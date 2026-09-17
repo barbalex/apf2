@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
@@ -25,9 +27,9 @@ const fieldTypes: Record<string, string> = {
 }
 
 interface Options {
-  adresses: Array<{ value: string; label: string }>
-  apBearbstandWertes: Array<{ value: number; label: string }>
-  apUmsetzungWertes: Array<{ value: number; label: string }>
+  adresses: { value: string; label: string }[]
+  apBearbstandWertes: { value: number; label: string }[]
+  apUmsetzungWertes: { value: number; label: string }[]
 }
 
 interface HistoryRow {
@@ -39,13 +41,22 @@ interface HistoryRow {
   ekfBeobachtungszeitpunkt: string | null
 }
 
+interface Fields {
+  year: number | string | null
+  bearbeitung: number | null
+  startJahr: number | null
+  umsetzung: number | null
+  bearbeiter: string | null
+  ekfBeobachtungszeitpunkt: string | null
+}
+
 interface Props {
   isNew: boolean
   artId: string | null
-  historyRow?: HistoryRow
+  historyRow?: HistoryRow | undefined
   options: Options
   onClose: () => void
-  refetch: () => void
+  refetch: () => Promise<unknown>
 }
 
 export const HistoryForm = ({
@@ -60,7 +71,7 @@ export const HistoryForm = ({
   const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
 
-  const [fields, setFields] = useState<Record<string, unknown>>({
+  const [fields, setFields] = useState<Fields>({
     year: isNew ? '' : (historyRow?.year ?? ''),
     bearbeitung: historyRow?.bearbeitung ?? null,
     startJahr: historyRow?.startJahr ?? null,
@@ -84,10 +95,10 @@ export const HistoryForm = ({
         )
       input?.focus()
     }
-  }, [])
+  }, [isNew])
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     if (isNew) {
@@ -98,7 +109,7 @@ export const HistoryForm = ({
     // Existing row: mutate immediately
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updateApHistoryForHistorienForm(
             $id: UUID!
             $year: Int!
@@ -124,7 +135,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: apId,
-          year: historyRow!.year,
+          year: historyRow?.year ?? 0,
           [field]: value,
           changedBy: userName,
         },
@@ -139,14 +150,14 @@ export const HistoryForm = ({
       const { [field]: _, ...rest } = prev
       return rest
     })
-    refetch()
+    void refetch()
   }
 
   const handleSaveNew = async () => {
     if (!fields.year) return
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation createApHistoryForHistorienForm(
             $id: UUID!
             $year: Int!
@@ -199,7 +210,7 @@ export const HistoryForm = ({
       console.error('Failed to create ap_history:', error)
       return
     }
-    refetch()
+    void refetch()
   }
 
   const rowKey = historyRow?.year ?? 'new'
@@ -217,7 +228,7 @@ export const HistoryForm = ({
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteApHistoryForHistorienForm($id: UUID!, $year: Int!) {
             deleteApHistoryByIdAndYear(input: { id: $id, year: $year }) {
               apHistory {
@@ -226,14 +237,14 @@ export const HistoryForm = ({
               }
             }
           }
-        `,
-        variables: { id: apId, year: historyRow!.year },
+        `),
+        variables: { id: apId ?? '', year: historyRow?.year ?? 0 },
       })
     } catch (error) {
       console.error('Failed to delete ap_history:', error)
       return
     }
-    refetch()
+    void refetch()
     onClose()
   }
 
@@ -256,7 +267,7 @@ export const HistoryForm = ({
           <IconButton
             className={styles.okButton}
             size="small"
-            onClick={handleOk}
+            onClick={() => void handleOk()}
           >
             <MdCheck />
           </IconButton>
@@ -269,14 +280,14 @@ export const HistoryForm = ({
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
       <TextField
         name="year"
         label="Jahr"
         type="number"
-        value={fields.year}
+        value={fields.year as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.year}
         disabled={!isNew}
@@ -286,33 +297,33 @@ export const HistoryForm = ({
         name="bearbeitung"
         label="Aktionsplan"
         options={options.apBearbstandWertes}
-        value={fields.bearbeitung}
-        saveToDb={saveToDb}
-        error={fieldErrors.bearbeitung}
+        value={fields.bearbeitung as string | number | null}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.bearbeitung ?? ''}
       />
       <Select
         key={`${rowKey}umsetzung`}
         name="umsetzung"
         label="Stand Umsetzung"
         options={options.apUmsetzungWertes}
-        value={fields.umsetzung}
-        saveToDb={saveToDb}
-        error={fieldErrors.umsetzung}
+        value={fields.umsetzung as string | number | null}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.umsetzung ?? ''}
       />
       <Select
         key={`${rowKey}bearbeiter`}
         name="bearbeiter"
         label="Verantwortlich"
         options={options.adresses}
-        value={fields.bearbeiter}
-        saveToDb={saveToDb}
-        error={fieldErrors.bearbeiter}
+        value={fields.bearbeiter as string | number | null}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.bearbeiter ?? ''}
       />
       <TextField
         name="startJahr"
         label="Start im Jahr"
         type="number"
-        value={fields.startJahr}
+        value={fields.startJahr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.startJahr}
       />
@@ -320,7 +331,7 @@ export const HistoryForm = ({
         name="ekfBeobachtungszeitpunkt"
         label="Bester Beobachtungszeitpunkt für EKF"
         type="text"
-        value={fields.ekfBeobachtungszeitpunkt}
+        value={fields.ekfBeobachtungszeitpunkt as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.ekfBeobachtungszeitpunkt}
       />

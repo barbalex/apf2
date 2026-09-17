@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -11,7 +11,8 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
+import type { TpopId } from '../../../../models/apflora/index.ts'
+import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import {
   addNotificationAtom,
@@ -43,10 +44,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: { data?: CreateTpopberResult | null | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateTpopberResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopberForTpopbersForm($tpopId: UUID!) {
             createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
               tpopber {
@@ -55,7 +56,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { tpopId },
       })
     } catch (error) {
@@ -66,14 +67,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopber?.tpopber?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -83,7 +84,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Kontroll-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

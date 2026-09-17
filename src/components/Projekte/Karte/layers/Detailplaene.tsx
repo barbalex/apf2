@@ -1,7 +1,8 @@
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import type { Feature, FeatureCollection } from 'geojson'
 
 interface DetailplanNode {
   id: string
@@ -35,7 +36,7 @@ export const Detailplaene = () => {
     queryKey: ['detailplaene'],
     queryFn: async () => {
       const result = await apolloClient.query<DetailplaeneQueryResult>({
-        query: gql`
+        query: graphql(`
           query karteDetailplaenesQuery {
             allDetailplaenes {
               nodes {
@@ -47,7 +48,7 @@ export const Detailplaene = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
@@ -57,15 +58,17 @@ export const Detailplaene = () => {
   if (!data) return null
 
   const nodes = data?.allDetailplaenes?.nodes ?? []
-  const detailplaene = nodes.map((n) => ({
+  const detailplaene = nodes.map((n): Feature => ({
     type: 'Feature',
     properties: n.data ? JSON.parse(n.data) : null,
-    geometry: JSON.parse(n?.geom?.geojson),
+    geometry: JSON.parse(String(n?.geom?.geojson)),
   }))
 
   return (
     <GeoJSON
-      data={detailplaene}
+      // leaflet handles plain feature arrays like FeatureCollections,
+      // but react-leaflet's data prop is typed as GeoJsonObject
+      data={detailplaene as unknown as FeatureCollection}
       style={style}
       interactive={false}
     />

@@ -8,6 +8,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const closeLowerNodesData = {
   action: 'closeLowerNodes',
@@ -24,7 +26,11 @@ const moveData = {
   action: 'move',
 }
 
-export const Ap = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const Ap = ({ onClick }: Props) => {
   const moving = useAtomValue(movingAtom)
   const userToken = useAtomValue(userTokenAtom)
 

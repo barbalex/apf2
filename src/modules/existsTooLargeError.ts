@@ -2,7 +2,9 @@
  * Gets an array of query results passed
  * returns true if any of them returns permission denied
  */
-export const existsTooLargeError = (errors) => {
+export const existsTooLargeError = (
+  errors: { message?: string }[] | undefined,
+) => {
   if (!errors) {
     return false
   }
@@ -10,7 +12,7 @@ export const existsTooLargeError = (errors) => {
     return false
   }
   const exists = errors.some((error) =>
-    error.message.includes('request entity too large'),
+    (error.message ?? '').includes('request entity too large'),
   )
   return exists
 }

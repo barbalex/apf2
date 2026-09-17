@@ -1,31 +1,36 @@
-import { gql } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { gql as dynamicGql } from '../apolloGql.ts'
+import type { TpopfeldkontrFieldsFragment } from '../gql/graphql.ts'
 
 import { tpopfeldkontr } from '../components/shared/fragments.ts'
 import {
   store,
-  apolloClientAtom,
   copyingBiotopAtom,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
-export const copyBiotopTo = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+export const copyBiotopTo = async ({ id }: { id: string }) => {
+  const apolloClient = getApolloClientFromStore()
   const copyingBiotop = store.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await apolloClient.query({
-    query: gql`
+    query: dynamicGql`
       query tpopkontrByIdForCopyBiotopToQuery($id: UUID!) {
         tpopkontrById(id: $id) {
           ...TpopfeldkontrFields
         }
       }
       ${tpopfeldkontr}
-    `,
+    ` as unknown as TypedDocumentNode<
+      { tpopkontrById?: TpopfeldkontrFieldsFragment | null },
+      Record<string, unknown>
+    >,
     variables: { id: previousId },
   })
   const from = dataFrom?.tpopkontrById
   await apolloClient.mutate({
-    mutation: gql`
+    mutation: dynamicGql`
       mutation updateTpopkontrForCopyBiotopTo(
         $id: UUID!
         $flaeche: Int

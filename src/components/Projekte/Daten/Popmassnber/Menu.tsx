@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { useSetAtom } from 'jotai'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -9,28 +9,22 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { PopmassnberId, PopId } from '../../../../models/apflora/index.tsx'
+import type { PopmassnberId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreatePopmassnberResult {
-  data?: {
-    createPopmassnber?: {
-      popmassnber?: {
-        id: PopmassnberId
-        popId: PopId
-      }
+  createPopmassnber?: {
+    popmassnber?: {
+      id: PopmassnberId
+      popId: PopId
     }
   }
 }
@@ -43,17 +37,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, popId, popmassnberId } = useParams()
 
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreatePopmassnberResult | undefined
+    let result: { data?: CreatePopmassnberResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreatePopmassnberResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createPopmassnberForPopmassnberForm($popId: UUID!) {
             createPopmassnber(input: { popmassnber: { popId: $popId } }) {
               popmassnber {
@@ -62,7 +53,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { popId },
       })
     } catch (error) {
@@ -73,14 +64,14 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopmassnber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
     const id = result?.data?.createPopmassnber?.popmassnber?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte/${id}${search}`,
     )
   }
@@ -90,53 +81,27 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    let result
-    try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation deletePopmassnber($id: UUID!) {
-            deletePopmassnberById(input: { id: $id }) {
-              popmassnber {
-                id
-              }
-            }
-          }
-        `,
-        variables: { id: popmassnberId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'popmassnber',
+        id: popmassnberId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treePopmassnber`],
+      },
     })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
-    })
-    // navigate to parent
-    navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte${search}`,
-    )
-  }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -156,7 +121,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

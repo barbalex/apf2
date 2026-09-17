@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
-import {
+import type {
   ApId,
   PopId,
   TpopId,
   TpopmassnId,
   AdresseId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -24,7 +24,7 @@ import {
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
-    nodes: Array<{
+    nodes: {
       tpopByTpopId?: {
         popByPopId?: {
           apByApId?: {
@@ -46,7 +46,7 @@ interface TpopmassnQueryResult {
             adresseByBearbeiter?: {
               name?: string
               usersByAdresseId?: {
-                nodes: Array<{ email?: string }>
+                nodes: { email?: string }[]
               }
             }
           }
@@ -132,7 +132,7 @@ interface TpopmassnQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 
@@ -146,21 +146,16 @@ export const Massnahmen = ({ filtered = false }: MassnahmenProps) => {
 
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const tpopmassnIsFiltered = tableIsFiltered({ table: 'tpopmassn' })
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: TpopmassnQueryResult }
-        try {
-          result = await apolloClient.query<TpopmassnQueryResult>({
-            query: gql`
+  const onClickMassnahmen = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: TpopmassnQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<TpopmassnQueryResult>({
+        query: graphql(`
               query tpopmassnForExportQuery($filter: TpopmassnFilter) {
                 allTpopmassns(
                   filter: $filter
@@ -284,125 +279,132 @@ export const Massnahmen = ({ filtered = false }: MassnahmenProps) => {
                   }
                 }
               }
-            `,
-            variables: {
-              filter: filtered ? tpopmassnGqlFilter.filtered : { or: [] },
-            },
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = (result?.data?.allTpopmassns.nodes ?? []).map((n) => ({
-          apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
-          apFamilie:
-            n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ??
-            null,
-          apArtname:
-            n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ??
-            null,
-          apBearbeitung:
-            n?.tpopByTpopId?.popByPopId?.apByApId
-              ?.apBearbstandWerteByBearbeitung?.text ?? null,
-          apStartJahr: n?.tpopByTpopId?.popByPopId?.apByApId?.startJahr ?? null,
-          apUmsetzung:
-            n?.tpopByTpopId?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung
-              ?.text ?? null,
-          avName:
-            n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter?.name ??
-            null,
-          avEmail:
-            n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter
-              ?.usersByAdresseId?.nodes?.[0]?.email ?? null,
-          popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
-          popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
-          popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
-          popStatus:
-            n?.tpopByTpopId?.popByPopId?.popStatusWerteByStatus?.text ?? null,
-          popBekanntSeit: n?.tpopByTpopId?.popByPopId?.bekanntSeit ?? null,
-          popStatusUnklar: n?.tpopByTpopId?.popByPopId?.statusUnklar ?? null,
-          popStatusUnklarBegruendung:
-            n?.tpopByTpopId?.popByPopId?.statusUnklarBegruendung ?? null,
-          popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
-          popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
-          tpopId: n?.tpopByTpopId?.id ?? null,
-          tpopNr: n?.tpopByTpopId?.nr ?? null,
-          tpopGemeinde: n?.tpopByTpopId?.gemeinde ?? null,
-          tpopFlurname: n?.tpopByTpopId?.flurname ?? null,
-          tpopStatus: n?.tpopByTpopId?.status ?? null,
-          statusDecodiert:
-            n?.tpopByTpopId?.popStatusWerteByStatus?.text ?? null,
-          tpopBekanntSeit: n?.tpopByTpopId?.bekanntSeit ?? null,
-          tpopStatusUnklar: n?.tpopByTpopId?.statusUnklar ?? null,
-          tpopStatusUnklarGrund: n?.tpopByTpopId?.statusUnklarGrund ?? null,
-          tpopX: n?.tpopByTpopId?.x ?? null,
-          tpopY: n?.tpopByTpopId?.y ?? null,
-          tpopRadius: n?.tpopByTpopId?.radius ?? null,
-          tpopHoehe: n?.tpopByTpopId?.hoehe ?? null,
-          tpopExposition: n?.tpopByTpopId?.exposition ?? null,
-          tpopKlima: n?.tpopByTpopId?.klima ?? null,
-          tpopNeigung: n?.tpopByTpopId?.neigung ?? null,
-          tpopBeschreibung: n?.tpopByTpopId?.beschreibung ?? null,
-          tpopKatasterNr: n?.tpopByTpopId?.katasterNr ?? null,
-          tpopApberRelevant: n?.tpopByTpopId?.apberRelevant ?? null,
-          tpopApberRelevantGrund: n?.tpopByTpopId?.apberRelevantGrund ?? null,
-          tpopEigentuemer: n?.tpopByTpopId?.eigentuemer ?? null,
-          tpopKontakt: n?.tpopByTpopId?.kontakt ?? null,
-          tpopNutzungszone: n?.tpopByTpopId?.nutzungszone ?? null,
-          tpopBewirtschafter: n?.tpopByTpopId?.bewirtschafter ?? null,
-          tpopBewirtschaftung: n?.tpopByTpopId?.bewirtschaftung ?? null,
-          tpopEkfrequenz: n?.tpopByTpopId?.ekfrequenz ?? null,
-          tpopEkfrequenzAbweichend:
-            n?.tpopByTpopId?.ekfrequenzAbweichend ?? null,
-          tpopEkfKontrolleur:
-            n?.tpopByTpopId?.adresseByEkfKontrolleur?.name ?? null,
-          id: n.id,
-          jahr: n.jahr,
-          datum: n.datum,
-          typ: n?.tpopmassnTypWerteByTyp?.text ?? null,
-          beschreibung: n.beschreibung,
-          bearbeiter: n?.adresseByBearbeiter?.name ?? null,
-          bemerkungen: n.bemerkungen,
-          planVorhanden: n.planVorhanden,
-          planBezeichnung: n.planBezeichnung,
-          flaeche: n.flaeche,
-          form: n.form,
-          pflanzanordnung: n.pflanzanordnung,
-          markierung: n.markierung,
-          anzTriebe: n.anzTriebe,
-          anzPflanzen: n.anzPflanzen,
-          anzPflanzstellen: n.anzPflanzstellen,
-          zieleinheitEinheit:
-            n?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text ?? null,
-          zieleinheitAnzahl: n.zieleinheitAnzahl,
-          wirtspflanze: n.wirtspflanze,
-          herkunftPop: n.herkunftPop,
-          sammeldatum: n.sammeldatum,
-          vonAnzahlIndividuen: n.vonAnzahlIndividuen,
-          createdAt: n.createdAt,
-          updatedAt: n.updatedAt,
-          changedBy: n.changedBy,
-        }))
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'Massnahmen',
-        })
-        setQueryState(undefined)
-      }}
+            `),
+        variables: {
+          filter: filtered ? tpopmassnGqlFilter.filtered : { or: [] },
+        },
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = (result?.data?.allTpopmassns.nodes ?? []).map((n) => ({
+      apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
+      apFamilie:
+        n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ??
+        null,
+      apArtname:
+        n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ??
+        null,
+      apBearbeitung:
+        n?.tpopByTpopId?.popByPopId?.apByApId
+          ?.apBearbstandWerteByBearbeitung?.text ?? null,
+      apStartJahr: n?.tpopByTpopId?.popByPopId?.apByApId?.startJahr ?? null,
+      apUmsetzung:
+        n?.tpopByTpopId?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung
+          ?.text ?? null,
+      avName:
+        n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter?.name ??
+        null,
+      avEmail:
+        n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter
+          ?.usersByAdresseId?.nodes?.[0]?.email ?? null,
+      popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
+      popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
+      popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
+      popStatus:
+        n?.tpopByTpopId?.popByPopId?.popStatusWerteByStatus?.text ?? null,
+      popBekanntSeit: n?.tpopByTpopId?.popByPopId?.bekanntSeit ?? null,
+      popStatusUnklar: n?.tpopByTpopId?.popByPopId?.statusUnklar ?? null,
+      popStatusUnklarBegruendung:
+        n?.tpopByTpopId?.popByPopId?.statusUnklarBegruendung ?? null,
+      popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
+      popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
+      tpopId: n?.tpopByTpopId?.id ?? null,
+      tpopNr: n?.tpopByTpopId?.nr ?? null,
+      tpopGemeinde: n?.tpopByTpopId?.gemeinde ?? null,
+      tpopFlurname: n?.tpopByTpopId?.flurname ?? null,
+      tpopStatus: n?.tpopByTpopId?.status ?? null,
+      statusDecodiert:
+        n?.tpopByTpopId?.popStatusWerteByStatus?.text ?? null,
+      tpopBekanntSeit: n?.tpopByTpopId?.bekanntSeit ?? null,
+      tpopStatusUnklar: n?.tpopByTpopId?.statusUnklar ?? null,
+      tpopStatusUnklarGrund: n?.tpopByTpopId?.statusUnklarGrund ?? null,
+      tpopX: n?.tpopByTpopId?.x ?? null,
+      tpopY: n?.tpopByTpopId?.y ?? null,
+      tpopRadius: n?.tpopByTpopId?.radius ?? null,
+      tpopHoehe: n?.tpopByTpopId?.hoehe ?? null,
+      tpopExposition: n?.tpopByTpopId?.exposition ?? null,
+      tpopKlima: n?.tpopByTpopId?.klima ?? null,
+      tpopNeigung: n?.tpopByTpopId?.neigung ?? null,
+      tpopBeschreibung: n?.tpopByTpopId?.beschreibung ?? null,
+      tpopKatasterNr: n?.tpopByTpopId?.katasterNr ?? null,
+      tpopApberRelevant: n?.tpopByTpopId?.apberRelevant ?? null,
+      tpopApberRelevantGrund: n?.tpopByTpopId?.apberRelevantGrund ?? null,
+      tpopEigentuemer: n?.tpopByTpopId?.eigentuemer ?? null,
+      tpopKontakt: n?.tpopByTpopId?.kontakt ?? null,
+      tpopNutzungszone: n?.tpopByTpopId?.nutzungszone ?? null,
+      tpopBewirtschafter: n?.tpopByTpopId?.bewirtschafter ?? null,
+      tpopBewirtschaftung: n?.tpopByTpopId?.bewirtschaftung ?? null,
+      tpopEkfrequenz: n?.tpopByTpopId?.ekfrequenz ?? null,
+      tpopEkfrequenzAbweichend:
+        n?.tpopByTpopId?.ekfrequenzAbweichend ?? null,
+      tpopEkfKontrolleur:
+        n?.tpopByTpopId?.adresseByEkfKontrolleur?.name ?? null,
+      id: n.id,
+      jahr: n.jahr,
+      datum: n.datum,
+      typ: n?.tpopmassnTypWerteByTyp?.text ?? null,
+      beschreibung: n.beschreibung,
+      bearbeiter: n?.adresseByBearbeiter?.name ?? null,
+      bemerkungen: n.bemerkungen,
+      planVorhanden: n.planVorhanden,
+      planBezeichnung: n.planBezeichnung,
+      flaeche: n.flaeche,
+      form: n.form,
+      pflanzanordnung: n.pflanzanordnung,
+      markierung: n.markierung,
+      anzTriebe: n.anzTriebe,
+      anzPflanzen: n.anzPflanzen,
+      anzPflanzstellen: n.anzPflanzstellen,
+      zieleinheitEinheit:
+        n?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text ?? null,
+      zieleinheitAnzahl: n.zieleinheitAnzahl,
+      wirtspflanze: n.wirtspflanze,
+      herkunftPop: n.herkunftPop,
+      sammeldatum: n.sammeldatum,
+      vonAnzahlIndividuen: n.vonAnzahlIndividuen,
+      createdAt: n.createdAt,
+      updatedAt: n.updatedAt,
+      changedBy: n.changedBy,
+    }))
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'Massnahmen',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
+      onClick={() => void onClickMassnahmen()}
     >
       {filtered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
       {queryState ?

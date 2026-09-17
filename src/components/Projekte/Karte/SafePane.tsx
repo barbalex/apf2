@@ -29,16 +29,18 @@ export const SafePane = ({
   const existingPane = useMemo(() => map.getPane(name), [map, name])
 
   useEffect(() => {
+    // look up the pane freshly instead of mutating the memoized value
+    const pane = map.getPane(name)
     // Update style and className if pane exists
-    if (existingPane) {
+    if (pane) {
       if (style?.zIndex !== undefined) {
-        existingPane.style.zIndex = String(style.zIndex)
+        pane.style.zIndex = String(style.zIndex)
       }
       if (className) {
-        existingPane.className = className
+        pane.className = className
       }
     }
-  }, [existingPane, className, style])
+  }, [map, name, className, style])
 
   // If pane already exists, render children into it using a portal
   if (existingPane) {
@@ -47,7 +49,11 @@ export const SafePane = ({
 
   // Otherwise, use the normal Pane component which will create the pane
   return (
-    <Pane name={name} className={className} style={style}>
+    <Pane
+      name={name}
+      {...(className !== undefined ? { className } : {})}
+      {...(style !== undefined ? { style } : {})}
+    >
       {children}
     </Pane>
   )

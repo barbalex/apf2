@@ -11,7 +11,7 @@ import {
 
 import styles from './index.module.css'
 
-export const Ap = ({ ap }) => {
+export const Ap = ({ ap }: { ap: { value: string; label: string } }) => {
   const removeAp = useSetAtom(ekPlanRemoveApAtom)
   const apsData = useAtomValue(ekPlanApsDataAtom)
   const apsDataLoading = useAtomValue(ekPlanApsDataLoadingAtom)

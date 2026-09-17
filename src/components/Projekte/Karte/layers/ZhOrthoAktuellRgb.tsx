@@ -7,6 +7,13 @@ import { WMSTileLayer, Pane } from 'react-leaflet'
 // URL: https://wms.zh.ch/OrthoZHWMS
 // Quelle: crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ortho_s_2024&styles&tilePixelRatio=0&url=https://wms.zh.ch/OrthoZHWMS
 
+// QGIS-specific WMS parameters, not typed in leaflet's WMSOptions
+// but forwarded to the WMS request by react-leaflet
+const qgisWmsParams = {
+  dpiMode: 7,
+  tilePixelRatio: 0,
+}
+
 export const ZhOrthoAktuellRgb = () => (
   <Pane
     className="ZhOrthoAktuellRgb"
@@ -25,8 +32,7 @@ export const ZhOrthoAktuellRgb = () => (
       maxNativeZoom={18}
       minZoom={0}
       maxZoom={23}
-      dpiMode={7}
-      tilePixelRatio={0}
+      {...qgisWmsParams}
     />
   </Pane>
 )

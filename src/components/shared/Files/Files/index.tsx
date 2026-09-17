@@ -2,11 +2,12 @@ import { useOutletContext } from 'react-router'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { File } from './File.tsx'
+import type { FilesOutletContext } from '../types.ts'
 
 import styles from './index.module.css'
 
 export const Component = () => {
-  const { parent, files, refetch } = useOutletContext()
+  const { parent, files, refetch } = useOutletContext<FilesOutletContext>()
 
   return (
     <ErrorBoundary>

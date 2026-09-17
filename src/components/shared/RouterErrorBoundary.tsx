@@ -5,15 +5,17 @@ import { logout } from '../../modules/logout.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
-export const RouterErrorBoundary = ({ children }) => {
+export const RouterErrorBoundary = () => {
   const error = useRouteError()
 
-  const onReload = () => window.location.reload(true)
+  const onReload = () => window.location.reload()
 
   return (
     <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={styles.preWrapping}>{error.message}</pre>
+      <pre className={styles.preWrapping}>
+        {(error as Error)?.message ?? String(error)}
+      </pre>
       <div className={styles.buttonContainer}>
         <Button
           className={styles.button}
@@ -28,7 +30,7 @@ export const RouterErrorBoundary = ({ children }) => {
         <Button
           className={styles.button}
           variant="outlined"
-          onClick={logout}
+          onClick={() => void logout()}
           color="inherit"
         >
           Cache leeren und neu starten (neue Anmeldung nötig)

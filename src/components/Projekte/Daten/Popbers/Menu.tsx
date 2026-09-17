@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -11,17 +11,15 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
+import type { PopberId, PopId } from '../../../../models/apflora/index.ts'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreatePopberResult {
-  data?: {
-    createPopber?: {
-      popber?: {
-        id: PopberId
-        popId: PopId
-      }
+  createPopber?: {
+    popber?: {
+      id: PopberId
+      popId: PopId
     }
   }
 }
@@ -42,10 +40,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreatePopberResult | undefined
+    let result: { data?: CreatePopberResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreatePopberResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createPopberForPopbersForm($popId: UUID!) {
             createPopber(input: { popber: { popId: $popId } }) {
               popber {
@@ -54,7 +52,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { popId },
       })
     } catch (error) {
@@ -65,17 +63,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
     const id = result?.data?.createPopber?.popber?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -85,7 +83,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Kontroll-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

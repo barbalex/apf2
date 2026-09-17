@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId, AdresseId } from '../../../../models/apflora/index.tsx'
+import type { ApId, AdresseId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApPopEkPrioQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -35,7 +35,7 @@ interface ApPopEkPrioQueryResult {
         name?: string
       }
       vApPopEkPriosByApId?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           jahrZuvor?: number
           jahrZuletzt?: number
@@ -49,9 +49,9 @@ interface ApPopEkPrioQueryResult {
           diffPopAnges?: number
           diffPopAktuell?: number
           beurteilungZuletzt?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 
@@ -59,14 +59,14 @@ export const PriorisierungFuerEk = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApPopEkPrio = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApPopEkPrioQueryResult }
+    let result: { data?: ApPopEkPrioQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApPopEkPrioQueryResult>({
-        query: gql`
+        query: graphql(`
           query apPopEkPrioForExportQuery {
             allAps(
               orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
@@ -112,7 +112,7 @@ export const PriorisierungFuerEk = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -123,9 +123,9 @@ export const PriorisierungFuerEk = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAps?.nodes ?? []).map((z) => ({
       ap_id: z.id,
-      artname: z?.aeTaxonomyByArtId.artname ?? '',
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z.startJahr,
       ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
@@ -162,14 +162,14 @@ export const PriorisierungFuerEk = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApPriorisierungFuerEk' })
+    void exportModule({ data: rows, fileName: 'ApPriorisierungFuerEk' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickApPopEkPrio}
+      onClick={() => void onClickApPopEkPrio()}
       color="inherit"
       disabled={!!queryState}
     >

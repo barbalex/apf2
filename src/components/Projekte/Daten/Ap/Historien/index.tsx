@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -16,21 +16,10 @@ import { HistoryForm } from './HistoryForm.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../../models/apflora/AeTaxonomies.ts'
-import type { ApBearbstandWerteCode } from '../../../../../models/apflora/ApBearbstandWerte.ts'
-import type { ApUmsetzungWerteCode } from '../../../../../models/apflora/ApUmsetzungWerte.ts'
 import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
 import type { ProjektId } from '../../../../../models/apflora/Projekt.ts'
 
-import {
-  innerContainer,
-  errorContainer,
-  docLink,
-  docLine,
-  aenderung,
-  aktuell,
-  historyRowWrapper,
-  historyButtons,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface ApHistoryNode {
   id: string
@@ -40,13 +29,13 @@ interface ApHistoryNode {
     id: AeTaxonomiesId
     artname: string
   } | null
-  bearbeitung: ApBearbstandWerteCode | null
+  bearbeitung: number | null
   apBearbstandWerteByBearbeitung: {
     id: number
     text: string
   } | null
   startJahr: number | null
-  umsetzung: ApUmsetzungWerteCode | null
+  umsetzung: number | null
   apUmsetzungWerteByUmsetzung: {
     id: number
     text: string
@@ -68,13 +57,13 @@ interface ApHistoriesQueryResult {
       id: AeTaxonomiesId
       artname: string
     } | null
-    bearbeitung: ApBearbstandWerteCode | null
+    bearbeitung: number | null
     apBearbstandWerteByBearbeitung: {
       id: number
       text: string
     } | null
     startJahr: number | null
-    umsetzung: ApUmsetzungWerteCode | null
+    umsetzung: number | null
     apUmsetzungWerteByUmsetzung: {
       id: number
       text: string
@@ -97,17 +86,17 @@ interface ApHistoriesQueryResult {
     nodes: ApHistoryNode[]
   }
   allAdresses: {
-    nodes: Array<{ value: AdresseId; label: string }>
+    nodes: { value: AdresseId; label: string }[]
   }
   allApBearbstandWertes: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
 }
 
-const apHistoriesQuery = gql`
+const apHistoriesQuery = graphql(`
   query apHistoryQuery($apId: UUID!) {
     apById(id: $apId) {
       id
@@ -191,23 +180,23 @@ const apHistoriesQuery = gql`
       }
     }
   }
-`
+`)
 
 export const Component = () => {
   const apolloClient = useApolloClient()
 
   const { apId } = useParams<{ apId: string }>()
-  const { data, refetch } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['apHistories', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApHistoriesQueryResult>({
         query: apHistoriesQuery,
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as ApHistoriesQueryResult
     },
-    suspense: true,
   })
 
   const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
@@ -258,20 +247,21 @@ export const Component = () => {
         MenuBarComponent={HistorienMenu}
         menuBarProps={{ onAdd: handleAdd }}
       />
-      <div className={innerContainer}>
-        <p className={docLine}>
+      <div className={styles.innerContainer}>
+        <p className={styles.docLine}>
           Jährlich historisierte Daten der Art (
           <span
-            className={docLink}
+            className={styles.docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={docLine}>
-          <span className={aenderung}>Änderungen</span> zum{' '}
-          <span className={aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+        <p className={styles.docLine}>
+          <span className={styles.aenderung}>Änderungen</span> zum{' '}
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind
+          hervorgehoben.
         </p>
         {rows.map((r) => {
           if (editingYear === r.year) {
@@ -327,9 +317,9 @@ export const Component = () => {
           return (
             <div
               key={r.year}
-              className={historyRowWrapper}
+              className={styles.historyRowWrapper}
             >
-              <div className={historyButtons}>
+              <div className={styles.historyButtons}>
                 <Tooltip title="bearbeiten">
                   <IconButton
                     size="small"

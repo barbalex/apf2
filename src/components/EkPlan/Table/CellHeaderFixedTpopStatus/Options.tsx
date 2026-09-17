@@ -1,7 +1,7 @@
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Option } from './Option.tsx'
 import { query } from './query.ts'
@@ -20,26 +20,25 @@ interface PopStatusWerteQueryResult {
   } | null
 }
 
-export const Options = ({ type }) => {
+export const Options = ({ type }: { type: string }) => {
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['PopStatusWertes'],
     queryFn: async () => {
-      const result = await apolloClient.query<PopStatusWerteQueryResult>({
+      const result = await apolloClient.query({
         query,
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as PopStatusWerteQueryResult
     },
-    suspense: true,
   })
-  const options = data.allPopStatusWertes.nodes ?? []
+  const options = (data as PopStatusWerteQueryResult).allPopStatusWertes?.nodes ?? []
 
   return (
     <FormGroup className={styles.formGroup}>
       <FormLabel>Gewünschte Stati wählen:</FormLabel>
-      {options.map((option) => (
+      {options.map((option: PopStatusWerteNode) => (
         <Option
           key={option.id}
           option={option}

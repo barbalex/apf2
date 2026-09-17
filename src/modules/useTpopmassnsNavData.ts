@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -15,24 +15,24 @@ import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useTpopmassnsNavData = (props) => {
+export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
 
   const moving = useAtomValue(movingAtom)
   const tpopmassnGqlFilterForTree = useAtomValue(
     treeTpopmassnGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeTpopmassnsQuery(
             $tpopmassnsFilter: TpopmassnFilter!
             $tpopId: UUID!
@@ -61,16 +61,16 @@ export const useTpopmassnsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopmassnsFilter: tpopmassnGqlFilterForTree,
           tpopId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   // this is how to make the filter reactive in a hook
@@ -83,7 +83,7 @@ export const useTpopmassnsNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   const copying = useAtomValue(copyingAtom)
@@ -92,12 +92,12 @@ export const useTpopmassnsNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 
-  const count = data.tpopById.tpopmassnsByTpopId.nodes.length
-  const totalCount = data.tpopById.totalCount.totalCount
+  const count = data.tpopById?.tpopmassnsByTpopId.nodes.length
+  const totalCount = data.tpopById?.totalCount.totalCount
 
   const navData = {
     id: 'Massnahmen',
@@ -124,30 +124,30 @@ export const useTpopmassnsNavData = (props) => {
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.tpopById.tpopmassnsByTpopId.nodes.map((p) => {
+    menus: data.tpopById?.tpopmassnsByTpopId.nodes.map((p) => {
       const labelRightElements = []
-      const isMoving = moving.id === p.id
+      const isMoving = moving.id === p?.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = copying.id === p.id
+      const isCopying = copying.id === p?.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
 
-      const zielAnzahl = p.zieleinheitAnzahl
-      const zielEinheit = p.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+      const zielAnzahl = p?.zieleinheitAnzahl
+      const zielEinheit = p?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
       const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
       const label =
-        p.label + (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
+        p?.label + (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
 
       return {
-        id: p.id,
+        id: p?.id,
         label,
         treeNodeType: 'table',
         treeMenuType: 'tpopmassn',
-        treeId: p.id,
-        treeTableId: p.id,
+        treeId: p?.id,
+        treeTableId: p?.id,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -159,11 +159,11 @@ export const useTpopmassnsNavData = (props) => {
           'Teil-Populationen',
           tpopId,
           'Massnahmen',
-          p.id,
+          p?.id,
         ],
         hasChildren: true,
         fetcherName: 'useTpopmassnNavData',
-        fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
+        fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p?.id },
         labelRightElements:
           labelRightElements.length ? labelRightElements : undefined,
       }

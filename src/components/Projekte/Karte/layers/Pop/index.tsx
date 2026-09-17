@@ -10,8 +10,11 @@ import { useParams } from 'react-router'
 import { Marker } from './Marker.tsx'
 import { query } from './query.ts'
 
-import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
-import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+import type {
+  PopId,
+  ApId,
+  AeTaxonomiesId,
+} from '../../../../../models/apflora/index.ts'
 
 import {
   addNotificationAtom,
@@ -19,7 +22,7 @@ import {
 } from '../../../../../store/index.ts'
 
 
-interface PopNode {
+export interface PopNode {
   id: PopId
   nr: number | null
   name: string | null
@@ -35,7 +38,7 @@ interface PopNode {
   apByApId: {
     id: ApId
     aeTaxonomyByArtId: {
-      id: AeTaxonomyId
+      id: AeTaxonomiesId
       artname: string | null
     } | null
   } | null
@@ -47,7 +50,17 @@ interface PopQueryResult {
   }
 }
 
-const iconCreateFunction = function (cluster) {
+// leaflet.markercluster ships no type declarations;
+// this models the narrow cluster API used by the cluster icon callback
+interface MarkerCluster {
+  getAllChildMarkers(): {
+    options: {
+      icon: { options: { className?: string } }
+    }
+  }[]
+}
+
+const iconCreateFunction = function (cluster: MarkerCluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(
     (m) => m.options.icon.options.className === 'popIconHighlighted',
@@ -55,7 +68,7 @@ const iconCreateFunction = function (cluster) {
   const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
 
   return window.L.divIcon({
-    html: markers.length,
+    html: String(markers.length),
     className,
     iconSize: window.L.point(40, 40),
   })
@@ -64,6 +77,7 @@ const iconCreateFunction = function (cluster) {
 const ObservedPop = () => {
   const map = useMap()
   const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
   const popFilter = cloneDeep(popGqlFilter.filtered)
@@ -71,15 +85,17 @@ const ObservedPop = () => {
 
   const { data, error } = useQuery({
     queryKey: ['PopForMapQuery', popFilter],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<PopQueryResult>({
         query: query,
         variables: { popFilter },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [refetchProvoker, setRefetchProvoker] = useState(1)
+  const [, setRefetchProvoker] = useState(1)
   const refetch = () => setRefetchProvoker(Math.random())
 
   useEffect(() => {
@@ -105,11 +121,11 @@ const ObservedPop = () => {
 
   return (
     <MarkerClusterGroup
-      key={data?.data?.allPops?.nodes.map((p) => p.id).toString()} // to force rerendering when data changes, see
+      key={data?.allPops?.nodes.map((p) => p.id).toString()} // to force rerendering when data changes, see
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
     >
-      {(data?.data?.allPops?.nodes ?? []).map((pop) => (
+      {(data?.allPops?.nodes ?? []).map((pop) => (
         <Marker
           key={pop.id}
           pop={pop}
@@ -120,7 +136,6 @@ const ObservedPop = () => {
 }
 
 export const Pop = () => {
-  const addNotification = useSetAtom(addNotificationAtom)
   const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const { apId } = useParams()
 

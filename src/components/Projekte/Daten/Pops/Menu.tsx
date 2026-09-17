@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -26,17 +26,15 @@ import {
   setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { PopId, ApId } from '../../../../models/apflora/index.tsx'
+import type { PopId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from './Menu.module.css'
 
 interface CreatePopResult {
-  data?: {
-    createPop?: {
-      pop?: {
-        id: PopId
-        apId: ApId
-      }
+  createPop?: {
+    pop?: {
+      id: PopId
+      apId: ApId
     }
   }
 }
@@ -49,7 +47,7 @@ const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams()
 
@@ -62,10 +60,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreatePopResult | undefined
+    let result: { data?: CreatePopResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreatePopResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createPopForPopsForm($apId: UUID!) {
             createPop(input: { pop: { apId: $apId } }) {
               pop {
@@ -74,7 +72,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -85,17 +83,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createPop?.pop?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
@@ -104,6 +102,9 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       projId,
       apId,
       menuType: 'popFolder',
+      parentId: undefined,
+      popId: undefined,
+      jahr: undefined,
     })
 
   const onClickCloseLowerNodes = () =>
@@ -150,7 +151,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Population erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -163,7 +164,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -176,7 +177,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               : `Verschiebe '${moving.label}' zu dieser Art`
             }
           >
-            <IconButton onClick={onClickMovePopToHere}>
+            <IconButton onClick={() => void onClickMovePopToHere()}>
               <MdOutlineMoveDown className={styles.moveIcon} />
             </IconButton>
           </Tooltip>
@@ -190,7 +191,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {isCopyingPop && (
           <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
-            <IconButton onClick={onClickCopyPopToHere}>
+            <IconButton onClick={() => void onClickCopyPopToHere()}>
               <MdContentCopy className={styles.copyIcon} />
             </IconButton>
           </Tooltip>

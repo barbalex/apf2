@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -18,16 +18,13 @@ import {
   addNotificationAtom,
 } from '../../../../store/index.ts'
 
-import type { ZielId } from '../../../../models/apflora/ZielId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
 
 interface CreateZielResult {
-  data: {
-    createZiel: {
-      ziel: {
-        id: ZielId
-        apId: ApId
-      }
+  createZiel?: {
+    ziel?: {
+      id: ZielId
+      apId: ApId
     }
   }
 }
@@ -48,10 +45,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateZielResult | undefined
+    let result: { data?: CreateZielResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateZielResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateZielResult>({
+        mutation: graphql(`
           mutation createZielForZieljahrs($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
               ziel {
@@ -60,7 +57,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -71,23 +68,23 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
-    apolloClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    apolloClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createZiel?.ziel?.id
-    navigate(`./1/${id}${search}`)
+    void navigate(`./1/${id}${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
@@ -108,25 +105,25 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   return (
     <ErrorBoundary>
-      <MenuBar rerenderer={showTreeMenus}>
+      <MenuBar rerenderer={`${showTreeMenus}`}>
         {!!toggleFilterInput && (
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neues Ziel erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
+            <IconButton onClick={() => void onClickOpenLowerNodes()}>
               <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>

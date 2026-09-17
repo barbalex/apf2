@@ -6,11 +6,22 @@ import {
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
 } from '../../../store/index.ts'
+import type { TpopRow } from './tableTypes.ts'
 
 import styles from './CellForTpopLink.module.css'
 import indexStyles from './index.module.css'
 
-export const CellForTpopLink = ({ field, width, row, isOdd }) => {
+export const CellForTpopLink = ({
+  field,
+  width,
+  row,
+  isOdd,
+}: {
+  field: Record<string, unknown>
+  width: number | undefined
+  row: TpopRow
+  isOdd: boolean
+}) => {
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
@@ -20,9 +31,9 @@ export const CellForTpopLink = ({ field, width, row, isOdd }) => {
 
   const onClickLink = () => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      window.open(field.value, '_blank', 'toolbar=no')
+      window.open(String(field.value), '_blank', 'toolbar=no')
     }
-    window.open(field.value)
+    window.open(String(field.value))
   }
 
   const cellStyle = {

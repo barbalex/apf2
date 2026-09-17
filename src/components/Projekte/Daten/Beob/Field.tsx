@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import type { ReactNode } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import Linkify from 'linkify-react'
 
@@ -8,7 +9,7 @@ const ItemTypes = { CARD: 'card' }
 
 interface FieldProps {
   label: string
-  value: any
+  value: ReactNode
   index: number
   moveField: (dragIndex: number, hoverIndex: number) => void
 }
@@ -20,7 +21,11 @@ interface DragItem {
 
 export const Field = ({ label, value, index, moveField }: FieldProps) => {
   const ref = useRef<HTMLDivElement>(null)
-  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: string | symbol | null }
+  >({
     accept: ItemTypes.CARD,
     collect(monitor) {
       return {
@@ -45,7 +50,7 @@ export const Field = ({ label, value, index, moveField }: FieldProps) => {
       // Determine mouse position
       const clientOffset = monitor.getClientOffset()
       // Get pixels to the top
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
+      const hoverClientY = (clientOffset?.y ?? 0) - hoverBoundingRect.top
       // Only perform the move when the mouse has crossed half of the items height
       // When dragging downwards, only move when the cursor is below 50%
       // When dragging upwards, only move when the cursor is above 50%
@@ -80,6 +85,7 @@ export const Field = ({ label, value, index, moveField }: FieldProps) => {
     }),
   })
   const opacity = isDragging ? 0 : 1
+  // eslint-disable-next-line react-hooks/refs -- react-dnd connectors must be attached during render
   drag(drop(ref))
 
   return (

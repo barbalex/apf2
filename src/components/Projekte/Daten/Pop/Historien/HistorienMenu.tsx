@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 const iconStyle = { color: 'white' }
 
-export const HistorienMenu = ({ onAdd }) => (
+export const HistorienMenu = ({ onAdd }: { onAdd: () => void }) => (
   <ErrorBoundary>
     <MenuBar>
       <Tooltip title="neue, leere Historie hinzufügen">

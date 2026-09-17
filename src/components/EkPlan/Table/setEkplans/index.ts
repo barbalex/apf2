@@ -6,35 +6,47 @@ import {
   store,
   apolloClientAtom,
   addNotificationAtom,
+  type Notification,
 } from '../../../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
+}: {
+  tpopId: string
+  ekfrequenz: string | null
+  ekfrequenzStartjahr: number | null
 }) => {
   const apolloClient = store.get(apolloClientAtom)
+  if (!apolloClient) return
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year
   //console.log('setEkplans', { ekfrequenzValue })
   if (!ekfrequenzStartjahr) return // 1. query all ekplans beginning with ekfrequenzStartJahr
-  let ekplansToDeleteResult
+  let ekplansToDeleteResult:
+    | {
+        data?:
+          | { allEkplans?: { nodes?: { id: string }[] } }
+          | undefined
+      }
+    | undefined
   try {
-    ekplansToDeleteResult = await apolloClient.query({
+    ekplansToDeleteResult = (await apolloClient.query({
       query: queryEkplans,
       fetchPolicy: 'network-only',
       variables: {
         tpopId,
         jahr: ekfrequenzStartjahr,
       },
-    })
+    })) as typeof ekplansToDeleteResult
   } catch (error) {
     return addNotification({
-      message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${error.message}`,
+      message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },
@@ -54,7 +66,7 @@ export const setEkplans = async ({
       })
     } catch (error) {
       return addNotification({
-        message: `Fehler beim Löschen der bisherigen EK-Pläne: ${error.message}`,
+        message: `Fehler beim Löschen der bisherigen EK-Pläne: ${(error as Error).message}`,
         options: {
           variant: 'error',
         },
@@ -62,26 +74,37 @@ export const setEkplans = async ({
     }
   }
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
-  let ekfrequenzsResult
+  let ekfrequenzsResult:
+    | {
+        data?:
+          | {
+              allEkfrequenzs?: {
+                nodes?: { ektyp: string; kontrolljahre: number[] | null }[]
+              }
+            }
+          | undefined
+      }
+    | undefined
   try {
-    ekfrequenzsResult = await apolloClient.query({
+    ekfrequenzsResult = (await apolloClient.query({
       query: queryEkfrequenz,
       variables: {
-        id: ekfrequenzValue,
+        id: ekfrequenzValue ?? '',
       },
-    })
+    })) as typeof ekfrequenzsResult
   } catch (error) {
     return addNotification({
-      message: `Fehler beim Abfragen der Kontrolljahre: ${error.message}`,
+      message: `Fehler beim Abfragen der Kontrolljahre: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },
     })
   }
   const ekfrequenz = ekfrequenzsResult?.data?.allEkfrequenzs?.nodes?.[0]
+  if (!ekfrequenz) return
   // 4. add kontrolljahre to ekplan
   const typ = ekfrequenz.ektyp.toUpperCase()
-  const kontrolljahre = ekfrequenz.kontrolljahre || []
+  const kontrolljahre: number[] = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
     return addNotification({
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
@@ -91,7 +114,7 @@ export const setEkplans = async ({
     })
   }
   // parallel execution:
-  const mutationPromises = kontrolljahre.map((jahr) =>
+  const mutationPromises = kontrolljahre.map((jahr: number) =>
     apolloClient.mutate({
       mutation: mutationCreateEkplan,
       variables: {
@@ -106,7 +129,7 @@ export const setEkplans = async ({
     await Promise.all(mutationPromises)
   } catch (error) {
     return addNotification({
-      message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
+      message: `Fehler beim Schaffen neuer EK-Pläne: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },

@@ -8,29 +8,30 @@
  */
 import { xmlToJson } from './xmlToJson.ts'
 
+const asObj = (value: unknown): Record<string, unknown> | undefined =>
+  value && typeof value === 'object' ? (value as Record<string, unknown>) : undefined
+
 export const vndOgcGmlToLayersData = (xml: Document) => {
   const obj = xmlToJson(xml)
   // extract layers
-  const output = obj?.HTML?.BODY?.MSGMLOUTPUT
-  const layers = Object.entries(output ?? {})
+  const output = asObj(asObj(asObj(obj)?.['HTML'])?.['BODY'])?.['MSGMLOUTPUT']
+  const layers = Object.entries(asObj(output) ?? {})
     .filter(([key]) => key.toLowerCase().includes('_layer'))
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map(([key, value]) => value)
+    .map(([, value]) => value)
 
   const layersData = layers.map((l) => {
-    const label = l['GML:NAME']?.['#text']
+    const layer = asObj(l)
+    const label = asObj(layer?.['GML:NAME'])?.['#text']
 
-    const propsObject = Object.entries(l ?? {})
+    const propsObject = Object.entries(layer ?? {})
       .filter(([key]) => key.toLowerCase().includes('_feature'))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(([key, value]) => value)?.[0]
+      .map(([, value]) => asObj(value))?.[0]
 
-    if (propsObject?.['#text']) delete propsObject['#text']
+    if (propsObject && '#text' in propsObject) delete propsObject['#text']
 
-    const properties = Object.entries(propsObject)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => !key.includes(':'))
-      .map(([key, value]) => [key, value?.['#text']])
+    const properties = Object.entries(propsObject ?? {})
+      .filter(([key]) => !key.includes(':'))
+      .map(([key, value]) => [key, asObj(value)?.['#text']])
 
     return { label, properties }
   })

@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query apAuswertungTpopKontrolliert($id: UUID!, $year: Int!) {
     # function: tpop_kontrolliert_for_jber
     tpopKontrolliertForJber(
@@ -14,4 +14,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

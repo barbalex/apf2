@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { useSetAtom } from 'jotai'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -9,29 +9,23 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
+import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopkontrzaehlResult {
-  data: {
-    createTpopkontrzaehl: {
-      tpopkontrzaehl: {
-        id: TpopkontrzaehlId
-        tpopkontrId: TpopkontrId
-      }
+  createTpopkontrzaehl: {
+    tpopkontrzaehl: {
+      id: TpopkontrzaehlId
+      tpopkontrId: TpopkontrId
     }
   }
 }
@@ -45,17 +39,14 @@ export const Menu = () => {
   const { projId, apId, popId, tpopId, tpopkontrId, tpopkontrzaehlId } =
     useParams()
 
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateTpopkontrzaehlResult | undefined
+    let result: { data?: CreateTpopkontrzaehlResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopkontrzaehlResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
+        mutation: graphql(`
           mutation createTpopkontrzaehlForTpopkontrzaehlForm(
             $tpopkontrId: UUID!
           ) {
@@ -68,7 +59,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { tpopkontrId },
       })
     } catch (error) {
@@ -79,17 +70,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehlFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
     const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen/${id}${search}`,
     )
   }
@@ -99,56 +90,36 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    let result
-    try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation deleteTpopkontrzaehl($id: UUID!) {
-            deleteTpopkontrzaehlById(input: { id: $id }) {
-              tpopkontrzaehl {
-                id
-              }
-            }
-          }
-        `,
-        variables: { id: tpopkontrzaehlId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpopkontrzaehl',
+        id: tpopkontrzaehlId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontrzaehl`],
+          })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontrzaehlFolders`],
+          })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontr`],
+          })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontrzaehl`],
+      },
     })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontrzaehlFolders`],
-    })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontr`],
-    })
-    // navigate to parent
-    navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen${search}`,
-    )
-  }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -168,7 +139,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={filesMenuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

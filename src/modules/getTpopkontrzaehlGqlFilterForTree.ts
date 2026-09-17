@@ -1,8 +1,9 @@
+import type { TpopkontrzaehlFilter } from '../gql/graphql.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
-export const getTpopkontrzaehlGqlFilterForTree = (tpopkontrId: string) => {
+export const getTpopkontrzaehlGqlFilterForTree = (_tpopkontrId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
-  const gqlFilter = {}
+  const gqlFilter: TpopkontrzaehlFilter = {}
 
   // Don't include tpopkontrId in filter - query is already scoped to tpopkontr
   // Only include label filter if present

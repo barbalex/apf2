@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query popAuswertungTpopMenge($apId: UUID!, $id: UUID!) {
     popById(id: $id) {
       id
@@ -37,4 +37,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

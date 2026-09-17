@@ -4,6 +4,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
@@ -14,7 +16,11 @@ const deleteData = {
   table: 'tpop_apberrelevant_grund_werte',
 }
 
-export const TpopApberrelevantGrundWerte = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const TpopApberrelevantGrundWerte = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeTpopApberrelevantGrundWerte"

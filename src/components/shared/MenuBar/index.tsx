@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect, Children, cloneElement } from 'react'
+import type { MouseEvent, ReactElement, ReactNode } from 'react'
 import { IconButton, Menu } from '@mui/material'
+import type { MenuProps } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import { styled } from '@mui/material/styles'
@@ -9,9 +11,10 @@ import styles from './index.module.css'
 
 const buttonWidth = 40
 
-const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+const StyledMenu = styled((props: MenuProps) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
-    backgroundColor: (props) => props.bgColor,
+    backgroundColor: ({ props }: { props?: { bgColor?: string } }) =>
+      props?.bgColor,
     overflow: 'hidden',
   },
   '& .MuiList-root': {
@@ -19,11 +22,17 @@ const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   },
 }))
 
-const getChildren = ({ addMargin, children }) => {
-  const visibleChildren = []
-  for (const [index, child] of Children.toArray(children).entries()) {
-    visibleChildren.push(child)
-  }
+const getChildren = ({
+  addMargin,
+  children,
+}: {
+  addMargin: boolean
+  children: ReactNode
+}) => {
+  const visibleChildren = Children.toArray(children) as ReactElement<{
+    width?: number
+    inmenu?: string
+  }>[]
   // add 12px for margin and border width to props.width
   const widths = visibleChildren.map((c) =>
     c.props.width ?
@@ -37,36 +46,54 @@ const getChildren = ({ addMargin, children }) => {
 
 // possible improvement:
 // add refs in here to measure their widths
+export interface MenuBarProps {
+  children: ReactNode
+  // enable the parent to force rerenders
+  rerenderer?: string
+  // files pass in titleComponent and its width
+  titleComponent?: ReactNode
+  titleComponentWidth?: number
+  bgColor?: string
+  color?: string
+  // top menu bar has no margin between menus, others do
+  // and that needs to be compensated for
+  addMargin?: boolean
+}
+
 export const MenuBar = ({
   children,
-  // enable the parent to force rerenders
   rerenderer,
-  // files pass in titleComponent and its width
   titleComponent,
   titleComponentWidth,
   bgColor = '#388e3c',
   color = 'white',
-  // top menu bar has no margin between menus, others do
-  // and that needs to be compensated for
   addMargin = true,
-}) => {
-  const [menuAnchor, setMenuAnchor] = useState(null)
+}: MenuBarProps) => {
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null)
   const menuIsOpen = Boolean(menuAnchor)
   const onCloseMenu = () => setMenuAnchor(null)
 
   const { visibleChildren, widths } = getChildren({ addMargin, children })
 
-  const outerContainerRef = useRef(null)
-  const outerContainerWidth = outerContainerRef.current?.clientWidth
+  const outerContainerRef = useRef<HTMLDivElement>(null)
+  const [outerContainerWidth, setOuterContainerWidth] = useState<
+    number | undefined
+  >(undefined)
   const previousMeasurementTimeRef = useRef(0)
 
-  const [buttons, setButtons] = useState([])
-  const [menus, setMenus] = useState([])
+  // measure once the container mounts and whenever it resizes
+  const measureContainer = () => {
+    setOuterContainerWidth(outerContainerRef.current?.clientWidth)
+  }
+
+  const [buttons, setButtons] = useState<ReactNode[]>([])
+  const [menus, setMenus] = useState<ReactNode[]>([])
 
   // this was quite some work to get right
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
   const checkOverflow = () => {
     if (!outerContainerRef.current) return
+    measureContainer()
 
     const containerWidth = outerContainerRef.current?.clientWidth
 
@@ -80,10 +107,10 @@ export const MenuBar = ({
     const spaceForButtons =
       needMenu ? spaceForButtonsAndMenus - buttonWidth : spaceForButtonsAndMenus
     // sum widths fitting into spaceForButtons
-    const newButtons = []
-    const newMenus = []
+    const newButtons: ReactNode[] = []
+    const newMenus: ReactNode[] = []
     let widthSum = 0
-    for (const [index, child] of Children.toArray(visibleChildren).entries()) {
+    for (const child of visibleChildren) {
       const width =
         child.props.width ?
           addMargin ? child.props.width + 12
@@ -121,9 +148,13 @@ export const MenuBar = ({
     // check overflow when rerenderer changes
     // Example: file preview (any action that changes the menus passed in)
     checkOverflow()
+    // checkOverflow is intentionally not in the deps:
+    // it is recreated on every render and setting state inside it
+    // would make this effect run in a loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerenderer])
 
-  const previousWidthRef = useRef(null)
+  const previousWidthRef = useRef<number | null>(null)
   useEffect(() => {
     if (!outerContainerRef.current) {
       // console.log('MenuBar.useEffect, no containerRef')
@@ -147,8 +178,10 @@ export const MenuBar = ({
         // only go on if the width has changed enough (prevent unnecessary rerenders)
         // this is the reason for not using react-resize-detector
         previousMeasurementTimeRef.current = currentTime
+        // before the first measurement there is no previous width:
+        // treat it as 0 so the first event counts as a 100% change
         const percentageChanged = Math.abs(
-          ((width - previousWidthRef.current) / width) * 100,
+          ((width - (previousWidthRef.current ?? 0)) / width) * 100,
         )
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
         if (!shouldCheckOverflow) {
@@ -170,12 +203,16 @@ export const MenuBar = ({
     }
   }, [rerenderer, checkOverflowDebounced])
 
-  const onClickMenuButton = (event) => setMenuAnchor(event.currentTarget)
+  const onClickMenuButton = (event: MouseEvent<HTMLButtonElement>) =>
+    setMenuAnchor(event.currentTarget)
 
   return (
     <div
       className={styles.measuredOuterContainer}
-      ref={outerContainerRef}
+      ref={(node: HTMLDivElement | null) => {
+        outerContainerRef.current = node
+        if (node) measureContainer()
+      }}
       style={{ backgroundColor: bgColor }}
     >
       {titleComponent}

@@ -1,12 +1,10 @@
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { DateTime } from 'luxon'
 
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-
-import type { Message } from '../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 
@@ -15,21 +13,26 @@ const defaultLinkOpen =
   mdParser.renderer.rules.link_open ??
   ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
 mdParser.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-  tokens[idx].attrSet('target', '_blank')
-  tokens[idx].attrSet('rel', 'noopener noreferrer')
+  tokens[idx]?.attrSet('target', '_blank')
+  tokens[idx]?.attrSet('rel', 'noopener noreferrer')
   return defaultLinkOpen(tokens, idx, options, env, self)
 }
 
 interface MessagesQueryResult {
   allMessages?: {
-    nodes: Message[]
+    nodes: {
+      id: string
+      message: string
+      time: string
+      active: boolean
+    }[]
   }
 }
 
 export const Component = () => {
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['messages'],
     queryFn: async () => {
       const result = await apolloClient.query<MessagesQueryResult>({
@@ -38,7 +41,6 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const rows = data?.allMessages?.nodes ?? []

@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { ApId } from '../../../../models/apflora/public/ApId.ts'
-import type { PopId } from '../../../../models/apflora/public/PopId.ts'
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
+import type {
+  ApId,
+  PopId,
+  TpopId,
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -67,20 +69,15 @@ export const LetzteZaehlungenInklAnpflanzungen = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data: TPopLastCountWithMassnQueryResult }
-        try {
-          result = await apolloClient.query({
-            // view: v_tpop_last_count_with_massn
-            query: gql`
+  const onClickLetzteZaehlungenInklAnpflanzungen = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: TPopLastCountWithMassnQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<TPopLastCountWithMassnQueryResult>({
+        // view: v_tpop_last_count_with_massn
+        query: graphql(`
               query viewTpopLastCountWithMassns {
                 allVTpopLastCountWithMassns {
                   nodes {
@@ -126,34 +123,41 @@ export const LetzteZaehlungenInklAnpflanzungen = () => {
                   }
                 }
               }
-            `,
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopLastCountWithMassns?.nodes ?? []
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'TPopLetzteZaehlungenInklMassn',
-          idKey: 'pop_id',
-        })
-        setQueryState(undefined)
-      }}
+            `),
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVTpopLastCountWithMassns?.nodes ?? []
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'TPopLetzteZaehlungenInklMassn',
+      idKey: 'pop_id',
+    } as Parameters<typeof exportModule>[0])
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickLetzteZaehlungenInklAnpflanzungen()}
     >
       Aktuellste Zählung inklusive seither erfolgter Anpflanzungen
       {queryState ?

@@ -1,6 +1,8 @@
-export const getDataArrayFromExportObjects = (exportObjects) => [
+export const getDataArrayFromExportObjects = (
+  exportObjects: Record<string, unknown>[],
+) => [
   // first the field names:
-  Object.keys(exportObjects[0]),
+  Object.keys(exportObjects[0] ?? {}),
   // then the field values
   ...exportObjects.map((o) => Object.values(o)),
 ]

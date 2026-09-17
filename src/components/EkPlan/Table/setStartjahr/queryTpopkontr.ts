@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryTpopkontr = gql`
+export const queryTpopkontr = graphql(`
   query TpopkontrQueryForSetStartjahr($tpopId: UUID!) {
     tpopById(id: $tpopId) {
       id
@@ -12,4 +12,4 @@ export const queryTpopkontr = gql`
       }
     }
   }
-`
+`)

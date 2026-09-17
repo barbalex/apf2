@@ -1,7 +1,7 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
 import { ekfrequenz } from '../../shared/fragments.ts'
 
-export const queryForExport = gql`
+export const queryForExport = dynamicGql`
   query EkplanExportQuery($tpopFilter: TpopFilter!, $apIds: [UUID!]) {
     allEkfrequenzs(filter: { apId: { in: $apIds } }, orderBy: SORT_ASC) {
       nodes {

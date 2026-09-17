@@ -1,4 +1,14 @@
-export const sendMail = ({ to, subject, body, cc }) => {
+export const sendMail = ({
+  to,
+  subject,
+  body,
+  cc,
+}: {
+  to: string
+  subject: string
+  body: string
+  cc?: string
+}) => {
   const link = `mailto:${to}${cc ? `?cc=${cc}` : '?'}${
     subject ? `&subject=${subject}` : ''
   }${body ? `&body=${encodeURIComponent(body)}` : ''}`

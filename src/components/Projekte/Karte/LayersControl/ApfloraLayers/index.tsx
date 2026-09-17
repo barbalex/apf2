@@ -2,12 +2,21 @@ import { useAtomValue } from 'jotai'
 
 import { mapApfloraLayersAtom } from '../../../../../store/index.ts'
 import { Layer } from './Layer/index.tsx'
+import type { ApfloraLayer } from './Layer/index.tsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.tsx'
 import { KtZhFilter } from './KtZhFilter/index.tsx'
 
 import styles from './index.module.css'
 
-export const ApfloraLayers = () => {
+interface ApfloraLayersProps {
+  /**
+   * overlaysString enforces rererender
+   * even when only the sorting changes
+   */
+  apfloraLayersString: string
+}
+
+export const ApfloraLayers = (_props: ApfloraLayersProps) => {
   const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
 
   return (
@@ -18,7 +27,7 @@ export const ApfloraLayers = () => {
         .map((apfloraLayer, index) => (
           <Layer
             key={index}
-            apfloraLayer={apfloraLayer}
+            apfloraLayer={apfloraLayer as ApfloraLayer}
           />
         ))}
       <ShowForMultipleAps />

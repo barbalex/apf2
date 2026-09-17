@@ -1,13 +1,11 @@
 import { Tooltip } from '@mui/material'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
+import type { FileNode } from '../types.ts'
 import styles from './Title.module.css'
 
-const FileNameForTooltip = ({ file, props, ref }) => (
-  <div
-    ref={ref}
-    {...props}
-  >
+const FileNameForTooltip = ({ file }: { file: FileNode }) => (
+  <div>
     <div className={styles.content}>
       {file.name && (
         <>
@@ -31,7 +29,13 @@ const FileNameForTooltip = ({ file, props, ref }) => (
   </div>
 )
 
-export const Title = ({ file, numbers, titleComponentWidth }) => {
+export interface FilesMenuTitleProps {
+  file?: FileNode | undefined
+  numbers?: string | number
+  titleComponentWidth: number
+}
+
+export const Title = ({ file, numbers, titleComponentWidth }: FilesMenuTitleProps) => {
   if (!file && numbers === undefined) return null
 
   // fix width to prevent jumping

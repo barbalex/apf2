@@ -1,8 +1,10 @@
-export const bufferBoundsTo50m = (bounds) => {
+export const bufferBoundsTo50m = (
+  bounds: [number, number][],
+): [number, number][] => {
   // only buffer if two points are identical
   if (bounds.length === 2) {
-    const b1 = bounds[0]
-    const b2 = bounds[1]
+    const b1 = bounds[0] ?? [0, 0]
+    const b2 = bounds[1] ?? [0, 0]
     if (
       b1[0] &&
       b2[0] &&

@@ -1,12 +1,36 @@
 import { sortBy } from 'es-toolkit'
 
 import { exists } from '../../../../../modules/exists.ts'
+
+import type { PopId } from '../../../../../models/apflora/Pop.ts'
+
 import styles from './CustomTooltip.module.css'
 
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
+interface PopData {
+  id: PopId
+  nr: number | null
+  name: string | null
+  status: number | null
+}
+
+interface CustomTooltipProps {
+  payload?: {
+    dataKey: string
+    value: number
+  }[]
+  label?: string | number
+  active?: boolean
+  popsData: PopData[]
+}
+
+export const CustomTooltip = ({
+  payload = [],
+  label,
+  popsData,
+}: CustomTooltipProps) => {
   const payloadSorted = sortBy(payload, [
     (p) => {
       const pop = popsData.find((d) => d.id === p.dataKey)
@@ -18,7 +42,7 @@ export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
   return (
     <div className={styles.popup}>
       <div className={styles.title}>{label}</div>
-      {payloadSorted.map((p, i) => {
+      {payloadSorted.map((p) => {
         const pop = popsData.find((d) => d.id === p.dataKey)
 
         let label = p.dataKey
@@ -35,7 +59,7 @@ export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
         if (!pop) {
           color = 'grey'
         } else {
-          const isUrspruenglich = pop?.status < 200
+          const isUrspruenglich = (pop?.status ?? 0) < 200
           color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
         }
 

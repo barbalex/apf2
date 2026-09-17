@@ -1,9 +1,10 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import type { Feature, FeatureCollection } from 'geojson'
 
 interface BetreuungsgebietNode {
   id: number
@@ -36,7 +37,7 @@ export const Betreuungsgebiete = () => {
     queryKey: ['betreuungsgebiete'],
     queryFn: async () => {
       const result = await apolloClient.query<BetreuungsgebieteQueryResult>({
-        query: gql`
+        query: graphql(`
           query nsBetreuungsQuery {
             allNsBetreuungs {
               nodes {
@@ -47,7 +48,7 @@ export const Betreuungsgebiete = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
@@ -60,15 +61,17 @@ export const Betreuungsgebiete = () => {
   if (!data) return null
 
   const nodes = data?.allNsBetreuungs?.nodes ?? []
-  const betrGebiete = nodes.map((n) => ({
+  const betrGebiete = nodes.map((n): Feature => ({
     type: 'Feature',
     properties: {},
-    geometry: JSON.parse(n?.geom?.geojson),
+    geometry: JSON.parse(String(n?.geom?.geojson)),
   }))
 
   return (
     <GeoJSON
-      data={betrGebiete}
+      // leaflet handles plain feature arrays like FeatureCollections,
+      // but react-leaflet's data prop is typed as GeoJsonObject
+      data={betrGebiete as unknown as FeatureCollection}
       style={style}
       interactive={false}
     />

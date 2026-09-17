@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 
 import { adresse } from '../../../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   query adresseByIdForDelete($id: UUID!) {
     adresseById(id: $id) {
       ...AdresseFields

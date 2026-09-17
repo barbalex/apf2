@@ -6,25 +6,27 @@ export const MouseWheelHandler = () => {
   // https://stackoverflow.com/a/20838527/712005
   // passive: false is needed or else chrome will bark
   useEffect(() => {
-    const handleWheel = (e) => {
+    const handleWheel = (e: WheelEvent) => {
       console.log('preventing wheel')
       e.preventDefault()
-      e.target.blur()
+      ;(e.target as HTMLElement).blur()
     }
-    const handleFocusNumberInput = (e) => {
+    const handleFocusNumberInput = (e: FocusEvent) => {
       //console.log('handleFocusNumberInput, e is:', e)
-      if (e.target.type === 'number') {
-        e.target.addEventListener('wheel', handleWheel, { passive: false })
+      const target = e.target as HTMLElement
+      if (target instanceof HTMLInputElement && target.type === 'number') {
+        target.addEventListener('wheel', handleWheel, { passive: false })
       }
     }
     document.addEventListener('focusin', handleFocusNumberInput, {
       passive: false,
     })
 
-    const handleBlurNumberInput = (e) => {
+    const handleBlurNumberInput = (e: FocusEvent) => {
       //console.log('handleBlurNumberInput, e is:', e)
-      if (e.target.type === 'number') {
-        e.target.removeEventListener('wheel', handleWheel, { passive: false })
+      const target = e.target as HTMLElement
+      if (target instanceof HTMLInputElement && target.type === 'number') {
+        target.removeEventListener('wheel', handleWheel)
       }
     }
     document.addEventListener('focusout', handleBlurNumberInput, {
@@ -32,9 +34,7 @@ export const MouseWheelHandler = () => {
     })
 
     return () => {
-      document.removeEventListener('focusout', handleBlurNumberInput, {
-        passive: false,
-      })
+      document.removeEventListener('focusout', handleBlurNumberInput)
     }
   }, [])
 

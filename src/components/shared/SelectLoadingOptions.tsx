@@ -6,9 +6,35 @@
 
 import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
+import type { DocumentNode } from '@apollo/client'
 import { get } from 'es-toolkit/compat'
 
+import type { SaveToDbHandler } from './types.ts'
+
 import styles from './Select.module.css'
+
+interface SelectLoadingOption {
+  value: string
+  label: string
+}
+
+interface SelectLoadingNodes {
+  nodes?: SelectLoadingOption[]
+}
+
+export interface SelectLoadingOptionsProps {
+  row?: object | null | undefined
+  valueLabelPath?: string | undefined
+  valueLabel?: string | undefined
+  field?: string
+  label?: string | undefined
+  labelSize?: number | undefined
+  error?: string | null | undefined
+  saveToDb: SaveToDbHandler
+  query: DocumentNode
+  filter?: (inputValue: string) => Record<string, unknown>
+  queryNodesName: string
+}
 
 export const SelectLoadingOptions = ({
   row,
@@ -22,15 +48,16 @@ export const SelectLoadingOptions = ({
   query,
   filter,
   queryNodesName,
-}) => {
+}: SelectLoadingOptionsProps) => {
   const apolloClient = useApolloClient()
+  const rowRecord = row as Record<string, unknown> | null | undefined
 
-  const loadOptions = async (inputValue, cb) => {
+  const loadOptions = async (inputValue: string) => {
     const ownFilter =
       inputValue ?
         { artname: { includesInsensitive: inputValue } }
       : { artname: { isNull: false } }
-    let result
+    let result: { data?: unknown } | undefined
     try {
       result = await apolloClient.query({
         query,
@@ -41,12 +68,13 @@ export const SelectLoadingOptions = ({
     } catch (error) {
       console.log({ error })
     }
-    const { data } = result
-    const options = data?.[queryNodesName]?.nodes ?? []
-    cb(options)
+    const data = result?.data as Record<string, unknown> | undefined
+    const options =
+      (data?.[queryNodesName] as SelectLoadingNodes | undefined)?.nodes ?? []
+    return options
   }
 
-  const onChange = (option) => {
+  const onChange = (option: SelectLoadingOption | null) => {
     const value = option && option.value ? option.value : null
     const fakeEvent = {
       target: {
@@ -54,12 +82,15 @@ export const SelectLoadingOptions = ({
         value,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   const value = {
-    value: row[field] ?? '',
-    label: valueLabel ? valueLabel : (get(row, valueLabelPath) ?? ''),
+    value: (rowRecord?.[field] as string | undefined) ?? '',
+    label:
+      valueLabel ?
+        valueLabel
+      : ((get(rowRecord ?? {}, valueLabelPath ?? '') as string | null) ?? ''),
   }
 
   return (
@@ -85,8 +116,6 @@ export const SelectLoadingOptions = ({
         placeholder=""
         isClearable
         isSearchable
-        // remove as can't select without typing
-        nocaret
         // don't show a no options message if a value exists
         noOptionsMessage={() =>
           value.value ? null : '(Bitte Tippen für Vorschläge)'

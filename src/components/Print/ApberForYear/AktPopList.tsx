@@ -1,13 +1,13 @@
 import { Suspense } from 'react'
 import { sumBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-import type { ApId } from '../../../models/apflora/public/Ap.ts'
+import type { ApId } from '../../../models/apflora/Ap.ts'
 
 import styles from './AktPopList.module.css'
 
@@ -28,6 +28,10 @@ interface AktPopListQueryResult {
   }
 }
 
+interface AktPopListProps {
+  year?: number | undefined
+}
+
 const fallback = (
   <ErrorBoundary>
     <div className={styles.container}>
@@ -39,17 +43,17 @@ const fallback = (
   </ErrorBoundary>
 )
 
-export const AktPopList = ({ year }) => {
+export const AktPopList = ({ year }: AktPopListProps) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
   const apolloClient = useApolloClient()
 
-  const previousYear = year - 1
+  const previousYear = (year ?? 0) - 1
   const { data, error } = useQuery({
     queryKey: ['jberAktPopQuery', projId, previousYear, year],
     queryFn: () =>
-      apolloClient.query({
-        query: gql`
+      apolloClient.query<AktPopListQueryResult>({
+        query: graphql(`
           query AktPopListAps($jahr: Int!) {
             jberAktPop(jahr: $jahr) {
               nodes {
@@ -64,7 +68,7 @@ export const AktPopList = ({ year }) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           projektId: projId,
           previousYear,
@@ -73,12 +77,12 @@ export const AktPopList = ({ year }) => {
       }),
   })
   const aps = data?.data?.jberAktPop?.nodes ?? []
-  const pop100 = sumBy(aps, (e) => e.pop100)
-  const pop200 = sumBy(aps, (e) => e.pop200)
-  const popsTotal = sumBy(aps, (e) => e.popTotal)
-  const pop100Diff = sumBy(aps, (e) => e.pop100Diff)
-  const pop200Diff = sumBy(aps, (e) => e.pop200Diff)
-  const popTotalDiff = sumBy(aps, (e) => e.popTotalDiff)
+  const pop100 = sumBy(aps, (e) => e.pop100 ?? 0)
+  const pop200 = sumBy(aps, (e) => e.pop200 ?? 0)
+  const popsTotal = sumBy(aps, (e) => e.popTotal ?? 0)
+  const pop100Diff = sumBy(aps, (e) => e.pop100Diff ?? 0)
+  const pop200Diff = sumBy(aps, (e) => e.pop200Diff ?? 0)
+  const popTotalDiff = sumBy(aps, (e) => e.popTotalDiff ?? 0)
 
   if (error) return `Fehler: ${error.message}`
 
@@ -116,8 +120,8 @@ export const AktPopList = ({ year }) => {
                 className={styles.ursprColumn}
                 style={{
                   backgroundColor:
-                    ap?.pop100Diff > 0 ? '#00ff00'
-                    : ap?.pop100Diff < 0 ? 'red'
+                    (ap?.pop100Diff ?? 0) > 0 ? '#00ff00'
+                    : (ap?.pop100Diff ?? 0) < 0 ? 'red'
                     : 'white',
                 }}
               >
@@ -127,8 +131,8 @@ export const AktPopList = ({ year }) => {
                 className={styles.angesColumn}
                 style={{
                   backgroundColor:
-                    ap?.pop200Diff > 0 ? '#00ff00'
-                    : ap?.pop200Diff < 0 ? 'red'
+                    (ap?.pop200Diff ?? 0) > 0 ? '#00ff00'
+                    : (ap?.pop200Diff ?? 0) < 0 ? 'red'
                     : 'white',
                 }}
               >
@@ -138,8 +142,8 @@ export const AktPopList = ({ year }) => {
                 className={styles.totalDiffColumn}
                 style={{
                   backgroundColor:
-                    ap?.popTotalDiff > 0 ? '#00ff00'
-                    : ap?.popTotalDiff < 0 ? 'red'
+                    (ap?.popTotalDiff ?? 0) > 0 ? '#00ff00'
+                    : (ap?.popTotalDiff ?? 0) < 0 ? 'red'
                     : 'white',
                 }}
               >

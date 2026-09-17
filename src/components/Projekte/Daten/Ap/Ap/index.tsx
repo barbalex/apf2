@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 
 import { TextFieldNonUpdatable } from '../../../../shared/TextFieldNonUpdatable.tsx'
@@ -17,7 +17,7 @@ export const Component = () => {
 
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ap', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApQueryResult>({
@@ -25,9 +25,9 @@ export const Component = () => {
         variables: { id: apId },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as ApQueryResult
     },
-    suspense: true,
   })
 
   const row = data.apById
@@ -46,7 +46,8 @@ export const Component = () => {
           key={`${row.id}artwert`}
           label="Artwert"
           value={
-            row?.aeTaxonomyByArtId?.artwert ?? 'Diese Art hat keinen Artwert'
+            (row?.aeTaxonomyByArtId?.artwert ??
+              'Diese Art hat keinen Artwert') as string
           }
         />
       </div>

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { BeobId } from '../../../../models/apflora/index.tsx'
+import type { BeobId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -17,7 +17,7 @@ import {
 
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
-    nodes: Array<{
+    nodes: {
       id: BeobId
       quelle?: string
       id_field?: string
@@ -45,7 +45,7 @@ interface BeobArtChangedQueryResult {
       created_at?: string
       updated_at?: string
       changed_by?: string
-    }>
+    }[]
   }
 }
 
@@ -55,16 +55,16 @@ export const BeobArtChanged = () => {
 
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickButton = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: BeobArtChangedQueryResult }
+    let result: { data?: BeobArtChangedQueryResult | undefined } | undefined
     try {
       // view: v_beob_art_changed
       result = mapFilter
         ? await apolloClient.query<BeobArtChangedQueryResult>({
-            query: gql`
+            query: graphql(`
               query allBeobsArtChangedFilteredByMap {
                 allVBeobArtChangeds {
                   nodes {
@@ -98,7 +98,7 @@ export const BeobArtChanged = () => {
                   }
                 }
               }
-            `,
+            `),
             variables: {
               filter: {
                 geomPoint: {
@@ -108,7 +108,7 @@ export const BeobArtChanged = () => {
             },
           })
         : await apolloClient.query<BeobArtChangedQueryResult>({
-            query: gql`
+            query: graphql(`
               query allBeobsArtChanged {
                 allVBeobArtChangeds {
                   nodes {
@@ -142,7 +142,7 @@ export const BeobArtChanged = () => {
                   }
                 }
               }
-            `,
+            `),
           })
     } catch (error) {
       setQueryState(undefined)
@@ -154,7 +154,7 @@ export const BeobArtChanged = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = result.data?.allVBeobArtChangeds?.nodes ?? []
+    const rows = result?.data?.allVBeobArtChangeds?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({
@@ -164,21 +164,21 @@ export const BeobArtChanged = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
+    void exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickButton}
+      onClick={() => void onClickButton()}
       color="inherit"
       disabled={!!queryState}
     >
       Alle Beobachtungen, bei denen die Art verändert wurde
-      {queryState ? (
+      {queryState ?
         <span className={styles.progress}>{queryState}</span>
-      ) : null}
+      : null}
     </Button>
   )
 }

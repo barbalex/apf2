@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryAeTaxonomies = gql`
+export const queryAeTaxonomies = graphql(`
   query TpopmassnAeTaxonomiesQueryForTpopmassn($filter: AeTaxonomyFilter!) {
     allAeTaxonomies(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
       nodes {
@@ -9,4 +9,4 @@ export const queryAeTaxonomies = gql`
       }
     }
   }
-`
+`)

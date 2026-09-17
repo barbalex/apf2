@@ -2,28 +2,48 @@ import { queryEkfrequenz } from './queryEkfrequenz.ts'
 import { queryTpopkontr } from './queryTpopkontr.ts'
 import { queryTpopmassn } from './queryTpopmassn.ts'
 import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
+import type { TpopRow } from '../tableTypes.ts'
 import {
   store,
   apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
+  type Notification,
 } from '../../../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const setStartjahr = async ({ row, ekfrequenz }) => {
+export const setStartjahr = async ({
+  row,
+  ekfrequenz,
+}: {
+  row: TpopRow
+  ekfrequenz: string | null
+}) => {
   const apolloClient = store.get(apolloClientAtom)
+  if (!apolloClient) return
   // 1  get ekfrequenz's kontrolljahreAb
-  let ekfrequenzResult
+  let ekfrequenzResult:
+    | {
+        data?:
+          | {
+              ekfrequenzById?: {
+                kontrolljahre: number[] | null
+                kontrolljahreAb: string | null
+              }
+            }
+          | undefined
+      }
+    | undefined
   try {
-    ekfrequenzResult = await apolloClient.query({
+    ekfrequenzResult = (await apolloClient.query({
       query: queryEkfrequenz,
-      variables: { id: ekfrequenz },
-    })
+      variables: { id: ekfrequenz ?? '' },
+    })) as typeof ekfrequenzResult
   } catch (error) {
     return addNotification({
-      message: `Fehler beim Abfragen der EK-Frequenz: ${error.message}`,
+      message: `Fehler beim Abfragen der EK-Frequenz: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },
@@ -50,18 +70,18 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
   }
   // TODO: query last ek here instead of fetching from previously loaded
   // reason: no need to load that data beforehand if it is not needed
-  let ekfrequenzStartjahr
+  let ekfrequenzStartjahr: number | undefined
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {
-    let result
+    let result: { data?: { tpopById?: { tpopkontrsByTpopId?: { nodes?: { jahr: number }[] }; tpopmassnsByTpopId?: { nodes?: { jahr: number }[] } } } } | undefined
     try {
-      result = await apolloClient.query({
+      result = (await apolloClient.query({
         query: queryTpopkontr,
         variables: { tpopId: row.id },
-      })
+      })) as typeof result
     } catch (error) {
       return addNotification({
-        message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
+        message: `Fehler beim Abfragen der EK-Kontrollen: ${(error as Error).message}`,
         options: {
           variant: 'error',
         },
@@ -79,7 +99,7 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
       })
     }
     ekfrequenzStartjahr = kontrollen.length
-      ? Math.max(...kontrollen.map((n) => n.jahr))
+      ? Math.max(...kontrollen.map((n: { jahr: number }) => n.jahr))
       : new Date().getFullYear()
   }
   // 2b if ansiedlung: get last ansiedlung
@@ -87,15 +107,15 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
     // TODO:
     // if tpop.status === 201 (Ansaatversuch): choose first ansaat
     // else: choose last anpflanzung
-    let result
+    let result: { data?: { tpopById?: { tpopkontrsByTpopId?: { nodes?: { jahr: number }[] }; tpopmassnsByTpopId?: { nodes?: { jahr: number }[] } } } } | undefined
     try {
-      result = await apolloClient.query({
+      result = (await apolloClient.query({
         query: queryTpopmassn,
         variables: { tpopId: row.id },
-      })
+      })) as typeof result
     } catch (error) {
       return addNotification({
-        message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
+        message: `Fehler beim Abfragen der EK-Kontrollen: ${(error as Error).message}`,
         options: {
           variant: 'error',
         },
@@ -127,7 +147,7 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
     })
   } catch (error) {
     return addNotification({
-      message: `Fehler beim Aktualisieren der Teil-Population: ${error.message}`,
+      message: `Fehler beim Aktualisieren der Teil-Population: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },

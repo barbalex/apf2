@@ -1,4 +1,13 @@
-export const layerLegends = ({ apId }) => ({
+export interface LayerLegend {
+  name: string
+  url: string
+}
+
+export const layerLegends = ({
+  apId,
+}: {
+  apId: string | undefined
+}): Record<string, LayerLegend[]> => ({
   ZhLrVegKartierungen: [
     {
       name: 'FnsLRKZH',

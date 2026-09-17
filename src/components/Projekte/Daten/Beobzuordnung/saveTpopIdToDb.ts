@@ -1,5 +1,7 @@
 import { isEqual } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import type { ApolloClient } from '@apollo/client'
+import type { QueryClient } from '@tanstack/react-query'
+import { graphql } from '../../../../gql/index.ts'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -13,15 +15,32 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
-export const saveTpopIdToDb = async ({ value, id, type, search }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+interface SaveTpopIdToDbParams {
+  value: string | number | null
+  id: string
+  type: string
+  search: string
+}
+
+export const saveTpopIdToDb = async ({
+  value,
+  id,
+  type,
+  search,
+}: SaveTpopIdToDbParams) => {
+  // both clients are set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
+  const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodesRaw = store.get(treeOpenNodesAtom)
   const openNodes = openNodesRaw ?? []
 
-  const variables = {
+  const variables: {
+    id: string
+    tpopId: string | number | null
+    nichtZuordnen?: boolean
+  } = {
     id,
     tpopId: value,
   }
@@ -34,21 +53,21 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
   })
 
   // need to update activeNodeArray and openNodes
-  let newANA
-  let newOpenNodes
+  let newANA: (string | number)[]
+  let newOpenNodes: (string | number)[][]
 
   if (value) {
-    let result = {}
-    result = await apolloClient.query({
-      query: gql`
+    const result = await apolloClient.query({
+      query: graphql(`
         query saveTpopIdToDbQuery($id: UUID!) {
           tpopById(id: $id) {
             id
             popId
           }
         }
-      `,
-      variables: { id: value },
+      `),
+      // value is a tpop id (a UUID string)
+      variables: { id: value as string },
     })
     // activeNodeArray is already loaded
     const popId = result?.data?.tpopById?.popId
@@ -64,7 +83,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
       tpopId,
       'Beobachtungen',
       id,
-    ]
+    ] as (string | number)[]
     const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
     const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
     const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
@@ -132,7 +151,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
           'Beobachtungen',
           id,
         ],
-      ]
+      ] as (string | number)[][]
     } else {
       // type = zugeordnet?
       newOpenNodes = [
@@ -195,7 +214,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
           'Beobachtungen',
           id,
         ],
-      ]
+      ] as (string | number)[][]
     }
   } else {
     // needs to go to nicht-beurteilte-Beobachtungen
@@ -206,7 +225,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
       activeNodeArray[3],
       'nicht-beurteilte-Beobachtungen',
       id,
-    ]
+    ] as (string | number)[]
     const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
     const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
     const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
@@ -233,7 +252,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
           'nicht-beurteilte-Beobachtungen',
           id,
         ],
-      ]
+      ] as (string | number)[][]
     } else {
       newOpenNodes = [
         ...openNodes.filter(
@@ -261,36 +280,36 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
           'nicht-beurteilte-Beobachtungen',
           id,
         ],
-      ]
+      ] as (string | number)[][]
     }
   }
-  navigate(`/Daten/${newANA.join('/')}${search}`)
+  navigate?.(`/Daten/${newANA.join('/')}${search}`)
   store.set(treeSetOpenNodesAtom, newOpenNodes)
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobZugeordnetForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobNichtBeurteiltForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobnichtbeurteilt`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
   setTimeout(() => store.set(setTreeLastTouchedNodeAtom, newANA), 1000)

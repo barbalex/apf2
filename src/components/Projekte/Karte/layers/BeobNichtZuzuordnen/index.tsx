@@ -3,34 +3,17 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
+import type { Marker as LeafletMarkerType } from 'leaflet'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
+import type { BeobNichtZuzuordnenNode } from './Marker.tsx'
 import { query } from './query.ts'
-
-import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
-import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
   addNotificationAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../store/index.ts'
-
-interface BeobNichtZuzuordnenNode {
-  id: BeobId
-  wgs84Lat: number
-  wgs84Long: number
-  lv95X: number | null
-  lv95Y: number | null
-  datum: string | null
-  autor: string | null
-  quelle: string | null
-  absenz: boolean | null
-  aeTaxonomyByArtId: {
-    id: AeTaxonomyId
-    artname: string | null
-  } | null
-}
 
 interface BeobNichtZuzuordnenQueryResult {
   allBeobs: {
@@ -38,10 +21,12 @@ interface BeobNichtZuzuordnenQueryResult {
   }
 }
 
-const iconCreateFunction = function (cluster) {
+const iconCreateFunction = (cluster: {
+  getAllChildMarkers: () => LeafletMarkerType[]
+}) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    (m) => m.options.icon.options.className === 'beobIconHighlighted',
+    (m) => m.options.icon?.options.className === 'beobIconHighlighted',
   )
   const className =
     hasHighlightedTpop ?
@@ -49,14 +34,15 @@ const iconCreateFunction = function (cluster) {
     : 'beobZugeordnetCluster'
 
   return window.L.divIcon({
-    html: markers.length,
+    html: String(markers.length),
     className,
     iconSize: window.L.point(40, 40),
   })
 }
 
-const BeobNichtZuzuordnenMarker = ({ clustered }) => {
+const BeobNichtZuzuordnenMarker = ({ clustered }: { clustered: boolean }) => {
   // const leafletMap = useMap()
+  const addNotification = useSetAtom(addNotificationAtom)
   const beobNichtZuzuordnenGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('nichtZuzuordnen'),
   )
@@ -67,16 +53,19 @@ const BeobNichtZuzuordnenMarker = ({ clustered }) => {
       'KarteBeobNichtZuzuordnenQuery',
       beobNichtZuzuordnenGqlFilter.filtered,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobNichtZuzuordnenQueryResult>({
         query,
         variables: {
           beobFilter: beobNichtZuzuordnenGqlFilter.filtered,
         },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   // const [refetchProvoker, setRefetchProvoker] = useState(1)
   // useEffect(() => {
   //   // DO NOT use:
@@ -99,7 +88,7 @@ const BeobNichtZuzuordnenMarker = ({ clustered }) => {
     })
   }
 
-  const beobMarkers = (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
+  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Marker
       key={beob.id}
       beob={beob}
@@ -120,8 +109,7 @@ const BeobNichtZuzuordnenMarker = ({ clustered }) => {
   return beobMarkers
 }
 
-export const BeobNichtZuzuordnen = ({ clustered }) => {
-  const addNotification = useSetAtom(addNotificationAtom)
+export const BeobNichtZuzuordnen = ({ clustered }: { clustered: boolean }) => {
   const beobNichtZuzuordnenGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('nichtZuzuordnen'),
   )

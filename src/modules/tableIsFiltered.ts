@@ -4,8 +4,9 @@ import {
   treeMapFilterAtom,
   getGqlFilterAtomByTable,
 } from '../store/index.ts'
+import type { Atom } from 'jotai'
 
-export const tableIsFiltered = ({ table }) => {
+export const tableIsFiltered = ({ table }: { table: string }) => {
   // check nodeLabelFilter
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const nodeLabelFilterExists = !!nodeLabelFilter[table]
@@ -25,7 +26,9 @@ export const tableIsFiltered = ({ table }) => {
   const gqlFilterAtom = getGqlFilterAtomByTable(table)
   if (!gqlFilterAtom) return false
 
-  const gqlFilter = store.get(gqlFilterAtom)?.filtered?.or?.[0] ?? {}
+  const gqlFilter =
+    (store.get(gqlFilterAtom as Atom<{ filtered?: { or?: object[] } }>)?.filtered
+      ?.or?.[0] as Record<string, unknown> | undefined) ?? {}
   const isGqlFilter = Object.keys(gqlFilter).length > 0
   return isGqlFilter
 }

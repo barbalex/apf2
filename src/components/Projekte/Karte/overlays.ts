@@ -101,7 +101,6 @@ export const overlays = [
   {
     label: 'Wälder: Vegetation',
     value: 'ZhWaelderVegetation',
-    name: 'ZhWaelderVegetation',
     // get info works, returns data
     name: 'ZhWaelderVegetation',
     wmsUrl: '//wms.zh.ch/FnsLWZH',

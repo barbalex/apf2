@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { user } from '../../../shared/fragments.ts'
 
-export const updateUserById = gql`
+export const updateUserById = dynamicGql`
   mutation updateUserForEkfUser(
     $id: UUID!
     $name: String

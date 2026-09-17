@@ -1,7 +1,8 @@
-import { useState, type ChangeEvent, type ReactNode } from 'react'
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
+import { useState, type ReactNode } from 'react'
 import { useParams } from 'react-router'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
-import { gql } from '@apollo/client'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 
@@ -15,13 +16,14 @@ import { userNameAtom } from '../../../../../store/index.ts'
 import { ap, aeTaxonomies } from '../../../../shared/fragments.ts'
 import { query } from '../query.ts'
 
-import type ApType from '../../../../../models/apflora/Ap.ts'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../../models/apflora/AeTaxonomies.ts'
 import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
+import type { ProjektId } from '../../../../../models/apflora/Projekt.ts'
 
 import styles from './Ap.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   bearbeitung: 'Int',
   startJahr: 'Int',
   umsetzung: 'Int',
@@ -32,30 +34,40 @@ const fieldTypes = {
 }
 
 export interface ApQueryResult {
-  apById: ApType & {
-    aeTaxonomyByArtId?: {
+  apById: {
+    id: ApId
+    label: string | null
+    artId: AeTaxonomiesId | null
+    bearbeitung: number | null
+    startJahr: number | null
+    umsetzung: number | null
+    bearbeiter: AdresseId | null
+    ekfBeobachtungszeitpunkt: string | null
+    projId: ProjektId | null
+    changedBy: string | null
+    aeTaxonomyByArtId: {
       id: AeTaxonomiesId
-      taxArtName: string
+      taxArtName: string | null
       artwert: number | null
-    }
+    } | null
   }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
-      label: string
-    }>
+      label: string | null
+    }[]
   }
   allApBearbstandWertes: {
-    nodes: Array<{
+    nodes: {
       value: number
-      label: string
-    }>
+      label: string | null
+    }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{
+    nodes: {
       value: number
-      label: string
-    }>
+      label: string | null
+    }[]
   }
 }
 
@@ -73,7 +85,7 @@ export const Ap = ({ children }: Props) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, refetch } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['ap', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApQueryResult>({
@@ -81,15 +93,15 @@ export const Ap = ({ children }: Props) => {
         variables: { id: apId },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as ApQueryResult
     },
-    suspense: true,
   })
 
-  const row = data.apById as ApType
+  const row = data.apById
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -98,8 +110,8 @@ export const Ap = ({ children }: Props) => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate<any>({
-        mutation: gql`
+      await apolloClient.mutate({
+        mutation: dynamicGql`
             mutation updateAp(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -137,9 +149,9 @@ export const Ap = ({ children }: Props) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    refetch()
+    void refetch()
     if (field === 'artId') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
     }
@@ -167,7 +179,9 @@ export const Ap = ({ children }: Props) => {
         key={`${apId}artId`}
         field="artId"
         valueLabelPath="aeTaxonomyByArtId.taxArtName"
+        valueLabel={undefined}
         label="Art (das namensgebende Taxon)"
+        labelSize={undefined}
         row={row}
         query={queryAeTaxonomies}
         filter={aeTaxonomiesfilterForData}
@@ -178,7 +192,6 @@ export const Ap = ({ children }: Props) => {
       <RadioButtonGroupWithInfo
         name="bearbeitung"
         dataSource={data.allApBearbstandWertes?.nodes ?? []}
-        loading={false}
         popover={
           <div className={styles.popover}>
             <div
@@ -198,7 +211,7 @@ export const Ap = ({ children }: Props) => {
           </div>
         }
         label="Aktionsplan"
-        value={row.bearbeitung}
+        value={row.bearbeitung as unknown as string}
         saveToDb={saveToDb}
         error={fieldErrors.bearbeitung}
       />
@@ -214,7 +227,6 @@ export const Ap = ({ children }: Props) => {
         key={`${apId}umsetzung`}
         name="umsetzung"
         dataSource={data.allApUmsetzungWertes?.nodes ?? []}
-        loading={false}
         popover={
           <div className={styles.popover}>
             <div
@@ -240,7 +252,7 @@ export const Ap = ({ children }: Props) => {
           </div>
         }
         label="Stand Umsetzung"
-        value={row.umsetzung}
+        value={row.umsetzung as unknown as string}
         saveToDb={saveToDb}
         error={fieldErrors.umsetzung}
       />
@@ -251,8 +263,8 @@ export const Ap = ({ children }: Props) => {
         options={data.allAdresses?.nodes ?? []}
         loading={false}
         value={row.bearbeiter}
-        saveToDb={saveToDb}
-        error={fieldErrors.bearbeiter}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.bearbeiter ?? ''}
       />
       {children}
       <TextField

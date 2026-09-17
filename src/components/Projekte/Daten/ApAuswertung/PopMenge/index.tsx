@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
@@ -22,28 +22,27 @@ import { exists } from '../../../../../modules/exists.ts'
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 import type { PopId } from '../../../../../models/apflora/Pop.ts'
 import type { EkzaehleinheitId } from '../../../../../models/apflora/Ekzaehleinheit.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
-import type { PopStatusWerteCode } from '../../../../../models/apflora/PopStatusWerte.ts'
+import type { TpopkontrzaehlEinheitWerteId } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
 
 import styles from './index.module.css'
 
 interface ApAuswPopMengeNode {
   jahr: number | null
-  values: string | null
+  values: string
 }
 
 interface PopNode {
   id: PopId
   nr: number | null
   name: string | null
-  status: PopStatusWerteCode | null
+  status: number | null
 }
 
 interface EkzaehleinheitNode {
   id: EkzaehleinheitId
   tpopkontrzaehlEinheitWerteByZaehleinheitId: {
-    id: TpopkontrzaehlEinheitWerteCode
-    text: string
+    id: TpopkontrzaehlEinheitWerteId
+    text: string | null
   } | null
 }
 
@@ -69,7 +68,7 @@ interface PopMengeProps {
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
-const formatNumber = (tickItem: any) => {
+const formatNumber = (tickItem: number) => {
   const value =
     exists(tickItem) && tickItem?.toLocaleString ?
       tickItem.toLocaleString('de-ch')
@@ -90,7 +89,7 @@ export const PopMenge = ({
   const id = apIdPassed ?? (apId as ApId)
 
   const jahr = jahrPassed ?? new Date().getFullYear()
-  const { data: dataPopMenge } = useQuery({
+  const { data: dataPopMenge } = useSuspenseQuery({
     queryKey: ['popMenge', id, jahr],
     queryFn: async () => {
       const result = await apolloClient.query<PopMengeQueryResult>({
@@ -98,27 +97,23 @@ export const PopMenge = ({
         variables: { id, jahr },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as PopMengeQueryResult
     },
-    suspense: true,
   })
 
   const popsData = dataPopMenge.allPops.nodes ?? []
   const popMengeRawData = dataPopMenge.apAuswPopMenge.nodes ?? []
-  const popMengeData = popMengeRawData.map((e) => ({
+  const popMengeData: Record<string, unknown>[] = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
   }))
   const nonUniquePopIdsWithData = popMengeData.flatMap((d) =>
     Object.entries(d)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => key !== 'jahr')
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => exists(value))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(([key, value]) => key),
+      .filter(([key]) => key !== 'jahr')
+      .filter(([, value]) => exists(value))
+      .map(([key]) => key),
   )
-  const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
+  const popIdsWithData = [...new Set(nonUniquePopIdsWithData)] as PopId[]
   const popIdsWithDataSorted = sortBy(popIdsWithData, [
     (id) => {
       const pop = popsData.find((d) => d.id === id)
@@ -183,15 +178,15 @@ export const PopMenge = ({
                   position: 'insideLeft',
                   offset: print ? 0 : -15,
                 }}
-                tickFormatter={formatNumber}
+                tickFormatter={formatNumber as (value: number) => string}
               />
               {popIdsWithDataSorted.reverse().map((id) => {
                 const pop = popsData.find((p) => p.id === id)
-                let color
+                let color: string
                 if (!pop) {
                   color = 'grey'
                 } else {
-                  const isUrspruenglich = pop?.status < 200
+                  const isUrspruenglich = (pop?.status ?? 0) < 200
                   color =
                     isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                 }

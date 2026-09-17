@@ -4,7 +4,7 @@ import { useParams } from 'react-router'
 const version = '1.3.0'
 const format = 'image/png'
 
-export const Massnahmen = ({ layer }) => {
+export const Massnahmen = ({ layer }: { layer: string }) => {
   const { apId } = useParams()
 
   if (!apId) return null

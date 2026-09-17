@@ -1,8 +1,7 @@
-import { lazy, Suspense, useRef } from 'react'
-import { Outlet } from 'react-router'
-import { useParams, useLocation } from 'react-router'
+import { lazy, Suspense, useRef, type ReactElement } from 'react'
+import { Outlet, useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-import { SplitPane, Pane } from 'react-split-pane'
+import { SplitPane, Pane, type Size } from 'react-split-pane'
 
 // Karte was previously not lazy-loaded due to issue #616.
 // That issue was specific to an older bundler/react-leaflet version.
@@ -29,8 +28,7 @@ import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 import styles from './ProjektContainer.module.css'
 
 export const ProjektContainer = () => {
-  const { projId, apberuebersichtId, apberId } = useParams()
-  const { pathname } = useLocation()
+  const { projId } = useParams()
 
   const isPrint = useAtomValue(isPrintAtom)
 
@@ -50,14 +48,11 @@ export const ProjektContainer = () => {
     ...new Set(treeTabValues).intersection(new Set(projekteTabs)),
   ]
 
-  const showApberForArt = apberId && pathname.endsWith('print')
-  const showApberForAll = apberuebersichtId && pathname.endsWith('print')
-
   // need this to prevent map from greying out on resize
   // https://github.com/PaulLeCam/react-leaflet/issues/1074
   const mapContainerRef = useRef(null)
 
-  const elObj = {
+  const elObj: Record<string, ReactElement> = {
     tree: (
       <div className={styles.innerContainer}>
         <Suspense fallback={<Spinner />}>
@@ -112,7 +107,8 @@ export const ProjektContainer = () => {
     singlePane ? '100%'
     : firstOfTwoIsTree ? '33%'
     : undefined
-  const firstPaneMaxSize = singlePane ? null : '95%'
+  // null means "no max size" and is not part of the Pane prop type
+  const firstPaneMaxSize = (singlePane ? null : '95%') as Size
 
   // issue with extra panes only appearing with help of keys
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
@@ -129,38 +125,38 @@ export const ProjektContainer = () => {
       >
         <SplitPane direction="horizontal">
           <Pane
-            size={firstPaneSize}
+            size={firstPaneSize as Size}
             maxSize={firstPaneMaxSize}
-            className={styles.overflowingPane}
+            className={styles.overflowingPane as string}
           >
-            {elObj[treeTabs[0]]}
+            {elObj[treeTabs[0] as string]}
           </Pane>
           <Pane
             key={treeTabs.length > 1 ? treeTabs[1] : 'emptyPane2'}
             maxSize="95%"
-            className={styles.overflowingPane}
-            size={treeTabs.length > 1 ? null : 0}
+            className={styles.overflowingPane as string}
+            size={(treeTabs.length > 1 ? null : 0) as Size}
           >
             {treeTabs[1] ? elObj[treeTabs[1]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 2 ? treeTabs[2] : 'emptyPane3'}
             maxSize="95%"
-            size={treeTabs.length > 2 ? null : 0}
+            size={(treeTabs.length > 2 ? null : 0) as Size}
           >
             {treeTabs[2] ? elObj[treeTabs[2]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 3 ? treeTabs[3] : 'emptyPane4'}
             maxSize="95%"
-            size={treeTabs.length > 3 ? null : 0}
+            size={(treeTabs.length > 3 ? null : 0) as Size}
           >
             {treeTabs[3] ? elObj[treeTabs[3]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 4 ? treeTabs[4] : 'emptyPane5'}
             maxSize="95%"
-            size={treeTabs.length > 4 ? null : 0}
+            size={(treeTabs.length > 4 ? null : 0) as Size}
           >
             {treeTabs[4] ? elObj[treeTabs[4]] : null}
           </Pane>

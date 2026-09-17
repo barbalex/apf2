@@ -1,17 +1,19 @@
 import { queryTpop } from './queryTpop.ts'
 import { updatePopById } from './updatePopById.ts'
-import {store,
-  apolloClientAtom,
-  tsQueryClientAtom,
-  addNotificationAtom} from '../../store/index.ts'
+import {
+  store,
+  addNotificationAtom,
+  type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
+} from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-
-export const copyTpopKoordToPop = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
   // fetch tpop
   let tpopResult
   try {
@@ -21,13 +23,22 @@ export const copyTpopKoordToPop = async ({ id }) => {
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const tpop = tpopResult?.data?.tpopById
+  if (!tpop?.popId || !tpop?.geomPoint) {
+    return addNotification({
+      message:
+        'Die Teil-Population hat keine Koordinaten oder keine Population',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const { geomPoint: geomPoint0, popId } = tpop
 
   // set pop coordinates
@@ -56,16 +67,16 @@ export const copyTpopKoordToPop = async ({ id }) => {
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`PopForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`TpopForMapQuery`],
   })
 

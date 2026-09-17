@@ -34,17 +34,25 @@ import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 
+import type { PopNode } from './index.tsx'
+
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
-const getIconHtml = ({ isHighlighted, pop, popIconName }) => {
+interface GetIconHtmlProps {
+  isHighlighted: boolean
+  pop: PopNode
+  popIconName: string
+}
+
+const getIconHtml = ({ isHighlighted, pop, popIconName }: GetIconHtmlProps) => {
   let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
   if (popIconName === 'statusGroup') {
     iconHtml = isHighlighted ? qIconHighlighted : qIcon
     if (pop.status === 300) {
       iconHtml = isHighlighted ? pIconHighlighted : pIcon
-    } else if (pop.status >= 200) {
+    } else if ((pop.status as number) >= 200) {
       iconHtml = isHighlighted ? aIconHighlighted : aIcon
-    } else if (pop.status >= 100) {
+    } else if ((pop.status as number) >= 100) {
       iconHtml = isHighlighted ? uIconHighlighted : uIcon
     }
   } else if (popIconName === 'statusGroupSymbols') {
@@ -66,7 +74,7 @@ const getIconHtml = ({ isHighlighted, pop, popIconName }) => {
   return iconHtml
 }
 
-export const Marker = ({ pop }) => {
+export const Marker = ({ pop }: { pop: PopNode }) => {
   const { apId, projId, popId } = useParams()
   const { search } = useLocation()
 
@@ -96,7 +104,8 @@ export const Marker = ({ pop }) => {
         apId,
         'Populationen',
         pop.id,
-      ],
+        // route params are present for map markers
+      ] as (string | number)[],
       search,
       projekteTabs,
       setProjekteTabs,

@@ -1,8 +1,14 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -22,7 +28,6 @@ import {
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import {
@@ -38,7 +43,7 @@ import type {
   TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './Tpop.module.css'
 
@@ -92,6 +97,7 @@ interface TpopQueryResult {
     bodenAbtrag: string | null
     wasserhaushalt: string | null
     geomPoint?: {
+      geojson: string | null
       x: number | null
       y: number | null
     }
@@ -108,20 +114,42 @@ interface TpopQueryResult {
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes?: {
-    nodes: Array<{
+    nodes: {
       value: TpopApberrelevantGrundWerteCode
       label: string | null
-    }>
+    }[]
   }
   allChAdministrativeUnits?: {
-    nodes: Array<{
+    nodes: {
       value: string
       label: string
-    }>
+    }[]
   }
 }
 
-export const fieldTypes = {
+interface GemeindeQueryResult {
+  allChAdministrativeUnits?: {
+    nodes?: {
+      id: string
+      text: string | null
+    }[]
+  }
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopUseQueryOptions = UseQueryOptions<TpopQueryResult | undefined, Error> & {
+  suspense: boolean
+}
+
+type TpopListsUseQueryOptions = UseQueryOptions<
+  TpopListsQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
+}
+
+const fieldTypes: Record<string, string> = {
   popId: 'UUID',
   nr: 'Int',
   gemeinde: 'String',
@@ -166,7 +194,7 @@ export const Component = () => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, refetch: refetchTpop } = useQuery<TpopQueryResult>({
+  const tpopQueryOptions: TpopUseQueryOptions = {
     queryKey: ['tpop', tpopId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopQueryResult>({
@@ -177,17 +205,20 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data, refetch: refetchTpop } = useQuery(tpopQueryOptions)
 
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
-  const row = data?.tpopById ?? {}
+  const row = (data?.tpopById ?? {}) as NonNullable<
+    TpopQueryResult['tpopById']
+  >
 
-  const { data: dataLists } = useQuery<TpopListsQueryResult>({
+  const tpopListsQueryOptions: TpopListsUseQueryOptions = {
     queryKey: ['tpopLists'],
     queryFn: async () => {
       const result = await apolloClient.query<TpopListsQueryResult>({
-        query: gql`
+        query: graphql(`
           query TpopListsQueryForTpop {
             allTpopApberrelevantGrundWertes(
               orderBy: SORT_ASC
@@ -208,16 +239,18 @@ export const Component = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data: dataLists } = useQuery(tpopListsQueryOptions)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -227,7 +260,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpop${field}(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -271,18 +304,18 @@ export const Component = () => {
       }))
     }
     // invalidate tpop queries
-    tsQueryClient.invalidateQueries({ queryKey: ['tpop', tpopId] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['tpop', tpopId] })
     // update tpop on map
     if (
       (value &&
         ((field === 'ylv95Y' && row?.lv95X) ||
-          (field === 'lv95X' && row?.y))) ||
+          (field === 'lv95X' && (row as { y?: number | null })?.y))) ||
       (!value && (field === 'ylv95Y' || field === 'lv95X'))
     ) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`PopForMapQuery`],
       })
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`TpopForMapQuery`],
       })
     }
@@ -293,7 +326,7 @@ export const Component = () => {
       })
     }
     if (['nr', 'flurname'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
     }
@@ -325,13 +358,13 @@ export const Component = () => {
           error={fieldErrors.flurname}
         />
         <Status
-          apJahr={apJahr}
+          apJahr={apJahr as null}
           showFilter={false}
           saveToDb={saveToDb}
           errors={fieldErrors}
           row={row}
           // this is just to enforce re-render on change
-          status={row.status}
+          {...{ status: row.status }}
         />
         <Checkbox2States
           name="statusUnklar"
@@ -339,6 +372,7 @@ export const Component = () => {
           value={row.statusUnklar}
           saveToDb={saveToDb}
           error={fieldErrors.statusUnklar}
+          helperText=""
         />
         <TextField
           name="statusUnklarGrund"
@@ -355,19 +389,20 @@ export const Component = () => {
           value={row.apberRelevant}
           saveToDb={saveToDb}
           error={fieldErrors.apberRelevant}
+          helperText=""
         />
         <RadioButtonGroupWithInfo
           name="apberRelevantGrund"
           dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
           popover={TpopAbBerRelevantInfoPopover}
           label="Grund für AP-Bericht (Nicht-)Relevanz"
-          value={row.apberRelevantGrund}
+          value={row.apberRelevantGrund as string}
           saveToDb={saveToDb}
           error={fieldErrors.apberRelevantGrund}
         />
         <Coordinates
           row={row}
-          refetchForm={refetchTpop}
+          refetchForm={() => void refetchTpop()}
           table="tpop"
         />
         <SelectCreatableGemeinde
@@ -389,12 +424,12 @@ export const Component = () => {
             if (!geojson) return
             const geojsonParsed = JSON.parse(geojson)
             if (!geojsonParsed) return
-            let result
+            let result: { data?: GemeindeQueryResult | undefined } | undefined
             try {
-              result = await apolloClient.query({
+              result = await apolloClient.query<GemeindeQueryResult>({
                 // this is a hack
                 // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-                query: gql`
+                query: dynamicGql`
                         query tpopGemeindeQuery {
                           allChAdministrativeUnits(
                             filter: {
@@ -413,7 +448,7 @@ export const Component = () => {
               })
             } catch (error) {
               return addNotification({
-                message: error.message,
+                message: (error as Error).message,
                 options: {
                   variant: 'error',
                 },
@@ -432,7 +467,7 @@ export const Component = () => {
               }
               //handleChange(fakeEvent)
               //handleBlur(fakeEvent)
-              saveToDb(fakeEvent)
+              void saveToDb(fakeEvent)
             }
           }}
           saveToDb={saveToDb}

@@ -9,6 +9,12 @@ export const openTree2WithActiveNodeArray = ({
   projekteTabs,
   setProjekteTabs,
   onlyShowActivePath,
+}: {
+  activeNodeArray: (string | number)[]
+  search: string
+  projekteTabs: string[]
+  setProjekteTabs: (tabs: string[]) => void
+  onlyShowActivePath?: boolean | undefined
 }) => {
   store.set(setTree2SrcByActiveNodeArrayAtom, {
     activeNodeArray,

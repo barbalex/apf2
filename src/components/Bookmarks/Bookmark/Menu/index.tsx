@@ -1,31 +1,34 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
+
+import type { NavData } from '../../types.ts'
 import IconButton from '@mui/material/IconButton'
-import MuiMenu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
+import MuiMenu, { type MenuProps as MuiMenuProps } from '@mui/material/Menu'
 import { styled } from '@mui/material/styles'
 import { BsCaretDown } from 'react-icons/bs'
 import { useResizeDetector } from 'react-resize-detector'
 import { motion } from 'framer-motion'
-import { useAtomValue } from 'jotai'
 
 import { Item } from './Item.tsx'
 import { Title } from './Title/index.tsx'
 import {
-  treeActiveNodeArrayAtom,
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
   store,
 } from '../../../../store/index.ts'
-import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
 
 import styles from './index.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
-const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
+interface StyledMenuProps extends MuiMenuProps {
+  minwidth?: number
+}
+
+const StyledMenu = styled((props: StyledMenuProps) => <MuiMenu {...props} />)(
+  (props: StyledMenuProps) => ({
   '& .MuiPaper-root': {
     scrollbarWidth: 'thin',
-    minWidth: (props) => (props.minwidth ? `${props.minwidth}px` : 'unset'),
+    minWidth: props.minwidth ? `${props.minwidth}px` : 'unset',
   },
   '& .MuiList-root': {
     paddingTop: 0,
@@ -35,17 +38,17 @@ const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
 
-export const Menu = ({ navData }) => {
-  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+export const Menu = ({ navData }: { navData: NavData }) => {
   const activeFilterTable = store.get(treeActiveFilterTableAtom)
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
 
-  const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+  const filterValue = activeFilterTable ? (nodeLabelFilter[activeFilterTable] ?? '') : ''
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const previousAnchorEl = usePrevious(anchorEl)
   const open = Boolean(anchorEl)
-  const onClick = (event) => setAnchorEl(event.currentTarget)
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setAnchorEl(event.currentTarget)
   const onClose = () => setAnchorEl(null)
 
   const iconId = `${navData.id}/MenuIcon`
@@ -60,7 +63,7 @@ export const Menu = ({ navData }) => {
 
   const [filterInputIsVisible, setFilterInputIsVisible] =
     useState(!!filterValue)
-  const filterInputRef = useRef(null)
+  const filterInputRef = useRef<HTMLInputElement | null>(null)
   const toggleFilterInput = () => {
     if (filterInputIsVisible) {
       setFilterInputIsVisible(false)
@@ -97,10 +100,10 @@ export const Menu = ({ navData }) => {
       >
         <Title
           navData={navData}
-          width={width}
+          width={width ?? undefined}
           filterInputIsVisible={filterInputIsVisible}
           toggleFilterInput={toggleFilterInput}
-          ref={filterInputRef}
+          ref={filterInputRef ?? undefined}
           setTitleWidth={setTitleWidth}
         />
         <motion.div

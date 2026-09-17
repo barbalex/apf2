@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql/index.ts'
 
-export const queryTpop = gql`
+export const queryTpop = graphql(`
   query copyTpopKoordToPopQuery($id: UUID!) {
     tpopById(id: $id) {
       id
@@ -13,4 +13,4 @@ export const queryTpop = gql`
       }
     }
   }
-`
+`)

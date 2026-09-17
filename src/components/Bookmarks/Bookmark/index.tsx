@@ -1,4 +1,7 @@
-import { useRef } from 'react'
+import { useRef, type CSSProperties } from 'react'
+import type { TransitionStatus } from 'react-transition-group'
+
+import type { NavData } from '../types.ts'
 import { Menu } from './Menu/index.tsx'
 import { Transition } from 'react-transition-group'
 import { useAtomValue } from 'jotai'
@@ -8,18 +11,24 @@ import { showBookmarksMenuAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const transitionStyles = {
+const transitionStyles: Record<Exclude<TransitionStatus, 'unmounted'>, CSSProperties> = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
 }
 
-export const Bookmark = ({ navData, in: inProp }) => {
+export const Bookmark = ({
+  navData,
+  in: inProp,
+}: {
+  navData: NavData
+  in: boolean
+}) => {
   const showBookmarksMenu = useAtomValue(showBookmarksMenuAtom)
 
-  const outerContainerRef = useRef(null)
-  const labelRef = useRef(null)
+  const outerContainerRef = useRef<HTMLDivElement | null>(null)
+  const labelRef = useRef<HTMLDivElement | null>(null)
 
   // don't add tooltip on mobile as longpress opens menu
   return (
@@ -43,7 +52,7 @@ export const Bookmark = ({ navData, in: inProp }) => {
               navData={navData}
               outerContainerRef={outerContainerRef}
               ref={labelRef}
-              labelStyle={transitionStyles[state]}
+              labelStyle={state === 'unmounted' ? undefined : transitionStyles[state]}
             />
             {!!navData.menus && showBookmarksMenu && <Menu navData={navData} />}
           </div>

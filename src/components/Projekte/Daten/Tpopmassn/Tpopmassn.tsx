@@ -1,5 +1,7 @@
-import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState } from 'react'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -22,83 +24,105 @@ import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
-import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
-import type { TpopmassnTypWerteCode } from '../../../../models/apflora/TpopmassnTypWerteCode.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+import type { ComponentType } from 'react'
 
-interface TpopmassnQueryResult {
-  tpopmassnById: {
-    id: TpopmassnId
-    label: string
-    typ: TpopmassnTypWerteCode | null
-    tpopmassnTypWerteByTyp: {
+import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
+
+interface TpopmassnNode {
+  id: TpopmassnId
+  label: string
+  typ: number | null
+  tpopmassnTypWerteByTyp: {
+    id: string
+    anpflanzung: boolean | null
+  } | null
+  beschreibung: string | null
+  jahr: number | null
+  datum: string | null
+  bemerkungen: string | null
+  planBezeichnung: string | null
+  flaeche: number | null
+  markierung: string | null
+  anzTriebe: number | null
+  anzPflanzen: number | null
+  anzPflanzstellen: number | null
+  zieleinheitEinheit: number | null
+  zieleinheitAnzahl: number | null
+  wirtspflanze: string | null
+  herkunftPop: string | null
+  sammeldatum: string | null
+  vonAnzahlIndividuen: number | null
+  form: string | null
+  pflanzanordnung: string | null
+  tpopId: TpopId
+  bearbeiter: AdresseId | null
+  planVorhanden: boolean | null
+  changedBy: string | null
+  tpopByTpopId: {
+    id: TpopId
+    popByPopId: {
       id: string
-      anpflanzung: boolean | null
-    } | null
-    beschreibung: string | null
-    jahr: number | null
-    datum: string | null
-    bemerkungen: string | null
-    planBezeichnung: string | null
-    flaeche: number | null
-    markierung: string | null
-    anzTriebe: number | null
-    anzPflanzen: number | null
-    anzPflanzstellen: number | null
-    zieleinheitEinheit: TpopkontrzaehlEinheitWerteCode | null
-    zieleinheitAnzahl: number | null
-    wirtspflanze: string | null
-    herkunftPop: string | null
-    sammeldatum: string | null
-    vonAnzahlIndividuen: number | null
-    form: string | null
-    pflanzanordnung: string | null
-    tpopId: TpopId
-    bearbeiter: AdresseId | null
-    planVorhanden: boolean | null
-    changedBy: string | null
-    tpopByTpopId: {
-      id: TpopId
-      popByPopId: {
-        id: string
-        apByApId: {
-          id: ApId
-          ekzaehleinheitsByApId: {
-            nodes: Array<{
-              id: string
-              zielrelevant: boolean | null
-              notMassnCountUnit: boolean | null
-            }>
-          }
+      apByApId: {
+        id: ApId
+        ekzaehleinheitsByApId: {
+          nodes: {
+            id: string
+            zielrelevant: boolean | null
+            notMassnCountUnit: boolean | null
+          }[]
         }
       }
     }
-  } | null
+  }
+}
+
+interface TpopmassnQueryResult {
+  tpopmassnById: TpopmassnNode | null
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: AdresseId
       label: string
-    }>
+    }[]
   }
   allTpopmassnTypWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
-      value: TpopmassnTypWerteCode
+      value: number
       label: string
       historic: boolean | null
-    }>
+    }[]
   }
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
-      value: TpopkontrzaehlEinheitWerteCode
+      value: number
       label: string
       historic: boolean | null
-    }>
+    }[]
+  }
+}
+
+interface TpopmassnZieleinheitQueryResult {
+  allTpopmassnTypWertes: {
+    nodes: {
+      id: string
+      anpflanzung: boolean | null
+    }[]
+  }
+  allEkzaehleinheits: {
+    nodes: {
+      id: string
+      tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+        id: string
+        code: number | null
+        correspondsToMassnAnzTriebe: boolean | null
+        correspondsToMassnAnzPflanzen: boolean | null
+      } | null
+    }[]
   }
 }
 
@@ -106,9 +130,24 @@ interface ComponentProps {
   showFilter?: boolean
 }
 
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: number; label: string; historic?: boolean | null }[]
+  loading?: boolean
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
 import styles from './Tpopmassn.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   typ: 'Int',
   beschreibung: 'String',
   jahr: 'Int',
@@ -141,30 +180,34 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery<TpopmassnQueryResult>({
+  // suspense is still honoured by useQuery at runtime but is no longer part
+  // of its option types; building the options outside the call keeps the
+  // excess property check from complaining about it
+  const tpopmassnQueryOptions = {
     queryKey: ['tpopmassn', tpopmassnId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopmassnQueryResult>({
         query,
-        variables: { id: tpopmassnId },
+        variables: { id: tpopmassnId ?? '' },
       })
       if (result.error) throw result.error
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopmassnQueryOptions)
 
   const notMassnCountUnit =
     data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
       ?.ekzaehleinheitsByApId?.nodes?.[0]?.notMassnCountUnit
 
-  const row = data?.tpopmassnById ?? {}
+  const row: Partial<TpopmassnNode> = data?.tpopmassnById ?? {}
 
   const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -176,16 +219,20 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       variables.datum = null
     }
     if (field === 'datum') {
-      variables.jahr = value && value.substring ? +value.substring(0, 4) : value
+      variables.jahr =
+        value && typeof value === 'string' ? +value.substring(0, 4) : value
     }
     if (field === 'typ') {
       // IF typ is anpflanzung
       // have to set zieleinheit_einheit to
       // ekzaehleinheit with zielrelevant = true
-      let zieleinheitIdResult
+      let zieleinheitIdResult: {
+        data?: TpopmassnZieleinheitQueryResult | undefined
+      } | undefined
       try {
-        zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+        zieleinheitIdResult =
+          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
+            query: graphql(`
             query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -210,9 +257,9 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
-          variables: { apId, typ: value ?? 1 },
-        })
+          `),
+            variables: { apId: apId ?? '', typ: (value ?? 1) as number },
+          })
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
@@ -239,10 +286,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzTriebe') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzTriebe
-      let zieleinheitIdResult
+      let zieleinheitIdResult: {
+        data?: TpopmassnZieleinheitQueryResult | undefined
+      } | undefined
       try {
-        zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+        zieleinheitIdResult =
+          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
+            query: graphql(`
             query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -265,13 +315,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
-          variables: { apId, typ: row.typ ?? 1 },
-        })
+          `),
+            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
+          })
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
-          [field]: error.message,
+          [field]: (error as Error).message,
         }))
       }
       const isAnpflanzung =
@@ -287,10 +337,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzPflanzen') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzPflanzen
-      let zieleinheitIdResult
+      let zieleinheitIdResult: {
+        data?: TpopmassnZieleinheitQueryResult | undefined
+      } | undefined
       try {
-        zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+        zieleinheitIdResult =
+          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
+            query: graphql(`
             query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -313,13 +366,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
-          variables: { apId, typ: row.typ ?? 1 },
-        })
+          `),
+            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
+          })
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
-          [field]: error.message,
+          [field]: (error as Error).message,
         }))
       }
       const isAnpflanzung =
@@ -334,7 +387,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpopmassn(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -412,7 +465,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       }))
     }
     // invalidate tpopmassn query
-    tsQueryClient.invalidateQueries({ queryKey: ['tpopmassn', tpopmassnId] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['tpopmassn', tpopmassnId] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -427,7 +480,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
         'anzPflanzstellen',
       ].includes(field)
     ) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassn`],
       })
     }
@@ -456,13 +509,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           saveToDb={saveToDb}
           error={fieldErrors.datum}
         />
-        <RadioButtonGroup
+        <TypedRadioButtonGroup
           name="typ"
           label="Typ"
           dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
           loading={false}
           value={row.typ}
-          saveToDb={saveToDb}
+          saveToDb={(event) => void saveToDb(event)}
           error={fieldErrors.typ}
         />
         <TextField
@@ -477,11 +530,11 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           key={`${tpopmassnId}bearbeiter`}
           name="bearbeiter"
           label="BearbeiterIn"
-          value={row.bearbeiter}
+          value={row.bearbeiter ?? null}
           options={data?.allAdresses?.nodes ?? []}
           loading={false}
-          saveToDb={saveToDb}
-          error={fieldErrors.bearbeiter}
+          saveToDb={(event) => void saveToDb(event)}
+          error={fieldErrors.bearbeiter ?? ''}
         />
         <MarkdownField
           name="bemerkungen"
@@ -496,6 +549,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           value={row.planVorhanden}
           saveToDb={saveToDb}
           error={fieldErrors.planVorhanden}
+          helperText={undefined}
         />
         <TextField
           name="planBezeichnung"
@@ -567,11 +621,18 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
               key={`${tpopmassnId}zieleinheitEinheit`}
               name="zieleinheitEinheit"
               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-              value={row.zieleinheitEinheit}
-              options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+              value={row.zieleinheitEinheit ?? null}
+              options={(data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
+                (node) => {
+                  const { historic, ...nodeWithoutHistoric } = node
+                  return historic === null ?
+                      nodeWithoutHistoric
+                    : { ...nodeWithoutHistoric, historic }
+                },
+              )}
               loading={false}
-              saveToDb={saveToDb}
-              error={fieldErrors.zieleinheitEinheit}
+              saveToDb={(event) => void saveToDb(event)}
+              error={fieldErrors.zieleinheitEinheit ?? ''}
             />
             <TextField
               name="zieleinheitAnzahl"

@@ -4,12 +4,18 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const closeLowerNodesData = {
   action: 'closeLowerNodes',
 }
 
-export const WerteListen = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const WerteListen = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeWlFolder"

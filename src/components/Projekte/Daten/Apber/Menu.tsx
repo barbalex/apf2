@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { useSetAtom } from 'jotai'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -9,42 +9,14 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-
-import type { ApberId } from '../../../../models/apflora/Apber.ts'
-import type { ApId } from '../../../../models/apflora/Ap.ts'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
-
-interface CreateApberResult {
-  data?: {
-    createApber?: {
-      apber?: {
-        id: ApberId
-        apId: ApId
-      }
-    }
-  }
-}
-
-interface DeleteApberResult {
-  data?: {
-    deleteApberById?: {
-      apber?: {
-        id: ApberId
-      }
-    }
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 const iconStyle = { color: 'white' }
 
@@ -58,17 +30,14 @@ export const Menu = () => {
     apberId: string
   }>()
 
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateApberResult | undefined
+    let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApberForApberForm($apId: UUID!) {
             createApber(input: { apber: { apId: $apId } }) {
               apber {
@@ -77,8 +46,8 @@ export const Menu = () => {
               }
             }
           }
-        `,
-        variables: { apId },
+        `),
+        variables: { apId: apId as string },
       })
     } catch (error) {
       return addNotification({
@@ -88,17 +57,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createApber?.apber?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte/${id}${search}`,
     )
   }
@@ -108,48 +77,24 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    let result: DeleteApberResult | undefined
-    try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation deleteApber($id: UUID!) {
-            deleteApberById(input: { id: $id }) {
-              apber {
-                id
-              }
-            }
-          }
-        `,
-        variables: { id: apberId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'apber',
+        id: apberId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeAp`],
+          })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeApber`],
+      },
     })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeAp`],
-    })
-    // navigate to parent
-    navigate(`/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte${search}`)
-  }
 
   const onClickPrint = () => navigate(`print${search}`)
 
@@ -157,7 +102,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -170,7 +115,7 @@ export const Menu = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server.">
-          <IconButton onClick={onClickPrint}>
+          <IconButton onClick={() => void onClickPrint()}>
             <FaFilePdf style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -182,7 +127,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

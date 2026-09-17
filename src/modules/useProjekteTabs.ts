@@ -17,5 +17,5 @@ export const useProjekteTabs = () => {
     : ['daten'],
   )
 
-  return [projekteTabs, setProjekteTabs]
+  return [projekteTabs, setProjekteTabs] as const
 }

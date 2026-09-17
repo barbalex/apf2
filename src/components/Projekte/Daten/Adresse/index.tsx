@@ -1,5 +1,6 @@
-import { useState, Suspense, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, Suspense } from 'react'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -17,11 +18,11 @@ import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { adresse } from '../../../shared/fragments.ts'
 
-import type Adresse from '../../../../models/apflora/Adresse.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   name: 'String',
   adresse: 'String',
   telefon: 'String',
@@ -30,7 +31,14 @@ const fieldTypes = {
 }
 
 interface AdresseQueryResult {
-  adresseById: Adresse
+  adresseById: {
+    id: AdresseId
+    name: string | null
+    adresse: string | null
+    telefon: string | null
+    email: string | null
+    freiwErfko: boolean | null
+  } | null
 }
 
 export const Component = () => {
@@ -39,11 +47,7 @@ export const Component = () => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const {
-    data,
-    error,
-    isLoading: loading,
-  } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['Adresse', adrId],
     queryFn: async () => {
       const result = await apolloClient.query<AdresseQueryResult>({
@@ -57,10 +61,12 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const row: Adresse = data?.adresseById ?? {}
+  const row: Partial<NonNullable<AdresseQueryResult['adresseById']>> =
+    data?.adresseById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -69,8 +75,8 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate<any>({
-        mutation: gql`
+      await apolloClient.mutate({
+        mutation: dynamicGql`
             mutation updateAdresse(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -105,7 +111,7 @@ export const Component = () => {
       return rest
     })
     if (field === 'name') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeAdresse`],
       })
     }
@@ -161,6 +167,7 @@ export const Component = () => {
                 value={row.freiwErfko}
                 saveToDb={saveToDb}
                 error={fieldErrors.freiwErfko}
+                helperText=""
               />
             </div>
           </div>

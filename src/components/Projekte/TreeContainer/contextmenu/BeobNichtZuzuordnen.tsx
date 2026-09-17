@@ -10,6 +10,8 @@ import {
 
 import styles from './Beobnichtbeurteilt.module.css'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const createNewPopFromBeobData = {
   action: 'createNewPopFromBeob',
@@ -24,7 +26,11 @@ const showCoordOfBeobOnMapGeoAdminChData = {
   action: 'showCoordOfBeobOnMapGeoAdminCh',
 }
 
-export const BeobNichtZuzuordnen = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const BeobNichtZuzuordnen = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
 
   return (

@@ -1,8 +1,9 @@
-import { gql } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontr } from '../../components/shared/fragments.ts'
 
-export const createTpopkontr = gql`
+export const createTpopkontr = dynamicGql`
   mutation createTpopkontr(
     $typ: String
     $datum: Date
@@ -83,4 +84,7 @@ export const createTpopkontr = gql`
     }
   }
   ${tpopkontr}
-`
+` as unknown as TypedDocumentNode<
+  { createTpopkontr?: { tpopkontr?: { id: string } | null } | null },
+  Record<string, unknown>
+>

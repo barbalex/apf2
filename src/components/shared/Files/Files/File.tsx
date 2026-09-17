@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -8,7 +8,9 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
+import type { MenuProps } from '@mui/material'
 import { upperFirst } from 'es-toolkit'
+import type { MouseEvent } from 'react'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { TextField } from '../../TextField.tsx'
@@ -22,6 +24,8 @@ import {
   tpopmassnFile as tpopmassnFileFragment,
 } from '../../fragments.ts'
 import { isImageFile } from '../isImageFile.ts'
+import type { FileNode, FileParent } from '../types.ts'
+import type { SaveToDbEvent } from '../../types.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
   userNameAtom,
@@ -30,7 +34,7 @@ import {
 
 import styles from './File.module.css'
 
-const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+const StyledMenu = styled((props: MenuProps) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
     maxHeight: 48 * 4.5,
     width: 120,
@@ -46,14 +50,20 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const File = ({ file, parent, refetch }) => {
+export interface FileProps {
+  file: FileNode
+  parent: FileParent
+  refetch: () => void
+}
+
+export const File = ({ file, parent, refetch }: FileProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
 
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const tableName = `${parent}File`
@@ -63,7 +73,7 @@ export const File = ({ file, parent, refetch }) => {
     try {
       const mutationName = `delete${upperFirst(parent)}FileById`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation deleteDataset {
             ${mutationName}(
               input: {
@@ -80,13 +90,13 @@ export const File = ({ file, parent, refetch }) => {
     } catch (error) {
       console.log(error)
       return addNotification({
-        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+        message: `Die Datei konnte nicht gelöscht werden: ${(error as Error).message}`,
         options: {
           variant: 'error',
         },
       })
     }
-    refetch()
+    void refetch()
     setDelMenuAnchorEl(null)
   }
 
@@ -95,8 +105,9 @@ export const File = ({ file, parent, refetch }) => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -110,7 +121,7 @@ export const File = ({ file, parent, refetch }) => {
       const fragment = fragmentObject[parent]
       const parentId = `${parent}Id`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
               mutation UpdateFile(
                 $id: UUID!
                 $${parentId}: UUID
@@ -144,14 +155,14 @@ export const File = ({ file, parent, refetch }) => {
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
-        [field]: error.message,
+        [field]: (error as Error).message,
       }))
     }
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    refetch()
+    void refetch()
   }
 
   if (!file) return null
@@ -164,7 +175,7 @@ export const File = ({ file, parent, refetch }) => {
         {isImage ?
           <SuspenseImage
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
-            alt={file.name}
+            alt={file.name ?? undefined}
             className={styles.img}
             fallback={<div className={styles.imgReplacement}>...</div>}
           />
@@ -174,8 +185,7 @@ export const File = ({ file, parent, refetch }) => {
             name="fileMimeType"
             label="Datei-Typ"
             disabled
-            schrinkLabel
-            value={file.fileMimeType}
+            value={file.fileMimeType ?? undefined}
             saveToDb={saveToDb}
             error={fieldErrors.fileMimeType}
           />
@@ -186,8 +196,7 @@ export const File = ({ file, parent, refetch }) => {
             name="name"
             label="Datei-Name"
             disabled
-            schrinkLabel
-            value={file.name}
+            value={file.name ?? undefined}
             saveToDb={saveToDb}
             error={fieldErrors.name}
           />
@@ -198,8 +207,7 @@ export const File = ({ file, parent, refetch }) => {
             name="beschreibung"
             label="Beschreibung"
             multiLine
-            schrinkLabel
-            value={file.beschreibung}
+            value={file.beschreibung ?? undefined}
             saveToDb={saveToDb}
             error={fieldErrors.beschreibung}
           />
@@ -217,7 +225,9 @@ export const File = ({ file, parent, refetch }) => {
             aria-label="löschen"
             aria-owns={delMenuOpen ? 'delMenu' : undefined}
             aria-haspopup="true"
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            onClick={(event: MouseEvent<HTMLButtonElement>) =>
+              setDelMenuAnchorEl(event.currentTarget)
+            }
             className={styles.delIcon}
           >
             <FaTimes />
@@ -230,7 +240,7 @@ export const File = ({ file, parent, refetch }) => {
           onClose={() => setDelMenuAnchorEl(null)}
         >
           <h3 className={styles.menuTitle}>löschen?</h3>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </StyledMenu>
       </div>

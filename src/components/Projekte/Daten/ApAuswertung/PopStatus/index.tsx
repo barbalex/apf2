@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   AreaChart,
   Area,
@@ -67,7 +67,7 @@ export const PopStatus = ({
   const id = apIdPassed ?? (apId as ApId)
 
   const year = yearPassed ?? new Date().getFullYear()
-  const { data: dataPopStati } = useQuery({
+  const { data: dataPopStati } = useSuspenseQuery({
     queryKey: ['popStatus', id, year],
     queryFn: async () => {
       const result = await apolloClient.query<PopStatusQueryResult>({
@@ -75,9 +75,8 @@ export const PopStatus = ({
         variables: { apId: id, year },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as PopStatusQueryResult
     },
-    suspense: true,
   })
   const rows = dataPopStati.popNachStatusForJber.nodes ?? []
 

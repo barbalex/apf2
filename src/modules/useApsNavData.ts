@@ -1,24 +1,24 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import { store, treeApGqlFilterForTreeAtom } from '../store/index.ts'
+import { treeApGqlFilterForTreeAtom } from '../store/index.ts'
 
-export const useApsNavData = (props) => {
+export const useApsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
+  const projId = (props?.projId ?? params.projId ?? '')
 
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeApsQuery($apsFilter: ApFilter!) {
             allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
               nodes {
@@ -30,15 +30,15 @@ export const useApsNavData = (props) => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           apsFilter: apGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   const count = data.allAps?.nodes?.length ?? 0
@@ -60,18 +60,18 @@ export const useApsNavData = (props) => {
     fetcherParams: { projId },
     component: NodeWithList,
     menus: (data.allAps?.nodes ?? [])?.map((p) => ({
-      id: p.id,
-      label: p.label,
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'ap',
       singleElementName: 'Art',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: projId,
-      treeUrl: ['Projekte', projId, 'Arten', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', p?.id],
       hasChildren: true,
       fetcherName: 'useApNavData',
-      fetcherParams: { projId, apId: p.id },
+      fetcherParams: { projId, apId: p?.id },
       component: NodeWithList,
     })),
   }

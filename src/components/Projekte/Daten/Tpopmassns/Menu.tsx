@@ -1,5 +1,5 @@
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -15,8 +15,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 
-import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 import {
   addNotificationAtom,
@@ -27,12 +27,10 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateTpopmassnResult {
-  data: {
-    createTpopmassn: {
-      tpopmassn: {
-        id: TpopmassnId
-        tpopId: TpopId
-      }
+  createTpopmassn: {
+    tpopmassn: {
+      id: TpopmassnId
+      tpopId: TpopId
     }
   }
 }
@@ -58,10 +56,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateTpopmassnResult | undefined
+    let result: { data?: CreateTpopmassnResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopmassnResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateTpopmassnResult>({
+        mutation: graphql(`
           mutation createTpopmassnForTpopmassnsForm($tpopId: UUID!) {
             createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
               tpopmassn {
@@ -70,9 +68,9 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: {
-          tpopId,
+          tpopId: tpopId ?? '',
         },
       })
     } catch (error) {
@@ -83,14 +81,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassn`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopmassn?.tpopmassn?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const isMovingMassn = moving.table === 'tpopmassn'
@@ -125,13 +123,13 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Massnahme erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
         {isMovingMassn && (
           <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
-            <IconButton onClick={onClickMoveMassnToHere}>
+            <IconButton onClick={() => void onClickMoveMassnToHere()}>
               <MdOutlineMoveDown style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -145,7 +143,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {isCopyingMassn && (
           <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
-            <IconButton onClick={onClickCopyMassnToHere}>
+            <IconButton onClick={() => void onClickCopyMassnToHere()}>
               <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>

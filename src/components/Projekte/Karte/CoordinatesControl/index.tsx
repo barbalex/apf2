@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import 'leaflet'
+import type { LeafletMouseEvent } from 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import { debounce } from 'es-toolkit'
 import { useSetAtom } from 'jotai'
@@ -25,9 +26,9 @@ export const CoordinatesControl = () => {
   const setMapMouseCoordinates = useSetAtom(setMapMouseCoordinatesAtom)
   const [controlType, setControlType] = useState('coordinates')
 
-  const setMouseCoords = (e) => {
+  const setMouseCoords = (e: LeafletMouseEvent) => {
     // console.log('setMouseCoordinates')
-    const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
+    const [x = 0, y = 0] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
     setMapMouseCoordinates({ x, y })
   }
 
@@ -41,6 +42,7 @@ export const CoordinatesControl = () => {
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setControlType('coordinates')
   }, [])
 

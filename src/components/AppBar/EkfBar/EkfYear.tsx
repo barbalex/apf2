@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -14,16 +14,19 @@ export const EkfYear = () => {
   const navigate = useNavigate()
 
   const [stateValue, setStateValue] = useState(ekfYear ?? '')
-
-  useEffect(() => setStateValue(ekfYear), [ekfYear])
-
-  const onBlur = (event) => {
-    const newValue = event.target.value ? +event.target.value : ekfRefYear
-    navigate(`/Daten/Benutzer/${userId}/EKF/${newValue}${search}`)
+  const [prevEkfYear, setPrevEkfYear] = useState(ekfYear)
+  if (prevEkfYear !== ekfYear) {
+    setPrevEkfYear(ekfYear)
+    setStateValue(ekfYear ?? '')
   }
 
-  const onChange = (event) => {
-    setStateValue(event.target.value ? +event.target.value : '')
+  const onBlur = (event: { target: { value: string } }) => {
+    const newValue = event.target.value ? +event.target.value : ekfRefYear
+    void navigate(`/Daten/Benutzer/${userId}/EKF/${newValue}${search}`)
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStateValue(event.target.value ? String(+event.target.value) : '')
     if (event.target.value.length === 4) onBlur(event)
   }
 

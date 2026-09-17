@@ -1,6 +1,8 @@
+import type { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import type { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
@@ -9,7 +11,7 @@ import { InfoWithPopover } from './InfoWithPopover.tsx'
 import styles from './CheckboxWithInfo.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
-const StyledFormControlLabel = styled((props) => (
+const StyledFormControlLabel = styled((props: FormControlLabelProps) => (
   <FormControlLabel {...props} />
 ))(() => ({
   marginTop: -10,
@@ -20,6 +22,19 @@ const StyledFormControlLabel = styled((props) => (
   },
 }))
 
+/**
+ * unlike the other field components this one passes
+ * the new value (not a fake event) to saveToDb
+ */
+export interface CheckboxWithInfoProps {
+  value?: boolean | null | undefined
+  label?: string | undefined
+  name: string
+  popover?: ReactNode | undefined
+  saveToDb: (value: boolean) => void | Promise<void>
+  error?: string | null | undefined
+}
+
 export const CheckboxWithInfo = ({
   value = null,
   label,
@@ -27,8 +42,9 @@ export const CheckboxWithInfo = ({
   popover,
   saveToDb,
   error,
-}) => {
-  const onCheck = (e, val) => saveToDb(val)
+}: CheckboxWithInfoProps) => {
+  const onCheck = (_e: ChangeEvent<HTMLInputElement>, val: boolean) =>
+    void saveToDb(val)
 
   return (
     <div className={styles.container}>
@@ -44,11 +60,15 @@ export const CheckboxWithInfo = ({
             label={label}
             control={
               <Checkbox
-                checked={value}
+                checked={value === true}
                 onChange={onCheck}
                 value={label}
                 color="primary"
-                slotProps={{ input: { 'data-id': name } }}
+                slotProps={{
+                  input: {
+                    'data-id': name,
+                  } as InputHTMLAttributes<HTMLInputElement>,
+                }}
               />
             }
           />

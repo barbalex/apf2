@@ -43,6 +43,7 @@ export const Password = ({
   // Reset password fields when editPassword becomes false
   useEffect(() => {
     if (!editPassword) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPassword('')
       setPassword2('')
       setShowPass(false)
@@ -59,7 +60,9 @@ export const Password = ({
     }
   }, [editPassword])
 
-  const onBlurPassword = (event: FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword = (
+    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
@@ -131,7 +134,9 @@ export const Password = ({
     setEditPassword(false)
   }
 
-  const onBlurPassword2 = async (event: FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword2 = async (
+    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setPassword2ErrorText('')
     const password2 = event.target.value
     setPassword2(password2)
@@ -176,13 +181,18 @@ export const Password = ({
               type={showPass ? 'text' : 'password'}
               value={password}
               onChange={onChangePassword}
-              onBlur={onBlurPassword}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  onBlurPassword(e)
-                }
-              }}
-              autoComplete="current-password"
+                  onBlur={onBlurPassword}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      // MUI types the root div's key event; the target is the input
+                      onBlurPassword(
+                        e as unknown as FocusEvent<
+                          HTMLInputElement | HTMLTextAreaElement
+                        >,
+                      )
+                    }
+                  }}
+                  autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
               error={!!errors.pass}
@@ -277,10 +287,15 @@ export const Password = ({
                   type={showPass2 ? 'text' : 'password'}
                   value={password2}
                   onChange={onChangePassword2}
-                  onBlur={onBlurPassword2}
+                  onBlur={(e) => void onBlurPassword2(e)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      onBlurPassword(e)
+                      // MUI types the root div's key event; the target is the input
+                      void onBlurPassword2(
+                        e as unknown as FocusEvent<
+                          HTMLInputElement | HTMLTextAreaElement
+                        >,
+                      )
                     }
                   }}
                   autoCorrect="off"
@@ -317,7 +332,7 @@ export const Password = ({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleSavePassword}
+                onClick={() => void handleSavePassword()}
                 className={styles.saveButton}
               >
                 Speichern

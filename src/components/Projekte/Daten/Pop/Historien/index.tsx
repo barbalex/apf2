@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Tooltip, IconButton } from '@mui/material'
 import { MdEdit } from 'react-icons/md'
@@ -18,19 +18,11 @@ import type {
   ApId,
   AeTaxonomiesId,
   PopStatusWerteCode,
-} from '../../../../../models/apflora/index.tsx'
+} from '../../../../../models/apflora/index.ts'
 
-import {
-  container,
-  docLink,
-  docLine,
-  aenderung,
-  aktuell,
-  historyRowWrapper,
-  historyButtons,
-} from './index.module.css'
+import indexStyles from './index.module.css'
 
-const query = gql`
+const query = graphql(`
   query popHistoryQuery($popId: UUID!) {
     popById(id: $popId) {
       id
@@ -98,7 +90,7 @@ const query = gql`
       }
     }
   }
-`
+`)
 
 interface PopHistoryData {
   id: PopId
@@ -112,7 +104,7 @@ interface PopHistoryData {
   }
   nr: number | null
   name: string | null
-  status: PopStatusWerteCode | null
+  status: number | null
   popStatusWerteByStatus?: {
     id: PopStatusWerteCode
     text: string | null
@@ -136,14 +128,12 @@ interface PopHistoryQueryResult {
   }
   allPopHistories?: {
     totalCount: number
-    nodes: Array<
-      PopHistoryData & {
+    nodes: (PopHistoryData & {
         year: number | null
-      }
-    >
+      })[]
   }
   allPopStatusWertes?: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
 }
 
@@ -151,7 +141,7 @@ export const Component = () => {
   const { popId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data, refetch } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['popHistory', popId],
     queryFn: async () => {
       const result = await apolloClient.query<PopHistoryQueryResult>({
@@ -161,7 +151,6 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
@@ -210,20 +199,20 @@ export const Component = () => {
         MenuBarComponent={HistorienMenu}
         menuBarProps={{ onAdd: handleAdd }}
       />
-      <div className={container}>
-        <p className={docLine}>
+      <div className={indexStyles.container}>
+        <p className={indexStyles.docLine}>
           Jährlich historisierte Daten der Population (
           <span
-            className={docLink}
+            className={indexStyles.docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={docLine}>
-          <span className={aenderung}>Änderungen</span> zum{' '}
-          <span className={aktuell}>aktuellen Zustand</span> sind
+        <p className={indexStyles.docLine}>
+          <span className={indexStyles.aenderung}>Änderungen</span> zum{' '}
+          <span className={indexStyles.aktuell}>aktuellen Zustand</span> sind
           hervorgehoben.
         </p>
         {rows.map((r) => {
@@ -235,7 +224,7 @@ export const Component = () => {
                 historyRow={r}
                 options={options}
                 onClose={() => setEditingYear(null)}
-                refetch={refetch}
+                refetch={() => void refetch()}
               />
             )
           }
@@ -292,9 +281,9 @@ export const Component = () => {
           return (
             <div
               key={r.year}
-              className={historyRowWrapper}
+              className={indexStyles.historyRowWrapper}
             >
-              <div className={historyButtons}>
+              <div className={indexStyles.historyButtons}>
                 <Tooltip title="bearbeiten">
                   <IconButton
                     size="small"
@@ -329,7 +318,7 @@ export const Component = () => {
               setEditingYear(null)
               setCopyFrom(null)
             }}
-            refetch={refetch}
+            refetch={() => void refetch()}
           />
         )}
         <div ref={bottomRef} />

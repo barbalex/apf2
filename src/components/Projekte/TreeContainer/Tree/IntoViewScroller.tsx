@@ -12,7 +12,7 @@ import { isElementInViewport } from '../../../../modules/isElementInViewport.ts'
 // (only the last element different i.e. missing). If so: return
 export const IntoViewScroller = () => {
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const previousActiveNodeArray = useRef<string[]>([])
+  const previousActiveNodeArray = useRef<(string | number)[]>([])
   // when opening a folder without activating it, lastTouchedNode is not same as activeNodeArray
   // in this case we do NOT want to scroll to active node that may be out of view
   const lastTouchedNode = useAtomValue(treeLastTouchedNodeAtom)
@@ -56,6 +56,7 @@ export const IntoViewScroller = () => {
     previousActiveNodeArray.current = activeNodeArray
 
     scroller()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- scroller is a new function on every render, so the effect runs after every render anyway
   }, [scroller])
 
   return null

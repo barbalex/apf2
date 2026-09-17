@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId } from '../../../../models/apflora/index.tsx'
+import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface EkPlanungNachAbrechnungstypQueryResult {
   allVEkPlanungNachAbrechnungstyps: {
-    nodes: Array<{
+    nodes: {
       apId?: ApId
       artname?: string
       artverantwortlich?: string
@@ -23,7 +23,7 @@ interface EkPlanungNachAbrechnungstypQueryResult {
       b?: number
       d?: number
       ekf?: number
-    }>
+    }[]
   }
 }
 
@@ -31,15 +31,17 @@ export const EkPlanung = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickEkPlanung = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: EkPlanungNachAbrechnungstypQueryResult }
+    let result:
+      | { data?: EkPlanungNachAbrechnungstypQueryResult | undefined }
+      | undefined
     try {
       result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>(
         {
-          query: gql`
+          query: graphql(`
             query ekPlanungNachAbrechnungstyps {
               allVEkPlanungNachAbrechnungstyps {
                 nodes {
@@ -54,7 +56,7 @@ export const EkPlanung = () => {
                 }
               }
             }
-          `,
+          `),
         },
       )
     } catch (error) {
@@ -67,7 +69,7 @@ export const EkPlanung = () => {
     }
     setQueryState('verarbeite...')
     const rows = (
-      result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
+      result?.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
     ).map((z) => ({
       ap_id: z?.apId,
       artname: z?.artname ?? '',
@@ -87,14 +89,14 @@ export const EkPlanung = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
+    void exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickEkPlanung}
+      onClick={() => void onClickEkPlanung()}
       color="inherit"
       disabled={!!queryState}
     >

@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import {
+import type {
   ApId,
   PopId,
   TpopId,
   TpopkontrId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -19,7 +19,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface KontrzaehlAnzproeinheitQueryResult {
   allVKontrzaehlAnzproeinheits: {
-    nodes: Array<{
+    nodes: {
       ap_id?: ApId
       artname?: string
       ap_bearbeitung?: string
@@ -99,7 +99,7 @@ interface KontrzaehlAnzproeinheitQueryResult {
       einheit?: string
       methode?: string
       anzahl?: number
-    }>
+    }[]
   }
 }
 
@@ -107,20 +107,17 @@ export const KontrAnzProZaehlEinheit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: KontrzaehlAnzproeinheitQueryResult }
-        try {
-          result = await apolloClient.query<KontrzaehlAnzproeinheitQueryResult>(
-            {
-              query: gql`
+  const onClickKontrAnzProZaehlEinheit = async () => {
+    setQueryState('lade Daten...')
+    let result:
+      | { data?: KontrzaehlAnzproeinheitQueryResult | undefined }
+      | undefined
+    try {
+      result = await apolloClient.query<KontrzaehlAnzproeinheitQueryResult>(
+        {
+          query: graphql(`
                 query viewKontrzaehlAnzproeinheits {
                   allVKontrzaehlAnzproeinheits {
                     nodes {
@@ -206,33 +203,40 @@ export const KontrAnzProZaehlEinheit = () => {
                     }
                   }
                 }
-              `,
-            },
-          )
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
-        setQueryState(undefined)
-        if (rows.length === 0) {
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'KontrollenAnzahlProZaehleinheit',
-        })
-      }}
+              `),
+        },
+      )
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
+    setQueryState(undefined)
+    if (rows.length === 0) {
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'KontrollenAnzahlProZaehleinheit',
+    })
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickKontrAnzProZaehlEinheit()}
     >
       Kontrollen: Anzahl pro Zähleinheit
       {queryState ?

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -26,16 +26,14 @@ import {
   setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 interface CreateTpopkontrResult {
-  data: {
-    createTpopkontr: {
-      tpopkontr: {
-        id: TpopkontrId
-        tpopId: TpopId
-      }
+  createTpopkontr: {
+    tpopkontr: {
+      id: TpopkontrId
+      tpopId: TpopId
     }
   }
 }
@@ -59,10 +57,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const setCopying = useSetAtom(setCopyingAtom)
 
   const onClickAdd = async () => {
-    let result: CreateTpopkontrResult | undefined
+    let result: { data?: CreateTpopkontrResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopkontrResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateTpopkontrResult>({
+        mutation: graphql(`
           mutation createTpopfreiwkontrForTpopfreiwkontrForm($tpopId: UUID!) {
             createTpopkontr(
               input: {
@@ -78,7 +76,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopId,
         },
@@ -91,14 +89,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopkontr?.tpopkontr?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
@@ -162,7 +160,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Freiwilligen-Kontrolle erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -175,14 +173,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isMovingEkf && (
           <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
-            <IconButton onClick={onClickMoveEkfToHere}>
+            <IconButton onClick={() => void onClickMoveEkfToHere()}>
               <MdOutlineMoveDown style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -196,7 +194,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {isCopyingEkf && (
           <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
-            <IconButton onClick={onClickCopyEkfToHere}>
+            <IconButton onClick={() => void onClickCopyEkfToHere()}>
               <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>

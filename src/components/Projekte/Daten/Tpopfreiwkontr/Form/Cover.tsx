@@ -1,15 +1,23 @@
 import { TextField2 } from '../../../../shared/TextField2.tsx'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 import anteilImg from './anteil.png'
 
 import styles from './Cover.module.css'
 
-export const Cover = ({ saveToDb, row, errors }) => (
+interface CoverProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const Cover = ({ saveToDb, row, errors }: CoverProps) => (
   <div className={styles.container}>
     <div className={styles.deckApArtLabel}>Deckung überprüfte Art</div>
     <div className={styles.deckApArtVal}>
       <TextField2
         key={`${row.id}deckungApArt`}
         name="deckungApArt"
+        label={undefined}
         row={row}
         type="number"
         saveToDb={saveToDb}
@@ -22,6 +30,7 @@ export const Cover = ({ saveToDb, row, errors }) => (
       <TextField2
         key={`${row.id}deckungNackterBoden`}
         name="deckungNackterBoden"
+        label={undefined}
         row={row}
         type="number"
         saveToDb={saveToDb}

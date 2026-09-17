@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
-import { useAtomValue, useSetAtom } from 'jotai'
-import type { ApId } from '../../../../../models/apflora/ApId.ts'
+import { useAtomValue } from 'jotai'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
+import type { TpopkontrId } from '../../../../../models/apflora/Tpopkontr.ts'
+import type { TpopkontrzaehlId } from '../../../../../models/apflora/Tpopkontrzaehl.ts'
+import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
 
 import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.tsx'
 import { Title } from './Title.tsx'
@@ -18,7 +21,6 @@ import { More } from './More.tsx'
 import { Danger } from './Danger.tsx'
 import { Remarks } from './Remarks.tsx'
 import { EkfRemarks } from './EkfRemarks.tsx'
-import { Files } from './Files.tsx'
 import { Count } from './Count/index.tsx'
 import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
@@ -26,7 +28,6 @@ import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.
 import {
   userNameAtom,
   isPrintAtom,
-  treeDataFilterSetValueAtom,
   userTokenAtom,
 } from '../../../../../store/index.ts'
 import {
@@ -37,16 +38,109 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments.ts'
 
-interface FormProps {
-  data: any
-  refetch: () => void
-  row: any
+/** node of tpopkontrzaehl_einheit_werte, as used in the count selects */
+export interface ZaehleinheitWerteNode {
+  id?: string
+  code: number
+  text: string
+}
+
+/** ekzaehleinheit, joined with its tpopkontrzaehlEinheitWerte */
+export interface EkzaehleinheitNode {
+  tpopkontrzaehlEinheitWerteByZaehleinheitId: ZaehleinheitWerteNode | null
+  sort: number | null
+}
+
+/** node of tpopkontrzaehl (a count) */
+export interface TpopkontrzaehlNode {
+  id: TpopkontrzaehlId
+  anzahl: number | null
+  einheit: number | null
+}
+
+export interface TpopfreiwkontrApRow {
+  id?: ApId
+  ekfBeobachtungszeitpunkt?: string | null
+  aeTaxonomyByArtId?: {
+    artname: string | null
+  } | null
+  ekzaehleinheitsByApId?: {
+    nodes: EkzaehleinheitNode[]
+  } | null
+}
+
+export interface TpopfreiwkontrPopRow {
+  nr: number | null
+  name: string | null
   apId: ApId
+  apByApId: TpopfreiwkontrApRow | null
+}
+
+export interface TpopfreiwkontrTpopRow {
+  nr: number | null
+  flurname: string | null
+  lv95X: number | null
+  lv95Y: number | null
+  status: number | null
+  popByPopId: TpopfreiwkontrPopRow | null
+}
+
+/** the tpopkontr row, built from the TpopfreiwkontrFields fragment */
+export interface TpopkontrRow {
+  id: TpopkontrId
+  datum: string | null
+  jahr: number | null
+  bemerkungen: string | null
+  ekfBemerkungen: string | null
+  flaecheUeberprueft: number | null
+  deckungVegetation: number | null
+  deckungNackterBoden: number | null
+  deckungApArt: number | null
+  vegetationshoeheMaximum: number | null
+  vegetationshoeheMittel: number | null
+  gefaehrdung: string | null
+  bearbeiter: AdresseId | null
+  planVorhanden: boolean | null
+  jungpflanzenVorhanden: boolean | null
+  apberNichtRelevant: boolean | null
+  apberNichtRelevantGrund: string | null
+  tpopByTpopId: TpopfreiwkontrTpopRow | null
+  tpopkontrzaehlsByTpopkontrId?: {
+    nodes: TpopkontrzaehlNode[]
+  } | null
+  adresseByBearbeiter?: {
+    usersByAdresseId: {
+      totalCount: number
+    }
+  } | null
+}
+
+export interface TpopkontrQueryResult {
+  tpopkontrById: TpopkontrRow | null
+}
+
+/** fake events are built for radio buttons and selects */
+export interface TpopkontrSaveToDbEvent {
+  target: {
+    name?: string | undefined
+    value: string | number | boolean | null
+  }
+}
+
+export type TpopkontrSaveToDb = (
+  event: TpopkontrSaveToDbEvent,
+) => void | Promise<void>
+
+interface FormProps {
+  data: TpopkontrQueryResult | undefined
+  refetch: () => void
+  row: Partial<TpopkontrRow>
+  apId: string
 }
 
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   typ: 'String',
   datum: 'Date',
   jahr: 'Int',
@@ -69,7 +163,6 @@ const fieldTypes = {
 
 export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const isPrint = useAtomValue(isPrintAtom)
-  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
   const userName = useAtomValue(userNameAtom)
   const token = useAtomValue(userTokenAtom)
 
@@ -77,21 +170,33 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+  // reset errors when the row changes
+  const [errorsRowId, setErrorsRowId] = useState(row.id)
+  if (errorsRowId !== row.id) {
+    setErrorsRowId(row.id)
+    setErrors({})
+  }
 
-  const role = token ? jwtDecode(token)?.role : null
+  const role = token ? jwtDecode<{ role?: string }>(token)?.role : null
 
   const ekzaehleinheitsOriginal =
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
       ?.ekzaehleinheitsByApId?.nodes ?? []
   const ekzaehleinheits = ekzaehleinheitsOriginal
-    .map((n) => n?.tpopkontrzaehlEinheitWerteByZaehleinheitId ?? {})
+    .map(
+      (n) =>
+        n?.tpopkontrzaehlEinheitWerteByZaehleinheitId ??
+        // empty object for ekzaehleinheit without zaehleinheit_id
+        ({} as ZaehleinheitWerteNode),
+    )
     // remove null values stemming from efkzaehleinheit without zaehleinheit_id
     .filter((n) => n !== null)
   const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
   const zaehlsSorted = sortBy(zaehls, [
     (z) => {
       const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
+        (e) =>
+          e.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code === z.einheit,
       )
       if (!ekzaehleinheitOriginal) return 999
       return ekzaehleinheitOriginal.sort || 999
@@ -127,31 +232,35 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const tpop = row?.tpopByTpopId ?? {}
   const { ekfBemerkungen } = row
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: TpopkontrSaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
     /**
      * enable passing two values
      * with same update
      */
-    const variables = {
+    const variables: Record<
+      string,
+      string | number | boolean | null | undefined
+    > = {
       id: row.id,
       [field]: value,
       changedBy: userName,
     }
-    let field2
+    let field2: string | undefined
     if (field === 'datum') field2 = 'jahr'
-    let value2
+    let value2: string | number | boolean | null | undefined
     if (field === 'datum') {
       // this broke 13.2.2019
       // value2 = !!value ? +format(new Date(value), 'yyyy') : null
       // value can be null so check if substring method exists
-      value2 = value && value.substring ? +value.substring(0, 4) : value
+      value2 = value && typeof value === 'string' ? +value.substring(0, 4) : value
     }
     if (field2) variables[field2] = value2
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpopkontrForEkf(
               $id: UUID!
                 $${field}: ${fieldTypes[field]}
@@ -214,20 +323,16 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
         variables,
       })
     } catch (error) {
-      return setErrors({ [field]: error.message })
+      return setErrors({ [field]: (error as Error).message })
     }
     setErrors({})
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`TpopkontrQuery`],
     })
   }
-
-  useEffect(() => {
-    setErrors({})
-  }, [row.id])
 
   return (
     <div className={styles.formContainer}>
@@ -373,7 +478,8 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
             errors={errors}
           />
         )}
-        {!isPrint && false && <Files row={row} />}
+        {/* Files section is disabled:
+            {!isPrint && <Files row={row} />} */}
         {!isPrint && !isFreiwillig && (
           <Verification
             saveToDb={saveToDb}

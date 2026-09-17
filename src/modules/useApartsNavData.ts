@@ -1,24 +1,24 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getApartGqlFilterForTree } from './getApartGqlFilterForTree.ts'
 
-export const useApartsNavData = (props) => {
+export const useApartsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
   const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeApart', apId, apartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeApartsQuery($apartsFilter: ApartFilter!, $apId: UUID!) {
             apById(id: $apId) {
               id
@@ -33,20 +33,20 @@ export const useApartsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           apartsFilter: apartGqlFilterForTree,
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const count = data.apById.apartsByApId.nodes.length
-  const totalCount = data.apById.totalCount.totalCount
+  const count = data.apById?.apartsByApId.nodes.length
+  const totalCount = data.apById?.totalCount.totalCount
 
   const navData = {
     id: 'Taxa',
@@ -54,15 +54,15 @@ export const useApartsNavData = (props) => {
     listFilter: 'apart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
     label: `Taxa (${count}/${totalCount})`,
-    menus: data.apById.apartsByApId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.apById?.apartsByApId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'apart',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p?.id],
       hasChildren: false,
     })),
   }

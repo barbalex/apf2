@@ -1,16 +1,16 @@
 import { beobIconHighlightedAbsenzString } from '../Projekte/Karte/layers/BeobNichtZuzuordnen/beobIconHighlightedAbsenzString.ts'
 
-import { iconContainer } from './index.module.css'
-import { absenzIcon } from './absenzIcon.module.css'
+import indexStyles from './index.module.css'
+import absenzIconStyles from './absenzIcon.module.css'
 
 export const BeobnichtzuzuordnenFilteredAbsenzMapIcon = () => (
   <div
     title="Absenz-Beobachtung in Karte hervorgehoben"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
     <div
       dangerouslySetInnerHTML={{ __html: beobIconHighlightedAbsenzString }}
-      className={absenzIcon}
+      className={absenzIconStyles.absenzIcon}
     />
   </div>
 )

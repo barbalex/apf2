@@ -1,7 +1,29 @@
 import ReactSelect from 'react-select'
+import type { CSSProperties } from 'react'
 
 import { exists } from '../../modules/exists.ts'
+import type { SaveToDbHandler } from './types.ts'
 import styles from './Select.module.css'
+
+export interface SelectOption {
+  value: string | number
+  label: string | null
+  historic?: boolean
+}
+
+export interface SelectProps {
+  value: string | number | null
+  field?: string
+  label?: string | undefined
+  labelSize?: number | undefined
+  name?: string
+  error?: string | undefined
+  options: SelectOption[]
+  loading?: boolean
+  maxHeight?: number | null
+  noCaret?: boolean
+  saveToDb: SaveToDbHandler
+}
 
 export const Select = ({
   value,
@@ -15,15 +37,15 @@ export const Select = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}) => {
-  const onChange = (option) => {
+}: SelectProps) => {
+  const onChange = (option: SelectOption | null | undefined) => {
     const fakeEvent = {
       target: {
         name,
         value: option ? option.value : null,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   // filter out historic options - if they are not the value set
@@ -34,11 +56,15 @@ export const Select = ({
   })
 
   // show ... while options are loading
-  const loadingOptions = [{ value, label: '...' }]
+  const loadingOptions: SelectOption[] = [{ value: value ?? '', label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : realOptions
   const selectValue = optionsToUse.find((o) => o.value === value)
   const styleMeantForSelect =
-    maxHeight ? { '--react-select-menu-list-max-height': `${maxHeight}px` } : {}
+    maxHeight ?
+      {
+        '--react-select-menu-list-max-height': `${maxHeight}px`,
+      } as CSSProperties
+    : {}
 
   return (
     <div

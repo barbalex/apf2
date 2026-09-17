@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from 'react'
-import { useAtomValue, useSetAtom, useAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
@@ -8,7 +7,6 @@ import InputLabel from '@mui/material/InputLabel'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
-import { upperFirst } from 'es-toolkit'
 
 import {
   ekPlanFilterApAtom,
@@ -69,19 +67,24 @@ const setFilterAtomMap = {
   ekfKontrolleur: ekPlanSetFilterEkfKontrolleurAtom,
 }
 
-const valForStore = (valPassed) => {
-  let val = valPassed
-  if (!val && val !== 0) val = null
-  return val
+const valForStore = (valPassed: string): string | null => {
+  if (!valPassed) return null
+  return valPassed
 }
-const valForState = (valPassed) => {
+const valForState = (valPassed: unknown) => {
   let val = valPassed
   if (!val && val !== 0) val = ''
 
   return val
 }
 
-export const TextFilter = ({ column, closeMenu }) => {
+export const TextFilter = ({
+  column,
+  closeMenu,
+}: {
+  column: { name: string }
+  closeMenu: () => void
+}) => {
   const setFilterEmptyEkfrequenz = useSetAtom(
     ekPlanSetFilterEmptyEkfrequenzAtom,
   )
@@ -104,26 +107,31 @@ export const TextFilter = ({ column, closeMenu }) => {
       'number'
     : 'text'
 
-  const filterAtom = filterAtomMap[name]
-  const setFilterAtom = setFilterAtomMap[name]
+  const filterAtom = filterAtomMap[name as keyof typeof filterAtomMap]
+  const setFilterAtom = setFilterAtomMap[name as keyof typeof setFilterAtomMap]
   const storeValue = useAtomValue(filterAtom ?? ekPlanFilterApAtom)
   const storeSetFunction = useSetAtom(setFilterAtom ?? ekPlanSetFilterApAtom)
 
-  const [localValue, setLocalValue] = useState('')
-  useEffect(() => {
-    setLocalValue(valForState(storeValue))
-  }, [storeValue])
+  const [localValue, setLocalValue] = useState(() =>
+    String(valForState(storeValue) ?? ''),
+  )
+  const [prevStoreValue, setPrevStoreValue] = useState(storeValue)
+  if (prevStoreValue !== storeValue) {
+    setPrevStoreValue(storeValue)
+    setLocalValue(String(valForState(storeValue) ?? ''))
+  }
 
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const onChange = (event) => setLocalValue(valForState(event.target.value))
+  const onChange = (event: { target: { value: string } }) =>
+    setLocalValue(valForState(event.target.value) as string)
 
-  const onBlur = (event) => {
+  const onBlur = (event: { target: { value: string } }) => {
     if (
-      event.target.value != storeValue && // eslint-disable-line eqeqeq
+      event.target.value != storeValue &&  
       !(event.target.value === '' && storeValue === null)
     ) {
-      storeSetFunction(valForStore(event.target.value))
+      storeSetFunction(valForStore(event.target.value) as never)
       if (name === 'ekfrequenz') setFilterEmptyEkfrequenz(false)
       if (name === 'ekfrequenzStartjahr')
         setFilterEmptyEkfrequenzStartjahr(false)
@@ -131,19 +139,21 @@ export const TextFilter = ({ column, closeMenu }) => {
     }
   }
 
-  const onClickEmpty = (event) => {
+  const onClickEmpty = (event: { stopPropagation: () => void }) => {
     // prevent blur event which would close menu
     event.stopPropagation()
     if (localValue) {
       setLocalValue('')
     }
-    inputRef.current.focus()
+    inputRef.current?.focus()
   }
 
   useEffect(() => {
-    inputRef.current && inputRef.current.focus()
-  }, [inputRef.current])
-  const onKeyDown = (event) => {
+    inputRef.current?.focus()
+  }, [])
+  const onKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     // need to stop propagation
     // menu focuses next label if that's first character is pressed
     // this blurs the textfield, so the filter can't be entered
@@ -151,7 +161,7 @@ export const TextFilter = ({ column, closeMenu }) => {
     // https://github.com/barbalex/apf2/issues/609
     event.stopPropagation()
     if (event.key === 'Enter') {
-      onBlur(event)
+      onBlur({ target: { value: (event.target as HTMLInputElement).value } })
     }
   }
 

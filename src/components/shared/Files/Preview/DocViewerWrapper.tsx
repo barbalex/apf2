@@ -1,4 +1,4 @@
-import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
+import DocViewer from '@cyntler/react-doc-viewer'
 import '@cyntler/react-doc-viewer/dist/index.css'
 
 interface Props {
@@ -20,12 +20,13 @@ export const DocViewerWrapper = ({
   <DocViewer
     key={width}
     documents={[
+      // mimeType is not part of IDocument typings but is passed
+      // through to the underlying viewer at runtime
       {
         uri: `https://ucarecdn.com/${fileId}/${name}`,
-        mimeType: fileMimeType,
+        ...({ mimeType: fileMimeType } as Record<string, unknown>),
       },
     ]}
-    renderers={DocViewerRenderers}
     config={{ header: { disableHeader: true } }}
     style={{ height: '100%' }}
     className="doc-viewer"

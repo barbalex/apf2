@@ -1,6 +1,7 @@
 export const isElectron = () => {
     // Renderer process
-    if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
+    if (typeof window !== 'undefined' && typeof (window as unknown as { process?: { type?: string } }).process === 'object' &&
+        (window as unknown as { process?: { type?: string } }).process?.type === 'renderer') {
         return true;
     }
 

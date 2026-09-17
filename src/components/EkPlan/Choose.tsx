@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
+import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
-import { useAtomValue, useSetAtom, useAtom } from 'jotai'
+import { useAtomValue, useAtom } from 'jotai'
 
 import { Fields } from './Fields.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -43,17 +43,19 @@ const allFields = [
   'ekfrequenzAbweichend',
 ]
 
-const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
-  overflowY: 'hidden',
-  '& .MuiDialog-paper': {
+const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(
+  () => ({
     overflowY: 'hidden',
-  },
-}))
+    '& .MuiDialog-paper': {
+      overflowY: 'hidden',
+    },
+  }),
+)
 
 // placing material-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
 // but styling with styled-components
-const DenserCheckbox = (props) => (
+const DenserCheckbox = (props: { children?: React.ReactNode }) => (
   <div className={styles.checkboxDensifier}>{props.children}</div>
 )
 
@@ -66,7 +68,6 @@ export const Choose = () => {
   const [showMassn, setShowMassn] = useAtom(ekPlanShowMassnAtom)
   const [pastYears, setPastYears] = useAtom(ekPlanPastYearsAtom)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = () => setShowEk(!showEk)
   const onChangeShowEkf = () => setShowEkf(!showEkf)
   const onChangeShowCount = () => setShowCount(!showCount)
@@ -77,21 +78,20 @@ export const Choose = () => {
   const closeFieldsDialog = () => setFieldsDialogOpen(false)
   const felderButtonTitle = `Felder wählen (${fields.length}/${allFields.length})`
 
-  const [pastYearsLocal, setPastYearsLocal] = useState(pastYears)
-  useEffect(() => {
+  const [pastYearsLocal, setPastYearsLocal] = useState<number | ''>(pastYears)
+  const [prevPastYears, setPrevPastYears] = useState(pastYears)
+  if (prevPastYears !== pastYears) {
+    setPrevPastYears(pastYears)
     setPastYearsLocal(pastYears)
-  }, [pastYears])
+  }
 
-  const onChangePastYears = (event) => {
-    const value =
-      event.target.value || event.target.value === 0 ? +event.target.value : ''
+  const onChangePastYears = (event: { target: { value: string } }) => {
+    const value = event.target.value ? +event.target.value : ''
     setPastYearsLocal(value)
   }
 
   const onBlurPastYears = () => {
-    let value = pastYearsLocal
-    if (pastYearsLocal === '') value = 5
-    setPastYears(value)
+    setPastYears(pastYearsLocal === '' ? 5 : pastYearsLocal)
   }
 
   return (
@@ -108,9 +108,9 @@ export const Choose = () => {
             value={pastYearsLocal}
             onChange={onChangePastYears}
             onBlur={onBlurPastYears}
-            onKeyPress={(e) => {
+            onKeyPress={(e: { key: string }) => {
               if (e.key === 'Enter') {
-                onBlurPastYears(e)
+                onBlurPastYears()
               }
             }}
             size="small"
@@ -207,7 +207,10 @@ export const Choose = () => {
         <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
         <Fields />
         <DialogActions>
-          <Button onClick={closeFieldsDialog} color="inherit">
+          <Button
+            onClick={closeFieldsDialog}
+            color="inherit"
+          >
             schliessen
           </Button>
         </DialogActions>

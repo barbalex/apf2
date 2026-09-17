@@ -1,27 +1,27 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useZielsOfJahrNavData = (props) => {
+export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  let jahr = props?.jahr ?? params.jahr
-  jahr = jahr ? +jahr : jahr
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const jahrParam = props?.jahr ?? params.jahr
+  const jahr = jahrParam ? +jahrParam : undefined
 
   // Get filter before useQuery so changes trigger refetch
   const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeZielsOfJahr', apId, jahr, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeZielsOfJahrQuery(
             $zielsFilter: ZielFilter!
             $jahrFilter: ZielFilter!
@@ -44,26 +44,26 @@ export const useZielsOfJahrNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           jahrFilter: {
-            jahr: { equalTo: +jahr },
+            jahr: { equalTo: jahr },
           },
           zielsFilter: {
             ...zielGqlFilterForTree,
-            jahr: { equalTo: +jahr },
+            jahr: { equalTo: jahr },
           },
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const count = data.apById.zielsByApId.totalCount
-  const filteredZiels = data.apById.filteredZiels.nodes
+  const count = data.apById?.zielsByApId.totalCount
+  const filteredZiels = data.apById?.filteredZiels?.nodes ?? []
 
   const navData = {
     id: jahr,
@@ -82,17 +82,17 @@ export const useZielsOfJahrNavData = (props) => {
     fetcherParams: { projId, apId, jahr },
     component: NodeWithList,
     menus: filteredZiels.map((p) => ({
-      id: p.id,
-      label: p.label,
-      jahr: p.jahr,
+      id: p?.id,
+      label: p?.label,
+      jahr: p?.jahr,
       treeNodeType: 'table',
       treeMenuType: 'ziel',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p?.id],
       fetcherName: 'useZielNavData',
-      fetcherParams: { projId, apId, jahr, zielId: p.id },
+      fetcherParams: { projId, apId, jahr, zielId: p?.id },
       hasChildren: !!filteredZiels.length,
     })),
   }

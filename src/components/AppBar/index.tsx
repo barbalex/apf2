@@ -6,10 +6,7 @@ import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
-import {
-  isMobileViewAtom,
-  treeActiveNodeArrayAtom,
-} from '../../store/index.ts'
+import { isMobileViewAtom, treeActiveNodeArrayAtom } from '../../store/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'
@@ -32,7 +29,7 @@ export const Component = () => {
     // but only if activeNodeArray is not empty
     // otherwise first time users are navigated to the login
     if (pathname === '/' && activeNodeArray.length > 0) {
-      navigate('/Daten/' + activeNodeArray.join('/') + search)
+      void navigate('/Daten/' + activeNodeArray.join('/') + search)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

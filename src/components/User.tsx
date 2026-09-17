@@ -11,7 +11,8 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
+import { gql as dynamicGql } from '../apolloGql.ts'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
@@ -22,7 +23,25 @@ import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
 
-function tokenStateReducer(state, action) {
+interface TokenState {
+  token: string | null
+  fetchingToken: boolean
+}
+
+interface CheckUserPasswordResult {
+  userByName: {
+    id: string
+    pass: string | null
+    requireNewPasswordOnNextLogin: boolean
+  } | null
+}
+
+type TokenAction = { type: 'reset' } | { type: 'set'; payload: string | null }
+
+function tokenStateReducer(
+  _state: TokenState,
+  action: TokenAction,
+): TokenState {
   switch (action.type) {
     case 'reset':
       return { token: null, fetchingToken: true }
@@ -43,15 +62,15 @@ export const User = () => {
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
   const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
-  const [userId, setUserId] = useState(null)
+  const [userId, setUserId] = useState<string | null>(null)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
     fetchingToken: true,
   })
 
-  const nameInput = useRef(null)
-  const passwordInput = useRef(null)
+  const nameInput = useRef<HTMLInputElement | null>(null)
+  const passwordInput = useRef<HTMLInputElement | null>(null)
 
   // Sync tokenState with user atom from Jotai
   useEffect(() => {
@@ -67,29 +86,38 @@ export const User = () => {
 
   // callbacks pass name or password
   // because state is not up to date yet
-  const fetchLogin = async ({ name: namePassed, password: passwordPassed }) => {
-    const nameToUse = namePassed || name || nameInput.current.value
+  // also used directly as the anmelden button's onClick handler,
+  // where the click event destructures to no name/password
+  const fetchLogin = async ({
+    name: namePassed,
+    password: passwordPassed,
+  }: {
+    name?: string
+    password?: string
+  }) => {
+    const nameToUse = namePassed || name || nameInput.current?.value || ''
     const passwordToUse =
-      passwordPassed || password || passwordInput.current.value
+      passwordPassed || password || passwordInput.current?.value || ''
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation logIn($name: String, $password: String) {
             login(input: { username: $name, pass: $password }) {
               jwtToken
             }
           }
-        `,
+        `),
         variables: {
           name: nameToUse,
           password: passwordToUse,
         },
       })
     } catch (error) {
+      const message = (error as Error).message
       const isNamePassError =
-        error?.message?.includes('invalid user or password') ||
-        error?.message?.includes('permission denied for relation user')
+        message?.includes('invalid user or password') ||
+        message?.includes('permission denied for relation user')
       if (isNamePassError) {
         const message = 'Name oder Passwort nicht bekannt'
         setNameErrorText(message)
@@ -101,13 +129,13 @@ export const User = () => {
     let userResult
     try {
       userResult = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query userLoginQuery($name: String!) {
             userByName(name: $name) {
               id
             }
           }
-        `,
+        `),
         variables: {
           name: nameToUse,
         },
@@ -117,27 +145,31 @@ export const User = () => {
     }
     setUser({
       name: nameToUse,
-      token: result?.data?.login?.jwtToken,
-      id: userResult?.data?.userByName?.id,
+      token: result?.data?.login?.jwtToken ?? null,
+      id: userResult?.data?.userByName?.id ?? null,
     })
     // this is easiest way to make sure everything is correct
     // as client is rebuilt with new settings
-    window.location.reload(true)
+    window.location.reload()
   }
 
-  const onBlurName = async (e) => {
+  const onBlurName = async (
+    e:
+      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setNameErrorText('')
-    const name = e.target.value
+    const name = e.currentTarget.value
     setName(name)
     if (!name) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       return
     }
-    
+
     // Check if user exists and has a password
     try {
-      const userResult = await apolloClient.query({
-        query: gql`
+      const userResult = await apolloClient.query<CheckUserPasswordResult>({
+        query: dynamicGql`
           query checkUserPassword($name: String!) {
             userByName(name: $name) {
               id
@@ -148,30 +180,30 @@ export const User = () => {
         `,
         variables: { name },
       })
-      
+
       const userData = userResult?.data?.userByName
       if (!userData) {
         setNameErrorText('Benutzer nicht gefunden')
         return
       }
-      
+
       if (!userData.pass) {
         // User has no password - show password setup
         setUserId(userData.id)
         setNeedsPasswordSetup(true)
         return
       }
-      
+
       if (userData.requireNewPasswordOnNextLogin) {
         // User needs to set a new password
         setUserId(userData.id)
         setNeedsPasswordSetup(true)
         return
       }
-      
+
       // User has password - proceed with normal login
       if (password) {
-        setTimeout(() => fetchLogin({ name }))
+        setTimeout(() => void fetchLogin({ name }))
       }
     } catch (error) {
       setNameErrorText('Fehler beim Überprüfen des Benutzers')
@@ -179,53 +211,56 @@ export const User = () => {
     }
   }
 
-  const onBlurPassword = (e) => {
+  const onBlurPassword = (
+    e:
+      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setPasswordErrorText('')
-    const password = e.target.value
+    const password = e.currentTarget.value
     setPassword(password)
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
     } else if (name) {
-      setTimeout(() => fetchLogin({ password }))
+      setTimeout(() => void fetchLogin({ password }))
     }
   }
 
-  const onKeyPressName = (e) => e.key === 'Enter' && onBlurName(e)
-  const onKeyPressPassword = (e) => e.key === 'Enter' && onBlurPassword(e)
+  const onKeyPressName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') void onBlurName(e)
+  }
+  const onKeyPressPassword = (e: React.KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && onBlurPassword(e)
   const onClickShowPass = () => setShowPass(!showPass)
-  const onMouseDownShowPass = (e) => e.preventDefault()
+  const onMouseDownShowPass = (e: React.MouseEvent<HTMLButtonElement>) =>
+    e.preventDefault()
 
-  const savePassword = async (event) => {
-    const field = event.target.name
+  const savePassword = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
-    
-    try {
-      await apolloClient.mutate({
-        mutation: gql`
-          mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
-            updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
-              user {
-                id
-                name
-                pass
-                requireNewPasswordOnNextLogin
-              }
+
+    await apolloClient.mutate({
+      mutation: dynamicGql`
+        mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
+          updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
+            user {
+              id
+              name
+              pass
+              requireNewPasswordOnNextLogin
             }
           }
-        `,
-        variables: {
-          id: userId,
-          pass: value,
-          requireNewPasswordOnNextLogin: false,
-        },
-      })
-      
-      // Password set successfully, proceed with login
-      setNeedsPasswordSetup(false)
-      setTimeout(() => fetchLogin({ name, password: value }))
-    } catch (error) {
-      throw error
-    }
+        }
+      `,
+      variables: {
+        id: userId,
+        pass: value,
+        requireNewPasswordOnNextLogin: false,
+      },
+    })
+
+    // Password set successfully, proceed with login
+    setNeedsPasswordSetup(false)
+    setTimeout(() => void fetchLogin({ name, password: value }))
   }
 
   const { token, fetchingToken } = tokenState
@@ -274,7 +309,7 @@ export const User = () => {
               id="name"
               inputRef={nameInput}
               defaultValue={name}
-              onBlur={onBlurName}
+              onBlur={(e) => void onBlurName(e)}
               autoFocus
               onKeyPress={onKeyPressName}
               className={`user-name ${styles.input}`}
@@ -326,7 +361,7 @@ export const User = () => {
           <DialogActions>
             <Button
               color="primary"
-              onClick={fetchLogin}
+              onClick={() => void fetchLogin({})}
             >
               anmelden
             </Button>

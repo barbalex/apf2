@@ -4,6 +4,8 @@
  * 3. update openNodes
  * 4. refresh tree
  */
+import type { ApolloClient } from '@apollo/client'
+
 import { query } from './query.ts'
 import {
   store,
@@ -11,15 +13,48 @@ import {
   treeAddOpenNodesAtom,
 } from '../../../../../store/index.ts'
 
+interface TpopFolderQueryResult {
+  popById?: {
+    tpopsByPopId?: {
+      nodes: {
+        id: string
+        tpopmassnsByTpopId?: { nodes: { id: string }[] }
+        tpopmassnbersByTpopId?: { nodes: { id: string }[] }
+        tpopfeldkontrs?: {
+          nodes: {
+            id: string
+            tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
+          }[]
+        }
+        tpopfreiwkontrs?: {
+          nodes: {
+            id: string
+            tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
+          }[]
+        }
+        tpopbersByTpopId?: { nodes: { id: string }[] }
+        beobsByTpopId?: { nodes: { id: string }[] }
+      }[]
+    }
+  }
+}
+
+interface TpopFolderParams {
+  popId?: string | null | undefined
+  apId?: string | null | undefined
+  projId?: string | null | undefined
+}
+
 export const tpopFolder = async ({
   popId,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-}) => {
+}: TpopFolderParams) => {
   console.log('tpopFolder', { popId, apId, projId })
-  const apolloClient = store.get(apolloClientAtom)
+  // apolloClient is set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   // 1. load all data
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<TpopFolderQueryResult>({
     query: query,
     variables: { id: popId },
   })
@@ -308,5 +343,5 @@ export const tpopFolder = async ({
   })
 
   // 3. update
-  store.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes as (string | number)[][])
 }

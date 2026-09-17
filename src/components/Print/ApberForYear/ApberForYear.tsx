@@ -15,11 +15,22 @@ import { ApberForAps } from './ApberForAps.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 
+import type {
+  ApberForYearQueryResult,
+  ApberuebersichtQueryResult,
+  JberQueryResult,
+} from './types.ts'
+
 import styles from './ApberForYear.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-export const ApberForYear = () => {
+interface ApberForYearProps {
+  jahr?: number | undefined
+  apberuebersichtId?: string | undefined
+}
+
+export const ApberForYear = (_props: ApberForYearProps) => {
   const { apberuebersichtId, projId } = useParams()
 
   const apolloClient = useApolloClient()
@@ -28,7 +39,7 @@ export const ApberForYear = () => {
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
-      const { data: data1 } = await apolloClient.query({
+      const { data: data1 } = await apolloClient.query<ApberuebersichtQueryResult>({
         query: queryForApberuebersicht,
         variables: {
           id: apberuebersichtId,
@@ -36,7 +47,7 @@ export const ApberForYear = () => {
       })
       const jahr = data1?.apberuebersichtById?.jahr
       // then get data
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<ApberForYearQueryResult>({
         query: query,
         variables: {
           projektId: projId,
@@ -46,7 +57,7 @@ export const ApberForYear = () => {
       })
       // then get jber data
       // WARNING: this HAS to be queried later or somehow loading never ended
-      const { data: jberData } = await apolloClient.query({
+      const { data: jberData } = await apolloClient.query<JberQueryResult>({
         query: jberQuery,
         variables: {
           jahr,

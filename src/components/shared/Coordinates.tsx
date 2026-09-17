@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import type { ChangeEvent, FocusEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
@@ -31,7 +32,29 @@ import {
 
 import styles from './Coordinates.module.css'
 
-export const Coordinates = ({ row, refetchForm, table }) => {
+export interface CoordinatesRow {
+  id?: string
+  lv95X?: number | null
+  lv95Y?: number | null
+  geomPoint?: { x?: number | null; y?: number | null } | null
+}
+
+export interface CoordinatesProps {
+  row?: CoordinatesRow | null
+  refetchForm: () => void
+  table: string
+}
+
+interface GeoJsonPoint {
+  type: 'Point'
+  coordinates: number[]
+  crs: {
+    type: 'name'
+    properties: { name: string }
+  }
+}
+
+export const Coordinates = ({ row, refetchForm, table }: CoordinatesProps) => {
   const { lv95X, lv95Y, id } = row || {}
   const wgs84Lat = row?.geomPoint?.x
   const wgs84Long = row?.geomPoint?.y
@@ -40,32 +63,46 @@ export const Coordinates = ({ row, refetchForm, table }) => {
   const tsQueryClient = useQueryClient()
   const userName = useAtomValue(userNameAtom)
 
-  const [lv95XState, setLv95XState] = useState(lv95X || '')
-  const [lv95YState, setLv95YState] = useState(lv95Y || '')
+  const [lv95XState, setLv95XState] = useState<string | number | null>(lv95X || '')
+  const [lv95YState, setLv95YState] = useState<string | number | null>(lv95Y || '')
   const [xError, setXError] = useState('')
   const [yError, setYError] = useState('')
 
-  const [wgs84LatState, setWgs84LatState] = useState(wgs84Lat || '')
-  const [wgs84LongState, setWgs84LongState] = useState(wgs84Long || '')
+  const [wgs84LatState, setWgs84LatState] = useState<string | number | null>(
+    wgs84Lat || '',
+  )
+  const [wgs84LongState, setWgs84LongState] = useState<string | number | null>(
+    wgs84Long || '',
+  )
   const [wgs84LatError, setWgs84LatError] = useState('')
   const [wgs84LongError, setWgs84LongError] = useState('')
 
   // ensure state is updated when changed from outside
-  useEffect(() => {
+  const [prevLv95, setPrevLv95] = useState({ x: lv95X, y: lv95Y })
+  if (prevLv95.x !== lv95X || prevLv95.y !== lv95Y) {
+    setPrevLv95({ x: lv95X, y: lv95Y })
     setLv95XState(lv95X || '')
     setLv95YState(lv95Y || '')
-  }, [lv95X, lv95Y])
-  useEffect(() => {
+  }
+  const [prevWgs84, setPrevWgs84] = useState({
+    lat: wgs84Lat,
+    long: wgs84Long,
+  })
+  if (prevWgs84.lat !== wgs84Lat || prevWgs84.long !== wgs84Long) {
+    setPrevWgs84({ lat: wgs84Lat, long: wgs84Long })
     setWgs84LatState(wgs84Lat || '')
     setWgs84LongState(wgs84Long || '')
-  }, [wgs84Lat, wgs84Long])
+  }
 
-  const onChangeX = (event) => {
+  const onChangeX = (event: ChangeEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
   }
 
-  const saveToDb = async (geomPoint, projection) => {
+  const saveToDb = async (
+    geomPoint: GeoJsonPoint | null,
+    projection: 'lv95' | 'wgs84',
+  ) => {
     // _somehow_ this managed to be called without id when deleting a tpop????
     if (!id) return
     try {
@@ -73,7 +110,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
       const mutationName = `update${upperFirst(table)}ById`
       const patchName = `${table}Patch`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation ${mutationTitle}(
               $id: UUID!
               $geomPoint: GeoJSON
@@ -99,21 +136,21 @@ export const Coordinates = ({ row, refetchForm, table }) => {
           `,
         // no optimistic response as geomPoint
         variables: {
-          id: row.id,
+          id,
           geomPoint,
           changedBy: userName,
         },
       })
     } catch (error) {
       return projection === 'lv95' ?
-          setYError(error.message)
-        : setWgs84LatError(error.message)
+          setYError((error as Error).message)
+        : setWgs84LatError((error as Error).message)
     }
     // update on map
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`PopForMapQuery`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`TpopForMapQuery`],
     })
     // refetch form ONLY if id exists
@@ -125,10 +162,13 @@ export const Coordinates = ({ row, refetchForm, table }) => {
     setWgs84LongError('')
   }
 
-  const saveToDbLv95 = (x, y) => {
-    let geomPoint = null
+  const saveToDbLv95 = (
+    x: string | number | null,
+    y: string | number | null,
+  ) => {
+    let geomPoint: GeoJsonPoint | null = null
     if (x && y) {
-      const [lat, long] = epsg2056to4326(x, y)
+      const [lat = 0, long = 0] = epsg2056to4326(x, y)
       geomPoint = {
         type: 'Point',
         coordinates: [long, lat],
@@ -141,15 +181,18 @@ export const Coordinates = ({ row, refetchForm, table }) => {
         },
       }
     }
-    saveToDb(geomPoint, 'lv95')
+    void saveToDb(geomPoint, 'lv95')
   }
 
-  const saveToDbWgs84 = (lat, long) => {
-    let geomPoint = null
+  const saveToDbWgs84 = (
+    lat: string | number | null,
+    long: string | number | null,
+  ) => {
+    let geomPoint: GeoJsonPoint | null = null
     if (lat && long) {
       geomPoint = {
         type: 'Point',
-        coordinates: [lat, long],
+        coordinates: [Number(lat), Number(long)],
         // need to add crs otherwise PostGIS v2.5 (on server) errors
         crs: {
           type: 'name',
@@ -159,10 +202,10 @@ export const Coordinates = ({ row, refetchForm, table }) => {
         },
       }
     }
-    saveToDb(geomPoint, 'wgs84')
+    void saveToDb(geomPoint, 'wgs84')
   }
 
-  const onBlurX = (event) => {
+  const onBlurX = (event: FocusEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = xIsValid(value)
     if (!isValid) return setXError(xMessage)
@@ -174,12 +217,12 @@ export const Coordinates = ({ row, refetchForm, table }) => {
     }
   }
 
-  const onChangeY = (event) => {
+  const onChangeY = (event: ChangeEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
   }
 
-  const onBlurY = (event) => {
+  const onBlurY = (event: FocusEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = yIsValid(value)
     if (!isValid) return setYError(yMessage)
@@ -191,12 +234,12 @@ export const Coordinates = ({ row, refetchForm, table }) => {
     }
   }
 
-  const onChangeWgs84Lat = (event) => {
+  const onChangeWgs84Lat = (event: ChangeEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
   }
 
-  const onBlurWgs84Lat = (event) => {
+  const onBlurWgs84Lat = (event: FocusEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = wgs84LatIsValid(value)
     if (!isValid) return setWgs84LatError(wgs84LatMessage)
@@ -208,12 +251,12 @@ export const Coordinates = ({ row, refetchForm, table }) => {
     }
   }
 
-  const onChangeWgs84Long = (event) => {
+  const onChangeWgs84Long = (event: ChangeEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LongState(value)
   }
 
-  const onBlurWgs84Long = (event) => {
+  const onBlurWgs84Long = (event: FocusEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = wgs84LongIsValid(value)
     if (!isValid) return setWgs84LongError(wgs84LongMessage)
@@ -247,7 +290,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
             id={`${id}wgs84Lat`}
             data-id="wgs84Lat"
             name="wgs84Lat"
-            value={wgs84LatState}
+            value={wgs84LatState ?? ''}
             type="number"
             onChange={onChangeWgs84Lat}
             onBlur={onBlurWgs84Lat}
@@ -281,7 +324,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
             id={`${id}wgs84Long`}
             data-id="wgs84Long"
             name="wgs84Long"
-            value={wgs84LongState}
+            value={wgs84LongState ?? ''}
             type="number"
             onChange={onChangeWgs84Long}
             onBlur={onBlurWgs84Long}
@@ -317,7 +360,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
             id={`${id}lv95X`}
             data-id="lv95X"
             name="lv95X"
-            value={lv95XState}
+            value={lv95XState ?? ''}
             type="number"
             onChange={onChangeX}
             onBlur={onBlurX}
@@ -351,7 +394,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
             id={`${id}lv95Y`}
             data-id="lv95Y"
             name="lv95Y"
-            value={lv95YState}
+            value={lv95YState ?? ''}
             type="number"
             onChange={onChangeY}
             onBlur={onBlurY}

@@ -1,36 +1,42 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../apolloGql.ts'
+import { graphql } from '../gql/index.ts'
 import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.ts'
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
+  type Notification,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const historize = async ({ apberuebersicht: row }) => {
-  const apolloClient = store.get(apolloClientAtom)
+export const historize = async ({
+  apberuebersicht: row,
+}: {
+  apberuebersicht: Record<string, unknown> & { id: string }
+}) => {
+  const apolloClient = getApolloClientFromStore()
   // 1. historize
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: graphql(`
         mutation historize($year: Int!) {
           historize(input: { _year: $year }) {
             boolean
           }
         }
-      `,
+      `),
       variables: {
-        year: row?.jahr,
+        year: row?.jahr as number,
       },
     })
   } catch (error) {
     console.log('Error from mutating historize:', error)
     return addNotification({
-      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
+      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },
@@ -43,7 +49,7 @@ export const historize = async ({ apberuebersicht: row }) => {
       historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
     }
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: dynamicGql`
         mutation updateApberuebersichtForHistoryDate(
           $id: UUID!
           $historyDate: Date
@@ -65,7 +71,7 @@ export const historize = async ({ apberuebersicht: row }) => {
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },

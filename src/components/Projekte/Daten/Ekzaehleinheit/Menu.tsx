@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { useSetAtom } from 'jotai'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -9,30 +9,24 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 import type {
   EkzaehleinheitId,
   ApId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateEkzaehleinheitResult {
-  data?: {
-    createEkzaehleinheit?: {
-      ekzaehleinheit?: {
-        id: EkzaehleinheitId
-        apId: ApId
-      }
+  createEkzaehleinheit: {
+    ekzaehleinheit: {
+      id: EkzaehleinheitId
+      apId: ApId
     }
   }
 }
@@ -45,17 +39,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, zaehleinheitId } = useParams()
 
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateEkzaehleinheitResult | undefined
+    let result: { data?: CreateEkzaehleinheitResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateEkzaehleinheitResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
             createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
               ekzaehleinheit {
@@ -64,8 +55,8 @@ export const Menu = () => {
               }
             }
           }
-        `,
-        variables: { apId },
+        `),
+        variables: { apId: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -75,17 +66,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkzaehleinheit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten/${id}${search}`,
     )
   }
@@ -95,56 +86,30 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    let result
-    try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation deleteEkzaehleinheitForEkzaehleinheitForm($id: UUID!) {
-            deleteEkzaehleinheitById(input: { id: $id }) {
-              ekzaehleinheit {
-                id
-              }
-            }
-          }
-        `,
-        variables: { id: zaehleinheitId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'ekzaehleinheit',
+        id: zaehleinheitId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeAp`],
+          })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeEkzaehleinheit`],
+      },
     })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeAp`],
-    })
-    // navigate to parent
-    navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten${search}`,
-    )
-  }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -164,7 +129,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

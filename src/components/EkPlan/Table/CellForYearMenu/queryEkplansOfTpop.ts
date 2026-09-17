@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryEkplansOfTpop = gql`
+export const queryEkplansOfTpop = graphql(`
   query EkplansOfTpopQuery($tpopId: UUID!, $jahr: Int) {
     allEkplans(
       filter: { tpopId: { equalTo: $tpopId }, jahr: { equalTo: $jahr } }
@@ -11,4 +11,4 @@ export const queryEkplansOfTpop = gql`
       }
     }
   }
-`
+`)

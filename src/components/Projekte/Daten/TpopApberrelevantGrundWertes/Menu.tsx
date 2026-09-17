@@ -1,30 +1,24 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
-import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
-import { RiFolderCloseFill } from 'react-icons/ri'
-import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { moveTo } from '../../../../modules/moveTo/index.ts'
-import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 
-import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.ts'
+import type { TpopApberrelevantGrundWerteId } from '../../../../models/apflora/TpopApberrelevantGrundWerte.ts'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {
     tpopApberrelevantGrundWerte: {
-      id: TpopApberrelevantGrundWerteCode
+      id: TpopApberrelevantGrundWerteId
     }
   }
 }
@@ -37,19 +31,20 @@ const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   const navigate = useNavigate()
-  const { projId, tpopApberrelevantGrundWerteId } = useParams()
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result:
+      | { data?: CreateTpopApberrelevantGrundWerteResult | undefined }
+      | undefined
     try {
       result =
         await apolloClient.mutate<CreateTpopApberrelevantGrundWerteResult>({
-          mutation: gql`
+          mutation: graphql(`
             mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
               createTpopApberrelevantGrundWerte(
                 input: { tpopApberrelevantGrundWerte: {} }
@@ -59,7 +54,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
                 }
               }
             }
-          `,
+          `),
         })
     } catch (error) {
       return addNotification({
@@ -69,16 +64,16 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopApberrelevantGrundWerte`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id =
       result?.data?.createTpopApberrelevantGrundWerte
         ?.tpopApberrelevantGrundWerte?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -88,7 +83,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Grund erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

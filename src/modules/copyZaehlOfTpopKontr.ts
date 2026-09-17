@@ -1,16 +1,21 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 
 import { copyTo } from './copyTo/index.ts'
-import { store, apolloClientAtom } from '../store/index.ts'
+import {
+  getApolloClientFromStore,
+} from '../store/index.ts'
 
 export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdFrom,
   tpopkontrIdTo,
+}: {
+  tpopkontrIdFrom: string
+  tpopkontrIdTo: string | null | undefined
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = getApolloClientFromStore()
   // 1. fetch all tpopkontrzaehl
   const { data } = await apolloClient.query({
-    query: gql`
+    query: graphql(`
       query tpopkontrzaehlsForCopyZaehlOfTpopkontrQuery($tpopkontrId: UUID!) {
         allTpopkontrzaehls(filter: { tpopkontrId: { equalTo: $tpopkontrId } }) {
           nodes {
@@ -21,16 +26,16 @@ export const copyZaehlOfTpopKontr = async ({
           }
         }
       }
-    `,
+    `),
     variables: { tpopkontrId: tpopkontrIdFrom },
   })
   const tpopkontrzaehl = data?.allTpopkontrzaehls?.nodes ?? []
   // 2. add tpopkontrzaehl to new tpopkontr
   tpopkontrzaehl.forEach((zaehl) =>
-    copyTo({
-      parentId: tpopkontrIdTo,
+    void copyTo({
+      parentId: tpopkontrIdTo ?? undefined,
       table: 'tpopkontrzaehl',
-      id: zaehl.id,
+      id: zaehl?.id ?? '',
     }),
   )
 }

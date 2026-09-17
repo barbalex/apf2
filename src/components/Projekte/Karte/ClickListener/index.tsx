@@ -2,23 +2,53 @@ import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import L from 'leaflet'
+import type { LeafletMouseEvent } from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
+import type { Response } from 'redaxios'
 
 import { Popup } from '../layers/Popup.js'
+import type { LayerData } from '../layers/Popup.js'
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
 import { overlays } from '../overlays.ts'
 import { fetchWmsData } from './fetchWmsData.ts'
+import type { RedaxiosError } from './fetchWmsData.ts'
 import { layersDataFromRequestData } from './layersDataFromRequestData.ts'
 
 import {
   addNotificationAtom,
   mapActiveOverlaysAtom,
 } from '../../../../store/index.ts'
+
+interface KarteAdministrativeUnitsQueryResult {
+  allChAdministrativeUnits?: {
+    nodes?: { id: number; text: string | null }[] | null
+  } | null
+}
+
+interface KarteBetreuungsgebietesQueryResult {
+  allNsBetreuungs?: {
+    nodes?: {
+      id: number
+      gebietNr: number
+      gebietName: string | null
+      firma: string | null
+      projektleiter: string | null
+      telefon: string | null
+    }[] | null
+  } | null
+}
+
+interface KarteDetailplaenesQueryResult {
+  allDetailplaenes?: {
+    nodes?: { id: string; data: string | null }[] | null
+  } | null
+}
 
 export const ClickListener = () => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -43,7 +73,7 @@ export const ClickListener = () => {
     }, 0)
   })
 
-  const onClick = async (event) => {
+  const onClick = async (event: LeafletMouseEvent) => {
     if (justClosedPopup.current) return
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
@@ -75,13 +105,15 @@ export const ClickListener = () => {
     // seems to be the best solution
     // may even be more efficient as no need to bind popups when adding layers
 
-    const layersData = []
+    const layersData: LayerData[] = []
 
     if (activeOverlays.includes('Gemeinden')) {
-      let gemeindenData
+      let gemeindenData:
+        | { data?: KarteAdministrativeUnitsQueryResult | undefined }
+        | undefined
       try {
-        gemeindenData = await apolloClient.query({
-          query: gql`query karteAdministrativeUnitsQuery {
+        gemeindenData = await apolloClient.query<KarteAdministrativeUnitsQueryResult>({
+          query: dynamicGql`query karteAdministrativeUnitsQuery {
           allChAdministrativeUnits(
             filter: { 
               localisedcharacterstring: { equalTo: "Gemeinde" }, 
@@ -101,7 +133,7 @@ export const ClickListener = () => {
 
       const node = gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0]
       if (node) {
-        const properties = { ...node }
+        const properties: Record<string, unknown> = { ...node }
         delete properties.__typename
         delete properties.id
         properties.Gemeinde = properties.text
@@ -114,10 +146,12 @@ export const ClickListener = () => {
     }
 
     if (activeOverlays.includes('Betreuungsgebiete')) {
-      let betreuungsgebieteData
+      let betreuungsgebieteData:
+        | { data?: KarteBetreuungsgebietesQueryResult | undefined }
+        | undefined
       try {
-        betreuungsgebieteData = await apolloClient.query({
-          query: gql`query karteBetreuungsgebietesQuery {
+        betreuungsgebieteData = await apolloClient.query<KarteBetreuungsgebietesQueryResult>({
+          query: dynamicGql`query karteBetreuungsgebietesQuery {
               allNsBetreuungs(
                 filter: { 
                   geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
@@ -140,7 +174,7 @@ export const ClickListener = () => {
 
       const node = betreuungsgebieteData?.data?.allNsBetreuungs?.nodes?.[0]
       if (node) {
-        const properties = { ...node }
+        const properties: Record<string, unknown> = { ...node }
         delete properties.__typename
         delete properties.id
         layersData.push({
@@ -151,10 +185,12 @@ export const ClickListener = () => {
     }
 
     if (activeOverlays.includes('Detailplaene')) {
-      let detailplaeneData
+      let detailplaeneData:
+        | { data?: KarteDetailplaenesQueryResult | undefined }
+        | undefined
       try {
-        detailplaeneData = await apolloClient.query({
-          query: gql`query karteDetailplaenesFilteredQuery {
+        detailplaeneData = await apolloClient.query<KarteDetailplaenesQueryResult>({
+          query: dynamicGql`query karteDetailplaenesFilteredQuery {
           allDetailplaenes(
             filter: { 
               geom: {intersects: {type: "Point", coordinates: [${lng}, ${lat}]}}
@@ -196,10 +232,10 @@ export const ClickListener = () => {
         : 1200
       try {
         const coordinates = [lng, lat]
-        const options = { steps: 8, units: 'meters' }
+        const options = { steps: 8, units: 'meters' as const }
         const circle = ellipse(coordinates, radius, radius, options)
         markierungenData = await apolloClient.query({
-          query: gql`
+          query: graphql(`
             query KarteClickListenerQuery($polygon: GeoJSON!) {
               allMarkierungens(
                 filter: { wkbGeometry: { coveredBy: $polygon } }
@@ -212,7 +248,7 @@ export const ClickListener = () => {
                 }
               }
             }
-          `,
+          `),
           variables: { polygon: circle.geometry },
         })
       } catch (error) {
@@ -223,9 +259,9 @@ export const ClickListener = () => {
       if (nodes?.length) {
         for (const node of nodes) {
           const properties = {
-            Gebiet: node.gebiet ?? '',
-            PfostenNr: node.pfostennum ?? '',
-            Markierung: node.markierung ?? '',
+            Gebiet: node?.gebiet ?? '',
+            PfostenNr: node?.pfostennum ?? '',
+            Markierung: node?.markierung ?? '',
           }
           layersData.push({
             label: 'Markierungen',
@@ -235,10 +271,10 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
-      let res
+      let res: Response<string> | undefined
       let failedToFetch = false
       try {
-        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
           service: 'WMS',
           version: '1.3.0',
@@ -255,37 +291,40 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios({
+        res = await axios<string>({
           method: 'get',
           url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
           params,
         })
       } catch (error) {
-        console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.status == 406) {
+        // redaxios rejections are response-like objects
+        // augmented with optional request and response fields
+        const axiosError = error as RedaxiosError
+        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        if (axiosError.status == 406) {
           // user clicked where no massn exists
-        } else if (error.response) {
+        } else if (axiosError.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.error('error.response.data', error.response.data)
-          console.error('error.response.status', error.response.status)
-          console.error('error.response.headers', error.response.headers)
+          console.error('error.response.data', axiosError.response.data)
+          console.error('error.response.status', axiosError.response.status)
+          console.error('error.response.headers', axiosError.response.headers)
           failedToFetch = true
-        } else if (error.request) {
+        } else if (axiosError.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.error('error.request:', error.request)
+          console.error('error.request:', axiosError.request)
           failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.error('error.message', error.message)
+          console.error('error.message', axiosError.message)
           failedToFetch = true
         }
-        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
@@ -307,10 +346,10 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenLinien')) {
-      let res
+      let res: Response<string> | undefined
       let failedToFetch = false
       try {
-        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
           service: 'WMS',
           version: '1.3.0',
@@ -327,37 +366,40 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios({
+        res = await axios<string>({
           method: 'get',
           url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
           params,
         })
       } catch (error) {
-        console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.status == 406) {
+        // redaxios rejections are response-like objects
+        // augmented with optional request and response fields
+        const axiosError = error as RedaxiosError
+        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        if (axiosError.status == 406) {
           // user clicked where no massn exists
-        } else if (error.response) {
+        } else if (axiosError.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.error('error.response.data', error.response.data)
-          console.error('error.response.status', error.response.status)
-          console.error('error.response.headers', error.response.headers)
+          console.error('error.response.data', axiosError.response.data)
+          console.error('error.response.status', axiosError.response.status)
+          console.error('error.response.headers', axiosError.response.headers)
           failedToFetch = true
-        } else if (error.request) {
+        } else if (axiosError.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.error('error.request:', error.request)
+          console.error('error.request:', axiosError.request)
           failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.error('error.message', error.message)
+          console.error('error.message', axiosError.message)
           failedToFetch = true
         }
-        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
@@ -379,10 +421,10 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenPunkte')) {
-      let res
+      let res: Response<string> | undefined
       let failedToFetch = false
       try {
-        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+        const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
           service: 'WMS',
           version: '1.3.0',
@@ -399,37 +441,40 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios({
+        res = await axios<string>({
           method: 'get',
           url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
           params,
         })
       } catch (error) {
-        console.log({ error, errorToJSON: error?.toJSON?.(), res })
-        if (error.status == 406) {
+        // redaxios rejections are response-like objects
+        // augmented with optional request and response fields
+        const axiosError = error as RedaxiosError
+        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        if (axiosError.status == 406) {
           // user clicked where no massn exists
-        } else if (error.response) {
+        } else if (axiosError.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.error('error.response.data', error.response.data)
-          console.error('error.response.status', error.response.status)
-          console.error('error.response.headers', error.response.headers)
+          console.error('error.response.data', axiosError.response.data)
+          console.error('error.response.status', axiosError.response.status)
+          console.error('error.response.headers', axiosError.response.headers)
           failedToFetch = true
-        } else if (error.request) {
+        } else if (axiosError.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.error('error.request:', error.request)
+          console.error('error.request:', axiosError.request)
           failedToFetch = true
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.error('error.message', error.message)
+          console.error('error.message', axiosError.message)
           failedToFetch = true
         }
-        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
@@ -453,7 +498,7 @@ export const ClickListener = () => {
 
     // wms layers
     for (const overlay of overlays) {
-      if (activeOverlays.includes(overlay.name) && overlay.wmsUrl) {
+      if (activeOverlays.includes(overlay.name as string) && overlay.wmsUrl) {
         const params = {
           request: 'GetFeatureInfo',
           service: 'WMS',
@@ -466,7 +511,7 @@ export const ClickListener = () => {
           y: Math.round(event.containerPoint.y),
           width: mapSize.x,
           height: mapSize.y,
-          bbox: `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`,
+          bbox: `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`,
         }
         const requestData = await fetchWmsData({
           url: overlay.wmsUrl,
@@ -503,7 +548,7 @@ export const ClickListener = () => {
     L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
   }
 
-  useMapEvent('click', onClick)
+  useMapEvent('click', (event) => void onClick(event))
 
   return null
 }

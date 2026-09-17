@@ -26,21 +26,14 @@ import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 import { EksMenu } from './EksMenu/index.tsx'
 import { EkfsMenu } from './EkfsMenu/index.tsx'
 import { MassnsMenu } from './MassnsMenu/index.tsx'
-
-import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-import type { PopId } from '../../../../models/apflora/Pop.ts'
-import type { ApId } from '../../../../models/apflora/Ap.ts'
-import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
-import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
-import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
-import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
-import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
-import type { TpopkontrzaehlEinheitWerteId } from '../../../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
-import type { TpopkontrzaehlMethodeWerteId } from '../../../../models/apflora/TpopkontrzaehlMethodeWerte.ts'
+import type { EkplanmenuTpopQueryResult } from './types.ts'
 
 import styles from './index.module.css'
 
-const anchorOrigin = { horizontal: 'right', vertical: 'top' }
+const anchorOrigin = {
+  horizontal: 'right',
+  vertical: 'top',
+} as const
 
 export const CellForYearMenu = () => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -55,24 +48,32 @@ export const CellForYearMenu = () => {
   const closeYearCellMenu = useSetAtom(ekPlanCloseYearCellMenuAtom)
   const { year, tpopId } = yearClicked
 
-  const [eksAnchor, setEksAnchor] = useState(null)
-  const [ekfsAnchor, setEkfsAnchor] = useState(null)
-  const [massnsAnchor, setMassnsAnchor] = useState(null)
+  const [eksAnchor, setEksAnchor] = useState<HTMLElement | null>(null)
+  const [ekfsAnchor, setEkfsAnchor] = useState<HTMLElement | null>(null)
+  const [massnsAnchor, setMassnsAnchor] = useState<HTMLElement | null>(null)
 
   const closeEksMenu = () => setEksAnchor(null)
   const closeEkfsMenu = () => setEkfsAnchor(null)
   const closeMassnsMenu = () => setMassnsAnchor(null)
 
-  const removeEkPlan = async (typ) => {
-    let qResult
+  const removeEkPlan = async (typ: string) => {
+    // menu actions only fire after a cell click set tpopId
+    if (!tpopId) return
+    let qResult:
+    | {
+        data?:
+          | { allEkplans?: { nodes?: { id: string; typ: string }[] } }
+          | undefined
+      }
+    | undefined
     try {
-      qResult = await apolloClient.query({
+      qResult = (await apolloClient.query({
         query: queryEkplansOfTpop,
         variables: {
           tpopId,
           jahr: year,
         },
-      })
+      })) as typeof qResult
     } catch (error) {
       closeYearCellMenu()
       return addNotification({
@@ -82,7 +83,8 @@ export const CellForYearMenu = () => {
         },
       })
     }
-    const id = qResult.data.allEkplans.nodes.find((o) => o.typ === typ).id
+    const id = qResult?.data?.allEkplans?.nodes?.find((o) => o?.typ === typ)?.id
+    if (!id) return
     try {
       await apolloClient.mutate({
         mutation: mutationDeleteEkplan,
@@ -96,7 +98,7 @@ export const CellForYearMenu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['RowQueryForEkPlan'],
     })
     closeYearCellMenu()
@@ -107,7 +109,7 @@ export const CellForYearMenu = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const addEkPlan = async (typ) => {
+  const addEkPlan = async (typ: string) => {
     const variables = {
       tpopId,
       jahr: year,
@@ -127,7 +129,7 @@ export const CellForYearMenu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['RowQueryForEkPlan'],
     })
     closeYearCellMenu()
@@ -135,85 +137,6 @@ export const CellForYearMenu = () => {
 
   const onClickEkPlanen = () => addEkPlan('EK')
   const onClickEkfPlanen = () => addEkPlan('EKF')
-
-  interface TpopkontrzaehlEinheitWerteNode {
-    id: TpopkontrzaehlEinheitWerteId
-    text: string | null
-  }
-
-  interface TpopkontrzaehlMethodeWerteNode {
-    id: TpopkontrzaehlMethodeWerteId
-    text: string | null
-  }
-
-  interface TpopkontrzaehlNode {
-    id: TpopkontrzaehlId
-    anzahl: number | null
-    einheit?: TpopkontrzaehlEinheitWerteId | null
-    tpopkontrzaehlEinheitWerteByEinheit: TpopkontrzaehlEinheitWerteNode | null
-    tpopkontrzaehlMethodeWerteByMethode: TpopkontrzaehlMethodeWerteNode | null
-  }
-
-  interface AdresseNode {
-    id: AdresseId
-    name: string | null
-  }
-
-  interface TpopkontrNode {
-    id: TpopkontrId
-    datum: Date | null
-    typ: string | null
-    adresseByBearbeiter: AdresseNode | null
-    tpopkontrzaehlsByTpopkontrId: {
-      nodes: TpopkontrzaehlNode[]
-    }
-  }
-
-  interface TpopmassnTypWerteNode {
-    id: string
-    text: string | null
-  }
-
-  interface TpopmassnNode {
-    id: TpopmassnId
-    datum: Date | null
-    tpopmassnTypWerteByTyp: TpopmassnTypWerteNode | null
-    beschreibung: string | null
-    anzTriebe: number | null
-    anzPflanzen: number | null
-    zieleinheitAnzahl: number | null
-    tpopkontrzaehlEinheitWerteByZieleinheitEinheit: TpopkontrzaehlEinheitWerteNode | null
-    bemerkungen: string | null
-    adresseByBearbeiter: AdresseNode | null
-  }
-
-  interface ApNode {
-    id: ApId
-    projId: ProjektId | null
-  }
-
-  interface PopNode {
-    id: PopId
-    apByApId: ApNode | null
-  }
-
-  interface TpopNode {
-    id: TpopId
-    eks: {
-      nodes: TpopkontrNode[]
-    }
-    ekfs: {
-      nodes: TpopkontrNode[]
-    }
-    massns: {
-      nodes: TpopmassnNode[]
-    }
-    popByPopId: PopNode | null
-  }
-
-  interface EkplanmenuTpopQueryResult {
-    tpopById: TpopNode | null
-  }
 
   const { data } = useQuery({
     queryKey: ['CellForYearMenu', tpopId, year, showEk, showEkf, showMassn],
@@ -233,7 +156,7 @@ export const CellForYearMenu = () => {
     },
     // DO NOT add suspense here, it breaks the menu display (entire ekplan form reloads)
   })
-  const tpop = data?.tpopById ?? {}
+  const tpop = data?.tpopById ?? undefined
   const eks = data?.tpopById?.eks?.nodes ?? []
   const ekfs = data?.tpopById?.ekfs?.nodes ?? []
   const massns = data?.tpopById?.massns?.nodes ?? []
@@ -243,8 +166,8 @@ export const CellForYearMenu = () => {
       <Menu
         anchorReference="anchorPosition"
         anchorPosition={{
-          top: yearMenuAnchor.top,
-          left: yearMenuAnchor.right,
+          top: yearMenuAnchor?.top ?? 0,
+          left: yearMenuAnchor?.right ?? 0,
         }}
         anchorOrigin={anchorOrigin}
         open={Boolean(yearMenuAnchor)}
@@ -256,7 +179,7 @@ export const CellForYearMenu = () => {
             {yearClicked.ekPlan ?
               <MenuItem
                 className={styles.menuItem}
-                onClick={onClickEkEntfernen}
+                onClick={() => void onClickEkEntfernen()}
               >
                 <ListItemIcon className={styles.listItemIcon}>
                   <EditIcon />
@@ -268,7 +191,7 @@ export const CellForYearMenu = () => {
               </MenuItem>
             : <MenuItem
                 className={styles.menuItem}
-                onClick={onClickEkPlanen}
+                onClick={() => void onClickEkPlanen()}
               >
                 <ListItemIcon className={styles.listItemIcon}>
                   <EditIcon />
@@ -286,7 +209,7 @@ export const CellForYearMenu = () => {
             {yearClicked.ekfPlan ?
               <MenuItem
                 className={styles.menuItem}
-                onClick={onClickEkfEntfernen}
+                onClick={() => void onClickEkfEntfernen()}
               >
                 <ListItemIcon className={styles.listItemIcon}>
                   <EditIcon />
@@ -298,7 +221,7 @@ export const CellForYearMenu = () => {
               </MenuItem>
             : <MenuItem
                 className={styles.menuItem}
-                onClick={onClickEkfPlanen}
+                onClick={() => void onClickEkfPlanen()}
               >
                 <ListItemIcon className={styles.listItemIcon}>
                   <EditIcon />
@@ -317,7 +240,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setEksAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(eksAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                eksAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -335,7 +258,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setEkfsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(ekfsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                ekfsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -353,7 +276,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setMassnsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(massnsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                massnsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>

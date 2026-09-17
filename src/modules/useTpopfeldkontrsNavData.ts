@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -17,22 +17,22 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useTpopfeldkontrsNavData = (props) => {
+export const useTpopfeldkontrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
 
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopfeldkontr', tpopId, ekGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeTpopfeldkontrsQuery(
             $eksFilter: TpopkontrFilter!
             $tpopId: UUID!
@@ -57,16 +57,16 @@ export const useTpopfeldkontrsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           eksFilter: ekGqlFilterForTree,
           tpopId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   // this is how to make the filter reactive in a hook
@@ -82,7 +82,7 @@ export const useTpopfeldkontrsNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -90,12 +90,12 @@ export const useTpopfeldkontrsNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 
-  const count = data.tpopById.tpopkontrsByTpopId.nodes.length
-  const totalCount = data.tpopById.totalCount.totalCount
+  const count = data.tpopById?.tpopkontrsByTpopId.nodes.length
+  const totalCount = data.tpopById?.totalCount.totalCount
 
   const navData = {
     id: 'Feld-Kontrollen',
@@ -123,28 +123,28 @@ export const useTpopfeldkontrsNavData = (props) => {
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.tpopById.tpopkontrsByTpopId.nodes.map((p) => {
+    menus: data.tpopById?.tpopkontrsByTpopId.nodes.map((p) => {
       const labelRightElements = []
-      const isMoving = moving.id === p.id
+      const isMoving = moving.id === p?.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = copying.id === p.id
+      const isCopying = copying.id === p?.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
-      const isCopyingBiotop = copyingBiotop.id === p.id
+      const isCopyingBiotop = copyingBiotop.id === p?.id
       if (isCopyingBiotop) {
         labelRightElements.push(BiotopCopyingIcon)
       }
 
       return {
-        id: p.id,
-        label: p.label,
+        id: p?.id,
+        label: p?.label,
         treeNodeType: 'table',
         treeMenuType: 'tpopfeldkontr',
-        treeId: p.id,
-        treeTableId: p.id,
+        treeId: p?.id,
+        treeTableId: p?.id,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -156,10 +156,10 @@ export const useTpopfeldkontrsNavData = (props) => {
           'Teil-Populationen',
           tpopId,
           'Feld-Kontrollen',
-          p.id,
+          p?.id,
         ],
         fetcherName: 'useTpopfeldkontrNavData',
-        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p?.id },
         treeSingleElementName: 'Feld-Kontrolle',
         hasChildren: true,
         labelRightElements:

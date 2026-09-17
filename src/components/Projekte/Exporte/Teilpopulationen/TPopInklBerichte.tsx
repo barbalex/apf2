@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { ApId } from '../../../../models/apflora/public/ApId.ts'
-import type { PopId } from '../../../../models/apflora/public/PopId.ts'
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
+import type {
+  ApId,
+  PopId,
+  TpopId,
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -78,19 +80,14 @@ export const TPopInklBerichte = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data: TPopPopberundmassnberQueryResult }
-        try {
-          result = await apolloClient.query({
-            query: gql`
+  const onClickTPopInklBerichte = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: TPopPopberundmassnberQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<TPopPopberundmassnberQueryResult>({
+        query: graphql(`
               query viewTpopPopberundmassnbers {
                 allVTpopPopberundmassnbers {
                   nodes {
@@ -150,31 +147,38 @@ export const TPopInklBerichte = () => {
                   }
                 }
               }
-            `,
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: { variant: 'error' },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopPopberundmassnbers?.nodes ?? []
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'TeilpopulationenTPopUndMassnBerichte',
-        })
-        setQueryState(undefined)
-      }}
+            `),
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: { variant: 'error' },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVTpopPopberundmassnbers?.nodes ?? []
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'TeilpopulationenTPopUndMassnBerichte',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickTPopInklBerichte()}
     >
       Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
       {queryState ?

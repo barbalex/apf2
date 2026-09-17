@@ -1,4 +1,4 @@
-import { lazy, Suspense, createRef, useEffect } from 'react'
+import { lazy, createRef, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -20,6 +20,7 @@ import { buildApolloClient } from './apolloClient.ts'
 import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
+import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
@@ -53,10 +54,6 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.tsx'))
     .LegacyBrowserInformer,
 }))
-const Spinner = lazy(async () => ({
-  default: (await import('./components/shared/Spinner.tsx')).Spinner,
-}))
-
 registerLocale('de', de)
 setDefaultLocale('de')
 
@@ -72,7 +69,7 @@ const queryClient = new QueryClient({
 
 export const App = () => {
   const apolloClient = buildApolloClient()
-  const uploaderRef = createRef<HTMLElement>(null)
+  const uploaderRef = createRef<UploadCtxProvider | null>()
 
   useEffect(() => {
     const baseTitle = 'apflora'

@@ -12,13 +12,19 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
   table: 'ekfrequenz',
 }
 
-export const EkfrequenzFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const EkfrequenzFolder = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
   const setOpenChooseApToCopyEkfrequenzsFrom = useSetAtom(
     setOpenChooseApToCopyEkfrequenzsFromAtom,
@@ -27,15 +33,15 @@ export const EkfrequenzFolder = ({ onClick }) => {
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   // i.e. to know what node was clicked
-  const [apId, changeApId] = useState(0)
-  const onShow = (event) => changeApId(event.detail.data.tableId)
+  const [, changeApId] = useState(0)
+  const onShow = (event: { detail: { data?: Record<string, unknown> } }) =>
+    changeApId(event.detail.data?.tableId as number)
   const onOpenChooseApDialog = () => setOpenChooseApToCopyEkfrequenzsFrom(true)
 
   return (
     <ErrorBoundary>
       <ContextMenu
         id="treeEkfrequenzFolder"
-        collect={(props) => props}
         onShow={onShow}
         hideOnLeave={true}
       >

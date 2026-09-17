@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql/index.ts'
 
-export const createUsermessage = gql`
+export const createUsermessage = graphql(`
   mutation createUsermessage($id: UUID!, $userName: String!) {
     createUsermessage(
       input: { usermessage: { userName: $userName, messageId: $id } }
@@ -10,4 +10,4 @@ export const createUsermessage = gql`
       }
     }
   }
-`
+`)

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -30,7 +30,15 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
-const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
+const getLabelRightElements = ({
+  movingId,
+  copyingId,
+  tpopId,
+}: {
+  movingId: string | null
+  copyingId: string | null
+  tpopId: string
+}) => {
   const labelRightElements = []
   const isMoving = movingId === tpopId
   if (isMoving) {
@@ -44,13 +52,13 @@ const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
   return labelRightElements
 }
 
-export const useTpopNavData = (props) => {
+export const useTpopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
@@ -72,7 +80,7 @@ export const useTpopNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, refetch } = useQuery({
+const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpop',
       tpopId,
@@ -85,7 +93,7 @@ export const useTpopNavData = (props) => {
       const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
       const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavTpopQuery(
             $tpopId: UUID!
             $tpopmassnFilter: TpopmassnFilter!
@@ -159,7 +167,7 @@ export const useTpopNavData = (props) => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           tpopId,
           tpopmassnFilter: tpopmassnGqlFilterForTree,
@@ -174,16 +182,16 @@ export const useTpopNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
   useEffect(
     () => {
       const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -191,7 +199,7 @@ export const useTpopNavData = (props) => {
       const unsub = store.sub(mapTpopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -199,7 +207,7 @@ export const useTpopNavData = (props) => {
       const unsub = store.sub(treeShowTpopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -207,7 +215,7 @@ export const useTpopNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -215,7 +223,7 @@ export const useTpopNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 
@@ -246,8 +254,8 @@ export const useTpopNavData = (props) => {
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =
     status ?
-      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
-      : tpopIcons[tpopIconName][status]
+      tpopIconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[status + 'Highlighted']
+      : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[status]
     : tpopIconIsHighlighted ? TpopIconQHighlighted
     : TpopIconQ
 

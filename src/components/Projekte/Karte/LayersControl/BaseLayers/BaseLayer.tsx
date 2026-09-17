@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
+import type { MouseEvent } from 'react'
 
 import { Radio } from '../shared/Radio.tsx'
 import {
@@ -6,15 +7,23 @@ import {
   setMapActiveBaseLayerAtom,
 } from '../../../../../store/index.ts'
 
+import type { BaseLayerItem } from './index.tsx'
+
 import styles from './BaseLayer.module.css'
 
-export const BaseLayer = ({ layer }) => {
+interface BaseLayerProps {
+  layer: BaseLayerItem
+}
+
+export const BaseLayer = ({ layer }: BaseLayerProps) => {
   const activeBaseLayer = useAtomValue(mapActiveBaseLayerAtom)
   const setActiveBaseLayer = useSetAtom(setMapActiveBaseLayerAtom)
   const onChange = () => setActiveBaseLayer(layer.value)
-  const onClick = (event) => {
+  const onClick = (event: MouseEvent<HTMLDivElement>) => {
     if (layer.value === activeBaseLayer) {
-      setActiveBaseLayer(null)
+      // null is passed to deselect the base layer
+      // even though the store atom is typed as string
+      setActiveBaseLayer(null as never)
       // prevent click bubbling to Radio
       // then triggering change...
       event.preventDefault()

@@ -12,6 +12,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
@@ -43,7 +45,11 @@ const resetCopyingBiotopData = {
   action: 'resetCopyingBiotop',
 }
 
-export const Tpopfeldkontr = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const Tpopfeldkontr = ({ onClick }: Props) => {
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const userToken = useAtomValue(userTokenAtom)

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { MouseEvent } from 'react'
 import { FaCog, FaCheck } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -34,8 +35,9 @@ export const Menu = () => {
   const toggleShowPopIcon = useSetAtom(toggleTreeShowPopIconAtom)
   const setDoShowPopIcon = useSetAtom(setTreeShowPopIconAtom)
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickConfig = (event) => setAnchorEl(event.currentTarget)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const onClickConfig = (event: MouseEvent<HTMLButtonElement>) =>
+    setAnchorEl(event.currentTarget)
   const onClose = () => setAnchorEl(null)
 
   const onClickAllTpopSame = () => {
@@ -73,11 +75,11 @@ export const Menu = () => {
   const onClickPopNoSymbols = () => toggleShowPopIcon()
 
   const [onlyShowActivePathString, setOnlyShowActivePath] =
-    useSearchParamsState('onlyShowActivePath', 'false')
+    useSearchParamsState<string>('onlyShowActivePath', 'false')
   const onlyShowActivePath = onlyShowActivePathString === 'true'
 
   const onClickOnlyShowActivePath = () =>
-    setOnlyShowActivePath(!onlyShowActivePath)
+    setOnlyShowActivePath(!onlyShowActivePath ? 'true' : 'false')
 
   return (
     <div className={styles.container}>
@@ -85,7 +87,7 @@ export const Menu = () => {
         <IconButton
           size="small"
           aria-label="Optionen wählen"
-          aria-owns={anchorEl ? 'menu' : null}
+          aria-owns={anchorEl ? 'menu' : undefined}
           onClick={onClickConfig}
         >
           <FaCog className={styles.faCog} />

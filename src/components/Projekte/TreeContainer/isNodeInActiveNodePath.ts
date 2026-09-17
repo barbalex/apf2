@@ -1,6 +1,12 @@
 import { isEqual } from 'es-toolkit'
 
-export const isNodeInActiveNodePath = ({ node, activeNodeArray }) => {
+export const isNodeInActiveNodePath = ({
+  node,
+  activeNodeArray,
+}: {
+  node?: { url?: (string | number)[] | null | undefined } | null | undefined
+  activeNodeArray?: (string | number)[] | null | undefined
+}) => {
   if (!node) return false
   if (!node.url) return false
   if (!activeNodeArray) return false

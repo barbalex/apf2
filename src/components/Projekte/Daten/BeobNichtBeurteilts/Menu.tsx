@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { FaMap } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -24,8 +23,6 @@ const iconStyle = { color: 'white' }
 // TODO: how to pass both props?
 // TODO: need to add menu to other beobs to enable filtering
 export const Menu = ({ apfloraLayer, toggleFilterInput }: MenuProps) => {
-  const tsQueryClient = useQueryClient()
-
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
 
@@ -39,7 +36,8 @@ export const Menu = ({ apfloraLayer, toggleFilterInput }: MenuProps) => {
 
   const onClickShowOnMap = () => {
     showMapIfNotYetVisible(projekteTabs)
-    setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer]))
+    // apfloraLayer is always passed via menuBarProps
+    setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer as string]))
   }
 
   return (

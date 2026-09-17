@@ -2,7 +2,6 @@ import { jwtDecode } from 'jwt-decode'
 import { useAtomValue } from 'jotai'
 
 import { userAtom } from '../../../../store/index.ts'
-import { NodeWithList } from './NodeWithList.tsx'
 import { RootNode } from './RootNode.tsx'
 import { RootUsersNode } from './RootUsersNode.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'
@@ -14,7 +13,7 @@ import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNav
 export const Root = () => {
   const user = useAtomValue(userAtom)
   const token = user?.token
-  const role = token ? jwtDecode(token).role : null
+  const role = token ? jwtDecode<{ role?: string }>(token).role : null
 
   // we need to use a node that does not get its fetcher passed in
   // for users because of the filtering: when the fetcher is not executed in the

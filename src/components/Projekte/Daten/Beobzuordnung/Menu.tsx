@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
-import { useParams, useNavigate, useLocation } from 'react-router'
-import { isEqual } from 'es-toolkit'
+import type { ComponentType } from 'react'
+import { useParams, useLocation } from 'react-router'
 import Button from '@mui/material/Button'
+import type { ButtonProps } from '@mui/material/Button'
 
-import { useSetAtom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-  addNotificationAtom,
 } from '../../../../store/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
@@ -21,29 +19,38 @@ import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/i
 
 import styles from '../Tpop/Menu.module.css'
 
+interface MenuButtonProps extends ButtonProps {
+  // legacy prop, passed through to the DOM by MUI without effect
+  width?: number
+}
+
+const MenuButton = Button as unknown as ComponentType<MenuButtonProps>
+
 export const Menu = () => {
   const { search, pathname } = useLocation()
-  const navigate = useNavigate()
+  // this component only renders on routes containing projId, apId and beobId
   const { projId, apId, beobId, tpopId } = useParams<{
     projId: string
     apId: string
     beobId: string
     tpopId?: string
-  }>()
-
-  const apolloClient = useApolloClient()
+  }>() as {
+    projId: string
+    apId: string
+    beobId: string
+    tpopId?: string | undefined
+  }
 
   const isBeobZugeordnet = !!tpopId
   const isBeobNichtBeurteilt =
     !tpopId && pathname.includes('nicht-beurteilte-Beobachtungen')
-  const isBeobNichtZuzuordnen =
-    !tpopId && pathname.includes('nicht-zuzuordnende-Beobachtungen')
 
   const [
     copyingBeobZugeordnetKoordToTpop,
     setCopyingBeobZugeordnetKoordToTpop,
   ] = useState(false)
   const onClickCopyingBeobZugeordnetKoordToTpop = async () => {
+    if (!beobId) return
     setCopyingBeobZugeordnetKoordToTpop(true)
     await copyBeobZugeordnetKoordToTpop({
       id: beobId,
@@ -52,13 +59,13 @@ export const Menu = () => {
   }
 
   const onClickShowCoordOfBeobOnMapGeoAdminCh = () => {
-    showCoordOfBeobOnMapGeoAdminCh({
+    void showCoordOfBeobOnMapGeoAdminCh({
       id: beobId,
     })
   }
 
   const onClickShowCoordOfBeobOnMapsZhCh = () => {
-    showCoordOfBeobOnMapsZhCh({
+    void showCoordOfBeobOnMapsZhCh({
       id: beobId,
     })
   }
@@ -77,13 +84,10 @@ export const Menu = () => {
     }, 500)
   }
 
-  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
+  const [, setNewTpopFromBeobDialogOpen] = useAtom(
     newTpopFromBeobDialogOpenAtom,
   )
-  const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useAtom(
-    newTpopFromBeobBeobIdAtom,
-  )
-  const closeNewTpopFromBeobDialog = () => setNewTpopFromBeobDialogOpen(false)
+  const [, setNewTpopFromBeobBeobId] = useAtom(newTpopFromBeobBeobIdAtom)
 
   const onClickNewTpopFromBeob = () => {
     setNewTpopFromBeobBeobId(beobId)
@@ -100,9 +104,9 @@ export const Menu = () => {
         rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
       >
         {isBeobZugeordnet && (
-          <Button
+          <MenuButton
             variant="outlined"
-            onClick={onClickCopyingBeobZugeordnetKoordToTpop}
+            onClick={() => void onClickCopyingBeobZugeordnetKoordToTpop()}
             loading={copyingBeobZugeordnetKoordToTpop}
             width={190}
             className={styles.styledLoadingButton}
@@ -110,12 +114,12 @@ export const Menu = () => {
             Koordinaten auf die
             <br />
             Teilpopulation übertragen
-          </Button>
+          </MenuButton>
         )}
         {isBeobNichtBeurteilt && (
-          <Button
+          <MenuButton
             variant="outlined"
-            onClick={onClickCreateNewPopFromBeob}
+            onClick={() => void onClickCreateNewPopFromBeob()}
             loading={creatingNewPopFromBeob}
             width={245}
             className={styles.styledLoadingButton}
@@ -123,10 +127,10 @@ export const Menu = () => {
             {'Pop. und TPop. gründen >'}
             <br />
             {'Beobachtung der TPop. zuordnen'}
-          </Button>
+          </MenuButton>
         )}
         {isBeobNichtBeurteilt && (
-          <Button
+          <MenuButton
             variant="outlined"
             onClick={onClickNewTpopFromBeob}
             width={258}
@@ -135,9 +139,9 @@ export const Menu = () => {
             {'TPop. in bestehender Pop. gründen'}
             <br />
             {'> Beobachtung der TPop. zuordnen'}
-          </Button>
+          </MenuButton>
         )}
-        <Button
+        <MenuButton
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapsZhCh}
           width={105}
@@ -146,8 +150,8 @@ export const Menu = () => {
           zeige auf
           <br />
           maps.zh.ch
-        </Button>
-        <Button
+        </MenuButton>
+        <MenuButton
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
           width={147}
@@ -156,7 +160,7 @@ export const Menu = () => {
           zeige auf
           <br />
           map.geo.admin.ch
-        </Button>
+        </MenuButton>
       </MenuBar>
     </ErrorBoundary>
   )

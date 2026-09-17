@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -10,7 +10,7 @@ import {
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useProjektNavData = (props) => {
+export const useProjektNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId =
@@ -21,7 +21,7 @@ export const useProjektNavData = (props) => {
     treeApberuebersichtGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeProject',
       projId,
@@ -30,7 +30,7 @@ export const useProjektNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavProjectQuery(
             $projId: UUID!
             $apFilter: ApFilter!
@@ -55,7 +55,7 @@ export const useProjektNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           projId,
           apFilter: apGqlFilterForTree,
@@ -63,18 +63,18 @@ export const useProjektNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const label = data.projektById.label ?? 'Projekt'
-  const artsCount = data.projektById.filteredAps.totalCount
-  const allArtsCount = data.projektById.allAps.totalCount
+  const label = data.projektById?.label ?? 'Projekt'
+  const artsCount = data.projektById?.filteredAps.totalCount
+  const allArtsCount = data.projektById?.allAps.totalCount
   const apberuebersichtsCount =
-    data.projektById.filteredApberuebersichts.totalCount
+    data.projektById?.filteredApberuebersichts.totalCount
   const allApberuebersichtsCount =
-    data.projektById.allApberuebersichts.totalCount
+    data.projektById?.allApberuebersichts.totalCount
   const navData = {
     id: projId,
     url: `/Daten/Projekte/${projId}`,

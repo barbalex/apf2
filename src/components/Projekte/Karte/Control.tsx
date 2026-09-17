@@ -8,7 +8,17 @@ const POSITION_CLASSES = {
   topright: 'leaflet-top leaflet-right',
 }
 
-export const Control = ({ children, position, visible = true }) => {
+interface ControlProps {
+  children?: React.ReactNode
+  position?: keyof typeof POSITION_CLASSES
+  visible?: boolean
+}
+
+export const Control = ({
+  children,
+  position,
+  visible = true,
+}: ControlProps) => {
   const positionClass =
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
 

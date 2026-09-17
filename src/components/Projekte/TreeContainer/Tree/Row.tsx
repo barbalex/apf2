@@ -8,6 +8,8 @@ import Highlighter from 'react-highlight-words'
 import { useLocation } from 'react-router'
 import { upperFirst } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
+import type { Ref } from 'react'
+import type { TransitionStatus } from 'react-transition-group'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.ts'
@@ -22,24 +24,31 @@ import {
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
+import type { TreeNodeData } from './types.ts'
 
 import styles from './Row.module.css'
 
-const transitionStyles = {
+const transitionStyles: Partial<
+  Record<TransitionStatus, { opacity: number }>
+> = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
 }
 
-export const Row = ({ node, transitionState, ref }) => {
+interface RowProps {
+  node: TreeNodeData
+  transitionState?: TransitionStatus | undefined
+  ref?: Ref<HTMLDivElement> | undefined
+}
+
+export const Row = ({ node, transitionState, ref }: RowProps) => {
   const { search } = useLocation()
 
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const activeId = activeNodeArray[activeNodeArray.length - 1]
-  const nodeIsActive = node.id === activeId
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath({
     node,
@@ -47,7 +56,7 @@ export const Row = ({ node, transitionState, ref }) => {
   })
   const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
 
-  const [onlyShowActivePathString] = useSearchParamsState(
+  const [onlyShowActivePathString] = useSearchParamsState<string>(
     'onlyShowActivePath',
     'false',
   )
@@ -62,7 +71,7 @@ export const Row = ({ node, transitionState, ref }) => {
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
-  let symbolIcon
+  let symbolIcon: string | undefined
   if (node.hasChildren && (nodeIsOpen || node.alwaysOpen)) {
     symbolIcon = 'openNodeIcon'
   } else if (node.hasChildren) {
@@ -88,8 +97,10 @@ export const Row = ({ node, transitionState, ref }) => {
 
   const onMouseEnterNode = () => {
     // Prefetch data when hovering over node
-    prefetchNodeData(node)
+    void prefetchNodeData(node)
   }
+
+  const labelFilter = nodeLabelFilter?.[node.menuType]
 
   const nodeStyle = {
     ...(transitionState ? transitionStyles[transitionState] : {}),
@@ -118,7 +129,7 @@ export const Row = ({ node, transitionState, ref }) => {
         data-singleelementname={node.singleElementName}
         data-jahr={node.jahr}
         // need this id to scroll elements into view
-        id={node.id}
+        id={node.id ?? undefined}
         ref={ref}
         className={styles.node}
         style={nodeStyle}
@@ -164,16 +175,16 @@ export const Row = ({ node, transitionState, ref }) => {
           node.labelLeftElements.map((El, index) => <El key={index} />)}
         <span
           className={styles.label}
-          node={node}
+          {...({ node } as Record<string, unknown>)}
           onClick={onClickNode}
           style={{
             fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
             color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
           }}
         >
-          {nodeLabelFilter?.[node.menuType] ?
+          {labelFilter ?
             <Highlighter
-              searchWords={[nodeLabelFilter[node.menuType]]}
+              searchWords={[labelFilter]}
               textToHighlight={node.label}
             />
           : node.label

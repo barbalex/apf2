@@ -1,9 +1,16 @@
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
 import { TextField2 } from '../../../../shared/TextField2.tsx'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 
 import styles from './Verification.module.css'
 
-export const Verification = ({ saveToDb, row, errors }) => {
+interface VerificationProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const Verification = ({ saveToDb, row, errors }: VerificationProps) => {
   const onSaveTrue = () => {
     const fakeEvent = {
       target: {
@@ -11,7 +18,7 @@ export const Verification = ({ saveToDb, row, errors }) => {
         value: row?.apberNichtRelevant === true ? null : true,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   return (

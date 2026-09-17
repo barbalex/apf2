@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { ApErfolg } from './ApErfolg/index.tsx'
 import { PopStatus } from './PopStatus/index.tsx'
@@ -14,7 +14,7 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
 
-const apAuswertungQuery = gql`
+const apAuswertungQuery = graphql(`
   query apAuswertungQuery($apId: UUID!) {
     apById(id: $apId) {
       id
@@ -24,23 +24,23 @@ const apAuswertungQuery = gql`
       }
     }
   }
-`
+`)
 
 interface ApAuswertungQueryResult {
   apById: {
     id: ApId
     aeTaxonomyByArtId: {
       id: AeTaxonomiesId
-      artname: string
+      artname: string | null
     } | null
-  }
+  } | null
 }
 
 export const Component = () => {
   const apolloClient = useApolloClient()
 
   const { apId } = useParams<{ apId: string }>()
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['apAuswertung', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApAuswertungQueryResult>({
@@ -48,12 +48,11 @@ export const Component = () => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as ApAuswertungQueryResult
     },
-    suspense: true,
   })
 
-  const artname = data.apById.aeTaxonomyByArtId.artname ?? 'Art'
+  const artname = data.apById?.aeTaxonomyByArtId?.artname ?? 'Art'
 
   return (
     <>

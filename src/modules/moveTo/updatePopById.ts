@@ -1,8 +1,9 @@
-import { gql } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { pop } from '../../components/shared/fragments.ts'
 
-export const updatePopById = gql`
+export const updatePopById = dynamicGql`
   mutation updatePopByIdForMoveTo($id: UUID!, $apId: UUID) {
     updatePopById(input: { id: $id, popPatch: { apId: $apId } }) {
       pop {
@@ -11,4 +12,7 @@ export const updatePopById = gql`
     }
   }
   ${pop}
-`
+` as unknown as TypedDocumentNode<
+  { updatePopById?: { pop?: { id: string } | null } | null },
+  Record<string, unknown>
+>

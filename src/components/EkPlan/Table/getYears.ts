@@ -2,7 +2,7 @@
  * used to automatically set first year depending on first kontrs or first massns
  * but now users set first shown year via pastYears
  */
-export const getYears = (pastYears) => {
+export const getYears = (pastYears: number) => {
   const currentYear = new Date().getFullYear()
   let firstYear = currentYear - pastYears
   let lastYear = currentYear + 15

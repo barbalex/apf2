@@ -1,6 +1,7 @@
 import 'leaflet'
 import 'leaflet-easyprint'
 import { createControlComponent } from '@react-leaflet/core'
+import type { Control as LeafletControl, ControlOptions } from 'leaflet'
 
 const options = {
   title: 'drucken',
@@ -16,9 +17,15 @@ const options = {
   spinnerBgColor: '#2e7d32',
 }
 
-export const PrintControl = createControlComponent((props) =>
-  window.L.easyPrint({
-    ...options,
-    ...props,
-  }),
+// the leaflet-easyprint plugin registers L.easyPrint without typings
+const easyPrint = (window.L as unknown as {
+  easyPrint: (options: Record<string, unknown>) => LeafletControl
+}).easyPrint
+
+export const PrintControl = createControlComponent(
+  (props: ControlOptions) =>
+    easyPrint({
+      ...options,
+      ...props,
+    }),
 )

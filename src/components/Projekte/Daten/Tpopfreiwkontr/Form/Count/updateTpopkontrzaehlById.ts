@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 
 import { tpopkontrzaehl } from '../../../../../shared/fragments.ts'
 
-export const updateTpopkontrzaehlById = gql`
+export const updateTpopkontrzaehlById = dynamicGql`
   mutation updateAnzahlForCount(
     $id: UUID!
     $anzahl: Float

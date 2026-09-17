@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql/index.ts'
 
-export const adresse = gql`
+export const adresse = graphql(`
   fragment AdresseFields on Adresse {
     id
     label
@@ -11,9 +11,9 @@ export const adresse = gql`
     freiwErfko
     changedBy
   }
-`
+`)
 
-export const aeTaxonomies = gql`
+export const aeTaxonomies = graphql(`
   fragment AeTaxonomiesFields on AeTaxonomy {
     taxonomieId
     taxonomieName
@@ -24,17 +24,17 @@ export const aeTaxonomies = gql`
     taxArtName
     artwert
   }
-`
+`)
 
-export const aeLrDelarze = gql`
+export const aeLrDelarze = graphql(`
   fragment AeLrDelarzeFields on AeLrDelarze {
     id
     label
     einheit
   }
-`
+`)
 
-export const ap = gql`
+export const ap = graphql(`
   fragment ApFields on Ap {
     id
     label
@@ -48,9 +48,9 @@ export const ap = gql`
     projId
     changedBy
   }
-`
+`)
 
-export const apart = gql`
+export const apart = graphql(`
   fragment ApartFields on Apart {
     id
     label
@@ -58,9 +58,9 @@ export const apart = gql`
     artId
     changedBy
   }
-`
+`)
 
-export const apber = gql`
+export const apber = graphql(`
   fragment ApberFields on Apber {
     id
     label
@@ -83,9 +83,9 @@ export const apber = gql`
     bearbeiter
     changedBy
   }
-`
+`)
 
-export const apberuebersicht = gql`
+export const apberuebersicht = graphql(`
   fragment ApberuebersichtFields on Apberuebersicht {
     id
     label
@@ -96,9 +96,9 @@ export const apberuebersicht = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const apFile = gql`
+export const apFile = graphql(`
   fragment ApFileFields on ApFile {
     id
     apId
@@ -107,9 +107,9 @@ export const apFile = gql`
     name
     beschreibung
   }
-`
+`)
 
-export const apHistory = gql`
+export const apHistory = graphql(`
   fragment ApHistoryFields on ApHistory {
     id
     year
@@ -125,16 +125,16 @@ export const apHistory = gql`
     updatedAt
     changedBy
   }
-`
+`)
 
-export const apqk = gql`
+export const apqk = graphql(`
   fragment ApqkFields on Apqk {
     apId
     qkName
   }
-`
+`)
 
-export const assozart = gql`
+export const assozart = graphql(`
   fragment AssozartFields on Assozart {
     id
     label
@@ -143,9 +143,9 @@ export const assozart = gql`
     apId
     changedBy
   }
-`
+`)
 
-export const beob = gql`
+export const beob = graphql(`
   fragment BeobFields on Beob {
     id
     label
@@ -173,9 +173,9 @@ export const beob = gql`
     infofloraInformiertDatum
     changedBy
   }
-`
+`)
 
-export const currentIssue = gql`
+export const currentIssue = graphql(`
   fragment CurrentIssueFields on Currentissue {
     id
     label
@@ -183,9 +183,9 @@ export const currentIssue = gql`
     title
     issue
   }
-`
+`)
 
-export const ekAbrechnungstypWerte = gql`
+export const ekAbrechnungstypWerte = graphql(`
   fragment EkAbrechnungstypWerteFields on EkAbrechnungstypWerte {
     id
     code
@@ -195,9 +195,9 @@ export const ekAbrechnungstypWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const ekfrequenz = gql`
+export const ekfrequenz = graphql(`
   fragment EkfrequenzFields on Ekfrequenz {
     id
     apId
@@ -211,9 +211,9 @@ export const ekfrequenz = gql`
     ekAbrechnungstyp
     changedBy
   }
-`
+`)
 
-export const ekplan = gql`
+export const ekplan = graphql(`
   fragment EkplanFields on Ekplan {
     id
     tpopId
@@ -221,9 +221,9 @@ export const ekplan = gql`
     typ
     changedBy
   }
-`
+`)
 
-export const ekzaehleinheit = gql`
+export const ekzaehleinheit = graphql(`
   fragment EkzaehleinheitFields on Ekzaehleinheit {
     id
     apId
@@ -235,9 +235,9 @@ export const ekzaehleinheit = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const erfkrit = gql`
+export const erfkrit = graphql(`
   fragment ErfkritFields on Erfkrit {
     id
     label
@@ -246,9 +246,9 @@ export const erfkrit = gql`
     kriterien
     changedBy
   }
-`
+`)
 
-export const idealbiotop = gql`
+export const idealbiotop = graphql(`
   fragment IdealbiotopFields on Idealbiotop {
     id
     apId
@@ -272,8 +272,8 @@ export const idealbiotop = gql`
     bemerkungen
     changedBy
   }
-`
-export const idealbiotopFile = gql`
+`)
+export const idealbiotopFile = graphql(`
   fragment IdealbiotopFileFields on IdealbiotopFile {
     id
     idealbiotopId
@@ -282,17 +282,17 @@ export const idealbiotopFile = gql`
     name
     beschreibung
   }
-`
-export const message = gql`
+`)
+export const message = graphql(`
   fragment MessageFields on Message {
     id
     message
     time
     active
   }
-`
+`)
 
-export const pop = gql`
+export const pop = graphql(`
   fragment PopFields on Pop {
     id
     label
@@ -315,9 +315,9 @@ export const pop = gql`
     }
     changedBy
   }
-`
+`)
 
-export const popber = gql`
+export const popber = graphql(`
   fragment PopberFields on Popber {
     id
     label
@@ -327,9 +327,9 @@ export const popber = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const popFile = gql`
+export const popFile = graphql(`
   fragment PopFileFields on PopFile {
     id
     popId
@@ -338,9 +338,9 @@ export const popFile = gql`
     name
     beschreibung
   }
-`
+`)
 
-export const popHistory = gql`
+export const popHistory = graphql(`
   fragment PopHistoryFields on PopHistory {
     id
     year
@@ -360,9 +360,9 @@ export const popHistory = gql`
     updatedAt
     changedBy
   }
-`
+`)
 
-export const popmassnber = gql`
+export const popmassnber = graphql(`
   fragment PopmassnberFields on Popmassnber {
     id
     label
@@ -372,27 +372,27 @@ export const popmassnber = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const projekt = gql`
+export const projekt = graphql(`
   fragment ProjektFields on Projekt {
     id
     label
     name
     changedBy
   }
-`
+`)
 
-export const qk = gql`
+export const qk = graphql(`
   fragment QkFields on Qk {
     name
     titel
     beschreibung
     sort
   }
-`
+`)
 
-export const tpop = gql`
+export const tpop = graphql(`
   fragment TpopFields on Tpop {
     id
     label
@@ -442,9 +442,9 @@ export const tpop = gql`
     statusUnklar
     changedBy
   }
-`
+`)
 
-export const tpopber = gql`
+export const tpopber = graphql(`
   fragment TpopberFields on Tpopber {
     id
     label
@@ -460,9 +460,9 @@ export const tpopber = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const tpopfeldkontr = gql`
+export const tpopfeldkontr = graphql(`
   fragment TpopfeldkontrFields on Tpopkontr {
     id
     labelEk
@@ -503,9 +503,9 @@ export const tpopfeldkontr = gql`
     apberNichtRelevantGrund
     changedBy
   }
-`
+`)
 
-export const tpopFile = gql`
+export const tpopFile = graphql(`
   fragment TpopFileFields on TpopFile {
     id
     tpopId
@@ -514,9 +514,9 @@ export const tpopFile = gql`
     name
     beschreibung
   }
-`
+`)
 
-export const tpopfreiwkontr = gql`
+export const tpopfreiwkontr = graphql(`
   fragment TpopfreiwkontrFields on Tpopkontr {
     id
     labelEkf
@@ -540,9 +540,9 @@ export const tpopfreiwkontr = gql`
     apberNichtRelevantGrund
     changedBy
   }
-`
+`)
 
-export const tpopHistory = gql`
+export const tpopHistory = graphql(`
   fragment TpopHistoryFields on TpopHistory {
     id
     year
@@ -582,9 +582,9 @@ export const tpopHistory = gql`
     updatedAt
     changedBy
   }
-`
+`)
 
-export const tpopkontr = gql`
+export const tpopkontr = graphql(`
   fragment TpopkontrFields on Tpopkontr {
     id
     typ
@@ -624,9 +624,9 @@ export const tpopkontr = gql`
     jungpflanzenVorhanden
     changedBy
   }
-`
+`)
 
-export const tpopkontrFile = gql`
+export const tpopkontrFile = graphql(`
   fragment TpopkontrFileFields on TpopkontrFile {
     id
     tpopkontrId
@@ -635,9 +635,9 @@ export const tpopkontrFile = gql`
     name
     beschreibung
   }
-`
+`)
 
-export const tpopkontrzaehl = gql`
+export const tpopkontrzaehl = graphql(`
   fragment TpopkontrzaehlFields on Tpopkontrzaehl {
     id
     label
@@ -647,9 +647,9 @@ export const tpopkontrzaehl = gql`
     methode
     changedBy
   }
-`
+`)
 
-export const tpopmassn = gql`
+export const tpopmassn = graphql(`
   fragment TpopmassnFields on Tpopmassn {
     id
     label
@@ -677,9 +677,9 @@ export const tpopmassn = gql`
     planVorhanden
     changedBy
   }
-`
+`)
 
-export const tpopmassnber = gql`
+export const tpopmassnber = graphql(`
   fragment TpopmassnberFields on Tpopmassnber {
     id
     label
@@ -689,9 +689,9 @@ export const tpopmassnber = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const tpopmassnFile = gql`
+export const tpopmassnFile = graphql(`
   fragment TpopmassnFileFields on TpopmassnFile {
     id
     tpopmassnId
@@ -700,9 +700,9 @@ export const tpopmassnFile = gql`
     name
     beschreibung
   }
-`
+`)
 
-export const user = gql`
+export const user = graphql(`
   fragment UserFields on User {
     id
     label
@@ -712,9 +712,9 @@ export const user = gql`
     pass
     adresseId
   }
-`
+`)
 
-export const ziel = gql`
+export const ziel = graphql(`
   fragment ZielFields on Ziel {
     id
     label
@@ -726,9 +726,9 @@ export const ziel = gql`
     bemerkungen
     changedBy
   }
-`
+`)
 
-export const apBearbstandWerte = gql`
+export const apBearbstandWerte = graphql(`
   fragment ApBearbstandWerteFields on ApBearbstandWerte {
     id
     code
@@ -737,9 +737,9 @@ export const apBearbstandWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const apErfkritWerte = gql`
+export const apErfkritWerte = graphql(`
   fragment ApErfkritWerteFields on ApErfkritWerte {
     id
     code
@@ -748,9 +748,9 @@ export const apErfkritWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const apUmsetzungWerte = gql`
+export const apUmsetzungWerte = graphql(`
   fragment ApUmsetzungWerteFields on ApUmsetzungWerte {
     id
     code
@@ -759,9 +759,9 @@ export const apUmsetzungWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const popStatusWerte = gql`
+export const popStatusWerte = graphql(`
   fragment PopStatusWerteFields on PopStatusWerte {
     id
     code
@@ -770,9 +770,9 @@ export const popStatusWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopApberrelevantGrundWerte = gql`
+export const tpopApberrelevantGrundWerte = graphql(`
   fragment TpopApberrelevantGrundWerteFields on TpopApberrelevantGrundWerte {
     id
     code
@@ -782,9 +782,9 @@ export const tpopApberrelevantGrundWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopEntwicklungWerte = gql`
+export const tpopEntwicklungWerte = graphql(`
   fragment TpopEntwicklungWerteFields on TpopEntwicklungWerte {
     id
     code
@@ -793,9 +793,9 @@ export const tpopEntwicklungWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopkontrIdbiotuebereinstWerte = gql`
+export const tpopkontrIdbiotuebereinstWerte = graphql(`
   fragment TpopkontrIdbiotuebereinstWerteFields on TpopkontrIdbiotuebereinstWerte {
     id
     code
@@ -804,9 +804,9 @@ export const tpopkontrIdbiotuebereinstWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopkontrTypWerte = gql`
+export const tpopkontrTypWerte = graphql(`
   fragment TpopkontrTypWerteFields on TpopkontrTypWerte {
     id
     code
@@ -815,9 +815,9 @@ export const tpopkontrTypWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopkontrzaehlEinheitWerte = gql`
+export const tpopkontrzaehlEinheitWerte = graphql(`
   fragment TpopkontrzaehlEinheitWerteFields on TpopkontrzaehlEinheitWerte {
     id
     code
@@ -829,9 +829,9 @@ export const tpopkontrzaehlEinheitWerte = gql`
     label
     changedBy
   }
-`
+`)
 
-export const tpopkontrzaehlMethodeWerte = gql`
+export const tpopkontrzaehlMethodeWerte = graphql(`
   fragment TpopkontrzaehlMethodeWerteFields on TpopkontrzaehlMethodeWerte {
     id
     code
@@ -840,9 +840,9 @@ export const tpopkontrzaehlMethodeWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopmassnErfbeurtWerte = gql`
+export const tpopmassnErfbeurtWerte = graphql(`
   fragment TpopmassnErfbeurtWerteFields on TpopmassnErfbeurtWerte {
     id
     code
@@ -851,9 +851,9 @@ export const tpopmassnErfbeurtWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const tpopmassnTypWerte = gql`
+export const tpopmassnTypWerte = graphql(`
   fragment TpopmassnTypWerteFields on TpopmassnTypWerte {
     id
     code
@@ -864,9 +864,9 @@ export const tpopmassnTypWerte = gql`
     historic
     changedBy
   }
-`
+`)
 
-export const zielTypWerte = gql`
+export const zielTypWerte = graphql(`
   fragment ZielTypWerteFields on ZielTypWerte {
     id
     code
@@ -875,4 +875,4 @@ export const zielTypWerte = gql`
     historic
     changedBy
   }
-`
+`)

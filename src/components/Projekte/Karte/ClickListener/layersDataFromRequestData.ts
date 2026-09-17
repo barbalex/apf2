@@ -1,22 +1,29 @@
+import type { LayerData } from '../layers/Popup.js'
 import { vndOgcGmlToLayersData } from '../../../../modules/vndOgcGmlToLayersData.ts'
 import { textXmlToLayersData } from '../../../../modules/textXmlToLayersData.ts'
+
+interface LayersDataFromRequestDataProps {
+  layersData: LayerData[]
+  requestData: string | LayerData[]
+  infoFormat: string
+}
 
 export const layersDataFromRequestData = ({
   layersData,
   requestData,
   infoFormat,
-}) => {
+}: LayersDataFromRequestDataProps) => {
   switch (infoFormat) {
     case 'application/vnd.ogc.gml':
     case 'application/vnd.ogc.gml/3.1.1': {
       const parser = new window.DOMParser()
       const dataArray = vndOgcGmlToLayersData(
-        parser.parseFromString(requestData, 'text/html'),
+        parser.parseFromString(requestData as string, 'text/html'),
       )
       // do not open empty popups
       if (dataArray.length) {
         dataArray.forEach((data) => {
-          layersData.push(data)
+          layersData.push(data as LayerData)
         })
       }
       break
@@ -24,23 +31,24 @@ export const layersDataFromRequestData = ({
     case 'text/xml': {
       const parser = new window.DOMParser()
       const dataArray = textXmlToLayersData(
-        parser.parseFromString(requestData, 'text/xml'),
+        parser.parseFromString(requestData as string, 'text/xml'),
       )
       // do not open empty popups
       if (dataArray.length) {
         dataArray.forEach((data) => {
-          layersData.push(data)
+          layersData.push(data as LayerData)
         })
       }
       break
     }
     case 'labelPropertiesArray': {
-      layersData.push(...requestData)
+      layersData.push(...(requestData as LayerData[]))
       break
     }
     // TODO: implement these
     case 'text/html': {
-      layersData.push({ html: requestData })
+      // dormant path: the payload is not LayerData-shaped
+      layersData.push({ html: requestData } as unknown as LayerData)
       break
     }
     // TODO: test
@@ -49,18 +57,20 @@ export const layersDataFromRequestData = ({
     case 'text/javascript': {
       // do not open empty popups
       if (!requestData?.length) return
-      if (requestData.includes('no results')) return
+      if ((requestData as string).includes('no results')) return
 
-      layersData.push({ json: requestData })
+      // dormant path: the payload is not LayerData-shaped
+      layersData.push({ json: requestData } as unknown as LayerData)
       break
     }
     case 'text/plain':
     default: {
       // do not open empty popups
       if (!requestData?.length) return
-      if (requestData.includes('no results')) return
+      if ((requestData as string).includes('no results')) return
 
-      layersData.push({ text: requestData })
+      // dormant path: the payload is not LayerData-shaped
+      layersData.push({ text: requestData } as unknown as LayerData)
 
       break
     }

@@ -1,5 +1,15 @@
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
 
+export interface EkPlanField {
+  name: string
+  label: string
+  sort: number
+  width: number
+  alwaysShow?: boolean
+  nofilter?: boolean
+  value?: unknown
+}
+
 export const fields = {
   ap: {
     name: 'ap',
@@ -112,4 +122,4 @@ export const fields = {
     alwaysShow: true,
     nofilter: true,
   },
-}
+} satisfies Record<string, EkPlanField>

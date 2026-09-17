@@ -6,8 +6,14 @@ import { MdDeleteSweep } from 'react-icons/md'
 
 import styles from './Filter.module.css'
 
-export const Filter = ({ filter, setFilter }) => {
-  const onChange = (e) => setFilter(e.target.value)
+export const Filter = ({
+  filter,
+  setFilter,
+}: {
+  filter: string
+  setFilter: (val: string) => void
+}) => {
+  const onChange = (e: { target: { value: string } }) => setFilter(e.target.value)
   const onClickEmptyFilter = () => setFilter('')
 
   return (

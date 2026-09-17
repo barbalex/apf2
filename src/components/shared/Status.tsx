@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import type { ChangeEvent, FocusEvent, MouseEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -9,8 +10,22 @@ import FormHelperText from '@mui/material/FormHelperText'
 
 import { InfoWithPopover } from './InfoWithPopover.tsx'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
+import type { SaveToDbHandler } from './types.ts'
 
 import styles from './Status.module.css'
+
+export interface StatusRow {
+  status?: string | number | null
+  bekanntSeit?: number | null
+}
+
+export interface StatusProps {
+  apJahr?: number | null | undefined
+  showFilter?: boolean
+  saveToDb: SaveToDbHandler
+  row?: StatusRow | undefined
+  errors?: { status?: string | null; bekanntSeit?: string | null } | undefined
+}
 
 export const Status = ({
   apJahr = null,
@@ -18,21 +33,21 @@ export const Status = ({
   saveToDb,
   row = {},
   errors,
-}) => {
+}: StatusProps) => {
   const herkunftValue = row.status
   const bekanntSeitValue = row.bekanntSeit
   const error = errors?.status || errors?.bekanntSeit
 
-  const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
-    bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
-  )
+  const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState<
+    string | number
+  >(bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '')
 
   const statusSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
 
   let angesiedeltLabel = 'angesiedelt:'
   if (!!apJahr && !!bekanntSeitStateValue) {
-    if (apJahr <= bekanntSeitStateValue) {
+    if (apJahr <= Number(bekanntSeitStateValue)) {
       angesiedeltLabel = 'angesiedelt (nach Beginn AP):'
     } else {
       angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
@@ -41,16 +56,16 @@ export const Status = ({
   let statusDisabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
   if (showFilter) statusDisabled = false
 
-  const onClickButton = (event) => {
+  const onClickButton = (event: MouseEvent<HTMLLabelElement>) => {
     /**
      * if clicked element is active value: set null
      * Problem: does not work on change event on RadioGroup
      * because that only fires on changes
      * Solution: do this in click event of button
      */
-    const targetValue = event.target.value
-    // eslint-disable-next-line eqeqeq
-    if (targetValue !== undefined && targetValue == herkunftValue) {
+    const targetValue = (event.target as HTMLInputElement).value
+
+    if (targetValue !== undefined && targetValue == String(herkunftValue ?? '')) {
       // an already active option was clicked
       // set value null
       const fakeEvent = {
@@ -59,12 +74,12 @@ export const Status = ({
       // It is possible to directly click an option after editing an other field
       // this creates a race condition in the two submits which can lead to lost inputs!
       // so timeout inputs in option fields
-      setTimeout(() => saveToDb(fakeEvent))
+      setTimeout(() => void saveToDb(fakeEvent))
       return
     }
   }
 
-  const onChangeStatus = (event) => {
+  const onChangeStatus = (event: ChangeEvent<HTMLInputElement>) => {
     const { value: valuePassed } = event.target
     // if clicked element is active herkunftValue: set null
     const fakeEvent = {
@@ -76,25 +91,28 @@ export const Status = ({
     // It is possible to directly click an option after editing an other field
     // this creates a race condition in the two submits which can lead to lost inputs!
     // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
+    setTimeout(() => void saveToDb(fakeEvent))
   }
 
-  const onChangeBekanntSeit = (event) =>
+  const onChangeBekanntSeit = (event: ChangeEvent<HTMLInputElement>) =>
     setBekanntSeitStateValue(event.target.value ? +event.target.value : '')
 
-  const onBlurBekanntSeit = (event) => {
+  const onBlurBekanntSeit = (event: FocusEvent<HTMLInputElement>) => {
     const { value } = event.target
     const fakeEvent = {
       target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
-  useEffect(() => {
+  const [prevBekanntSeit, setPrevBekanntSeit] = useState(bekanntSeitValue)
+  // adjust state when the value changes from outside
+  if (prevBekanntSeit !== bekanntSeitValue) {
+    setPrevBekanntSeit(bekanntSeitValue)
     setBekanntSeitStateValue(
       bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
     )
-  }, [bekanntSeitValue])
+  }
 
   // console.log('Status rendering', { statusSelected, apJahr, showFilter, row })
 

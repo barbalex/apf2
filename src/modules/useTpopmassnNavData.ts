@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import { copyingAtom, movingAtom, store } from '../store/index.ts'
@@ -10,7 +10,15 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
+const getLabelRightElements = ({
+  copyingId,
+  movingId,
+  tpopmassnId,
+}: {
+  copyingId: string | null
+  movingId: string | null
+  tpopmassnId: string
+}) => {
   const labelRightElements = []
   const isMoving = movingId === tpopmassnId
   if (isMoving) {
@@ -24,20 +32,20 @@ const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
   return labelRightElements
 }
 
-export const useTpopmassnNavData = (props) => {
+export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopmassnId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const tpopmassnId = props?.tpopmassnId ?? params.tpopmassnId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const tpopmassnId = (props?.tpopmassnId ?? params.tpopmassnId ?? '')
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavTpopmassnQuery($tpopmassnId: UUID!) {
             tpopmassnById(id: $tpopmassnId) {
               id
@@ -56,15 +64,15 @@ export const useTpopmassnNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopmassnId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   const [, setRerenderer] = useState(0)
@@ -76,7 +84,7 @@ export const useTpopmassnNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -84,18 +92,18 @@ export const useTpopmassnNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 
-  const zielAnzahl = data.tpopmassnById.zieleinheitAnzahl
+  const zielAnzahl = data.tpopmassnById?.zieleinheitAnzahl
   const zielEinheit =
-    data.tpopmassnById.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+    data.tpopmassnById?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
   const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
   const label =
-    data.tpopmassnById.label +
+    data.tpopmassnById?.label +
     (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
-  const filesCount = data.tpopmassnById.tpopmassnFilesByTpopmassnId.totalCount
+  const filesCount = data.tpopmassnById?.tpopmassnFilesByTpopmassnId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,

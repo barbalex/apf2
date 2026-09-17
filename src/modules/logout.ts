@@ -7,8 +7,8 @@ import {
 
 export const logout = async () => {
   console.log('LOGGING OUT')
-  localForage.clear()
+  void localForage.clear()
 
   store.set(clearAllStorageAtom)
-  window.location.reload(true)
+  window.location.reload()
 }

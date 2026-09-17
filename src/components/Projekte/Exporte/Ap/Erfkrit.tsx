@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId, ErfkritId, AdresseId } from '../../../../models/apflora/index.tsx'
+import type { ApId, ErfkritId, AdresseId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -18,7 +18,7 @@ import {
 
 interface ErfkritsQueryResult {
   allErfkrits: {
-    nodes: Array<{
+    nodes: {
       id: ErfkritId
       apId?: ApId
       apByApId?: {
@@ -49,7 +49,7 @@ interface ErfkritsQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 
@@ -57,14 +57,14 @@ export const Erfkrit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickErfkrit = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ErfkritsQueryResult }
+    let result: { data?: ErfkritsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ErfkritsQueryResult>({
-        query: gql`
+        query: graphql(`
           query erfkritsForExportQuery {
             allErfkrits {
               nodes {
@@ -101,7 +101,7 @@ export const Erfkrit = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -112,7 +112,7 @@ export const Erfkrit = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allErfkrits?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allErfkrits?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -135,7 +135,7 @@ export const Erfkrit = () => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: sortBy(rows, ['artname', 'beurteilung']),
       fileName: 'Erfolgskriterien',
     })
@@ -145,7 +145,7 @@ export const Erfkrit = () => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickErfkrit}
+      onClick={() => void onClickErfkrit()}
       color="inherit"
       disabled={!!queryState}
     >
