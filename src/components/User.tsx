@@ -31,7 +31,6 @@ interface TokenState {
 interface CheckUserPasswordResult {
   userByName: {
     id: string
-    pass: string | null
     requireNewPasswordOnNextLogin: boolean
   } | null
 }
@@ -166,14 +165,16 @@ export const User = () => {
       return
     }
 
-    // Check if user exists and has a password
+    // Check if user exists and needs to set a password
+    // pass is never read: anon must not see password hashes.
+    // Users without a password always have
+    // requireNewPasswordOnNextLogin = true (migration 02 default)
     try {
       const userResult = await apolloClient.query<CheckUserPasswordResult>({
         query: dynamicGql`
           query checkUserPassword($name: String!) {
             userByName(name: $name) {
               id
-              pass
               requireNewPasswordOnNextLogin
             }
           }
@@ -184,13 +185,6 @@ export const User = () => {
       const userData = userResult?.data?.userByName
       if (!userData) {
         setNameErrorText('Benutzer nicht gefunden')
-        return
-      }
-
-      if (!userData.pass) {
-        // User has no password - show password setup
-        setUserId(userData.id)
-        setNeedsPasswordSetup(true)
         return
       }
 
@@ -239,18 +233,17 @@ export const User = () => {
     const value = event.target.value
 
     await apolloClient.mutate({
-      mutation: dynamicGql`
-        mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
-          updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
-            user {
-              id
-              name
-              pass
-              requireNewPasswordOnNextLogin
+        mutation: dynamicGql`
+          mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
+            updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
+              user {
+                id
+                name
+                requireNewPasswordOnNextLogin
+              }
             }
           }
-        }
-      `,
+        `,
       variables: {
         id: userId,
         pass: value,

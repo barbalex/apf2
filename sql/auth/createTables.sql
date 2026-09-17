@@ -91,9 +91,14 @@ GRANT EXECUTE ON FUNCTION public.crypt(text, text) TO public;
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
 -- if the name and password are correct
+-- SECURITY DEFINER: executed by anon during login but reads
+-- apflora.user.pass; must run as its owner, not the calling role.
+-- search_path is pinned because the function is SECURITY DEFINER.
 CREATE OR REPLACE FUNCTION auth.user_role (username text, pass text)
   RETURNS name
   LANGUAGE plpgsql
+  SECURITY DEFINER
+  SET search_path = apflora, public
   AS $$
 BEGIN
   RETURN (
@@ -166,5 +171,7 @@ GRANT EXECUTE ON FUNCTION request.jwt_claim (text) TO anon;
 
 GRANT EXECUTE ON FUNCTION request.env_var (text) TO anon;
 
-GRANT SELECT ON TABLE apflora.user TO anon;
+-- column-level grant WITHOUT pass: pass holds bcrypt hashes and must
+-- never be readable by anonymous clients
+GRANT SELECT (id, name, email, require_new_password_on_next_login) ON TABLE apflora.user TO anon;
 

@@ -1,6 +1,7 @@
 -- TODO: this is copied from ae. Apply it to apflora!
 \c apflora
-ALTER DATABASE apflora SET "app.jwt_secret" TO '${JWT_SECRET}';
+-- app.jwt_secret is set by 04_jwt_secret.sh: psql does not expand
+-- env vars in .sql init files, so it needs a shell script
 
 REVOKE connect ON DATABASE apflora FROM public;
 
@@ -115,7 +116,8 @@ GRANT ALL ON apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl T
 -- secure pass and role in apflora.user:
 REVOKE ALL ON apflora.user FROM public, apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
-GRANT SELECT (id, name, email, pass, ROLE, adresse_id) ON apflora.user TO anon;
+-- pass is deliberately NOT granted to anon: it holds bcrypt hashes
+GRANT SELECT (id, name, email, ROLE, adresse_id) ON apflora.user TO anon;
 
 GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
