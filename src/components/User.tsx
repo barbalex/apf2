@@ -61,7 +61,9 @@ export const User = () => {
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
   const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
-  const [userId, setUserId] = useState<string | null>(null)
+  // set by the server when a password exists already: it must be
+  // proved before a new one is accepted
+  const [oldPasswordRequired, setOldPasswordRequired] = useState(false)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
@@ -70,6 +72,7 @@ export const User = () => {
 
   const nameInput = useRef<HTMLInputElement | null>(null)
   const passwordInput = useRef<HTMLInputElement | null>(null)
+  const oldPasswordInput = useRef<HTMLInputElement | null>(null)
 
   // Sync tokenState with user atom from Jotai
   useEffect(() => {
@@ -190,7 +193,7 @@ export const User = () => {
 
       if (userData.requireNewPasswordOnNextLogin) {
         // User needs to set a new password
-        setUserId(userData.id)
+        setOldPasswordRequired(false)
         setNeedsPasswordSetup(true)
         return
       }
@@ -231,25 +234,34 @@ export const User = () => {
 
   const savePassword = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
+    const oldPass = oldPasswordInput.current?.value
 
-    await apolloClient.mutate({
+    try {
+      await apolloClient.mutate({
         mutation: dynamicGql`
-          mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
-            updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
-              user {
-                id
-                name
-                requireNewPasswordOnNextLogin
-              }
+          mutation setPassword($pUsername: String!, $pNewPass: String!, $pOldPass: String) {
+            setPassword(input: { pUsername: $pUsername, pNewPass: $pNewPass, pOldPass: $pOldPass }) {
+              uuid
             }
           }
         `,
-      variables: {
-        id: userId,
-        pass: value,
-        requireNewPasswordOnNextLogin: false,
-      },
-    })
+        variables: {
+          pUsername: name,
+          pNewPass: value,
+          pOldPass: oldPasswordRequired ? oldPass : null,
+        },
+      })
+    } catch (error) {
+      // Apollo Client 4 rejects with CombinedGraphQLErrors:
+      // the server message is on the error itself
+      const message = (error as Error).message ?? ''
+      if (message.includes('altes Passwort erforderlich')) {
+        // the account has a password already: ask for it, then retry
+        setOldPasswordRequired(true)
+      }
+      // Password displays the error message
+      throw error
+    }
 
     // Password set successfully, proceed with login
     setNeedsPasswordSetup(false)
@@ -273,9 +285,26 @@ export const User = () => {
           </DialogTitle>
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
-              Ihr Konto hat noch kein Passwort. Bitte richten Sie ein sicheres
-              Passwort ein.
+              {oldPasswordRequired ?
+                'Sie müssen ein neues Passwort setzen. Bestätigen Sie es mit dem aktuellen Passwort.'
+              : 'Ihr Konto hat noch kein Passwort. Bitte richten Sie ein sicheres Passwort ein.'}
             </p>
+            {oldPasswordRequired && (
+              <FormControl fullWidth variant="standard">
+                <InputLabel htmlFor="altes-passwort">
+                  Aktuelles Passwort
+                </InputLabel>
+                <Input
+                  id="altes-passwort"
+                  inputRef={oldPasswordInput}
+                  type="password"
+                  autoComplete="current-password"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  className={`user-altes-passwort ${styles.input}`}
+                />
+              </FormControl>
+            )}
             <Password errors={{}} saveToDb={savePassword} showChangePasswordButton={false} />
           </div>
         </Dialog>

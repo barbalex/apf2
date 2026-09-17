@@ -1,28 +1,37 @@
 # Phased rollout
 
-## Phase 1 - security fix - branch: security-fix
+## Phase 1 - security fix - DONE, deployed 2026-09-17
 
-Deployed from the security-fix branch, see
-00_deploy_security_fix.md there. It applies migrations 02 and 05
-and restarts the graphql server with --default-role anon.
-No change for users: nobody is forced to change their password.
+Merged to master, applied to the live server, see
+2026-09-17_security-fix/00_deploy_security_fix.md.
+No user was forced to change their password.
 
 ## Phase 2 - this branch: enforce strong passwords
 
-1. build the proper password-setup flow:
-   - set_initial_password as a SECURITY DEFINER function
-     (only for users without a password, ideally with an email token)
-   - password rotation for logged-in users
-   - replace the anonymous updateUserById call in src/components/User.tsx
-2. merge security-fix (or master, once security-fix is merged)
-3. run migrations 01 and 03
-   (02 and 05 are already applied by security-fix;
-   re-running them is harmless)
-4. restart the graphql server, test
+Built:
+- 08_set_password.sql: apflora.set_password SECURITY DEFINER
+  - user without a password: sets the initial one
+  - user with a password: the old password must be proved
+    (this is the forced-rotation path for phase 3)
+  - complexity enforced by the validation trigger (01),
+    hashing by on_change_pass
+- src/components/User.tsx uses setPassword instead of the
+  anonymous updateUserById (which was broken and dangerous)
+- the setup dialog asks for the current password when the
+  server demands it (rotation case)
+
+Deploy:
+1. merge this branch
+2. run migrations 01, 03 and 08
+3. restart the graphql server
+4. test: a user without a password can set one via the login
+   dialog; setting a password for an account that has one
+   requires the old password
 
 ## Phase 3 - in a few weeks: force the password change
 
 1. inform users they will have to set new passwords and why
 2. run 04_set_allrequire.sql
 3. restart the graphql server
-4. test: login shows the password setup dialog
+4. test: login shows the password setup dialog; users with a
+   password must enter the old one, users without set a new one
