@@ -128,9 +128,12 @@ REVOKE ALL ON apflora.user FROM public, apflora_reader, apflora_ap_reader, apflo
 -- (require_new_password_on_next_login is granted by migration 05
 -- after migration 02 added the column - a restored backup does not
 -- have it yet)
+-- The REVOKE is essential: the restored backup carries the OLD
+-- grants incl. pass in its ACLs.
 -- Authenticated roles DO get pass: postgraphile passes whole rows
 -- (e.g. to the user_label computed function), which requires column
 -- privileges on all of them.
+REVOKE ALL ON apflora.user FROM anon;
 GRANT SELECT (id, name) ON apflora.user TO anon;
 
 GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
