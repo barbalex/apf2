@@ -8,7 +8,4 @@ What's deliberately still open, no urgency today:
 - phase 2 on the password-strength branch (the set_initial_password SECURITY DEFINER flow replacing the anonymous updateUserById)
 - phase 3 whenever you're ready (run 04_set_allrequire.sql + restart to force the password reset wave, after informing users)
 
-
-****************************
-
-could there be other components running a useEffect on mount to pass in values that have been similarly changed and now do not render the passed in value? Could there be more changed in the eslint commits?
+---
