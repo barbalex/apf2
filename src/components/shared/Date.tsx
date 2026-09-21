@@ -24,6 +24,11 @@ export interface DateFieldProps {
   popperPlacement?: 'bottom' | 'top' | 'left' | 'right'
 }
 
+const formatForDisplay = (value: string | null | undefined): string => {
+  const dt = value ? DateTime.fromSQL(value) : null
+  return dt?.isValid ? dt.toFormat('dd.MM.yyyy') : ''
+}
+
 export const DateField = ({
   value: valuePassed,
   name,
@@ -36,7 +41,9 @@ export const DateField = ({
     valuePassed,
   )
   const [isPickerOpen, setIsPickerOpen] = useState(false)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(() =>
+    formatForDisplay(valuePassed),
+  )
   const datePickerRef = useRef<DatePicker>(null)
 
   const [prevValuePassed, setPrevValuePassed] = useState(valuePassed)
@@ -44,9 +51,7 @@ export const DateField = ({
   if (prevValuePassed !== valuePassed) {
     setPrevValuePassed(valuePassed)
     setStateValue(valuePassed)
-    // Format the value for display in the input field
-    const dt = valuePassed ? DateTime.fromSQL(valuePassed) : null
-    setInputValue(dt?.isValid ? dt.toFormat('dd.MM.yyyy') : '')
+    setInputValue(formatForDisplay(valuePassed))
   }
 
   useEffect(() => {
