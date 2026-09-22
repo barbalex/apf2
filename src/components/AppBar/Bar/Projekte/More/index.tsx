@@ -156,7 +156,7 @@ export const More = ({
         <MenuItem
           onClick={() => void logout()}
           data-id="appbar-more-logout"
-        >{`${userName} abmelden (und Cache leeren)`}</MenuItem>
+        >{`${userName} abmelden`}</MenuItem>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>

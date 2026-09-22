@@ -33,7 +33,7 @@ export const RouterErrorBoundary = () => {
           onClick={() => void logout()}
           color="inherit"
         >
-          Cache leeren und neu starten (neue Anmeldung nötig)
+          App-Cache leeren und neu starten (neue Anmeldung nötig)
         </Button>
       </div>
     </div>
