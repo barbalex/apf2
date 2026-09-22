@@ -34,7 +34,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           onClick={resetErrorBoundary}
           className={styles.button}
         >
-          Cache leeren und neu starten (neue Anmeldung nötig)
+          App-Cache leeren und neu starten (neue Anmeldung nötig)
         </Button>
       </div>
     </div>

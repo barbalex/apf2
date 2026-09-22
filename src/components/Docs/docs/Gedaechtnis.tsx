@@ -25,10 +25,9 @@ export const Component = () => (
     <p>
       Es gibt auch einen neuen Befehl im Mehr-Menü, mit dem ihr apflora sagen
       könnt: &quot;Vergiss bitte den aktuellen Zustand&quot;. Er heisst:
-      &quot;abmelden (und Cache leeren)&quot;. Hoffentlich braucht ihr diesen
-      Befehl nie. Aber: Das Erinnern früherer Zustände birgt auch die Gefahr,
-      sich an Zustände zu erinnern, die Fehler enthalten und daher das Arbeiten
-      stören 😝
+      &quot;abmelden&quot;. Hoffentlich braucht ihr diesen Befehl nie. Aber: Das
+      Erinnern früherer Zustände birgt auch die Gefahr, sich an Zustände zu
+      erinnern, die Fehler enthalten und daher das Arbeiten stören 😝
     </p>
     <p>&nbsp;</p>
   </>
