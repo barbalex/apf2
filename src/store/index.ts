@@ -1975,7 +1975,7 @@ export const mapOverlaysAtom = atom([
     value: 'MassnahmenPunkte',
   },
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
-  { label: 'ZH Übersichtsplan', value: 'ZhUep' },
+  { label: 'ZH Übersichtsplan', value: 'ZhUepOverlay' },
   { label: 'Gemeinden', value: 'Gemeinden' },
   { label: 'Schutzanordnungen', value: 'ZhSvo' },
   { label: 'Pflegeplan aktuelles Jahr', value: 'ZhPflegeplanAJ' },

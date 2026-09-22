@@ -97,7 +97,7 @@ const crs = new window.L.Proj.CRS(
  */
 
 const OverlayComponents = {
-  ZhUep: () => <ZhUepOverlay />,
+  ZhUepOverlay: () => <ZhUepOverlay />,
   // rebuild detailplaene on localizing change to close popups and rebuild without popups
   Detailplaene: () => <Detailplaene />,
   Markierungen: () => <Markierungen />,
@@ -109,7 +109,7 @@ const OverlayComponents = {
   ZhSvo: () => <ZhSvo />,
   ZhPflegeplanAJ: () => <ZhPflegeplanAJ />,
   ZhPflegeplanVJ: () => <ZhPflegeplanVJ />,
-  ZhPflegeplanVVJ: () => <ZhPflegeplanVVJ />, 
+  ZhPflegeplanVVJ: () => <ZhPflegeplanVVJ />,
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,
   ZhWaelderVegetation: () => <ZhWaelderVegetation />,
@@ -244,9 +244,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
             .reverse()
             .map((overlayName, index) => {
               const OverlayComponent =
-                OverlayComponents[
-                  overlayName as keyof typeof OverlayComponents
-                ]
+                OverlayComponents[overlayName as keyof typeof OverlayComponents]
               // prevent bad error if wrong overlayName was passed
               // for instance after an overlay was renamed but user still has old name in cache
               if (!OverlayComponent) return null

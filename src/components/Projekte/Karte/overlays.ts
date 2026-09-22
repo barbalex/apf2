@@ -14,7 +14,7 @@ export const overlays = [
     value: 'MassnahmenPunkte',
   },
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
-  { label: 'ZH Übersichtsplan', value: 'ZhUep' },
+  { label: 'ZH Übersichtsplan', value: 'ZhUepOverlay' },
   {
     label: 'Gemeinden',
     value: 'Gemeinden',
