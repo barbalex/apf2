@@ -1,5 +1,10 @@
 import { useEffect, useMemo } from 'react'
 import { Pane, useMap } from 'react-leaflet'
+import {
+  LeafletContext,
+  extendContext,
+  useLeafletContext,
+} from '@react-leaflet/core'
 import { createPortal } from 'react-dom'
 
 interface SafePaneProps {
@@ -24,6 +29,7 @@ export const SafePane = ({
   children,
 }: SafePaneProps) => {
   const map = useMap()
+  const context = useLeafletContext()
 
   // Check synchronously if pane already exists
   const existingPane = useMemo(() => map.getPane(name), [map, name])
@@ -37,14 +43,25 @@ export const SafePane = ({
         pane.style.zIndex = String(style.zIndex)
       }
       if (className) {
-        pane.className = className
+        // add classes instead of overwriting
+        // overwriting removes leaflet's own pane classes
+        // which breaks positioning and stacking
+        pane.classList.add(...className.split(' ').filter(Boolean))
       }
     }
   }, [map, name, className, style])
 
-  // If pane already exists, render children into it using a portal
+  // If pane already exists, render children into it using a portal.
+  // Children need a context with the pane set
+  // or their layers attach to the default panes instead
+  // and the vertical order of the overlays breaks
   if (existingPane) {
-    return createPortal(children, existingPane)
+    return createPortal(
+      <LeafletContext value={extendContext(context, { pane: name })}>
+        {children}
+      </LeafletContext>,
+      existingPane,
+    )
   }
 
   // Otherwise, use the normal Pane component which will create the pane
