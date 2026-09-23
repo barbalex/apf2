@@ -184,11 +184,15 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
 
   const BaseLayerComponent =
     BaseLayerComponents[activeBaseLayer as keyof typeof BaseLayerComponents]
-  const activeOverlaysSorted = [...activeOverlays].sort(
-    (a, b) =>
-      overlays.findIndex((o) => o.value === a) -
-      overlays.findIndex((o) => o.value === b),
-  )
+  const activeOverlaysSorted = activeOverlays
+    // drop values that no longer exist, e.g. from renamed overlays
+    // still stored in a user's cache
+    .filter((name) => name in OverlayComponents)
+    .sort(
+      (a, b) =>
+        overlays.findIndex((o) => o.value === a) -
+        overlays.findIndex((o) => o.value === b),
+    )
 
   // explicitly sort Layers
   // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
@@ -239,28 +243,31 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
               <BaseLayerComponent />
             </MapResizer>
           )}
-          {/* TODO: Set paneBaseIndex to 400 (?), subtract index from zIndex in Pane style, then remove reverse() */}
-          {activeOverlaysSorted
-            .reverse()
-            .map((overlayName, index) => {
-              const OverlayComponent =
-                OverlayComponents[overlayName as keyof typeof OverlayComponents]
-              // prevent bad error if wrong overlayName was passed
-              // for instance after an overlay was renamed but user still has old name in cache
-              if (!OverlayComponent) return null
+          {activeOverlaysSorted.map((overlayName, index) => {
+            const OverlayComponent =
+              OverlayComponents[overlayName as keyof typeof OverlayComponents]
+            // prevent bad error if wrong overlayName was passed
+            if (!OverlayComponent) return null
 
-              return (
-                <SafePane
-                  key={`${overlayName}/${index}`}
-                  className={overlayName}
-                  name={overlayName}
-                  style={{ zIndex: 200 + index }}
-                >
-                  <OverlayComponent />
-                </SafePane>
-              )
-            })
-            .reverse()}
+            return (
+              <SafePane
+                // the key MUST be the overlay name alone
+                // an index in the key remounts panes when overlays are
+                // added/removed, which unpredictably evicts their layers
+                // see: https://github.com/barbalex/apf2/issues/816
+                key={overlayName}
+                className={overlayName}
+                name={overlayName}
+                // overlays earlier in the list stack above later ones;
+                // stay below 400 where vector layers (apflora) live
+                style={{
+                  zIndex: 200 + activeOverlaysSorted.length - 1 - index,
+                }}
+              >
+                <OverlayComponent />
+              </SafePane>
+            )
+          })}
           {showPop && (
             // add no pane
             // it prevented pop svgs from appearing

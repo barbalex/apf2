@@ -1994,6 +1994,31 @@ export const setMapOverlaysAtom = atom(
   (_get, set, value: { label: string; value: string }[]) =>
     set(mapOverlaysAtom, value),
 )
+// migrate overlay names that were renamed
+// ('ZhUep' overlay became 'ZhUepOverlay' to not conflict with the base layer)
+// needs to happen before the atom reads localStorage on init
+// see: https://github.com/barbalex/apf2/issues/816
+try {
+  const storedActiveOverlays = localStorage.getItem('mapActiveOverlays')
+  if (storedActiveOverlays) {
+    const parsedActiveOverlays = JSON.parse(storedActiveOverlays)
+    if (Array.isArray(parsedActiveOverlays)) {
+      const migratedActiveOverlays = [
+        ...new Set(
+          parsedActiveOverlays.map((o) =>
+            o === 'ZhUep' ? 'ZhUepOverlay' : o,
+          ),
+        ),
+      ]
+      localStorage.setItem(
+        'mapActiveOverlays',
+        JSON.stringify(migratedActiveOverlays),
+      )
+    }
+  }
+} catch {
+  // ignore malformed storage
+}
 export const mapActiveOverlaysAtom = atomWithStorage<string[]>(
   'mapActiveOverlays',
   [],
