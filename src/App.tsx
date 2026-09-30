@@ -36,9 +36,6 @@ const NotificationDismisser = lazy(async () => ({
 const Router = lazy(async () => ({
   default: (await import('./components/Router/index.tsx')).Router,
 }))
-// const UnterhaltsRouter = lazy(async () => ({
-//   default: (await import('./components/Router/indexUnterhalt.tsx')).Router,
-// }))
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.tsx')).IsPrintSetter,
 }))
@@ -102,7 +99,6 @@ export const App = () => {
                       don't suspend the whole app without a fallback */}
                   <Suspense fallback={null}>
                     <Router />
-                    {/*<UnterhaltsRouter />*/}
                     <Notifier />
                     <IsPrintSetter />
                     <LastTouchedNodeSetter />
