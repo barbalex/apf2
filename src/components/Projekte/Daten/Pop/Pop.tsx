@@ -1,5 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -144,61 +144,59 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<div>Loading...</div>}>
-        <FormTitle
-          title="Population"
-          MenuBarComponent={Menu}
-          menuBarProps={{ row }}
+      <FormTitle
+        title="Population"
+        MenuBarComponent={Menu}
+        menuBarProps={{ row }}
+      />
+      <div className={styles.formContainer}>
+        <TextField
+          label="Nr."
+          name="nr"
+          type="number"
+          value={row.nr}
+          saveToDb={saveToDb}
+          error={fieldErrors.nr}
         />
-        <div className={styles.formContainer}>
-          <TextField
-            label="Nr."
-            name="nr"
-            type="number"
-            value={row.nr}
-            saveToDb={saveToDb}
-            error={fieldErrors.nr}
-          />
-          <TextFieldWithInfo
-            label="Name"
-            name="name"
-            type="text"
-            popover="Dieses Feld möglichst immer ausfüllen"
-            value={row.name}
-            saveToDb={saveToDb}
-            error={fieldErrors.name}
-          />
-          <Status
-            apJahr={row?.apByApId?.startJahr as null | undefined}
-            showFilter={false}
-            row={row}
-            saveToDb={saveToDb}
-            errors={fieldErrors}
-          />
-          <Checkbox2States
-            label="Status unklar"
-            name="statusUnklar"
-            value={row.statusUnklar}
-            saveToDb={saveToDb}
-            error={fieldErrors.statusUnklar}
-            helperText=""
-          />
-          <TextField
-            label="Begründung"
-            name="statusUnklarBegruendung"
-            type="text"
-            multiLine
-            value={row.statusUnklarBegruendung}
-            saveToDb={saveToDb}
-            error={fieldErrors.statusUnklarBegruendung}
-          />
-          <Coordinates
-            row={row}
-            refetchForm={refetchForm}
-            table="pop"
-          />
-        </div>
-      </Suspense>
+        <TextFieldWithInfo
+          label="Name"
+          name="name"
+          type="text"
+          popover="Dieses Feld möglichst immer ausfüllen"
+          value={row.name}
+          saveToDb={saveToDb}
+          error={fieldErrors.name}
+        />
+        <Status
+          apJahr={row?.apByApId?.startJahr as null | undefined}
+          showFilter={false}
+          row={row}
+          saveToDb={saveToDb}
+          errors={fieldErrors}
+        />
+        <Checkbox2States
+          label="Status unklar"
+          name="statusUnklar"
+          value={row.statusUnklar}
+          saveToDb={saveToDb}
+          error={fieldErrors.statusUnklar}
+          helperText=""
+        />
+        <TextField
+          label="Begründung"
+          name="statusUnklarBegruendung"
+          type="text"
+          multiLine
+          value={row.statusUnklarBegruendung}
+          saveToDb={saveToDb}
+          error={fieldErrors.statusUnklarBegruendung}
+        />
+        <Coordinates
+          row={row}
+          refetchForm={refetchForm}
+          table="pop"
+        />
+      </div>
     </ErrorBoundary>
   )
 }

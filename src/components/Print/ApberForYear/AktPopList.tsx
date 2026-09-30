@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { sumBy } from 'es-toolkit'
 import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -31,17 +30,6 @@ interface AktPopListQueryResult {
 interface AktPopListProps {
   year?: number | undefined
 }
-
-const fallback = (
-  <ErrorBoundary>
-    <div className={styles.container}>
-      <p className={styles.title}>
-        Übersicht über aktuelle Populationen aller AP-Arten
-      </p>
-      <div className={styles.titleRow1}>Lade Daten...</div>
-    </div>
-  </ErrorBoundary>
-)
 
 export const AktPopList = ({ year }: AktPopListProps) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
@@ -88,110 +76,108 @@ export const AktPopList = ({ year }: AktPopListProps) => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={fallback}>
-        <div className={styles.container}>
-          <p className={styles.title}>
-            Übersicht über aktuelle Populationen aller AP-Arten
-          </p>
-          <div className={styles.titleRow1}>
-            <div className={styles.diffLeftColumn} />
-            <div className={styles.dataColumn}>aktuelle Werte</div>
-            <div className={styles.diffColumn}>Differenz zum Vorjahr</div>
-          </div>
-          <div className={styles.titleRow2}>
-            <div className={styles.apColumn}>Aktionsplan</div>
-            <div className={styles.ursprColumn}>ursprünglich</div>
-            <div className={styles.angesColumn}>angesiedelt</div>
-            <div className={styles.totalColumn}>total</div>
-            <div className={styles.ursprColumn}>ursprünglich</div>
-            <div className={styles.angesColumn}>angesiedelt</div>
-            <div className={styles.totalDiffColumn}>total</div>
-          </div>
-          {aps.map((ap) => (
-            <div
-              className={styles.apRow}
-              key={ap?.artname}
-            >
-              <div className={styles.apColumn}>{ap?.artname}</div>
-              <div className={styles.ursprColumn}>{ap?.pop100}</div>
-              <div className={styles.angesColumn}>{ap?.pop200}</div>
-              <div className={styles.totalColumn}>{ap?.popTotal}</div>
-              <div
-                className={styles.ursprColumn}
-                style={{
-                  backgroundColor:
-                    (ap?.pop100Diff ?? 0) > 0 ? '#00ff00'
-                    : (ap?.pop100Diff ?? 0) < 0 ? 'red'
-                    : 'white',
-                }}
-              >
-                {ap?.pop100Diff}
-              </div>
-              <div
-                className={styles.angesColumn}
-                style={{
-                  backgroundColor:
-                    (ap?.pop200Diff ?? 0) > 0 ? '#00ff00'
-                    : (ap?.pop200Diff ?? 0) < 0 ? 'red'
-                    : 'white',
-                }}
-              >
-                {ap?.pop200Diff}
-              </div>
-              <div
-                className={styles.totalDiffColumn}
-                style={{
-                  backgroundColor:
-                    (ap?.popTotalDiff ?? 0) > 0 ? '#00ff00'
-                    : (ap?.popTotalDiff ?? 0) < 0 ? 'red'
-                    : 'white',
-                }}
-              >
-                {ap?.popTotalDiff}
-              </div>
-            </div>
-          ))}
-          <div className={styles.totalRow}>
-            <div className={styles.apColumn}>{aps.length}</div>
-            <div className={styles.ursprColumn}>{pop100}</div>
-            <div className={styles.angesColumn}>{pop200}</div>
-            <div className={styles.totalColumn}>{popsTotal}</div>
+      <div className={styles.container}>
+        <p className={styles.title}>
+          Übersicht über aktuelle Populationen aller AP-Arten
+        </p>
+        <div className={styles.titleRow1}>
+          <div className={styles.diffLeftColumn} />
+          <div className={styles.dataColumn}>aktuelle Werte</div>
+          <div className={styles.diffColumn}>Differenz zum Vorjahr</div>
+        </div>
+        <div className={styles.titleRow2}>
+          <div className={styles.apColumn}>Aktionsplan</div>
+          <div className={styles.ursprColumn}>ursprünglich</div>
+          <div className={styles.angesColumn}>angesiedelt</div>
+          <div className={styles.totalColumn}>total</div>
+          <div className={styles.ursprColumn}>ursprünglich</div>
+          <div className={styles.angesColumn}>angesiedelt</div>
+          <div className={styles.totalDiffColumn}>total</div>
+        </div>
+        {aps.map((ap) => (
+          <div
+            className={styles.apRow}
+            key={ap?.artname}
+          >
+            <div className={styles.apColumn}>{ap?.artname}</div>
+            <div className={styles.ursprColumn}>{ap?.pop100}</div>
+            <div className={styles.angesColumn}>{ap?.pop200}</div>
+            <div className={styles.totalColumn}>{ap?.popTotal}</div>
             <div
               className={styles.ursprColumn}
               style={{
                 backgroundColor:
-                  pop100Diff > 0 ? '#00ff00'
-                  : pop100Diff < 0 ? 'red'
+                  (ap?.pop100Diff ?? 0) > 0 ? '#00ff00'
+                  : (ap?.pop100Diff ?? 0) < 0 ? 'red'
                   : 'white',
               }}
             >
-              {pop100Diff}
+              {ap?.pop100Diff}
             </div>
             <div
               className={styles.angesColumn}
               style={{
                 backgroundColor:
-                  pop200Diff > 0 ? '#00ff00'
-                  : pop200Diff < 0 ? 'red'
+                  (ap?.pop200Diff ?? 0) > 0 ? '#00ff00'
+                  : (ap?.pop200Diff ?? 0) < 0 ? 'red'
                   : 'white',
               }}
             >
-              {pop200Diff}
+              {ap?.pop200Diff}
             </div>
             <div
               className={styles.totalDiffColumn}
               style={{
                 backgroundColor:
-                  popTotalDiff > 0 ? '#00ff00'
-                  : popTotalDiff < 0 ? 'red'
+                  (ap?.popTotalDiff ?? 0) > 0 ? '#00ff00'
+                  : (ap?.popTotalDiff ?? 0) < 0 ? 'red'
                   : 'white',
               }}
             >
-              {popTotalDiff}
+              {ap?.popTotalDiff}
             </div>
           </div>
+        ))}
+        <div className={styles.totalRow}>
+          <div className={styles.apColumn}>{aps.length}</div>
+          <div className={styles.ursprColumn}>{pop100}</div>
+          <div className={styles.angesColumn}>{pop200}</div>
+          <div className={styles.totalColumn}>{popsTotal}</div>
+          <div
+            className={styles.ursprColumn}
+            style={{
+              backgroundColor:
+                pop100Diff > 0 ? '#00ff00'
+                : pop100Diff < 0 ? 'red'
+                : 'white',
+            }}
+          >
+            {pop100Diff}
+          </div>
+          <div
+            className={styles.angesColumn}
+            style={{
+              backgroundColor:
+                pop200Diff > 0 ? '#00ff00'
+                : pop200Diff < 0 ? 'red'
+                : 'white',
+            }}
+          >
+            {pop200Diff}
+          </div>
+          <div
+            className={styles.totalDiffColumn}
+            style={{
+              backgroundColor:
+                popTotalDiff > 0 ? '#00ff00'
+                : popTotalDiff < 0 ? 'red'
+                : 'white',
+            }}
+          >
+            {popTotalDiff}
+          </div>
         </div>
-      </Suspense>
+      </div>
     </ErrorBoundary>
   )
 }

@@ -1,5 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -411,29 +411,7 @@ export const Component = () => {
           />
         </div>
         <h5 className={styles.ekplanTitle}>EK-Plan</h5>
-        <Suspense
-          fallback={
-            <Table
-              size="small"
-              className={styles.styledTable}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell>Jahr</TableCell>
-                  <TableCell>geplant</TableCell>
-                  <TableCell>ausgeführt</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Lade...</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          }
-        >
-          <EkPlanTable ekGroupedByYear={ekGroupedByYear} />
-        </Suspense>
+        <EkPlanTable ekGroupedByYear={ekGroupedByYear} />
       </div>
     </ErrorBoundary>
   )

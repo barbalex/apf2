@@ -1,5 +1,4 @@
 import type { SaveToDbEvent } from '../../../../../shared/types.ts'
-import { Suspense } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
@@ -40,16 +39,14 @@ export const EkfUser = ({ closeMenu }: { closeMenu: () => void }) => {
 
   return (
     <div className={styles.container}>
-      <Suspense fallback={'lade...'}>
-        <Select
-          value={''}
-          label="EKF sehen als"
-          options={(data.allUsers?.nodes ?? []).filter((n) => !!n)}
-          loading={false}
-          saveToDb={choose}
-          maxHeight={120}
-        />
-      </Suspense>
+      <Select
+        value={''}
+        label="EKF sehen als"
+        options={(data.allUsers?.nodes ?? []).filter((n) => !!n)}
+        loading={false}
+        saveToDb={choose}
+        maxHeight={120}
+      />
     </div>
   )
 }
