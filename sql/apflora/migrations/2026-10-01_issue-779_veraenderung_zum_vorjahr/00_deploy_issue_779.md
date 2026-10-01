@@ -29,5 +29,6 @@ berechnet aus den Beurteilungen - nicht aus der gelöschten Spalte.
    - change the Beurteilung: the value recalculates
    - AP-Bericht without Beurteilung des Vorjahres: no value
    - Jahresbericht (print): Erfolg list still shows only + or -
-   - export "AP-Berichte (Jahresberichte)" has no
-     veraenderung_zum_vorjahr column any more
+   - export "AP-Berichte (Jahresberichte)": veraenderung_zum_vorjahr
+     right of beurteilung_decodiert, calculated like in the form
+     (+, - or =), not read from the table any more

@@ -14,6 +14,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
+import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
@@ -123,29 +124,21 @@ export const Component = () => {
 
   const row = data?.apberById
 
-  // Veränderung zum Vorjahr is no longer stored but calculated
-  // from the beurteilungen of this year's and last year's apber.
-  // Beurteilungen are compared by their sort value in ap_erfkrit_werte:
-  // lower sort means more successful
-  const veraenderungZumVorjahr = (() => {
-    const { beurteilung, jahr } = row ?? {}
-    if (beurteilung == null || jahr == null) return null
-    const erfkritWerte = data?.allApErfkritWertes?.nodes ?? []
-    const sort = erfkritWerte.find((w) => w.value === beurteilung)?.sort
-    const beurteilungVorjahr = (row?.apByApId?.apbersByApId?.nodes ?? []).find(
-      (apber) => apber.jahr === jahr - 1,
-    )?.beurteilung
-    if (beurteilungVorjahr == null) return null
-    const sortVorjahr = erfkritWerte.find(
-      (w) => w.value === beurteilungVorjahr,
-    )?.sort
-    if (sort == null || sortVorjahr == null) return null
-    // 6 = unsichere Entwicklung: not comparable
-    if (sort === 6 || sortVorjahr === 6) return null
-    if (sort < sortVorjahr) return '+'
-    if (sort > sortVorjahr) return '-'
-    return '='
-  })()
+  const sortsByCode = new Map(
+    (data?.allApErfkritWertes?.nodes ?? []).map((w) => [w.value, w.sort]),
+  )
+  const jahr = row?.jahr
+  const beurteilungVorjahr =
+    jahr == null
+      ? null
+      : ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
+          (apber) => apber.jahr === jahr - 1,
+        )?.beurteilung ?? null)
+  const veraenderung = veraenderungZumVorjahr({
+    beurteilung: row?.beurteilung,
+    beurteilungVorjahr,
+    sortsByCode,
+  })
 
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
@@ -237,7 +230,7 @@ export const Component = () => {
             <TextField
               name="veraenderungZumVorjahr"
               label="Veränderung zum Vorjahr"
-              value={veraenderungZumVorjahr ?? ''}
+              value={veraenderung ?? ''}
               disabled
               saveToDb={() => {
                 // computed value, cannot be saved
