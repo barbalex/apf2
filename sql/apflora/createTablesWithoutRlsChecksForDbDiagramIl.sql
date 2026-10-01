@@ -700,6 +700,11 @@ COMMENT ON COLUMN apflora.ap_history.ekf_beobachtungszeitpunkt IS 'bester Beobac
 
 COMMENT ON COLUMN apflora.ap_history.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+-- deleting an art propagates to its history:
+-- ap -> ap_history -> pop_history -> tpop_history
+ALTER TABLE apflora.ap_history
+  ADD CONSTRAINT fk_ap_history_ap FOREIGN KEY (id) REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- ekfrequenz
 DROP TABLE IF EXISTS apflora.ekfrequenz;
 
@@ -1314,7 +1319,10 @@ ALTER TABLE apflora.pop_history
   DROP CONSTRAINT IF EXISTS fk_ap;
 
 ALTER TABLE apflora.pop_history
-  ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE NO action ON UPDATE CASCADE;
+  ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE apflora.pop_history
+  ADD CONSTRAINT fk_pop_history_ap FOREIGN KEY (ap_id) REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE INDEX ON apflora.pop_history USING btree(id);
 
@@ -1652,7 +1660,7 @@ CREATE TABLE apflora.tpop_history(
 );
 
 ALTER TABLE apflora.tpop_history
-  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 CREATE INDEX ON apflora.tpop_history USING btree(id);

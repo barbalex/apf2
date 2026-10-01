@@ -7199,6 +7199,40 @@ type Ap implements Node {
     filter: ApFileFilter
   ): ApFilesConnection!
 
+  """Reads and enables pagination through a set of `ApHistory`."""
+  apHistoriesById(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `ApHistory`."""
+    orderBy: [ApHistoriesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ApHistoryCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ApHistoryFilter
+  ): ApHistoriesConnection!
+
   """Reads and enables pagination through a set of `ApUser`."""
   apUsersByApId(
     """Only read the first `n` values of the set."""
@@ -7728,6 +7762,8 @@ enum ApsOrderBy {
   ZIELS_BY_AP_ID__COUNT_DESC
   AP_FILES_BY_AP_ID__COUNT_ASC
   AP_FILES_BY_AP_ID__COUNT_DESC
+  AP_HISTORIES_BY_ID__COUNT_ASC
+  AP_HISTORIES_BY_ID__COUNT_DESC
   AP_USERS_BY_AP_ID__COUNT_ASC
   AP_USERS_BY_AP_ID__COUNT_DESC
   APQKS_BY_AP_ID__COUNT_ASC
@@ -7875,6 +7911,12 @@ input ApFilter {
 
   """Some related `apFilesByApId` exist."""
   apFilesByApIdExist: Boolean
+
+  """Filter by the object’s `apHistoriesById` relation."""
+  apHistoriesById: ApToManyApHistoryFilter
+
+  """Some related `apHistoriesById` exist."""
+  apHistoriesByIdExist: Boolean
 
   """Filter by the object’s `apUsersByApId` relation."""
   apUsersByApId: ApToManyApUserFilter
@@ -11010,6 +11052,9 @@ input ApHistoryFilter {
   """Some related `zielsByApIdAndJahr` exist."""
   zielsByApIdAndJahrExist: Boolean
 
+  """Filter by the object’s `apById` relation."""
+  apById: ApFilter
+
   """Filter by the object’s `aeTaxonomyByArtId` relation."""
   aeTaxonomyByArtId: AeTaxonomyFilter
 
@@ -12654,6 +12699,9 @@ input UserFilter {
 
   """Filter by the object’s `adresseId` field."""
   adresseId: UUIDFilter
+
+  """Filter by the object’s `requireNewPasswordOnNextLogin` field."""
+  requireNewPasswordOnNextLogin: BooleanFilter
 
   """Filter by the object’s `label` field."""
   label: StringFilter
@@ -15962,6 +16010,26 @@ input ApFileFilter {
 }
 
 """
+A filter to be used against many `ApHistory` object types. All fields are combined with a logical ‘and.’
+"""
+input ApToManyApHistoryFilter {
+  """
+  Every related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: ApHistoryFilter
+
+  """
+  Some related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: ApHistoryFilter
+
+  """
+  No related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: ApHistoryFilter
+}
+
+"""
 A filter to be used against many `ApUser` object types. All fields are combined with a logical ‘and.’
 """
 input ApToManyApUserFilter {
@@ -16646,6 +16714,9 @@ type ApHistory implements Node {
   changedBy: String
   createdAt: Datetime!
   updatedAt: Datetime!
+
+  """Reads a single `Ap` that is related to this `ApHistory`."""
+  apById: Ap
 
   """Reads a single `AeTaxonomy` that is related to this `ApHistory`."""
   aeTaxonomyByArtId: AeTaxonomy
@@ -29702,6 +29773,30 @@ enum ApHistoriesOrderBy {
   UPDATED_AT_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
+  AP_BY_ID__BEARBEITUNG_ASC
+  AP_BY_ID__BEARBEITUNG_DESC
+  AP_BY_ID__START_JAHR_ASC
+  AP_BY_ID__START_JAHR_DESC
+  AP_BY_ID__UMSETZUNG_ASC
+  AP_BY_ID__UMSETZUNG_DESC
+  AP_BY_ID__CHANGED_BY_ASC
+  AP_BY_ID__CHANGED_BY_DESC
+  AP_BY_ID__ID_ASC
+  AP_BY_ID__ID_DESC
+  AP_BY_ID__ART_ID_ASC
+  AP_BY_ID__ART_ID_DESC
+  AP_BY_ID__BEARBEITER_ASC
+  AP_BY_ID__BEARBEITER_DESC
+  AP_BY_ID__PROJ_ID_ASC
+  AP_BY_ID__PROJ_ID_DESC
+  AP_BY_ID__EKF_BEOBACHTUNGSZEITPUNKT_ASC
+  AP_BY_ID__EKF_BEOBACHTUNGSZEITPUNKT_DESC
+  AP_BY_ID__CREATED_AT_ASC
+  AP_BY_ID__CREATED_AT_DESC
+  AP_BY_ID__UPDATED_AT_ASC
+  AP_BY_ID__UPDATED_AT_DESC
+  AP_BY_ID__LABEL_ASC
+  AP_BY_ID__LABEL_DESC
   AE_TAXONOMY_BY_ART_ID__TAXONOMIE_ID_ASC
   AE_TAXONOMY_BY_ART_ID__TAXONOMIE_ID_DESC
   AE_TAXONOMY_BY_ART_ID__TAXONOMIE_NAME_ASC
@@ -31216,6 +31311,7 @@ type User implements Node {
   Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können
   """
   adresseId: UUID
+  requireNewPasswordOnNextLogin: Boolean
 
   """Reads a single `Adresse` that is related to this `User`."""
   adresseByAdresseId: Adresse
@@ -31341,6 +31437,8 @@ enum ApUsersOrderBy {
   USER_BY_USER_NAME__PASS_DESC
   USER_BY_USER_NAME__ADRESSE_ID_ASC
   USER_BY_USER_NAME__ADRESSE_ID_DESC
+  USER_BY_USER_NAME__REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_ASC
+  USER_BY_USER_NAME__REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_DESC
   USER_BY_USER_NAME__LABEL_ASC
   USER_BY_USER_NAME__LABEL_DESC
 }
@@ -31461,6 +31559,8 @@ enum UsermessagesOrderBy {
   USER_BY_USER_NAME__PASS_DESC
   USER_BY_USER_NAME__ADRESSE_ID_ASC
   USER_BY_USER_NAME__ADRESSE_ID_DESC
+  USER_BY_USER_NAME__REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_ASC
+  USER_BY_USER_NAME__REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_DESC
   USER_BY_USER_NAME__LABEL_ASC
   USER_BY_USER_NAME__LABEL_DESC
   MESSAGE_BY_MESSAGE_ID__MESSAGE_ASC
@@ -32558,6 +32658,8 @@ enum UsersOrderBy {
   PASS_DESC
   ADRESSE_ID_ASC
   ADRESSE_ID_DESC
+  REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_ASC
+  REQUIRE_NEW_PASSWORD_ON_NEXT_LOGIN_DESC
   LABEL_ASC
   LABEL_DESC
   PRIMARY_KEY_ASC
@@ -32609,6 +32711,11 @@ input UserCondition {
 
   """Checks for equality with the object’s `adresseId` field."""
   adresseId: UUID
+
+  """
+  Checks for equality with the object’s `requireNewPasswordOnNextLogin` field.
+  """
+  requireNewPasswordOnNextLogin: Boolean
 }
 
 """A `Adresse` edge in the connection."""
@@ -53487,6 +53594,9 @@ type CreateApHistoryPayload {
   """
   query: Query
 
+  """Reads a single `Ap` that is related to this `ApHistory`."""
+  apById: Ap
+
   """Reads a single `AeTaxonomy` that is related to this `ApHistory`."""
   aeTaxonomyByArtId: AeTaxonomy
 
@@ -56908,6 +57018,7 @@ input UserInput {
   Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können
   """
   adresseId: UUID
+  requireNewPasswordOnNextLogin: Boolean
 }
 
 """The output of our create `Usermessage` mutation."""
@@ -58026,6 +58137,9 @@ type UpdateApHistoryPayload {
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
+
+  """Reads a single `Ap` that is related to this `ApHistory`."""
+  apById: Ap
 
   """Reads a single `AeTaxonomy` that is related to this `ApHistory`."""
   aeTaxonomyByArtId: AeTaxonomy
@@ -62906,6 +63020,7 @@ input UserPatch {
   Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können
   """
   adresseId: UUID
+  requireNewPasswordOnNextLogin: Boolean
 }
 
 """All input for the `updateUserById` mutation."""
@@ -63629,6 +63744,9 @@ type DeleteApHistoryPayload {
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
+
+  """Reads a single `Ap` that is related to this `ApHistory`."""
+  apById: Ap
 
   """Reads a single `AeTaxonomy` that is related to this `ApHistory`."""
   aeTaxonomyByArtId: AeTaxonomy

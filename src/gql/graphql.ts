@@ -396,6 +396,10 @@ export type ApFilter = {
   apFilesByApId?: ApToManyApFileFilter | null | undefined;
   /** Some related `apFilesByApId` exist. */
   apFilesByApIdExist?: boolean | null | undefined;
+  /** Filter by the object’s `apHistoriesById` relation. */
+  apHistoriesById?: ApToManyApHistoryFilter | null | undefined;
+  /** Some related `apHistoriesById` exist. */
+  apHistoriesByIdExist?: boolean | null | undefined;
   /** Filter by the object’s `apUmsetzungWerteByUmsetzung` relation. */
   apUmsetzungWerteByUmsetzung?: ApUmsetzungWerteFilter | null | undefined;
   /** A related `apUmsetzungWerteByUmsetzung` exists. */
@@ -514,6 +518,8 @@ export type ApHistoryFilter = {
   apBearbstandWerteByBearbeitung?: ApBearbstandWerteFilter | null | undefined;
   /** A related `apBearbstandWerteByBearbeitung` exists. */
   apBearbstandWerteByBearbeitungExists?: boolean | null | undefined;
+  /** Filter by the object’s `apById` relation. */
+  apById?: ApFilter | null | undefined;
   /** Filter by the object’s `apUmsetzungWerteByUmsetzung` relation. */
   apUmsetzungWerteByUmsetzung?: ApUmsetzungWerteFilter | null | undefined;
   /** A related `apUmsetzungWerteByUmsetzung` exists. */
@@ -616,6 +622,16 @@ export type ApToManyApFileFilter = {
   none?: ApFileFilter | null | undefined;
   /** Some related `ApFile` matches the filter criteria. All fields are combined with a logical ‘and.’ */
   some?: ApFileFilter | null | undefined;
+};
+
+/** A filter to be used against many `ApHistory` object types. All fields are combined with a logical ‘and.’ */
+export type ApToManyApHistoryFilter = {
+  /** Every related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  every?: ApHistoryFilter | null | undefined;
+  /** No related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  none?: ApHistoryFilter | null | undefined;
+  /** Some related `ApHistory` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  some?: ApHistoryFilter | null | undefined;
 };
 
 /** A filter to be used against many `ApUser` object types. All fields are combined with a logical ‘and.’ */
@@ -3940,6 +3956,8 @@ export type UserFilter = {
   or?: Array<UserFilter> | null | undefined;
   /** Filter by the object’s `pass` field. */
   pass?: StringFilter | null | undefined;
+  /** Filter by the object’s `requireNewPasswordOnNextLogin` field. */
+  requireNewPasswordOnNextLogin?: BooleanFilter | null | undefined;
   /** Filter by the object’s `role` field. */
   role?: StringFilter | null | undefined;
   /** Filter by the object’s `usermessagesByUserName` relation. */
