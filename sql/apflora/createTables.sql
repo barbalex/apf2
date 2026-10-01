@@ -1289,7 +1289,6 @@ CREATE TABLE apflora.apber(
   situation text,
   vergleich_vorjahr_gesamtziel text,
   beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
-  veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
   -- analyse is a reserved word!!!
   apber_analyse text DEFAULT NULL,
   konsequenzen_umsetzung text,
@@ -1326,8 +1325,6 @@ COMMENT ON COLUMN apflora.apber.situation IS 'Beschreibung der Situation im Beri
 COMMENT ON COLUMN apflora.apber.vergleich_vorjahr_gesamtziel IS 'Vergleich zu Vorjahr und Ausblick auf das Gesamtziel';
 
 COMMENT ON COLUMN apflora.apber.beurteilung IS 'Beurteilung des Erfolgs des Aktionsplans bisher';
-
-COMMENT ON COLUMN apflora.apber.veraenderung_zum_vorjahr IS 'Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen';
 
 COMMENT ON COLUMN apflora.apber.apber_analyse IS 'Was sind die Ursachen fuer die beobachtete Entwicklung?';
 
