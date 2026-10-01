@@ -6,6 +6,7 @@ import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { isMobileViewAtom, treeActiveNodeArrayAtom } from '../../store/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
@@ -34,7 +35,13 @@ export const Component = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isInIframe) return <Outlet />
+  if (isInIframe) {
+    return (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    )
+  }
 
   const showEkf =
     !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
@@ -50,9 +57,13 @@ export const Component = () => {
           <EkfBar />
         : <Bar />}
       </div>
-      <Suspense fallback={<Spinner />}>
-        <Outlet />
-      </Suspense>
+      {/* ErrorBoundary above Suspense: query errors of routed pages
+          render locally instead of replacing the whole route */}
+      <ErrorBoundary>
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }

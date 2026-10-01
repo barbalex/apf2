@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
@@ -104,24 +103,22 @@ export const Messages = () => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={null}>
-        <StyledDialog
-          open={unreadMessages.length > 0 && !!userName}
-          aria-labelledby="dialog-title"
-        >
-          <div className={styles.titleRow}>
-            <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-            <Button
-              onClick={() => void onClickReadAll()}
-              color="inherit"
-              className={styles.allOkButton}
-            >
-              alle o.k.
-            </Button>
-          </div>
-          <MessagesList unreadMessages={unreadMessages} />
-        </StyledDialog>
-      </Suspense>
+      <StyledDialog
+        open={unreadMessages.length > 0 && !!userName}
+        aria-labelledby="dialog-title"
+      >
+        <div className={styles.titleRow}>
+          <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+          <Button
+            onClick={() => void onClickReadAll()}
+            color="inherit"
+            className={styles.allOkButton}
+          >
+            alle o.k.
+          </Button>
+        </div>
+        <MessagesList unreadMessages={unreadMessages} />
+      </StyledDialog>
     </ErrorBoundary>
   )
 }

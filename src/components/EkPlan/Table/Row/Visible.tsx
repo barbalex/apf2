@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
@@ -78,83 +77,23 @@ export const Visible = ({
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={null}>
-        {tpopColumns.map((tpopColumn, columnIndex) => {
-          const value = row[tpopColumn.name as string] as Record<string, unknown>
-          const width = tpopColumn.width as number
+      {tpopColumns.map((tpopColumn, columnIndex) => {
+        const value = row[tpopColumn.name as string] as Record<string, unknown>
+        const width = tpopColumn.width as number
 
-          if (value.name === 'yearTitle') {
-            return (
-              <CellForYearTitle
-                key={value.name}
-                row={row}
-                isOdd={isOdd}
-              />
-            )
-          }
-          if (value.name === 'ekAbrechnungstyp') {
-            return (
-              <CellForValue
-                key={value.name}
-                field={value}
-                row={row}
-                isOdd={isOdd}
-                firstChild={columnIndex === 0}
-                width={width}
-              />
-            )
-          }
-          if (value.name === 'ekfrequenz') {
-            return (
-              <CellForEkfrequenz
-                key={value.name}
-                row={row}
-                isOdd={isOdd}
-                data={data}
-                field={value}
-                setProcessing={setProcessing}
-                width={width}
-              />
-            )
-          }
-          if (value.name === 'ekfrequenzStartjahr') {
-            return (
-              <CellForEkfrequenzStartjahr
-                key={value.name}
-                row={row}
-                isOdd={isOdd}
-                ekfrequenzStartjahr={ekfrequenzStartjahr}
-                ekfrequenz={ekfrequenz}
-                setProcessing={setProcessing}
-                width={width}
-              />
-            )
-          }
-          if (value.name === 'ekfrequenzAbweichend') {
-            return (
-              <CellForEkfrequenzAbweichend
-                key={value.name}
-                row={row}
-                isOdd={isOdd}
-                ekfrequenzAbweichend={ekfrequenzAbweichend}
-                width={width}
-              />
-            )
-          }
-          if (value.name === 'link') {
-            return (
-              <CellForTpopLink
-                key={value.name}
-                field={value}
-                row={row}
-                isOdd={isOdd}
-                width={width}
-              />
-            )
-          }
+        if (value.name === 'yearTitle') {
+          return (
+            <CellForYearTitle
+              key={value.name}
+              row={row}
+              isOdd={isOdd}
+            />
+          )
+        }
+        if (value.name === 'ekAbrechnungstyp') {
           return (
             <CellForValue
-              key={String(value.label)}
+              key={value.name}
               field={value}
               row={row}
               isOdd={isOdd}
@@ -162,34 +101,92 @@ export const Visible = ({
               width={width}
             />
           )
-        })}
-        {years.map((year: number) => {
-          // TODO: query view/function to get these values without having to filter here?
-          const ekPlan =
-            (tpop?.ekPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
-          const ekfPlan =
-            (tpop?.ekfPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
-          const eks = (tpop?.eks?.nodes ?? []).filter((n) => n.jahr === year)
-          const ekfs = (tpop?.ekfs?.nodes ?? []).filter((n) => n.jahr === year)
-          const ansiedlungs = (tpop?.ansiedlungs?.nodes ?? []).filter(
-            (n) => n.jahr === year,
-          )
-
+        }
+        if (value.name === 'ekfrequenz') {
           return (
-            <CellForYear
-              key={year}
+            <CellForEkfrequenz
+              key={value.name}
               row={row}
               isOdd={isOdd}
-              year={year}
-              ekPlan={ekPlan}
-              ekfPlan={ekfPlan}
-              eks={eks}
-              ekfs={ekfs}
-              ansiedlungs={ansiedlungs}
+              data={data}
+              field={value}
+              setProcessing={setProcessing}
+              width={width}
             />
           )
-        })}
-      </Suspense>
+        }
+        if (value.name === 'ekfrequenzStartjahr') {
+          return (
+            <CellForEkfrequenzStartjahr
+              key={value.name}
+              row={row}
+              isOdd={isOdd}
+              ekfrequenzStartjahr={ekfrequenzStartjahr}
+              ekfrequenz={ekfrequenz}
+              setProcessing={setProcessing}
+              width={width}
+            />
+          )
+        }
+        if (value.name === 'ekfrequenzAbweichend') {
+          return (
+            <CellForEkfrequenzAbweichend
+              key={value.name}
+              row={row}
+              isOdd={isOdd}
+              ekfrequenzAbweichend={ekfrequenzAbweichend}
+              width={width}
+            />
+          )
+        }
+        if (value.name === 'link') {
+          return (
+            <CellForTpopLink
+              key={value.name}
+              field={value}
+              row={row}
+              isOdd={isOdd}
+              width={width}
+            />
+          )
+        }
+        return (
+          <CellForValue
+            key={String(value.label)}
+            field={value}
+            row={row}
+            isOdd={isOdd}
+            firstChild={columnIndex === 0}
+            width={width}
+          />
+        )
+      })}
+      {years.map((year: number) => {
+        // TODO: query view/function to get these values without having to filter here?
+        const ekPlan =
+          (tpop?.ekPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
+        const ekfPlan =
+          (tpop?.ekfPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
+        const eks = (tpop?.eks?.nodes ?? []).filter((n) => n.jahr === year)
+        const ekfs = (tpop?.ekfs?.nodes ?? []).filter((n) => n.jahr === year)
+        const ansiedlungs = (tpop?.ansiedlungs?.nodes ?? []).filter(
+          (n) => n.jahr === year,
+        )
+
+        return (
+          <CellForYear
+            key={year}
+            row={row}
+            isOdd={isOdd}
+            year={year}
+            ekPlan={ekPlan}
+            ekfPlan={ekfPlan}
+            eks={eks}
+            ekfs={ekfs}
+            ansiedlungs={ansiedlungs}
+          />
+        )
+      })}
     </ErrorBoundary>
   )
 }

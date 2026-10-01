@@ -1,4 +1,4 @@
-import { lazy, createRef, useEffect } from 'react'
+import { lazy, createRef, Suspense, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -36,9 +36,6 @@ const NotificationDismisser = lazy(async () => ({
 const Router = lazy(async () => ({
   default: (await import('./components/Router/index.tsx')).Router,
 }))
-// const UnterhaltsRouter = lazy(async () => ({
-//   default: (await import('./components/Router/indexUnterhalt.tsx')).Router,
-// }))
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.tsx')).IsPrintSetter,
 }))
@@ -98,13 +95,16 @@ export const App = () => {
                 action={(key) => <NotificationDismisser nKey={key} />}
               >
                 <UploaderContext value={uploaderRef}>
-                  <Router />
-                  {/*<UnterhaltsRouter />*/}
-                  <Notifier />
-                  <IsPrintSetter />
-                  <LastTouchedNodeSetter />
-                  <MouseWheelHandler />
-                  <LegacyBrowserInformer />
+                  {/* these are all lazy: give them a boundary so they
+                      don't suspend the whole app without a fallback */}
+                  <Suspense fallback={null}>
+                    <Router />
+                    <Notifier />
+                    <IsPrintSetter />
+                    <LastTouchedNodeSetter />
+                    <MouseWheelHandler />
+                    <LegacyBrowserInformer />
+                  </Suspense>
                 </UploaderContext>
               </SnackbarProvider>
             </ThemeProvider>

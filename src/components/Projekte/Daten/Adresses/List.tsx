@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
 import { useAtomValue } from 'jotai'
 
 import { treeNodeLabelFilterAtom } from '../../../../store/index.ts'
 import { useAdressesNavData } from '../../../../modules/useAdressesNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type { NavData } from '../../../Bookmarks/types.ts'
 
@@ -15,12 +13,10 @@ export const List = () => {
   const navData = useAdressesNavData()
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <SharedList
-        navData={navData as NavData}
-        MenuBarComponent={Menu}
-        highlightSearchString={nodeLabelFilter.adresse}
-      />
-    </Suspense>
+    <SharedList
+      navData={navData as NavData}
+      MenuBarComponent={Menu}
+      highlightSearchString={nodeLabelFilter.adresse}
+    />
   )
 }

@@ -1,8 +1,6 @@
-import { Suspense } from 'react'
 
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { useTpopmassnNavData } from '../../../../modules/useTpopmassnNavData.ts'
 
 export const List = () => {
@@ -22,12 +20,10 @@ export const List = () => {
   }
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <SharedList
-        navData={navDataForList}
-        MenuBarComponent={(props) => <Menu {...props} row={navData} />}
-        menuBarProps={{ row: navData }}
-      />
-    </Suspense>
+    <SharedList
+      navData={navDataForList}
+      MenuBarComponent={(props) => <Menu {...props} row={navData} />}
+      menuBarProps={{ row: navData }}
+    />
   )
 }

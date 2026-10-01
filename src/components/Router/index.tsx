@@ -9,21 +9,11 @@ import { useAtomValue } from 'jotai'
 
 import { Spinner } from '../shared/Spinner.tsx'
 
-// import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.tsx'
-
-const DatenNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
-}))
 const datenHandle = {
-  nav: DatenNav,
   bookmarkFetcher: true,
   bookmarkFetcherName: 'useRootNavData',
 }
-const ProjekteNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Projects.tsx')).Menu,
-}))
 const projekteHandle = {
-  nav: ProjekteNav,
   bookmarkFetcher: true,
   bookmarkFetcherName: 'useProjekteNavData',
 }

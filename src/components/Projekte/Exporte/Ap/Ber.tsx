@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
+import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 
 import type {
   ApId,
@@ -38,7 +39,6 @@ interface ApbersQueryResult {
         id: number
         text?: string
       }
-      veraenderungZumVorjahr?: string
       apberAnalyse?: string
       konsequenzenUmsetzung?: string
       konsequenzenErfolgskontrolle?: string
@@ -57,6 +57,12 @@ interface ApbersQueryResult {
         id: AdresseId
         name?: string
       }
+    }[]
+  }
+  allApErfkritWertes: {
+    nodes: {
+      code: number
+      sort: number | null
     }[]
   }
 }
@@ -93,7 +99,6 @@ export const Ber = () => {
                   id
                   text
                 }
-                veraenderungZumVorjahr
                 apberAnalyse
                 konsequenzenUmsetzung
                 konsequenzenErfolgskontrolle
@@ -114,6 +119,12 @@ export const Ber = () => {
                 }
               }
             }
+            allApErfkritWertes {
+              nodes {
+                code
+                sort
+              }
+            }
           }
         `),
       })
@@ -126,7 +137,21 @@ export const Ber = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allApbers?.nodes ?? []).map((z) => ({
+    // the export contains every apber, so the beurteilungen of the
+    // previous years are already in this result and need no extra query
+    const apbers = result?.data?.allApbers?.nodes ?? []
+    const sortsByCode = new Map(
+      (result?.data?.allApErfkritWertes?.nodes ?? []).map((w) => [
+        w.code,
+        w.sort,
+      ]),
+    )
+    const beurteilungByApIdAndJahr = new Map(
+      apbers
+        .filter((z) => z.jahr != null)
+        .map((z) => [`${z.apId}|${z.jahr}`, z.beurteilung] as const),
+    )
+    const rows = apbers.map((z) => ({
       id: z.id,
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
@@ -135,7 +160,15 @@ export const Ber = () => {
       vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
       beurteilung: z.beurteilung,
       beurteilung_decodiert: z?.apErfkritWerteByBeurteilung?.text ?? '',
-      veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
+      veraenderung_zum_vorjahr: veraenderungZumVorjahr({
+        beurteilung: z.beurteilung,
+        beurteilungVorjahr:
+          z.jahr == null
+            ? null
+            : (beurteilungByApIdAndJahr.get(`${z.apId}|${z.jahr - 1}`) ??
+              null),
+        sortsByCode,
+      }),
       apber_analyse: z.apberAnalyse,
       konsequenzen_umsetzung: z.konsequenzenUmsetzung,
       konsequenzen_erfolgskontrolle: z.konsequenzenErfolgskontrolle,

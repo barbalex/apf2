@@ -22,6 +22,7 @@ const Bookmarks = lazy(async () => ({
   default: (await import('../Bookmarks/Bookmarks/index.tsx')).Bookmarks,
 }))
 import { Spinner } from '../shared/Spinner.tsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 
@@ -62,9 +63,13 @@ export const ProjektContainer = () => {
     ),
     daten: (
       <div className={styles.innerContainer}>
-        <Suspense fallback={<Spinner />}>
-          <Outlet />
-        </Suspense>
+        {/* ErrorBoundary above Suspense: query errors of routed forms
+            render in this pane instead of replacing the whole route */}
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     ),
     filter: (
