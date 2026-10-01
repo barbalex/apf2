@@ -38,7 +38,6 @@ interface ApbersQueryResult {
         id: number
         text?: string
       }
-      veraenderungZumVorjahr?: string
       apberAnalyse?: string
       konsequenzenUmsetzung?: string
       konsequenzenErfolgskontrolle?: string
@@ -93,7 +92,6 @@ export const Ber = () => {
                   id
                   text
                 }
-                veraenderungZumVorjahr
                 apberAnalyse
                 konsequenzenUmsetzung
                 konsequenzenErfolgskontrolle
@@ -135,7 +133,6 @@ export const Ber = () => {
       vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
       beurteilung: z.beurteilung,
       beurteilung_decodiert: z?.apErfkritWerteByBeurteilung?.text ?? '',
-      veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
       apber_analyse: z.apberAnalyse,
       konsequenzen_umsetzung: z.konsequenzenUmsetzung,
       konsequenzen_erfolgskontrolle: z.konsequenzenErfolgskontrolle,

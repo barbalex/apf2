@@ -9,7 +9,6 @@ export default dynamicGql`
     $situation: String
     $vergleichVorjahrGesamtziel: String
     $beurteilung: Int
-    $veraenderungZumVorjahr: String
     $apberAnalyse: String
     $konsequenzenUmsetzung: String
     $konsequenzenErfolgskontrolle: String
@@ -31,7 +30,6 @@ export default dynamicGql`
           situation: $situation
           vergleichVorjahrGesamtziel: $vergleichVorjahrGesamtziel
           beurteilung: $beurteilung
-          veraenderungZumVorjahr: $veraenderungZumVorjahr
           apberAnalyse: $apberAnalyse
           konsequenzenUmsetzung: $konsequenzenUmsetzung
           konsequenzenErfolgskontrolle: $konsequenzenErfolgskontrolle

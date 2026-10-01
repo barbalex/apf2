@@ -24,18 +24,11 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 
-const veraenGegenVorjahrWerte = [
-  { value: '+', label: '+' },
-  { value: '-', label: '–' },
-  { value: '=', label: '=' },
-]
-
 const fieldTypes: Record<string, string> = {
   jahr: 'Int',
   situation: 'String',
   vergleichVorjahrGesamtziel: 'String',
   beurteilung: 'Int',
-  veraenderungZumVorjahr: 'String',
   apberAnalyse: 'String',
   konsequenzenUmsetzung: 'String',
   konsequenzenErfolgskontrolle: 'String',
@@ -58,7 +51,6 @@ interface ApberQueryResult {
     situation: string | null
     vergleichVorjahrGesamtziel: string | null
     beurteilung: number | null
-    veraenderungZumVorjahr: string | null
     apberAnalyse: string | null
     konsequenzenUmsetzung: string | null
     konsequenzenErfolgskontrolle: string | null
@@ -72,6 +64,14 @@ interface ApberQueryResult {
     apId: ApId | null
     bearbeiter: AdresseId | null
     changedBy: string | null
+    apByApId: {
+      apbersByApId: {
+        nodes: {
+          jahr: number | null
+          beurteilung: number | null
+        }[]
+      } | null
+    } | null
   }
   allAdresses: {
     nodes: {
@@ -83,6 +83,7 @@ interface ApberQueryResult {
     nodes: {
       value: number
       label: string | null
+      sort: number | null
     }[]
   }
 }
@@ -121,6 +122,30 @@ export const Component = () => {
   const { data, refetch } = useQuery(queryOptions)
 
   const row = data?.apberById
+
+  // Veränderung zum Vorjahr is no longer stored but calculated
+  // from the beurteilungen of this year's and last year's apber.
+  // Beurteilungen are compared by their sort value in ap_erfkrit_werte:
+  // lower sort means more successful
+  const veraenderungZumVorjahr = (() => {
+    const { beurteilung, jahr } = row ?? {}
+    if (beurteilung == null || jahr == null) return null
+    const erfkritWerte = data?.allApErfkritWertes?.nodes ?? []
+    const sort = erfkritWerte.find((w) => w.value === beurteilung)?.sort
+    const beurteilungVorjahr = (row?.apByApId?.apbersByApId?.nodes ?? []).find(
+      (apber) => apber.jahr === jahr - 1,
+    )?.beurteilung
+    if (beurteilungVorjahr == null) return null
+    const sortVorjahr = erfkritWerte.find(
+      (w) => w.value === beurteilungVorjahr,
+    )?.sort
+    if (sort == null || sortVorjahr == null) return null
+    // 6 = unsichere Entwicklung: not comparable
+    if (sort === 6 || sortVorjahr === 6) return null
+    if (sort < sortVorjahr) return '+'
+    if (sort > sortVorjahr) return '-'
+    return '='
+  })()
 
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
@@ -209,15 +234,15 @@ export const Component = () => {
               saveToDb={(event) => void saveToDb(event)}
               error={fieldErrors.beurteilung ?? ''}
             />
-            <Select
-              key={`${apberId}veraenderungZumVorjahr`}
+            <TextField
               name="veraenderungZumVorjahr"
               label="Veränderung zum Vorjahr"
-              options={veraenGegenVorjahrWerte}
-              loading={false}
-              value={row?.veraenderungZumVorjahr ?? null}
-              saveToDb={(event) => void saveToDb(event)}
-              error={fieldErrors.veraenderungZumVorjahr ?? ''}
+              value={veraenderungZumVorjahr ?? ''}
+              disabled
+              saveToDb={() => {
+                // computed value, cannot be saved
+              }}
+              helperText="Berechnet aus den Beurteilungen dieses und des Vorjahres"
             />
           </fieldset>
           <MarkdownField

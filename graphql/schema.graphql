@@ -10754,9 +10754,6 @@ input ApberFilter {
   """Filter by the object’s `beurteilung` field."""
   beurteilung: IntFilter
 
-  """Filter by the object’s `veraenderungZumVorjahr` field."""
-  veraenderungZumVorjahr: StringFilter
-
   """Filter by the object’s `apberAnalyse` field."""
   apberAnalyse: StringFilter
 
@@ -30312,11 +30309,6 @@ type Apber implements Node {
   """Beurteilung des Erfolgs des Aktionsplans bisher"""
   beurteilung: Int
 
-  """
-  Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen
-  """
-  veraenderungZumVorjahr: String
-
   """Was sind die Ursachen fuer die beobachtete Entwicklung?"""
   apberAnalyse: String
 
@@ -30491,8 +30483,6 @@ enum ApbersOrderBy {
   VERGLEICH_VORJAHR_GESAMTZIEL_DESC
   BEURTEILUNG_ASC
   BEURTEILUNG_DESC
-  VERAENDERUNG_ZUM_VORJAHR_ASC
-  VERAENDERUNG_ZUM_VORJAHR_DESC
   APBER_ANALYSE_ASC
   APBER_ANALYSE_DESC
   KONSEQUENZEN_UMSETZUNG_ASC
@@ -30632,9 +30622,6 @@ input ApberCondition {
 
   """Checks for equality with the object’s `beurteilung` field."""
   beurteilung: Int
-
-  """Checks for equality with the object’s `veraenderungZumVorjahr` field."""
-  veraenderungZumVorjahr: String
 
   """Checks for equality with the object’s `apberAnalyse` field."""
   apberAnalyse: String
@@ -53900,11 +53887,6 @@ input ApberInput {
   """Beurteilung des Erfolgs des Aktionsplans bisher"""
   beurteilung: Int
 
-  """
-  Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen
-  """
-  veraenderungZumVorjahr: String
-
   """Was sind die Ursachen fuer die beobachtete Entwicklung?"""
   apberAnalyse: String
 
@@ -58590,11 +58572,6 @@ input ApberPatch {
 
   """Beurteilung des Erfolgs des Aktionsplans bisher"""
   beurteilung: Int
-
-  """
-  Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen
-  """
-  veraenderungZumVorjahr: String
 
   """Was sind die Ursachen fuer die beobachtete Entwicklung?"""
   apberAnalyse: String

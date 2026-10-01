@@ -68,7 +68,6 @@ export const apber = graphql(`
     situation
     vergleichVorjahrGesamtziel
     beurteilung
-    veraenderungZumVorjahr
     apberAnalyse
     konsequenzenUmsetzung
     konsequenzenErfolgskontrolle

@@ -27,9 +27,6 @@ export default interface Apber {
   /** Beurteilung des Erfolgs des Aktionsplans bisher */
   beurteilung: number | null;
 
-  /** Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen */
-  veraenderung_zum_vorjahr: string | null;
-
   /** Was sind die Ursachen fuer die beobachtete Entwicklung? */
   apber_analyse: string | null;
 
@@ -42,7 +39,7 @@ export default interface Apber {
   /** Bemerkungen zum Aussagebereich A: Grundmengen und getroffene Massnahmen */
   biotope_neue: string | null;
 
-  /** Bemerkungen zum Aussagebereich B: Bestandeskontrolle */
+  /** Bemerkungen zum Aussagebereich B: Bestandskontrolle */
   biotope_optimieren: string | null;
 
   /** Bemerkungen zum Aussagebereich C: Zwischenbilanz zur Wirkung von Massnahmen */
@@ -96,12 +93,6 @@ export interface ApberInitializer {
 
   /** Beurteilung des Erfolgs des Aktionsplans bisher */
   beurteilung?: number | null;
-
-  /**
-   * Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen
-   * Default value: NULL::character varying
-   */
-  veraenderung_zum_vorjahr?: string | null;
 
   /** Was sind die Ursachen fuer die beobachtete Entwicklung? */
   apber_analyse?: string | null;
@@ -171,9 +162,6 @@ export interface ApberMutator {
 
   /** Beurteilung des Erfolgs des Aktionsplans bisher */
   beurteilung?: number | null;
-
-  /** Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen */
-  veraenderung_zum_vorjahr?: string | null;
 
   /** Was sind die Ursachen fuer die beobachtete Entwicklung? */
   apber_analyse?: string | null;
