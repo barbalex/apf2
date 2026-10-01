@@ -1,4 +1,4 @@
-import { useEffect, Suspense } from 'react'
+import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -12,7 +12,6 @@ import { exists } from '../../../../modules/exists.ts'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
 import {
   sortedBeobFieldsAtom,
@@ -129,14 +128,12 @@ export const Beob = () => {
           Die Felder können beliebig sortiert werden (drag and drop).
         </p>
         <div className={styles.container}>
-          <Suspense fallback={<Spinner />}>
-            <DndProvider
-              backend={HTML5Backend}
-              context={window}
-            >
-              {fields.map((field, i) => renderField(field, i))}
-            </DndProvider>
-          </Suspense>
+          <DndProvider
+            backend={HTML5Backend}
+            context={window}
+          >
+            {fields.map((field, i) => renderField(field, i))}
+          </DndProvider>
         </div>
       </div>
     </ErrorBoundary>

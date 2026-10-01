@@ -1,5 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -15,7 +15,6 @@ import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { adresse } from '../../../shared/fragments.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
@@ -126,52 +125,50 @@ export const Component = () => {
           title="Adresse"
           MenuBarComponent={Menu}
         />
-        <Suspense fallback={<Spinner />}>
-          <div className={styles.fieldsContainer}>
-            <div className={styles.formContainer}>
-              <TextField
-                name="name"
-                label="Name"
-                type="text"
-                value={row.name}
-                saveToDb={saveToDb}
-                error={fieldErrors.name}
-              />
-              <TextField
-                name="adresse"
-                label="Adresse"
-                type="text"
-                value={row.adresse}
-                saveToDb={saveToDb}
-                error={fieldErrors.adresse}
-              />
-              <TextField
-                name="telefon"
-                label="Telefon"
-                type="text"
-                value={row.telefon}
-                saveToDb={saveToDb}
-                error={fieldErrors.telefon}
-              />
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                value={row.email}
-                saveToDb={saveToDb}
-                error={fieldErrors.email}
-              />
-              <Checkbox2States
-                name="freiwErfko"
-                label="freiwillige ErfolgskontrolleurIn"
-                value={row.freiwErfko}
-                saveToDb={saveToDb}
-                error={fieldErrors.freiwErfko}
-                helperText=""
-              />
-            </div>
+        <div className={styles.fieldsContainer}>
+          <div className={styles.formContainer}>
+            <TextField
+              name="name"
+              label="Name"
+              type="text"
+              value={row.name}
+              saveToDb={saveToDb}
+              error={fieldErrors.name}
+            />
+            <TextField
+              name="adresse"
+              label="Adresse"
+              type="text"
+              value={row.adresse}
+              saveToDb={saveToDb}
+              error={fieldErrors.adresse}
+            />
+            <TextField
+              name="telefon"
+              label="Telefon"
+              type="text"
+              value={row.telefon}
+              saveToDb={saveToDb}
+              error={fieldErrors.telefon}
+            />
+            <TextField
+              name="email"
+              label="Email"
+              type="email"
+              value={row.email}
+              saveToDb={saveToDb}
+              error={fieldErrors.email}
+            />
+            <Checkbox2States
+              name="freiwErfko"
+              label="freiwillige ErfolgskontrolleurIn"
+              value={row.freiwErfko}
+              saveToDb={saveToDb}
+              error={fieldErrors.freiwErfko}
+              helperText=""
+            />
           </div>
-        </Suspense>
+        </div>
       </div>
     </ErrorBoundary>
   )

@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -11,7 +10,6 @@ import type {
   ApberForApJberAbcNode,
 } from '../ApberForAp/types.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
-import { Spinner } from '../../shared/Spinner.tsx'
 import type { ApberId } from '../../../models/apflora/index.ts'
 
 interface ApberQueryResult {
@@ -69,14 +67,12 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Spinner />}>
-        <ApberForAp
-          apId={apId}
-          jahr={jahr}
-          apData={data?.data}
-          node={data?.data?.jberAbcByApId?.nodes?.[0]}
-        />
-      </Suspense>
+      <ApberForAp
+        apId={apId}
+        jahr={jahr}
+        apData={data?.data}
+        node={data?.data?.jberAbcByApId?.nodes?.[0]}
+      />
     </ErrorBoundary>
   )
 }

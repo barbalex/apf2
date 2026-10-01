@@ -14,6 +14,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
+import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
@@ -24,18 +25,11 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 
-const veraenGegenVorjahrWerte = [
-  { value: '+', label: '+' },
-  { value: '-', label: '–' },
-  { value: '=', label: '=' },
-]
-
 const fieldTypes: Record<string, string> = {
   jahr: 'Int',
   situation: 'String',
   vergleichVorjahrGesamtziel: 'String',
   beurteilung: 'Int',
-  veraenderungZumVorjahr: 'String',
   apberAnalyse: 'String',
   konsequenzenUmsetzung: 'String',
   konsequenzenErfolgskontrolle: 'String',
@@ -58,7 +52,6 @@ interface ApberQueryResult {
     situation: string | null
     vergleichVorjahrGesamtziel: string | null
     beurteilung: number | null
-    veraenderungZumVorjahr: string | null
     apberAnalyse: string | null
     konsequenzenUmsetzung: string | null
     konsequenzenErfolgskontrolle: string | null
@@ -72,6 +65,14 @@ interface ApberQueryResult {
     apId: ApId | null
     bearbeiter: AdresseId | null
     changedBy: string | null
+    apByApId: {
+      apbersByApId: {
+        nodes: {
+          jahr: number | null
+          beurteilung: number | null
+        }[]
+      } | null
+    } | null
   }
   allAdresses: {
     nodes: {
@@ -83,6 +84,7 @@ interface ApberQueryResult {
     nodes: {
       value: number
       label: string | null
+      sort: number | null
     }[]
   }
 }
@@ -121,6 +123,22 @@ export const Component = () => {
   const { data, refetch } = useQuery(queryOptions)
 
   const row = data?.apberById
+
+  const sortsByCode = new Map(
+    (data?.allApErfkritWertes?.nodes ?? []).map((w) => [w.value, w.sort]),
+  )
+  const jahr = row?.jahr
+  const beurteilungVorjahr =
+    jahr == null
+      ? null
+      : ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
+          (apber) => apber.jahr === jahr - 1,
+        )?.beurteilung ?? null)
+  const veraenderung = veraenderungZumVorjahr({
+    beurteilung: row?.beurteilung,
+    beurteilungVorjahr,
+    sortsByCode,
+  })
 
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
@@ -209,15 +227,15 @@ export const Component = () => {
               saveToDb={(event) => void saveToDb(event)}
               error={fieldErrors.beurteilung ?? ''}
             />
-            <Select
-              key={`${apberId}veraenderungZumVorjahr`}
+            <TextField
               name="veraenderungZumVorjahr"
               label="Veränderung zum Vorjahr"
-              options={veraenGegenVorjahrWerte}
-              loading={false}
-              value={row?.veraenderungZumVorjahr ?? null}
-              saveToDb={(event) => void saveToDb(event)}
-              error={fieldErrors.veraenderungZumVorjahr ?? ''}
+              value={veraenderung ?? ''}
+              disabled
+              saveToDb={() => {
+                // computed value, cannot be saved
+              }}
+              helperText="Berechnet aus den Beurteilungen dieses und des Vorjahres"
             />
           </fieldset>
           <MarkdownField

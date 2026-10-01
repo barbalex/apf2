@@ -37,6 +37,7 @@ export const Component = () => {
       <FormTitle
         title="Art"
         MenuBarComponent={Menu}
+        menuBarProps={{ label: row?.label ?? null }}
       />
       <div className={styles.formContainer}>
         <Ap>

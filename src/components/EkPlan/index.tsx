@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
@@ -126,8 +126,13 @@ export const Component = () => {
       return result.data as EkplanApQueryResult
     },
   })
-  setApsData(data as unknown as EkPlanApsData)
-  setApsDataLoading(false)
+  // mirror the query data into atoms for the ApList children.
+  // must run in an effect: writing atoms during render causes
+  // "Cannot update a component while rendering a different component"
+  useEffect(() => {
+    setApsData(data as unknown as EkPlanApsData)
+    setApsDataLoading(false)
+  }, [data, setApsData, setApsDataLoading])
 
   const onClickAnleitung = () => {
     const url = `${appBaseUrl()}Dokumentation/erfolgs-kontrollen-planen`

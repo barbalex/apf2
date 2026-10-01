@@ -34,7 +34,12 @@ import type { CreateApForApFormMutation } from '../../../../gql/graphql.ts'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = () => {
+export const Menu = ({
+  label,
+}: {
+  label?: string | null
+  toggleFilterInput?: () => void
+}) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -96,7 +101,7 @@ export const Menu = () => {
       toDelete: {
         table: 'ap',
         id: apId ?? null,
-        label: null,
+        label: label ?? null,
         url: pathname.split('/').filter((p) => !!p),
         afterDeletionHook: () => {
           void tsQueryClient.invalidateQueries({
@@ -197,7 +202,9 @@ export const Menu = () => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <h3 className={styles.menuTitle}>löschen?</h3>
+        <h3 className={styles.menuTitle}>
+          {label ? `Art "${label}" löschen?` : 'löschen?'}
+        </h3>
         <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>

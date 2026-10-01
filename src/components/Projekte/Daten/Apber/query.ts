@@ -6,6 +6,15 @@ export const query = dynamicGql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
       ...ApberFields
+      apByApId {
+        id
+        apbersByApId {
+          nodes {
+            jahr
+            beurteilung
+          }
+        }
+      }
     }
     allAdresses(orderBy: NAME_ASC) {
       nodes {
@@ -17,6 +26,7 @@ export const query = dynamicGql`
       nodes {
         value: code
         label: text
+        sort
       }
     }
   }

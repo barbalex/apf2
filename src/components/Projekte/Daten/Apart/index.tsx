@@ -1,5 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -18,7 +18,6 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apart } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
@@ -201,25 +200,23 @@ export const Component = () => {
             <br />
             <br />
           </div>
-          <Suspense fallback={<Spinner />}>
-            <div className={styles.formContainer}>
-              <SelectLoadingOptions
-                key={`${row?.id}artId`}
-                field="artId"
-                valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
-                valueLabelPath="aeTaxonomyByArtId.taxArtName"
-                labelSize={12}
-                label="Taxon"
-                row={row}
-                query={queryAeTaxonomies}
-                filter={aeTaxonomiesfilter}
-                queryNodesName="allAeTaxonomies"
-                saveToDb={saveToDb}
-                error={fieldErrors.artId}
-              />
-              <div className={styles.spacer} />
-            </div>
-          </Suspense>
+          <div className={styles.formContainer}>
+            <SelectLoadingOptions
+              key={`${row?.id}artId`}
+              field="artId"
+              valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+              valueLabelPath="aeTaxonomyByArtId.taxArtName"
+              labelSize={12}
+              label="Taxon"
+              row={row}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
+              saveToDb={saveToDb}
+              error={fieldErrors.artId}
+            />
+            <div className={styles.spacer} />
+          </div>
         </div>
       </div>
     </ErrorBoundary>
