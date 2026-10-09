@@ -4,18 +4,23 @@
  */
 import { nearestPoint } from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import {
-  store,
-  apolloClientAtom,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
-export const getNearestTpop = async ({ latLng, apId }) => {
-  const apolloClient = store.get(apolloClientAtom)
+export const getNearestTpop = async ({
+  latLng,
+  apId,
+}: {
+  latLng: { lat: number; lng: number }
+  apId?: string
+}) => {
+  const apolloClient = getApolloClientFromStore()
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
   const { data } = await apolloClient.query({
-    query: gql`
+    query: graphql(`
       query getNearestTpopQuery($apId: UUID!) {
         apById(id: $apId) {
           id
@@ -34,18 +39,18 @@ export const getNearestTpop = async ({ latLng, apId }) => {
           }
         }
       }
-    `,
+    `),
     variables: { apId: apId || '99999999-9999-9999-9999-999999999999' },
   })
   const pops = data?.apById?.popsByApId?.nodes ?? []
   const tpops = pops
-    .map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => t.wgs84Lat))
+    .map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => !!t?.wgs84Lat))
     .flat()
   const tpopPoints = featureCollection(
     tpops.map((t) =>
-      point([t.wgs84Lat, t.wgs84Long], {
-        id: t.id,
-        popId: t.popId,
+      point([t?.wgs84Lat ?? 0, t?.wgs84Long ?? 0], {
+        id: t?.id ?? '',
+        popId: t?.popId ?? null,
       }),
     ),
   )

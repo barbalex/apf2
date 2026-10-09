@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { apberuebersicht } from '../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   mutation createApberuebersichtForUndelete(
     $id: UUID
     $projId: UUID

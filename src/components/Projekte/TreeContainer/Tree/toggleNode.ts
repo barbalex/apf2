@@ -7,8 +7,17 @@ import {
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
+import type { TreeNodeData } from './types.ts'
 
-export const toggleNode = ({ node, search, onlyShowActivePath = false }) => {
+export const toggleNode = ({
+  node,
+  search,
+  onlyShowActivePath = false,
+}: {
+  node: TreeNodeData
+  search: string
+  onlyShowActivePath?: boolean
+}) => {
   if (!node.url) throw new Error('passed node has no url')
 
   const navigate = store.get(navigateAtom)
@@ -21,11 +30,11 @@ export const toggleNode = ({ node, search, onlyShowActivePath = false }) => {
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let newActiveNodeArray = []
+  let newActiveNodeArray: (string | number)[]
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed
     // open it and make it the active node
-    openNode({ node, openNodes })
+    void openNode({ node, openNodes })
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
   } else if (node.urlLabel == activeNodeArray.slice(-1)[0]) {

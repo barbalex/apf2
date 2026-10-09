@@ -4,12 +4,18 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 const insertData = {
   action: 'insert',
   table: 'ek_abrechnungstyp_werte',
 }
 
-export const EkAbrechnungstypWerteFolder = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const EkAbrechnungstypWerteFolder = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeEkAbrechnungstypWerteFolder"

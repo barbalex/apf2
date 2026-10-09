@@ -1,4 +1,5 @@
-import { useState, useEffect, type ChangeEvent, type FocusEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -6,12 +7,11 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
-import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
@@ -23,8 +23,10 @@ import { user as userFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { UserId } from '../../../../models/apflora/UserId.ts'
-import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
+import type { ComponentType } from 'react'
+
+import type { UserId } from '../../../../models/apflora/User.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 interface UserQueryResult {
   userById: {
@@ -36,14 +38,28 @@ interface UserQueryResult {
     adresseId: AdresseId | null
   } | null
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 
 import styles from './index.module.css'
+
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: string; label: string }[]
+  value?: string | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
 
 const roleWerte = [
   {
@@ -69,7 +85,7 @@ const roleWerte = [
   },
 ]
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   name: 'String',
   email: 'String',
   role: 'String',
@@ -93,7 +109,7 @@ export const Component = () => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
       const result = await apolloClient.query<UserQueryResult>({
@@ -103,21 +119,22 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.userById ?? {}
+  const row: Partial<NonNullable<UserQueryResult['userById']>> =
+    data?.userById ?? {}
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setErrors({})
   }, [row.id])
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateUserForUser(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -146,19 +163,19 @@ export const Component = () => {
       return setErrors({ [field]: (error as Error).message })
     }
     setErrors({})
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['user', userId],
     })
     if (field === 'name') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeUser`],
       })
     }
   }
 
-  const onBlurPassword = (event: FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword = (event: { target: EventTarget }) => {
     setPasswordErrorText('')
-    const password = event.target.value
+    const password = (event.target as HTMLInputElement).value
     setPassword(password)
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
@@ -167,9 +184,9 @@ export const Component = () => {
     }
   }
 
-  const onBlurPassword2 = async (event: FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword2 = async (event: { target: EventTarget }) => {
     setPassword2ErrorText('')
-    const password2 = event.target.value
+    const password2 = (event.target as HTMLInputElement).value
     setPassword2(password2)
     if (!password2) {
       setPassword2ErrorText('Bitte Passwort eingeben')
@@ -180,7 +197,7 @@ export const Component = () => {
       // then tell user if it worked
       try {
         const fakeEvent = { target: { name: 'pass', value: password2 } }
-        await saveToDb(fakeEvent as ChangeEvent<HTMLInputElement>)
+        await saveToDb(fakeEvent)
       } catch (error) {
         setErrors({ pass: (error as Error).message })
         return setPasswordMessage((error as Error).message)
@@ -235,24 +252,24 @@ export const Component = () => {
             errors={errors}
             helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             key={`${row.id}role`}
             name="role"
             value={row.role}
             dataSource={roleWerte}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={errors.role}
             label="Rolle (nur von Managern veränderbar)"
           />
           <Select
             key={`${row.id}adresseId`}
             name="adresseId"
-            value={row.adresseId}
+            value={row.adresseId ?? null}
             field="adresseId"
             label="Zugehörige Adresse"
             options={data?.allAdresses?.nodes ?? []}
-            saveToDb={saveToDb}
-            error={errors.adresseId}
+            saveToDb={(event) => void saveToDb(event)}
+            error={errors.adresseId ?? ''}
           />
           {!!passwordMessage && (
             <div className={styles.passwordMessage}>{passwordMessage}</div>
@@ -320,7 +337,7 @@ export const Component = () => {
                 name="pass"
                 type={showPass2 ? 'text' : 'password'}
                 defaultValue={password2}
-                onBlur={onBlurPassword2}
+                onBlur={(e) => void onBlurPassword2(e)}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') {
                     onBlurPassword(e)

@@ -1,0 +1,1 @@
+Ab Version 1.135.0: Bestehende Historien können in neue kopiert werden. Damit erspart ihr euch viel Tipp-Arbeit: ihr könnt die älteste Historie kopieren und nur ändern, was nötig ist

@@ -1,6 +1,7 @@
-import { useState, useEffect, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
@@ -25,9 +26,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
-import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.ts'
-import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.ts'
+
+import type { AeTaxonomyFilter } from '../../../../gql/graphql.ts'
 
 import styles from './index.module.css'
 
@@ -42,32 +42,42 @@ interface ApsQueryResult {
 
 interface AdressesQueryResult {
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 
 interface ListsQueryResult {
   allApBearbstandWertes: {
-    nodes: Array<{
-      value: ApBearbstandWerteCode
+    nodes: {
+      value: number
       label: string
-    }>
+    }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{
-      value: ApUmsetzungWerteCode
+    nodes: {
+      value: number
       label: string
-    }>
+    }[]
   }
 }
 
 interface AeTaxonomiesByIdQueryResult {
-  aeTaxonomyById: {
-    artname: string
-  }
+  aeTaxonomyById?: {
+    artname: string | null
+  } | undefined
+}
+
+interface ApFilterRow {
+  id?: string | undefined
+  artId: string | null
+  bearbeitung: number | null
+  startJahr: number | null
+  umsetzung: number | null
+  bearbeiter: string | null
+  ekfBeobachtungszeitpunkt: string | null
 }
 
 export const ApFilter = () => {
@@ -83,6 +93,7 @@ export const ApFilter = () => {
   useEffect(() => {
     if (dataFilter.ap.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.ap.length])
@@ -98,34 +109,35 @@ export const ApFilter = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      // errors are thrown above, so data is defined
+      return result.data as ApsQueryResult
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const { data: dataAdresses } = useQuery({
+  const { data: dataAdresses } = useSuspenseQuery({
     queryKey: ['adresses'],
     queryFn: async () => {
       const result = await apolloClient.query<AdressesQueryResult>({
         query: queryAdresses,
       })
       if (result.error) throw result.error
-      return result
+      // errors are thrown above, so data is defined
+      return result.data as AdressesQueryResult
     },
-    suspense: true,
     staleTime: Infinity, // This data rarely changes
   })
 
-  const { data: dataLists } = useQuery({
+  const { data: dataLists } = useSuspenseQuery({
     queryKey: ['apFilterLists'],
     queryFn: async () => {
       const result = await apolloClient.query<ListsQueryResult>({
         query: queryLists,
       })
       if (result.error) throw result.error
-      return result
+      // errors are thrown above, so data is defined
+      return result.data as ListsQueryResult
     },
-    suspense: true,
     staleTime: Infinity, // This data rarely changes
   })
 
@@ -135,26 +147,26 @@ export const ApFilter = () => {
       const result = await apolloClient.query<AeTaxonomiesByIdQueryResult>({
         query: queryAeTaxonomiesById,
         variables: {
-          id: dataFilter.ap?.[activeTab]?.artId,
+          id: dataFilter.ap?.[activeTab]?.artId ?? '',
           run: !!dataFilter.ap?.[activeTab]?.artId,
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     enabled: !!dataFilter.ap?.[activeTab]?.artId,
     staleTime: Infinity, // Keep data fresh until artId changes
   })
 
   const artname =
-    !!dataFilter.ap?.[activeTab]?.artId ?
-      (dataAeTaxonomiesById?.data?.aeTaxonomyById?.artname ?? '')
+    dataFilter.ap?.[activeTab]?.artId ?
+      (dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? '')
     : ''
 
-  const row = dataFilter.ap[activeTab]
+  const row = dataFilter.ap[activeTab] as ApFilterRow | undefined
 
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     setDataFilterValue({
@@ -166,7 +178,7 @@ export const ApFilter = () => {
   }
 
   const aeTaxonomiesFilter = (inputValue: string) => {
-    let filter: any = { apByArtIdExists: true }
+    const filter: AeTaxonomyFilter = { apByArtIdExists: true }
     if (inputValue) filter.artname = { includesInsensitive: inputValue }
     if (nurApFilter) filter.apByArtId = { bearbeitung: { in: [1, 2, 3] } }
     return filter
@@ -191,11 +203,8 @@ export const ApFilter = () => {
         <FilterTitle
           title="Art"
           table="ap"
-          totalNr={apsData?.data?.allAps?.totalCount ?? '...'}
-          filteredNr={apsData?.data?.filteredAps?.totalCount ?? '...'}
-          // need to pass row even though not used
-          // to ensure title re-renders an change of row
-          row={row}
+          totalNr={apsData?.allAps?.totalCount ?? '...'}
+          filteredNr={apsData?.filteredAps?.totalCount ?? '...'}
           activeTab={activeTab}
         />
         {showFilterComments && (
@@ -224,7 +233,9 @@ export const ApFilter = () => {
               key={`${row?.id}artId`}
               field="artId"
               valueLabelPath="aeTaxonomyByArtId.artname"
+              valueLabel={undefined}
               label="Art (das namensgebende Taxon)"
+              labelSize={undefined}
               row={{
                 ...row,
                 ...{ aeTaxonomyByArtId: { artname } },
@@ -232,13 +243,13 @@ export const ApFilter = () => {
               query={queryAeTaxonomies}
               filter={aeTaxonomiesFilter}
               queryNodesName="allAeTaxonomies"
-              value={row?.artId}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <RadioButtonGroupWithInfo
               key={`${row?.id}bearbeitung`}
               name="bearbeitung"
-              dataSource={dataLists?.data?.allApBearbstandWertes?.nodes ?? []}
+              dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
               popover={
                 <div className={styles.popover}>
                   <div className={styles.title}>Legende</div>
@@ -253,8 +264,9 @@ export const ApFilter = () => {
                 </div>
               }
               label="Aktionsplan"
-              value={row?.bearbeitung}
+              value={row?.bearbeitung as unknown as string}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="startJahr"
@@ -262,12 +274,13 @@ export const ApFilter = () => {
               type="number"
               value={row?.startJahr}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <div className={styles.fieldContainer}>
               <RadioButtonGroupWithInfo
                 key={`${row?.id}umsetzung`}
                 name="umsetzung"
-                dataSource={dataLists?.data?.allApUmsetzungWertes?.nodes ?? []}
+                dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                 popover={
                   <div className={styles.popover}>
                     <div className={styles.title}>Legende</div>
@@ -289,15 +302,16 @@ export const ApFilter = () => {
                   </div>
                 }
                 label="Stand Umsetzung"
-                value={row?.umsetzung}
+                value={row?.umsetzung as unknown as string}
                 saveToDb={saveToDb}
+                error={undefined}
               />
             </div>
             <Select
               key={`${row?.id}bearbeiter`}
               name="bearbeiter"
               label="Verantwortlich"
-              options={dataAdresses?.data?.allAdresses?.nodes ?? []}
+              options={dataAdresses?.allAdresses?.nodes ?? []}
               value={row?.bearbeiter}
               saveToDb={saveToDb}
             />
@@ -307,6 +321,7 @@ export const ApFilter = () => {
               type="text"
               value={row?.ekfBeobachtungszeitpunkt}
               saveToDb={saveToDb}
+              error={undefined}
             />
           </div>
         </div>

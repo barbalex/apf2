@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
+import type { ReactNode } from 'react'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -23,17 +24,23 @@ import {
   setMapBeobDetailsOpenAtom,
 } from '../../../../../store/index.ts'
 
-import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+import type { BeobId } from '../../../../../models/apflora/index.ts'
 
 import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 import styles from './index.module.css'
 
+interface BeobRow {
+  id: BeobId
+  data: string | null
+  absenz: boolean | null
+}
+
 interface BeobByIdQueryResult {
-  beobById: {
-    id: BeobId
-    data: string | null
-    [key: string]: any
-  }
+  beobById: BeobRow | null
+}
+
+interface DataProps {
+  id: BeobId
 }
 
 const topFieldNames = [
@@ -44,7 +51,7 @@ const topFieldNames = [
   'locality_descript',
 ]
 
-export const Data = ({ id }) => {
+export const Data = ({ id }: DataProps) => {
   const apolloClient = useApolloClient()
 
   const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
@@ -52,12 +59,12 @@ export const Data = ({ id }) => {
 
   const beobDetailsOpen = useAtomValue(mapBeobDetailsOpenAtom)
   const setBeobDetailsOpen = useSetAtom(setMapBeobDetailsOpenAtom)
-  const onClickDetails = (event) => setBeobDetailsOpen(!beobDetailsOpen)
+  const onClickDetails = () => setBeobDetailsOpen(!beobDetailsOpen)
 
   // use existing sorting if available and no own has been set yet
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
 
-  const sortFn = (a, b) => {
+  const sortFn = (a: [string, ReactNode], b: [string, ReactNode]) => {
     const keyA = a[0]
     const keyB = b[0]
     const indexOfA = sortedBeobFields.indexOf(keyA)
@@ -78,9 +85,9 @@ export const Data = ({ id }) => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['beobByIdQueryForBeob', id],
-    queryFn: async () =>
-      apolloClient.query({
-        query: gql`
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobByIdQueryResult>({
+        query: dynamicGql`
           query beobByIdQueryForBeobLayer($id: UUID!) {
             beobById(id: $id) {
               ...BeobFields
@@ -91,25 +98,28 @@ export const Data = ({ id }) => {
         variables: {
           id,
         },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  const row = data?.data?.beobById ?? {}
-  const rowData = row.data ? JSON.parse(row.data) : {}
+  const row = data?.beobById ?? null
+  const rowData: Record<string, ReactNode> = row?.data ? JSON.parse(row.data) : {}
 
   const topFields = Object.entries(rowData)
-    .filter(([key, value]) => exists(value))
+    .filter(([, value]) => exists(value))
     .filter(([key]) => topFieldNames.includes(key))
     .sort(sortFn)
 
   const fields = Object.entries(rowData)
-    .filter(([key, value]) => exists(value))
+    .filter(([, value]) => exists(value))
     .sort(sortFn)
   const keys = fields.map((f) => f[0])
 
   useEffect(() => {
     // add missing keys to sortedBeobFields
-    const additionalKeys = []
+    const additionalKeys: string[] = []
     for (const key of keys) {
       if (!sortedBeobFields.includes(key)) {
         additionalKeys.push(key)
@@ -120,14 +130,14 @@ export const Data = ({ id }) => {
     // console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
   }, [keys, setSortedBeobFields, sortedBeobFields])
 
-  const moveField = (dragIndex, hoverIndex) => {
+  const moveField = (dragIndex: number, hoverIndex: number) => {
     // get item from keys
     const itemBeingDragged = keys[dragIndex]
     const itemBeingHovered = keys[hoverIndex]
     // move from dragIndex to hoverIndex
     // in sortedBeobFields
-    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged)
-    const toIndex = sortedBeobFields.indexOf(itemBeingHovered)
+    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged ?? '')
+    const toIndex = sortedBeobFields.indexOf(itemBeingHovered ?? '')
     // catch some edge cases
     if (fromIndex === toIndex) return
     if (fromIndex === -1) return
@@ -137,7 +147,7 @@ export const Data = ({ id }) => {
     setSortedBeobFields(newArray)
   }
 
-  const renderField = (field, index) => (
+  const renderField = (field: [string, ReactNode], index: number) => (
     <Field
       key={field[0]}
       label={field[0]}

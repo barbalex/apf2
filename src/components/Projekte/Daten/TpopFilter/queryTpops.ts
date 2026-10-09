@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryTpops = gql`
+export const queryTpops = graphql(`
   query tpopsQuery($filteredFilter: TpopFilter!, $allFilter: TpopFilter!) {
     allTpops(filter: $allFilter) {
       totalCount
@@ -9,4 +9,4 @@ export const queryTpops = gql`
       totalCount
     }
   }
-`
+`)

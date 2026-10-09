@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 
 import { tpopkontr } from '../../../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   query tpopkontrByIdForDelete($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopkontrFields

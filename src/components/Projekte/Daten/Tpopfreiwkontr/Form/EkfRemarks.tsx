@@ -1,7 +1,14 @@
 import { TextField2 } from '../../../../shared/TextField2.tsx'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 import styles from './EkfRemarks.module.css'
 
-export const EkfRemarks = ({ saveToDb, row, errors }) => (
+interface EkfRemarksProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const EkfRemarks = ({ saveToDb, row, errors }: EkfRemarksProps) => (
   <div className={styles.container}>
     <div className={styles.label}>
       Mitteilungen zwischen AV/Topos und Freiwilligen
@@ -10,6 +17,7 @@ export const EkfRemarks = ({ saveToDb, row, errors }) => (
       <TextField2
         key={`${row?.id}ekfBemerkungen`}
         name="ekfBemerkungen"
+        label={undefined}
         row={row}
         type="text"
         multiLine

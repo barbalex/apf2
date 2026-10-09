@@ -1,20 +1,23 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { ApId } from '../../../../models/apflora/public/ApId.ts'
-import type { PopId } from '../../../../models/apflora/public/PopId.ts'
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
+import type {
+  ApId,
+  PopId,
+  TpopId,
+} from '../../../../models/apflora/index.ts'
 
 import styles from './WollmilchsauSingle.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 
 interface ApByArtIdQueryResult {
   apByArtId: {
@@ -157,6 +160,7 @@ interface TPopErsteUndLetzteKontrolleFilteredQueryResult {
           letzteKontrolleVegetationshoeheMaximum: number | null
           letzteKontrolleVegetationshoeheMittel: number | null
           letzteKontrolleGefaehrdung: string | null
+          letzteKontrolleChanged: string | null
           letzteKontrolleCreatedAt: string | null
           letzteKontrolleUpdatedAt: string | null
           letzteKontrolleChangedBy: string | null
@@ -186,7 +190,7 @@ export const WollmilchsauSingle = () => {
 
   const [ewmMessage, setEwmMessage] = useState('')
 
-  const aeTaxonomiesfilter = (inputValue) =>
+  const aeTaxonomiesfilter = (inputValue: string) =>
     inputValue ?
       {
         artname: { includesInsensitive: inputValue },
@@ -201,24 +205,25 @@ export const WollmilchsauSingle = () => {
         row={{}}
         field="ewm"
         valueLabelPath="aeTaxonomyByArtId.artname"
+        valueLabel={undefined}
         label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
         labelSize={14}
-        saveToDb={async (e) => {
-          const aeId = e.target.value
+        saveToDb={async (e: SaveToDbEvent) => {
+          const aeId = e.target.value as string | null
           if (aeId === null) return
           setEwmMessage(
             'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
           )
-          let result: { data: ApByArtIdQueryResult }
+          let result: { data?: ApByArtIdQueryResult | undefined } | undefined
           try {
-            result = await apolloClient.query({
-              query: gql`
+            result = await apolloClient.query<ApByArtIdQueryResult>({
+              query: graphql(`
                 query apByArtIdQuery($aeId: UUID!) {
                   apByArtId(artId: $aeId) {
                     id
                   }
                 }
-              `,
+              `),
               variables: { aeId },
             })
           } catch (error) {
@@ -227,12 +232,10 @@ export const WollmilchsauSingle = () => {
               options: { variant: 'error' },
             })
           }
-          const apId = result.data?.apByArtId?.id
-          const {
-            data,
-          }: { data: TPopErsteUndLetzteKontrolleFilteredQueryResult } =
-            await apolloClient.query({
-              query: gql`
+          const apId = result?.data?.apByArtId?.id
+          const { data } =
+            await apolloClient.query<TPopErsteUndLetzteKontrolleFilteredQueryResult>({
+              query: graphql(`
                 query tpopErsteUndLetzteKontrolleUndLetzterTpopbersFilteredQuery(
                   $apId: UUID!
                 ) {
@@ -397,7 +400,7 @@ export const WollmilchsauSingle = () => {
                     }
                   }
                 }
-              `,
+              `),
               variables: { apId },
             })
           const rows = (data?.allTpops?.nodes ?? []).map((n) => ({
@@ -822,12 +825,12 @@ export const WollmilchsauSingle = () => {
               },
             })
           }
-          exportModule({
+          void exportModule({
             data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
             fileName: 'anzkontrinklletzterundletztertpopber',
           })
         }}
-        query={gql`
+        query={graphql(`
           query allAeTaxonomiesQuery($filter: AeTaxonomyFilter!) {
             allAeTaxonomies(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
               nodes {
@@ -836,7 +839,7 @@ export const WollmilchsauSingle = () => {
               }
             }
           }
-        `}
+        `)}
         filter={aeTaxonomiesfilter}
         queryNodesName="allAeTaxonomies"
         error={ewmMessage}

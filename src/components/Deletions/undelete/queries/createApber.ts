@@ -1,15 +1,14 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { apber } from '../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   mutation createApberForUndelete(
     $id: UUID
     $jahr: Int
     $situation: String
     $vergleichVorjahrGesamtziel: String
     $beurteilung: Int
-    $veraenderungZumVorjahr: String
     $apberAnalyse: String
     $konsequenzenUmsetzung: String
     $konsequenzenErfolgskontrolle: String
@@ -31,7 +30,6 @@ export default gql`
           situation: $situation
           vergleichVorjahrGesamtziel: $vergleichVorjahrGesamtziel
           beurteilung: $beurteilung
-          veraenderungZumVorjahr: $veraenderungZumVorjahr
           apberAnalyse: $apberAnalyse
           konsequenzenUmsetzung: $konsequenzenUmsetzung
           konsequenzenErfolgskontrolle: $konsequenzenErfolgskontrolle

@@ -1,13 +1,23 @@
 import { exists } from '../../../../modules/exists.ts'
 import styles from './CustomTooltip.module.css'
 
+interface CustomTooltipProps {
+  payload?: {
+    dataKey: string
+    value: number
+  }[]
+  label?: string | number
+  active?: boolean
+  color: Record<string, string>
+  reverse?: boolean
+}
+
 export const CustomTooltip = ({
   payload = [],
   label,
-  active,
   color,
   reverse,
-}) => {
+}: CustomTooltipProps) => {
   const data = reverse ? payload : (payload?.reverse() ?? [])
 
   return (

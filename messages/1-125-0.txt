@@ -1,0 +1,1 @@
+Ab Version 1.125.0: Im Navigationsbaum werden bei Anpflanzungen die Anzahl Pflanzen angezeigt ([Issue #658](https://github.com/barbalex/apf2/issues/658))

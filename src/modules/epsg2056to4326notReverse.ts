@@ -6,5 +6,7 @@ proj4.defs(
 )
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
-export const epsg2056to4326notReverse = (x, y) =>
-  proj4('EPSG:2056', 'EPSG:4326', [+x, +y])
+export const epsg2056to4326notReverse = (
+  x: number | string,
+  y: number | string,
+): number[] => proj4('EPSG:2056', 'EPSG:4326', [+x, +y])

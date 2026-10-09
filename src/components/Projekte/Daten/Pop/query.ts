@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { pop } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query popByIdForPopFormQuery($id: UUID!) {
     popById(id: $id) {
       ...PopFields

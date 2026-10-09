@@ -5,11 +5,24 @@ import {
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
 } from '../../../store/index.ts'
+import type { TpopRow } from './tableTypes.ts'
 
 import styles from './CellForValue.module.css'
 import indexStyles from './index.module.css'
 
-export const CellForValue = ({ field, width, row, isOdd, firstChild }) => {
+export const CellForValue = ({
+  field,
+  width,
+  row,
+  isOdd,
+  firstChild,
+}: {
+  field: Record<string, unknown>
+  width: number | undefined
+  row: TpopRow
+  isOdd: boolean
+  firstChild: boolean
+}) => {
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
@@ -37,7 +50,7 @@ export const CellForValue = ({ field, width, row, isOdd, firstChild }) => {
       style={tableCellStyle}
     >
       <div className={styles.container}>
-        <div>{value}</div>
+        <div>{value as React.ReactNode}</div>
       </div>
     </div>
   )

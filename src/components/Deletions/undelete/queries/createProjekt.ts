@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export default gql`
+export default graphql(`
   mutation createProjektForUndelete($id: UUID, $name: String) {
     createProjekt(input: { projekt: { id: $id, name: $name } }) {
       projekt {
@@ -9,4 +9,4 @@ export default gql`
       }
     }
   }
-`
+`)

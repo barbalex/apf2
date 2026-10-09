@@ -7,13 +7,21 @@ import { PngControl } from './PngControl.tsx'
 
 import styles from './OwnControls.module.css'
 
-export const OwnControls = ({ mapRef }) => {
+interface OwnControlsProps {
+  // passed to enforce rerendering when the sorting of the
+  // active overlays or apflora layers changes
+  activeOverlaysString?: string
+  activeApfloraLayersString?: string
+  mapRef: React.RefObject<HTMLDivElement | null>
+}
+
+export const OwnControls = ({ mapRef }: OwnControlsProps) => {
   /**
    * need to pass the height of the self built controls
    * to move controls built by leaflet when layer menu changes height
    * Beware: If initial value is wrong, map will render twice
    */
-  const onResize = ({ height }) => {
+  const onResize = ({ height }: { height: number | null }) => {
     document.documentElement.style.setProperty(
       '--map-control-height',
       `${height ?? 167}px`,

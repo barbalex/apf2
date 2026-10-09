@@ -1,10 +1,17 @@
 import { TextField2 } from '../../../../shared/TextField2.tsx'
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 import veghoeheImg from './veghoehe.png'
 
 import styles from './More.module.css'
 
-export const More = ({ saveToDb, row, errors }) => {
+interface MoreProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const More = ({ saveToDb, row, errors }: MoreProps) => {
   const jungpflanzenVorhandenOnSaveFalse = () => {
     const fakeEvent = {
       target: {
@@ -12,7 +19,7 @@ export const More = ({ saveToDb, row, errors }) => {
         value: row?.jungpflanzenVorhanden === false ? null : false,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   const jungpflanzenVorhandenOnSaveTrue = () => {
@@ -22,7 +29,7 @@ export const More = ({ saveToDb, row, errors }) => {
         value: row?.jungpflanzenVorhanden === true ? null : true,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   return (
@@ -32,6 +39,7 @@ export const More = ({ saveToDb, row, errors }) => {
         <TextField2
           key={`${row?.id}flaecheUeberprueft`}
           name="flaecheUeberprueft"
+          label={undefined}
           row={row}
           type="number"
           saveToDb={saveToDb}
@@ -52,8 +60,10 @@ export const More = ({ saveToDb, row, errors }) => {
         <RadioButton
           key={`${row?.id}${row?.jungpflanzenVorhanden}jungpflanzenVorhanden1`}
           name="jungpflanzenVorhanden"
+          label={undefined}
           value={row?.jungpflanzenVorhanden}
           saveToDb={jungpflanzenVorhandenOnSaveTrue}
+          error={undefined}
         />
       </div>
       <div className={styles.jungPflLabel2}>nein</div>
@@ -64,6 +74,7 @@ export const More = ({ saveToDb, row, errors }) => {
         <RadioButton
           key={`${row?.id}jungpflanzenVorhanden2`}
           name="jungpflanzenVorhandenNein"
+          label={undefined}
           value={row?.jungpflanzenVorhanden === false}
           saveToDb={jungpflanzenVorhandenOnSaveFalse}
           error={errors?.jungpflanzenVorhanden}
@@ -82,6 +93,7 @@ export const More = ({ saveToDb, row, errors }) => {
         <TextField2
           key={`${row?.id}vegetationshoeheMaximum`}
           name="vegetationshoeheMaximum"
+          label={undefined}
           row={row}
           type="number"
           saveToDb={saveToDb}
@@ -93,6 +105,7 @@ export const More = ({ saveToDb, row, errors }) => {
         <TextField2
           key={`${row?.id}vegetationshoeheMittel`}
           name="vegetationshoeheMittel"
+          label={undefined}
           row={row}
           type="number"
           saveToDb={saveToDb}

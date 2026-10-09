@@ -12,8 +12,12 @@ import {
   ekPlanHoveredAtom,
   ekPlanResetHoveredAtom,
 } from '../../../../store/index.ts'
-import { query } from './query.ts'
 import { yearColumnWidth } from './yearColumnWidth.ts'
+import type {
+  RowTpopkontrNode,
+  RowTpopmassnNode,
+  TpopRow,
+} from '../tableTypes.ts'
 
 import indexStyles from '../index.module.css'
 
@@ -26,6 +30,15 @@ export const CellForYear = ({
   eks,
   ekfs,
   ansiedlungs,
+}: {
+  year: number
+  row: TpopRow
+  isOdd: boolean
+  ekPlan: boolean
+  ekfPlan: boolean
+  eks: RowTpopkontrNode[]
+  ekfs: RowTpopkontrNode[]
+  ansiedlungs: RowTpopmassnNode[]
 }) => {
   const showEk = useAtomValue(ekPlanShowEkAtom)
   const showEkf = useAtomValue(ekPlanShowEkfAtom)
@@ -40,9 +53,9 @@ export const CellForYear = ({
 
   const onMouseEnter = () => setHovered({ year, tpopId: row.id })
   const clicked = yearClicked.year === year && yearClicked.tpopId === row.id
-  const einheits = einheitsByAp[row.apId]
+  const einheits = row.apId ? einheitsByAp[row.apId] : undefined
 
-  const onClickCell = (event) => {
+  const onClickCell = (event: React.MouseEvent) => {
     setYearClicked({
       year,
       tpopId: row.id,

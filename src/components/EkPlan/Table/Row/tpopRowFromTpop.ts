@@ -4,8 +4,11 @@ import {
   store,
   ekPlanFieldsAtom,
 } from '../../../../store/index.ts'
+import type { RowTpopNode, TpopRow } from '../tableTypes.ts'
 
-export const tpopRowFromTpop = (tpop) => {
+export const tpopRowFromTpop = (
+  tpop: RowTpopNode | null | undefined,
+): TpopRow => {
   const fieldsShown = store.get(ekPlanFieldsAtom)
 
   return tpop ?
@@ -94,9 +97,9 @@ export const tpopRowFromTpop = (tpop) => {
             link: {
               ...fields.link,
               value: `${appBaseUrl()}Daten/Projekte/${
-                tpop.popByPopId.apByApId.projId
-              }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
-                tpop.popByPopId.id
+                tpop.popByPopId?.apByApId?.projId
+              }/Arten/${tpop.popByPopId?.apByApId?.id}/Populationen/${
+                tpop.popByPopId?.id
               }/Teil-Populationen/${tpop.id}`,
             },
           }
@@ -145,5 +148,5 @@ export const tpopRowFromTpop = (tpop) => {
         : {}),
         yearTitle: fields.yearTitle,
       }
-    : {}
+    : ({} as TpopRow)
 }

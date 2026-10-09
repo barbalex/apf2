@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query tpopmassnsFilterQuery(
     $filteredFilter: TpopmassnFilter!
     $allFilter: TpopmassnFilter!
@@ -34,4 +34,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

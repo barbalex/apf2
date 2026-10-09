@@ -1,12 +1,17 @@
-import { gql } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import type { TpopkontrFieldsFragment } from '../../gql/graphql.ts'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontr } from '../../components/shared/fragments.ts'
 
-export const queryTpopKontrById = gql`
+export const queryTpopKontrById = dynamicGql`
   query copyEkToQueryForEk2($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopkontrFields
     }
   }
   ${tpopkontr}
-`
+` as unknown as TypedDocumentNode<
+  { tpopkontrById?: TpopkontrFieldsFragment | null },
+  { id: string }
+>

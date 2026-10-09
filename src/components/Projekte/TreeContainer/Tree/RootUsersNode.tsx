@@ -1,4 +1,4 @@
-import { useUsersNavData } from '../../../../modules/useUsersNavData'
+import { useUsersNavData } from '../../../../modules/useUsersNavData.ts'
 
 export const RootUsersNode = () => {
   const navData = useUsersNavData()

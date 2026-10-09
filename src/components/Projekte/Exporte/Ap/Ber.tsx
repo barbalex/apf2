@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
+import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 
-import {
+import type {
   ApId,
   ApberId,
   AdresseId,
   UserId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -20,7 +21,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApbersQueryResult {
   allApbers: {
-    nodes: Array<{
+    nodes: {
       apByApId?: {
         id: ApId
         aeTaxonomyByArtId?: {
@@ -38,7 +39,6 @@ interface ApbersQueryResult {
         id: number
         text?: string
       }
-      veraenderungZumVorjahr?: string
       apberAnalyse?: string
       konsequenzenUmsetzung?: string
       konsequenzenErfolgskontrolle?: string
@@ -57,7 +57,13 @@ interface ApbersQueryResult {
         id: AdresseId
         name?: string
       }
-    }>
+    }[]
+  }
+  allApErfkritWertes: {
+    nodes: {
+      code: number
+      sort: number | null
+    }[]
   }
 }
 
@@ -65,14 +71,14 @@ export const Ber = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApBer = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApbersQueryResult }
+    let result: { data?: ApbersQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApbersQueryResult>({
-        query: gql`
+        query: graphql(`
           query apbersForExportQuery {
             allApbers {
               nodes {
@@ -93,7 +99,6 @@ export const Ber = () => {
                   id
                   text
                 }
-                veraenderungZumVorjahr
                 apberAnalyse
                 konsequenzenUmsetzung
                 konsequenzenErfolgskontrolle
@@ -114,8 +119,14 @@ export const Ber = () => {
                 }
               }
             }
+            allApErfkritWertes {
+              nodes {
+                code
+                sort
+              }
+            }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -126,7 +137,21 @@ export const Ber = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allApbers?.nodes ?? []).map((z) => ({
+    // the export contains every apber, so the beurteilungen of the
+    // previous years are already in this result and need no extra query
+    const apbers = result?.data?.allApbers?.nodes ?? []
+    const sortsByCode = new Map(
+      (result?.data?.allApErfkritWertes?.nodes ?? []).map((w) => [
+        w.code,
+        w.sort,
+      ]),
+    )
+    const beurteilungByApIdAndJahr = new Map(
+      apbers
+        .filter((z) => z.jahr != null)
+        .map((z) => [`${z.apId}|${z.jahr}`, z.beurteilung] as const),
+    )
+    const rows = apbers.map((z) => ({
       id: z.id,
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
@@ -135,7 +160,15 @@ export const Ber = () => {
       vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
       beurteilung: z.beurteilung,
       beurteilung_decodiert: z?.apErfkritWerteByBeurteilung?.text ?? '',
-      veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
+      veraenderung_zum_vorjahr: veraenderungZumVorjahr({
+        beurteilung: z.beurteilung,
+        beurteilungVorjahr:
+          z.jahr == null
+            ? null
+            : (beurteilungByApIdAndJahr.get(`${z.apId}|${z.jahr - 1}`) ??
+              null),
+        sortsByCode,
+      }),
       apber_analyse: z.apberAnalyse,
       konsequenzen_umsetzung: z.konsequenzenUmsetzung,
       konsequenzen_erfolgskontrolle: z.konsequenzenErfolgskontrolle,
@@ -161,7 +194,7 @@ export const Ber = () => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: sortBy(rows, ['artname', 'jahr']),
       fileName: 'Jahresberichte',
     })
@@ -171,7 +204,7 @@ export const Ber = () => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickApBer}
+      onClick={() => void onClickApBer()}
       color="inherit"
       disabled={!!queryState}
     >

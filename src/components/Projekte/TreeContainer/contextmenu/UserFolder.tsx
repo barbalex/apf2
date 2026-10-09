@@ -8,6 +8,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const closeLowerNodesData = {
   action: 'closeLowerNodes',
@@ -17,7 +19,11 @@ const insertData = {
   table: 'user',
 }
 
-export const UserFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const UserFolder = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
 
   return (

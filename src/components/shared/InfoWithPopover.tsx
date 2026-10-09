@@ -1,17 +1,25 @@
 import { useState } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import Popover from '@mui/material/Popover'
 import { MdInfoOutline } from 'react-icons/md'
 
 import styles from './InfoWithPopover.module.css'
 
-export const InfoWithPopover = ({ children, name }) => {
-  const [popupOpen, changePopupOpen] = useState(false)
-  const [popupAnchorEl, changePopupAnchorEl] = useState(null)
+export interface InfoWithPopoverProps {
+  children?: ReactNode
+  name?: string
+}
 
-  const onClickFontIcon = (event) => {
+export const InfoWithPopover = ({ children, name }: InfoWithPopoverProps) => {
+  const [popupOpen, changePopupOpen] = useState(false)
+  const [popupAnchorEl, changePopupAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
+
+  const onClickFontIcon = (event: MouseEvent<SVGElement>) => {
     event.preventDefault()
     changePopupOpen(!popupOpen)
-    changePopupAnchorEl(event.currentTarget)
+    changePopupAnchorEl(event.currentTarget as unknown as HTMLElement)
   }
 
   const onRequestClosePopover = () => changePopupOpen(false)

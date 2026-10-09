@@ -2,9 +2,16 @@ import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+
+import type { JberQueryResult } from './types.ts'
+
 import styles from './AvList.module.css'
 
-export const AvList = ({ data }) => {
+interface AvListProps {
+  data?: JberQueryResult | undefined
+}
+
+export const AvList = ({ data }: AvListProps) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const avGrouped = groupBy(
     nodes.map((ap) => ({
@@ -20,7 +27,7 @@ export const AvList = ({ data }) => {
       <div className={styles.container}>
         <p className={styles.title}>Artverantwortliche</p>
         {avs.map((av) => {
-          const array = sortBy(avGrouped[av], ['art'])
+          const array = sortBy(avGrouped[av] ?? [], ['art'])
 
           return array.map((o, i) => {
             if (i === 0) {

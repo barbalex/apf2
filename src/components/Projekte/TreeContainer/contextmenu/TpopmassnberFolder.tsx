@@ -8,13 +8,19 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
   table: 'tpopmassnber',
 }
 
-export const TpopmassnberFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const TpopmassnberFolder = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
 
   return (

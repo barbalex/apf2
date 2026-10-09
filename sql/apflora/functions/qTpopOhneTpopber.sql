@@ -35,7 +35,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_tpopber(projid uuid, apid uuid, b
           on apflora.pop.id = apflora.tpop.pop_id
         on apflora.tpop.id = apflora.tpopkontr.tpop_id
       WHERE
-        apflora.tpopkontr.typ IN ('Freiwilligen-Erfolgskontrolle','Zwischenbeurteilung')
+        apflora.tpopkontr.typ IN ('Freiwilligen-Kontrolle','Kontrolle')
         and apflora.tpopkontr.jahr = $3
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1

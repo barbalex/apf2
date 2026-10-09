@@ -9,21 +9,23 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
 
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
 
     /* Linting */
     "strict": true,
+    "ignoreDeprecations": "6.0",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*"],

@@ -7,10 +7,16 @@ const mdParser = new MarkdownIt({ breaks: true })
 
 // setting tabIndex on Presenter to make it focusable
 // see: https://stackoverflow.com/a/16261525/712005
-export const Presenter = ({ value, label }) => (
+export const Presenter = ({
+  value,
+  label,
+}: {
+  value?: string | null | undefined
+  label?: string | undefined
+}) => (
   <div
     className={styles.container}
-    tabIndex="0"
+    tabIndex={0}
   >
     <Label label={label} />
     <div dangerouslySetInnerHTML={{ __html: mdParser.render(value || '') }} />

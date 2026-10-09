@@ -1,20 +1,37 @@
 import { useRef } from 'react'
+import type { ReactNode } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import styles from './Field.module.css'
 
 const ItemTypes = { CARD: 'card' }
 
-export const Field = ({ label, value, index, moveField }) => {
-  const ref = useRef(null)
-  const [{ handlerId }, drop] = useDrop({
+interface FieldProps {
+  label: string
+  value: ReactNode
+  index: number
+  moveField: (dragIndex: number, hoverIndex: number) => void
+}
+
+interface DragItem {
+  id: string
+  index: number
+}
+
+export const Field = ({ label, value, index, moveField }: FieldProps) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: string | symbol | null }
+  >({
     accept: ItemTypes.CARD,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item, monitor) {
+    hover(item: DragItem, monitor) {
       if (!ref.current) {
         return
       }
@@ -32,7 +49,7 @@ export const Field = ({ label, value, index, moveField }) => {
       // Determine mouse position
       const clientOffset = monitor.getClientOffset()
       // Get pixels to the top
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
+      const hoverClientY = (clientOffset?.y ?? 0) - hoverBoundingRect.top
       // Only perform the move when the mouse has crossed half of the items height
       // When dragging downwards, only move when the cursor is below 50%
       // When dragging upwards, only move when the cursor is above 50%
@@ -53,7 +70,11 @@ export const Field = ({ label, value, index, moveField }) => {
       item.index = hoverIndex
     },
   })
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<
+    DragItem,
+    void,
+    { isDragging: boolean }
+  >({
     type: ItemTypes.CARD,
     item: () => {
       return { id: label, index }
@@ -63,6 +84,7 @@ export const Field = ({ label, value, index, moveField }) => {
     }),
   })
   const opacity = isDragging ? 0 : 1
+  // eslint-disable-next-line react-hooks/refs -- react-dnd connectors must be attached during render
   drag(drop(ref))
 
   return (

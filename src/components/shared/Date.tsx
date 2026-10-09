@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import type { ChangeEvent, FocusEvent } from 'react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -12,6 +13,22 @@ import DatePicker from 'react-datepicker'
 
 import styles from './Date.module.css'
 
+export interface DateFieldProps {
+  value?: string | null | undefined
+  name: string
+  label?: string | undefined
+  saveToDb: (event: {
+    target: { name?: string; value: string | null }
+  }) => void | Promise<void>
+  error?: string | null | undefined
+  popperPlacement?: 'bottom' | 'top' | 'left' | 'right'
+}
+
+const formatForDisplay = (value: string | null | undefined): string => {
+  const dt = value ? DateTime.fromSQL(value) : null
+  return dt?.isValid ? dt.toFormat('dd.MM.yyyy') : ''
+}
+
 export const DateField = ({
   value: valuePassed,
   name,
@@ -19,27 +36,26 @@ export const DateField = ({
   saveToDb,
   error,
   popperPlacement = 'bottom',
-}) => {
-  const [stateValue, setStateValue] = useState(valuePassed)
+}: DateFieldProps) => {
+  const [stateValue, setStateValue] = useState<string | null | undefined>(
+    valuePassed,
+  )
   const [isPickerOpen, setIsPickerOpen] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const datePickerRef = useRef(null)
+  const [inputValue, setInputValue] = useState(() =>
+    formatForDisplay(valuePassed),
+  )
+  const datePickerRef = useRef<DatePicker>(null)
 
-  useEffect(() => {
+  const [prevValuePassed, setPrevValuePassed] = useState(valuePassed)
+  // adjust state when the value changes from outside
+  if (prevValuePassed !== valuePassed) {
+    setPrevValuePassed(valuePassed)
     setStateValue(valuePassed)
-    // Format the value for display in the input field
-    if (valuePassed) {
-      const dt = DateTime.fromSQL(valuePassed)
-      if (dt.isValid) {
-        setInputValue(dt.toFormat('dd.MM.yyyy'))
-      }
-    } else {
-      setInputValue('')
-    }
-  }, [valuePassed])
+    setInputValue(formatForDisplay(valuePassed))
+  }
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isPickerOpen) {
         setIsPickerOpen(false)
       }
@@ -49,9 +65,9 @@ export const DateField = ({
     return () => document.removeEventListener('keydown', handleEscape)
   }, [isPickerOpen])
 
-  const saveDate = (newValue) => {
+  const saveDate = (newValue: string | null) => {
     setStateValue(newValue)
-    saveToDb({
+    void saveToDb({
       target: {
         value: newValue,
         name,
@@ -59,7 +75,7 @@ export const DateField = ({
     })
   }
 
-  const onChangeDatePicker = (date) => {
+  const onChangeDatePicker = (date: Date | null) => {
     if (date === null) {
       setInputValue('')
       saveDate(null)
@@ -72,11 +88,11 @@ export const DateField = ({
     setIsPickerOpen(false)
   }
 
-  const onChangeInput = (e) => {
+  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
   }
 
-  const onBlurInput = (e) => {
+  const onBlurInput = (e: FocusEvent<HTMLInputElement>) => {
     const dateString = e.target.value.trim()
 
     // If empty, save null and return
@@ -99,9 +115,9 @@ export const DateField = ({
     const dayMonthYearMatch = dateString.match(dayMonthYearPattern)
 
     if (dayMonthYearMatch) {
-      const day = dayMonthYearMatch[1].padStart(2, '0')
-      const month = dayMonthYearMatch[2].padStart(2, '0')
-      const yearInput = dayMonthYearMatch[3]
+      const day = (dayMonthYearMatch[1] ?? '').padStart(2, '0')
+      const month = (dayMonthYearMatch[2] ?? '').padStart(2, '0')
+      const yearInput = dayMonthYearMatch[3] ?? ''
 
       // Expand year based on number of digits
       let year
@@ -125,7 +141,7 @@ export const DateField = ({
       const dayOnlyMatch = dateString.match(dayOnlyPattern)
 
       if (dayOnlyMatch) {
-        const day = dayOnlyMatch[1].padStart(2, '0')
+        const day = (dayOnlyMatch[1] ?? '').padStart(2, '0')
         completedDate = `${day}.${currentMonth}.${currentYear}`
       }
       // Pattern 3: Day and month (d.m or dd.mm) - add current year
@@ -135,8 +151,8 @@ export const DateField = ({
         const dayMonthMatch = dateString.match(dayMonthPattern)
 
         if (dayMonthMatch) {
-          const day = dayMonthMatch[1].padStart(2, '0')
-          const month = dayMonthMatch[2].padStart(2, '0')
+          const day = (dayMonthMatch[1] ?? '').padStart(2, '0')
+          const month = (dayMonthMatch[2] ?? '').padStart(2, '0')
           completedDate = `${day}.${month}.${currentYear}`
         }
       }
@@ -161,8 +177,11 @@ export const DateField = ({
     }
   }
 
-  const isValid = DateTime.fromSQL(stateValue).isValid
-  const selected = isValid ? new Date(DateTime.fromSQL(stateValue)) : null
+  const parsedStateValue =
+    stateValue ? DateTime.fromSQL(stateValue) : null
+  const isValid = parsedStateValue?.isValid ?? false
+  const selected =
+    isValid && parsedStateValue ? new Date(parsedStateValue.toMillis()) : null
 
   return (
     <FormControl variant="standard" className={styles.formControl}>

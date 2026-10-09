@@ -3,7 +3,6 @@ import image002 from './image002.png'
 import image003 from './image003.png'
 import image004 from './image004.png'
 import image005 from './image005.png'
-import image006 from './image006.png'
 
 import desktopStyles from '../../DesktopDocs.module.css'
 

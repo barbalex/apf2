@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query tpopkontrQueryForEkfFilter(
     $filteredFilter: TpopkontrFilter!
     $allFilter: TpopkontrFilter!
@@ -12,4 +12,4 @@ export const query = gql`
       totalCount
     }
   }
-`
+`)

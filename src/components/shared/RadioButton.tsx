@@ -3,9 +3,25 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import type { SaveToDbHandler } from './types.ts'
+
 import styles from './RadioButton.module.css'
 
-export const RadioButton = ({ label, name, value, error, saveToDb }) => {
+export interface RadioButtonProps {
+  label?: string | undefined
+  name: string
+  value?: boolean | null | undefined
+  error?: string | null | undefined
+  saveToDb: SaveToDbHandler
+}
+
+export const RadioButton = ({
+  label,
+  name,
+  value,
+  error,
+  saveToDb,
+}: RadioButtonProps) => {
   const onClickButton = () => {
     const fakeEvent = {
       target: {
@@ -16,7 +32,7 @@ export const RadioButton = ({ label, name, value, error, saveToDb }) => {
     // It is possible to directly click an option after editing an other field
     // this creates a race condition in the two submits which can lead to lost inputs!
     // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
+    setTimeout(() => void saveToDb(fakeEvent))
   }
 
   return (
@@ -37,7 +53,7 @@ export const RadioButton = ({ label, name, value, error, saveToDb }) => {
         data-id={name}
         onClick={onClickButton}
         color="primary"
-        checked={value}
+        checked={value === true}
         className={styles.radio}
       />
       {!!error && (

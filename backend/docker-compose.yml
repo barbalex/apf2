@@ -20,7 +20,7 @@ services:
       # make the Postgres database accessible from outside the Docker container on port 5432
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
       - sik_data:/sik_data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -55,13 +55,14 @@ services:
         "--jwt-token-identifier",
         "auth.jwt_token",
         "--default-role",
-        "postgres",
+        "anon",
         "--jwt-secret",
         "${JWT_SECRET}",
         "--body-size-limit",
         "2MB",
         "--cors",
         "--disable-query-log",
+        "--disable-graphiql",
         "--enable-query-batching",
         "--retry-on-init-fail",
       ]

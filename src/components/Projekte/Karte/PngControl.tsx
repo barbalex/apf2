@@ -4,6 +4,7 @@ import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
 import { MdGetApp } from 'react-icons/md'
 import { useSetAtom } from 'jotai'
+import type { Map as LeafletMap } from 'leaflet'
 
 import { setMapHideControlsAtom } from '../../../store/index.ts'
 
@@ -17,14 +18,26 @@ const options = {
   hideControlContainer: true,
 }
 
+interface EasyPrintControl {
+  addTo: (map: LeafletMap) => EasyPrintControl
+  remove: () => EasyPrintControl
+  printMap: (sizeMode: string, filename: string) => void
+}
+
+// the leaflet-easyprint plugin registers L.easyPrint without typings
+const easyPrint = (window.L as unknown as {
+  easyPrint: (options: Record<string, unknown>) => EasyPrintControl
+}).easyPrint
+
 export const PngControl = () => {
   const setHideMapControls = useSetAtom(setMapHideControlsAtom)
   const map = useMap()
-  const [printPlugin, setPrintPlugin] = useState({})
+  const [printPlugin, setPrintPlugin] = useState<EasyPrintControl | undefined>()
 
   useEffect(() => {
-    const pp = window.L.easyPrint(options)
+    const pp = easyPrint(options)
     pp.addTo(map)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- stores the easyPrint instance for savePng
     setPrintPlugin(pp)
 
     return () => {
@@ -32,9 +45,9 @@ export const PngControl = () => {
     }
   }, [map])
 
-  const onEasyPrintFinished = () => setHideMapControls(false)
-
   useEffect(() => {
+    const onEasyPrintFinished = () => setHideMapControls(false)
+
     map.on('easyPrint-finished', onEasyPrintFinished)
 
     return () => {
@@ -42,10 +55,10 @@ export const PngControl = () => {
     }
   }, [map, setHideMapControls])
 
-  const savePng = (event) => {
+  const savePng = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     setHideMapControls(true)
-    printPlugin.printMap('CurrentSize', 'apfloraKarte')
+    printPlugin?.printMap('CurrentSize', 'apfloraKarte')
   }
 
   return (

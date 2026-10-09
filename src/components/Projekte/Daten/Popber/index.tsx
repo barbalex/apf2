@@ -1,7 +1,8 @@
-import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState } from 'react'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -19,7 +20,7 @@ import type {
   PopberId,
   PopId,
   TpopEntwicklungWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
@@ -42,14 +43,14 @@ interface PopberQueryResult {
     }
   }
   allTpopEntwicklungWertes?: {
-    nodes: Array<{
+    nodes: {
       value: TpopEntwicklungWerteCode
       label: string | null
-    }>
+    }[]
   }
 }
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   popId: 'UUID',
   jahr: 'Int',
   entwicklung: 'Int',
@@ -66,7 +67,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['popber', id],
     queryFn: async () => {
       const result = await apolloClient.query<PopberQueryResult>({
@@ -76,13 +77,14 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.popberById ?? {}
+  const row: Partial<NonNullable<PopberQueryResult['popberById']>> =
+    data?.popberById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -92,7 +94,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updatePopber(
             $id: UUID!
             $${field}: ${fieldTypes[field]}
@@ -138,11 +140,11 @@ export const Component = () => {
       })
     }
     // Invalidate queries to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['popber', id],
     })
     if (['jahr', 'entwicklung'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treePopber`],
       })
     }
@@ -167,8 +169,10 @@ export const Component = () => {
           <RadioButtonGroup
             name="entwicklung"
             label="Entwicklung"
-            dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-            value={row.entwicklung}
+            dataSource={
+              (data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]
+            }
+            value={row.entwicklung as null}
             saveToDb={saveToDb}
             error={fieldErrors.entwicklung}
           />

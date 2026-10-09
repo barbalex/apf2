@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query EkplanCellForYearQuery($tpopId: UUID!, $jahr: Int!) {
     tpopById(id: $tpopId) {
       id
@@ -19,7 +19,7 @@ export const query = gql`
       eks: tpopkontrsByTpopId(
         orderBy: JAHR_ASC
         filter: {
-          typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+          typ: { notEqualTo: "Freiwilligen-Kontrolle" }
           jahr: { equalTo: $jahr }
         }
       ) {
@@ -43,7 +43,7 @@ export const query = gql`
         }
       }
       ekfs: tpopkontrsByTpopId(
-        condition: { typ: "Freiwilligen-Erfolgskontrolle", jahr: $jahr }
+        condition: { typ: "Freiwilligen-Kontrolle", jahr: $jahr }
       ) {
         nodes {
           id
@@ -77,4 +77,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

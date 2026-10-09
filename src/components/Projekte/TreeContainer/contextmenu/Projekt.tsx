@@ -4,13 +4,19 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const closeLowerNodesData = {
   action: 'closeLowerNodes',
 }
 
 // TODO: add MenuItem for admins to add new projekt
-export const Projekt = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const Projekt = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeProjekt"

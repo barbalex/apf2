@@ -1,12 +1,14 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { useAtomValue } from 'jotai'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
-import { sortBy } from 'es-toolkit'
 import { useParams } from 'react-router'
+import type { LatLngBoundsExpression } from 'leaflet'
+import type { Geometry, GeometryCollection } from 'geojson'
+import type { PrimitiveAtom } from 'jotai'
 
 import { MapResizer } from './MapResizer.tsx'
 import { SafePane } from './SafePane.tsx'
@@ -30,11 +32,11 @@ import { ZhUep } from './layers/ZhUep.tsx'
 import { Detailplaene } from './layers/Detailplaene.tsx'
 import { Massnahmen } from './layers/Massnahmen.tsx'
 import { Betreuungsgebiete } from './layers/Betreuungsgebiete.tsx'
-import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
-import { ZhSvoColor } from './layers/ZhSvoColor.tsx'
-import { ZhPflegeplan } from './layers/ZhPflegeplan.tsx'
-import { ZhSvoGrey } from './layers/ZhSvoGrey.tsx'
+import { ZhSvo } from './layers/ZhSvo.tsx'
+import { ZhPflegeplanAJ } from './layers/ZhPflegeplanAJ.js'
+import { ZhPflegeplanVJ } from './layers/ZhPflegeplanVJ.js'
+import { ZhPflegeplanVVJ } from './layers/ZhPflegeplanVVJ.js'
 import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.tsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.tsx'
 import { Gemeinden } from './layers/Gemeinden.tsx'
@@ -54,7 +56,7 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapFilterListener } from './MapFilterListener.tsx'
-import { ClickListener } from './ClickListener.tsx'
+import { ClickListener } from './ClickListener/index.tsx'
 
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-measure/dist/leaflet-measure.css'
@@ -95,7 +97,7 @@ const crs = new window.L.Proj.CRS(
  */
 
 const OverlayComponents = {
-  ZhUep: () => <ZhUepOverlay />,
+  ZhUepOverlay: () => <ZhUepOverlay />,
   // rebuild detailplaene on localizing change to close popups and rebuild without popups
   Detailplaene: () => <Detailplaene />,
   Markierungen: () => <Markierungen />,
@@ -103,11 +105,11 @@ const OverlayComponents = {
   MassnahmenLinien: () => <Massnahmen layer="linien" />,
   MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
   Betreuungsgebiete: () => <Betreuungsgebiete />,
-  Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
-  ZhSvoColor: () => <ZhSvoColor />,
-  ZhSvoGrey: () => <ZhSvoGrey />,
-  ZhPflegeplan: () => <ZhPflegeplan />,
+  ZhSvo: () => <ZhSvo />,
+  ZhPflegeplanAJ: () => <ZhPflegeplanAJ />,
+  ZhPflegeplanVJ: () => <ZhPflegeplanVJ />,
+  ZhPflegeplanVVJ: () => <ZhPflegeplanVVJ />,
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,
   ZhWaelderVegetation: () => <ZhWaelderVegetation />,
@@ -133,10 +135,14 @@ const BaseLayerComponents = {
   ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
 }
 
-export const Karte = ({ mapContainerRef }) => {
+interface KarteProps {
+  mapContainerRef: React.RefObject<HTMLDivElement | null>
+}
+
+export const Karte = ({ mapContainerRef }: KarteProps) => {
   const { apId } = useParams()
 
-  const mapRef = useRef(null)
+  const mapRef = useRef<HTMLDivElement | null>(null)
 
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const hideMapControls = useAtomValue(mapHideControlsAtom)
@@ -148,7 +154,15 @@ export const Karte = ({ mapContainerRef }) => {
   const overlays = useAtomValue(mapOverlaysAtom)
   const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
   const activeBaseLayer = useAtomValue(mapActiveBaseLayerAtom)
-  const mapFilter = useAtomValue(treeMapFilterAtom)
+  // the atom is typed as undefined (its initial value) but holds
+  // a GeoJSON geometry at runtime
+  // (drawn filter shapes are never GeometryCollections,
+  // which are the only geometries without coordinates)
+  const mapFilter = useAtomValue(
+    treeMapFilterAtom as unknown as PrimitiveAtom<
+      Exclude<Geometry, GeometryCollection> | undefined
+    >,
+  )
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId
   const showPop = activeApfloraLayers.includes('pop') && showApfLayers
@@ -163,22 +177,22 @@ export const Karte = ({ mapContainerRef }) => {
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines') &&
     showApfLayers
 
-  /**
-   * need to pass the height of the self built controls
-   * to move controls built by leaflet when layer menu changes height
-   * Beware: If initial value is wrong, map will render twice
-   */
-  const [controlHeight, setControlHeight] = useState(167)
-
   const clustered = !(
     assigningBeob ||
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   )
 
-  const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-  const activeOverlaysSorted = sortBy(activeOverlays, [
-    (activeOverlay) => overlays.findIndex((o) => o.value === activeOverlay),
-  ])
+  const BaseLayerComponent =
+    BaseLayerComponents[activeBaseLayer as keyof typeof BaseLayerComponents]
+  const activeOverlaysSorted = activeOverlays
+    // drop values that no longer exist, e.g. from renamed overlays
+    // still stored in a user's cache
+    .filter((name) => name in OverlayComponents)
+    .sort(
+      (a, b) =>
+        overlays.findIndex((o) => o.value === a) -
+        overlays.findIndex((o) => o.value === b),
+    )
 
   // explicitly sort Layers
   // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044
@@ -212,7 +226,9 @@ export const Karte = ({ mapContainerRef }) => {
           // bounds need to be set using map.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
-          bounds={bounds}
+          // atomWithStorage provides the bounds as number[][],
+          // which is a valid LatLngBoundsLiteral at runtime
+          bounds={bounds as LatLngBoundsExpression}
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
@@ -227,27 +243,31 @@ export const Karte = ({ mapContainerRef }) => {
               <BaseLayerComponent />
             </MapResizer>
           )}
-          {/* TODO: Set paneBaseIndex to 400 (?), subtract index from zIndex in Pane style, then remove reverse() */}
-          {activeOverlaysSorted
-            .reverse()
-            .map((overlayName, index) => {
-              const OverlayComponent = OverlayComponents[overlayName]
-              // prevent bad error if wrong overlayName was passed
-              // for instance after an overlay was renamed but user still has old name in cache
-              if (!OverlayComponent) return null
+          {activeOverlaysSorted.map((overlayName, index) => {
+            const OverlayComponent =
+              OverlayComponents[overlayName as keyof typeof OverlayComponents]
+            // prevent bad error if wrong overlayName was passed
+            if (!OverlayComponent) return null
 
-              return (
-                <SafePane
-                  key={`${overlayName}/${index}`}
-                  className={overlayName}
-                  name={overlayName}
-                  style={{ zIndex: 200 + index }}
-                >
-                  <OverlayComponent />
-                </SafePane>
-              )
-            })
-            .reverse()}
+            return (
+              <SafePane
+                // the key MUST be the overlay name alone
+                // an index in the key remounts panes when overlays are
+                // added/removed, which unpredictably evicts their layers
+                // see: https://github.com/barbalex/apf2/issues/816
+                key={overlayName}
+                className={overlayName}
+                name={overlayName}
+                // overlays earlier in the list stack above later ones;
+                // stay below 400 where vector layers (apflora) live
+                style={{
+                  zIndex: 200 + activeOverlaysSorted.length - 1 - index,
+                }}
+              >
+                <OverlayComponent />
+              </SafePane>
+            )
+          })}
           {showPop && (
             // add no pane
             // it prevented pop svgs from appearing

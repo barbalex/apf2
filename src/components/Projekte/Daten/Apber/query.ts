@@ -1,11 +1,20 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { apber } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
       ...ApberFields
+      apByApId {
+        id
+        apbersByApId {
+          nodes {
+            jahr
+            beurteilung
+          }
+        }
+      }
     }
     allAdresses(orderBy: NAME_ASC) {
       nodes {
@@ -17,6 +26,7 @@ export const query = gql`
       nodes {
         value: code
         label: text
+        sort
       }
     }
   }

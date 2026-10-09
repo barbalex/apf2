@@ -22,6 +22,10 @@
   border-bottom: solid #f0f0f0;
 }
 
+.messageRow p {
+  margin: 0;
+}
+
 .date {
   flex-basis: 110px;
   flex-shrink: 0;

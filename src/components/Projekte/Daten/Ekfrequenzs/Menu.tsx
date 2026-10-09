@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -7,7 +7,7 @@ import { FaPlus } from 'react-icons/fa6'
 import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.tsx'
+import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,12 +20,10 @@ import {
 
 
 interface CreateEkfrequenzResult {
-  data?: {
-    createEkfrequenz?: {
-      ekfrequenz?: {
-        id: EkfrequenzId
-        apId: ApId
-      }
+  createEkfrequenz: {
+    ekfrequenz: {
+      id: EkfrequenzId
+      apId: ApId
     }
   }
 }
@@ -51,10 +49,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   )
 
   const onClickAdd = async () => {
-    let result: CreateEkfrequenzResult | undefined
+    let result: { data?: CreateEkfrequenzResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateEkfrequenzResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createEkfrequenzForEkfrequenzsForm($apId: UUID!) {
             createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
               ekfrequenz {
@@ -63,8 +61,8 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
-        variables: { apId },
+        `),
+        variables: { apId: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -74,17 +72,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkfrequenz`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickCopy = () => setOpenChooseApToCopyEkfrequenzsFrom(true)
@@ -96,7 +94,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue EK-Frequenz erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

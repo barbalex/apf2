@@ -1,10 +1,9 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
@@ -26,7 +25,7 @@ export const useWertesNavData = () => {
   )
   const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeWertes',
       adresseGqlFilterForTree,
@@ -36,7 +35,7 @@ export const useWertesNavData = () => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavWertesQuery(
             $adressesFilter: AdresseFilter!
             $tpopApberrelevantGrundWerteFilter: TpopApberrelevantGrundWerteFilter!
@@ -74,7 +73,7 @@ export const useWertesNavData = () => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           adressesFilter: adresseGqlFilterForTree,
           tpopApberrelevantGrundWerteFilter:
@@ -85,24 +84,24 @@ export const useWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const adressesCount = data.allAdresses.totalCount
-  const adressesFilteredCount = data.filteredAdresses.totalCount
+  const adressesCount = data.allAdresses?.totalCount
+  const adressesFilteredCount = data.filteredAdresses?.totalCount
   const tpopApberrelevantGrundWerteCount =
-    data.allTpopApberrelevantGrundWertes.totalCount
+    data.allTpopApberrelevantGrundWertes?.totalCount
   const tpopApberrelevantGrundWerteFilteredCount =
-    data.filteredTpopApberrelevantGrundWertes.totalCount
-  const ekAbrechnungstypWerteCount = data.allEkAbrechnungstypWertes.totalCount
+    data.filteredTpopApberrelevantGrundWertes?.totalCount
+  const ekAbrechnungstypWerteCount = data.allEkAbrechnungstypWertes?.totalCount
   const ekAbrechnungstypWerteFilteredCount =
-    data.filteredEkAbrechnungstypWertes.totalCount
+    data.filteredEkAbrechnungstypWertes?.totalCount
   const tpopkontrzaehlEinheitWerteCount =
-    data.allTpopkontrzaehlEinheitWertes.totalCount
+    data.allTpopkontrzaehlEinheitWertes?.totalCount
   const tpopkontrzaehlEinheitWerteFilteredCount =
-    data.filteredTpopkontrzaehlEinheitWertes.totalCount
+    data.filteredTpopkontrzaehlEinheitWertes?.totalCount
 
   const navData = {
     id: 'WerteListen',

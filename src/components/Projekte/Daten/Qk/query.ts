@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { qk, apqk } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query QkQueryForQkTop($apId: UUID!) {
     allQks(orderBy: [SORT_ASC, NAME_ASC]) {
       totalCount

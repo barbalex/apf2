@@ -1,29 +1,25 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  mapActiveApfloraLayersAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
-  store,
 } from '../store/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.ts'
+import { BeobnichtbeurteiltFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredAbsenzMapIcon.tsx'
+import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
+import { BeobnichtbeurteiltAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useBeobNichtBeurteiltsNavData = (props) => {
+export const useBeobNichtBeurteiltsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const beobId = props?.beobId ?? params.beobId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const beobId = (props?.beobId ?? params.beobId ?? '')
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
@@ -42,7 +38,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
   }
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeBeobNichtBeurteilt',
       apId,
@@ -50,7 +46,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavBeobNichtBeurteiltsQuery(
             $beobNichtBeurteiltFilter: BeobFilter!
             $allBeobNichtBeurteiltFilter: BeobFilter!
@@ -67,10 +63,11 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
               nodes {
                 id
                 label
+                absenz
               }
             }
           }
-        `,
+        `),
         variables: {
           beobNichtBeurteiltFilter: {
             ...beobNichtBeurteiltGqlFilterForTree,
@@ -88,16 +85,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const showBeobnichtbeurteiltIcon =
-    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
-
-  const count = data.beobsNichtBeurteilt.totalCount
-  const filteredCount = data.filteredBeobsNichtBeurteilt.nodes.length
+  const count = data.beobsNichtBeurteilt?.totalCount
+  const filteredCount = data.filteredBeobsNichtBeurteilt?.nodes.length
 
   const navData = {
     id: 'nicht-beurteilte-Beobachtungen',
@@ -119,13 +113,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: data.filteredBeobsNichtBeurteilt.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.filteredBeobsNichtBeurteilt?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'beobNichtBeurteilt',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -133,13 +127,17 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         'Arten',
         apId,
         'nicht-beurteilte-Beobachtungen',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtbeurteiltIcon && beobId === p.id ?
+        p?.absenz ?
+          beobId === p?.id ?
+            [BeobnichtbeurteiltFilteredAbsenzMapIcon]
+          : [BeobnichtbeurteiltAbsenzMapIcon]
+        : beobId === p?.id ?
           [BeobnichtbeurteiltFilteredMapIcon]
-        : undefined,
+        : [BeobnichtbeurteiltMapIcon],
     })),
   }
 

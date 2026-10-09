@@ -34,7 +34,7 @@ export const useDocsNavData = () => {
       const unsub = store.sub(treeApGqlFilterForTreeAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 

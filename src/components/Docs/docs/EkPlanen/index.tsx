@@ -325,7 +325,7 @@ export const Component = () => (
       <li>&quot;Kontrolljahre ab letzter&quot; (Kontrolle oder Ansiedlung)</li>
       <li>letzte Kontrolle oder Ansiedlung</li>
     </ul>
-    <ol start="2">
+    <ol start={2}>
       <li>Dann setzt apflora die EK-Pläne, beruhend auf</li>
     </ol>
     <ul>

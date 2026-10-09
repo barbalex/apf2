@@ -1,0 +1,24 @@
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import { FaPlus } from 'react-icons/fa6'
+
+import { MenuBar } from '../../../../shared/MenuBar/index.tsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+
+const iconStyle = { color: 'white' }
+
+interface HistorienMenuProps {
+  onAdd: () => void
+}
+
+export const HistorienMenu = ({ onAdd }: HistorienMenuProps) => (
+  <ErrorBoundary>
+    <MenuBar>
+      <Tooltip title="neue, leere Historie hinzufügen">
+        <IconButton onClick={onAdd}>
+          <FaPlus style={iconStyle} />
+        </IconButton>
+      </Tooltip>
+    </MenuBar>
+  </ErrorBoundary>
+)

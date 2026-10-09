@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
 
 import {
   adresse,
@@ -10,7 +10,7 @@ import {
   zielTypWerte,
 } from '../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query projektByIdForApberForYear(
     $projektId: UUID!
     $jahr: Int!

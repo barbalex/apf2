@@ -1,6 +1,7 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import { useParams, useLocation } from 'react-router'
@@ -8,7 +9,7 @@ import { useParams, useLocation } from 'react-router'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-import type { PopId } from '../../../models/apflora/public/Pop.ts'
+import type { PopId } from '../../../models/apflora/index.ts'
 
 import styles from './TpopFromBeobPopList.module.css'
 
@@ -23,13 +24,27 @@ interface AllPopsQueryResult {
   }
 }
 
-export const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
+// react-query v5 omitted suspense from the public useQuery options
+type PopsForTpopFromBeobQueryOptions = UseQueryOptions<
+  AllPopsQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
+}
+
+export const TpopFromBeobPopList = ({
+  closeNewTpopFromBeobDialog,
+  beobId,
+}: {
+  closeNewTpopFromBeobDialog: () => void
+  beobId: string | null | undefined
+}) => {
   const { projId, apId } = useParams()
   const { search } = useLocation()
 
   const apolloClient = useApolloClient()
 
-  const query = gql`
+  const query = graphql(`
     query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
       allPops(
         filter: { apId: { equalTo: $apId } }
@@ -41,19 +56,20 @@ export const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
         }
       }
     }
-  `
-  const { data } = useQuery({
+  `)
+  const queryOptions: PopsForTpopFromBeobQueryOptions = {
     queryKey: ['popsForTpopFromBeob', apId],
     queryFn: async () => {
       const result = await apolloClient.query<AllPopsQueryResult>({
         query,
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
       if (result.error) throw result.error
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(queryOptions)
 
   const pops = data?.allPops?.nodes ?? []
 
@@ -64,9 +80,9 @@ export const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
           <ListItemButton
             key={pop.id}
             onClick={() => {
-              createNewTpopFromBeob({
+              void createNewTpopFromBeob({
                 pop,
-                beobId,
+                beobId: beobId ?? '',
                 projId,
                 apId,
                 search,

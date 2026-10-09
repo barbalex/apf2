@@ -5,9 +5,21 @@ import {
   ekPlanShowCountAtom,
   ekPlanShowEkCountAtom,
 } from '../../../../store/index.ts'
+import type {
+  RowTpopkontrNode,
+  RowTpopkontrzaehlNode,
+} from '../tableTypes.ts'
 import styles from './EkIcon.module.css'
 
-export const EkIcon = ({ planned, eks, einheits }) => {
+export const EkIcon = ({
+  planned,
+  eks,
+  einheits,
+}: {
+  planned: boolean
+  eks: RowTpopkontrNode[]
+  einheits: (string | null | undefined)[] | undefined
+}) => {
   const showCount = useAtomValue(ekPlanShowCountAtom)
   const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
 
@@ -15,34 +27,28 @@ export const EkIcon = ({ planned, eks, einheits }) => {
     return <div className={styles.container}>&nbsp;</div>
   }
 
+  // zaehls of zielrelevanten einheits that were counted
+  const gezaehlteZielrelevanteZaehls = (ek: RowTpopkontrNode) =>
+    (ek.tpopkontrzaehlsByTpopkontrId?.nodes ?? []).filter(
+      (z: RowTpopkontrzaehlNode) =>
+        (einheits?.includes(z.einheit) ?? false) &&
+        z.anzahl !== null &&
+        (z.tpopkontrzaehlEinheitWerteByEinheit?.ekzaehleinheitsByZaehleinheitId
+          ?.totalCount ?? 0) > 0,
+    )
+
   let sumCounted = null
   let eksHaveCountedZielrelevanteEinheits = false
   if (einheits && einheits.length) {
     eksHaveCountedZielrelevanteEinheits =
-      eks
-        .flatMap((ek) =>
-          (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []).filter(
-            (z) =>
-              einheits.includes(z.einheit) &&
-              z.anzahl !== null &&
-              z?.tpopkontrzaehlEinheitWerteByEinheit
-                ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
-          ),
-        )
-        .filter((o) => !!o).length > 0
+      eks.flatMap(gezaehlteZielrelevanteZaehls).length > 0
   }
   if (eksHaveCountedZielrelevanteEinheits) {
     sumCounted = sum(
       eks.flatMap((ek) =>
-        (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
-          .filter(
-            (z) =>
-              einheits.includes(z.einheit) &&
-              z.anzahl !== null &&
-              z?.tpopkontrzaehlEinheitWerteByEinheit
-                ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
-          )
-          .flatMap((z) => z.anzahl),
+        gezaehlteZielrelevanteZaehls(ek).flatMap((z) =>
+          z.anzahl !== null ? [z.anzahl] : [],
+        ),
       ),
     )
   }

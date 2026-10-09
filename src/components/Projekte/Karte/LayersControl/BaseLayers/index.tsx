@@ -1,7 +1,13 @@
 import { BaseLayer } from './BaseLayer.tsx'
 import styles from '../ApfloraLayers/index.module.css'
 
-export const baseLayers = [
+export interface BaseLayerItem {
+  label: string
+  value: string
+  cors: boolean
+}
+
+const baseLayers: BaseLayerItem[] = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor', cors: true },
   { label: 'OpenStreetMap grau', value: 'OsmBw', cors: true },
   { label: 'Swisstopo farbig', value: 'SwisstopoPixelFarbe', cors: false },

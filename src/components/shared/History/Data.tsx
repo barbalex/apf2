@@ -1,7 +1,7 @@
 import { diffSentences } from 'diff'
 
 import { toStringIfPossible } from '../../../modules/toStringIfPossible.ts'
-import { Spinner } from '../Spinner'
+import { Spinner } from '../Spinner.tsx'
 
 import styles from './Data.module.css'
 
@@ -10,7 +10,18 @@ const style = {
   removed: { color: 'red' },
 }
 
-export const Data = ({ dataArray = [], loading }) => {
+export interface HistoryDatum {
+  label: string
+  valueInRow: unknown
+  valueInHist: unknown
+}
+
+export interface HistoryDataProps {
+  dataArray?: HistoryDatum[] | null | undefined
+  loading?: boolean
+}
+
+export const Data = ({ dataArray = [], loading }: HistoryDataProps) => {
   if (loading) return <Spinner />
 
   return (dataArray ?? [])?.map((d, index) => {

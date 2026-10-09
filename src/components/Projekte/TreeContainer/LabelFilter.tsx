@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import type { ChangeEvent, KeyboardEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -12,18 +13,25 @@ import {
   treeActiveFilterTableAtom,
   treeSetNodeLabelFilterKeyAtom,
   treeEmptyNodeLabelFilterAtom,
+  type TreeNodeLabelFilter,
 } from '../../../store/index.ts'
 
 import styles from './LabelFilter.module.css'
 
-const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
+const getValues = ({
+  activeFilterTable,
+  nodeLabelFilter,
+}: {
+  activeFilterTable: string | undefined
+  nodeLabelFilter: TreeNodeLabelFilter
+}) => {
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
 
   if (activeFilterTable) {
     filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     // make sure 0 is kept
-    if (!filterValue && filterValue !== 0) filterValue = ''
+    if (!filterValue) filterValue = ''
     // activeFilterTable is already in snake_case format, no conversion needed. Was: snakeCase
     const table = tables.find((t) => t.table === activeFilterTable)
     const tableLabel = table ? table.label : null
@@ -51,19 +59,22 @@ export const LabelFilter = () => {
   })
 
   const [value, setValue] = useState(filterValue)
+  const [prevFilterValue, setPrevFilterValue] = useState(filterValue)
   // value should update when changed from outside
-  useEffect(() => {
-    if (filterValue === value) return
+  if (prevFilterValue !== filterValue) {
+    setPrevFilterValue(filterValue)
     setValue(filterValue)
-  }, [filterValue])
+  }
 
-  const setNodeLabelFilter = (val) =>
+  const setNodeLabelFilter = (val: string) => {
+    if (!activeFilterTable) return
     setNodeLabelFilterKey({
       value: val,
       key: activeFilterTable,
     })
+  }
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (labelText === '(filtern nicht möglich)') return
 
     // remove some values as they can cause exceptions in regular expressions
@@ -71,7 +82,8 @@ export const LabelFilter = () => {
     setValue(val)
   }
 
-  const onKeyUp = (e) => e.key === 'Enter' && setNodeLabelFilter(value)
+  const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && setNodeLabelFilter(value)
 
   const onClickEmptyFilter = () => {
     empty()

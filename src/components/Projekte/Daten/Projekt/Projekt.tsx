@@ -1,7 +1,8 @@
-import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState } from 'react'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -12,7 +13,7 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { ProjektId } from '../../../../models/apflora/index.tsx'
+import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
 
@@ -24,7 +25,7 @@ interface ProjektQueryResult {
   }
 }
 
-const fieldTypes = { name: 'String' }
+const fieldTypes: Record<string, string> = { name: 'String' }
 
 export const Component = () => {
   const { projId } = useParams()
@@ -36,7 +37,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['projekt', projId],
     queryFn: async () => {
       const result = await apolloClient.query<ProjektQueryResult>({
@@ -46,13 +47,14 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.projektById ?? {}
+  const row: Partial<NonNullable<ProjektQueryResult['projektById']>> =
+    data?.projektById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -62,7 +64,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateProjekt(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -98,10 +100,10 @@ export const Component = () => {
       return rest
     })
     // Invalidate queries to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['projekt', projId],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
   }

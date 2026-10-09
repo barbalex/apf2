@@ -1,31 +1,31 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
 
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 
-const getZieljahrsCount = (ziels) => {
-  const jahrs = countBy(ziels, (e) => e.jahr)
+const getZieljahrsCount = (ziels: ({ jahr?: number | null } | null)[]) => {
+  const jahrs = countBy(ziels, (e) => e?.jahr ?? 0)
   const count = Object.keys(jahrs).length
   return count
 }
 
-export const useZieljahrsNavData = (props) => {
+export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
   const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeZieljahrs', apId, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeZieljahrsQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
             apById(id: $apId) {
               id
@@ -47,23 +47,23 @@ export const useZieljahrsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           zielsFilter: zielGqlFilterForTree,
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const ziels = data.apById.zielsByApId.nodes
-  const filteredZiels = data.apById.filteredZiels?.nodes
+  const ziels = data.apById?.zielsByApId?.nodes ?? []
+  const filteredZiels = data.apById?.filteredZiels?.nodes ?? []
   const zieljahrsCount = getZieljahrsCount(ziels)
-  const countByJahr = countBy(filteredZiels, (e) => e.jahr)
-  const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
+  const countByJahr = countBy(filteredZiels, (e) => e?.jahr ?? 0) as Record<string, number>
+  const unfilteredCountByJahr = countBy(ziels, (e) => e?.jahr ?? 0) as Record<string, number>
 
   // convert into array of objects with id=jahr and count
   const menus = Object.keys(countByJahr).map((jahr) => ({

@@ -1,6 +1,6 @@
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { isEqual } from 'date-fns/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { queryBeob } from './queryBeob.ts'
 import { createPop } from './createPop.ts'
@@ -8,17 +8,18 @@ import { createTpop } from './createTpop.ts'
 import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
-  apolloClientAtom,
-  tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
+  type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const createNewPopFromBeob = async ({
@@ -26,9 +27,14 @@ export const createNewPopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
   search,
+}: {
+  id: string
+  apId?: string | undefined
+  projId?: string | undefined
+  search: string
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -41,19 +47,31 @@ export const createNewPopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const beob = beobResult?.data?.beobById
+  if (!beob) {
+    return addNotification({
+      message: 'Die Beobachtung wurde nicht gefunden',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const { geomPoint, datum, data } = beob
-  const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
+  // data is the raw InfoFlora/EVK JSON blob
+  const beobData = (data ?? {}) as Record<string, string | null | undefined>
+  // new Date(null) coerces to the epoch, like new Date(0)
+  const datumDate = new Date(datum ?? 0)
+  const datumIsValid = isValid(datumDate)
+  const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
 
   const newGeomPoint =
-    geomPoint?.geojson ? JSON.parse(geomPoint?.geojson) : null
+    geomPoint?.geojson ? JSON.parse(String(geomPoint.geojson)) : null
 
   // create new pop for ap
   let popResult
@@ -68,13 +86,21 @@ export const createNewPopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const pop = popResult?.data?.createPop?.pop
+  if (!pop) {
+    return addNotification({
+      message: 'Die neue Population wurde nicht erstellt',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   // create new tpop for pop
   let tpopResult
@@ -85,19 +111,27 @@ export const createNewPopFromBeob = async ({
         popId: pop.id,
         geomPoint: newGeomPoint,
         bekannt_seit: bekanntSeit,
-        gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
-        flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
+        gemeinde: beobData.NOM_COMMUNE ? beobData.NOM_COMMUNE : null,
+        flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
       },
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const tpop = tpopResult?.data?.createTpop?.tpop
+  if (!tpop?.popId) {
+    return addNotification({
+      message: 'Die neue Teil-Population wurde nicht erstellt',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   try {
     await apolloClient.mutate({
@@ -109,7 +143,7 @@ export const createNewPopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
@@ -130,7 +164,7 @@ export const createNewPopFromBeob = async ({
     id,
   ]
 
-  let newOpenNodes = [
+  const newOpenNodes = [
     ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],
@@ -182,33 +216,33 @@ export const createNewPopFromBeob = async ({
     .filter((n) => !isEqual(n, activeNodeArray))
 
   store.set(treeAddOpenNodesAtom, newOpenNodes)
-  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate?.(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobZugeordnetForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobNichtBeurteiltForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: ['treeAp'],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
   store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)

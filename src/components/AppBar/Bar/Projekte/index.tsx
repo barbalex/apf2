@@ -1,10 +1,15 @@
 import Button from '@mui/material/Button'
+
+// MenuBar measures its children via a width prop that MUI's Button doesn't declare
+const WidthButton = Button as unknown as React.ComponentType<
+  React.ComponentProps<typeof Button> & { width?: number }
+>
 import Tooltip from '@mui/material/Tooltip'
 import { remove } from 'es-toolkit'
 import { jwtDecode } from 'jwt-decode'
-import { Link, useParams, useLocation, useNavigate } from 'react-router'
+import { useParams, useLocation, useNavigate } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
+import { MdFilterAlt, MdInfoOutline } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
 import { TbMap2 } from 'react-icons/tb'
@@ -35,12 +40,12 @@ export const ProjekteMenus = () => {
   const resetTree2Src = useSetAtom(resetTree2SrcAtom)
 
   const token = useAtomValue(userTokenAtom)
-  const tokenDecoded = token ? jwtDecode(token) : null
+  const tokenDecoded = token ? jwtDecode<{ role?: string }>(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
-  const onClickButton = (name) => {
+  const onClickButton = (name: string) => {
     if (isMobileView) {
       // show one tab only
       if (projekteTabs.length === 1) {
@@ -77,10 +82,10 @@ export const ProjekteMenus = () => {
 
   // need to not use Link in AppBar because:
   // long press on mobile opens context menu AND tooltip...
-  const onClickDocs = () => navigate(`/Dokumentation/${search}`)
+  const onClickDocs = () => void navigate(`/Dokumentation/${search}`)
 
   const onClickEkPlanung = () =>
-    navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`)
+    void navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`)
 
   const onClickExporte = () => onClickButton('exporte')
 
@@ -111,7 +116,7 @@ export const ProjekteMenus = () => {
     >
       {isDesktopView && (
         <Tooltip title="Navigationsbaum anzeigen">
-          <Button
+          <WidthButton
             variant={treeIsVisible ? 'outlined' : 'text'}
             onClick={onClickTree}
             data-id="nav-tree1"
@@ -119,14 +124,14 @@ export const ProjekteMenus = () => {
             className={`${styles.button} ${datenIsVisible ? styles.followed : ''}`}
           >
             Navigationsbaum
-          </Button>
+          </WidthButton>
         </Tooltip>
       )}
       {/* in mobile view: only show if user did not decide to always show */}
       {/* do not hide if tree is visible - user can't close it! */}
       {isMobileView && (!hideTree || treeIsVisible) && (
         <Tooltip title="Navigationsbaum anzeigen">
-          <Button
+          <WidthButton
             variant={treeIsVisible ? 'outlined' : 'text'}
             onClick={onClickTree}
             data-id="nav-tree1"
@@ -134,13 +139,13 @@ export const ProjekteMenus = () => {
             className={styles.iconButton}
           >
             <VscListTree />
-          </Button>
+          </WidthButton>
         </Tooltip>
       )}
       <Daten width={77} />
       <Tooltip title="Daten filtern">
         {isDesktopView ?
-          <Button
+          <WidthButton
             variant={filterIsVisible ? 'outlined' : 'text'}
             onClick={onClickFilter}
             data-id="nav-filter1"
@@ -148,8 +153,8 @@ export const ProjekteMenus = () => {
             className={`${styles.button} ${datenIsVisible ? styles.preceded : ''} ${karteIsVisible ? styles.followed : ''}`}
           >
             Filter
-          </Button>
-        : <Button
+          </WidthButton>
+        : <WidthButton
             variant={filterIsVisible ? 'outlined' : 'text'}
             onClick={onClickFilter}
             data-id="nav-filter1"
@@ -157,12 +162,12 @@ export const ProjekteMenus = () => {
             className={styles.iconButton}
           >
             <MdFilterAlt />
-          </Button>
+          </WidthButton>
         }
       </Tooltip>
       <Tooltip title="Karte anzeigen">
         {isDesktopView ?
-          <Button
+          <WidthButton
             variant={karteIsVisible ? 'outlined' : 'text'}
             onClick={onClickKarte}
             data-id="nav-karte1"
@@ -174,8 +179,8 @@ export const ProjekteMenus = () => {
             }`}
           >
             Karte
-          </Button>
-        : <Button
+          </WidthButton>
+        : <WidthButton
             variant={karteIsVisible ? 'outlined' : 'text'}
             onClick={onClickKarte}
             data-id="nav-karte1"
@@ -183,13 +188,13 @@ export const ProjekteMenus = () => {
             className={styles.iconButton}
           >
             <TbMap2 />
-          </Button>
+          </WidthButton>
         }
       </Tooltip>
       {!!projId && (
         <Tooltip title="Exporte anzeigen">
           {isDesktopView ?
-            <Button
+            <WidthButton
               variant={exporteIsVisible ? 'outlined' : 'text'}
               onClick={onClickExporte}
               data-id="nav-exporte"
@@ -199,8 +204,8 @@ export const ProjekteMenus = () => {
               }`}
             >
               Exporte
-            </Button>
-          : <Button
+            </WidthButton>
+          : <WidthButton
               variant={exporteIsVisible ? 'outlined' : 'text'}
               onClick={onClickExporte}
               data-id="nav-exporte"
@@ -208,13 +213,13 @@ export const ProjekteMenus = () => {
               className={styles.iconButton}
             >
               <FaDownload />
-            </Button>
+            </WidthButton>
           }
         </Tooltip>
       )}
       {(isDesktopView || tree2IsVisible) && (
         <Tooltip title="Navigationsbaum 2 anzeigen">
-          <Button
+          <WidthButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             onClick={onClickTree2}
             data-id="nav-tree2"
@@ -226,7 +231,7 @@ export const ProjekteMenus = () => {
             } ${daten2IsVisible ? styles.followed : ''}`}
           >
             Navigationsbaum 2
-          </Button>
+          </WidthButton>
         </Tooltip>
       )}
       {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
@@ -237,7 +242,7 @@ export const ProjekteMenus = () => {
       )}
       {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
         <Tooltip title="Daten filtern">
-          <Button
+          <WidthButton
             variant={filter2IsVisible ? 'outlined' : 'text'}
             onClick={onClickFilter2}
             data-id="nav-filter2"
@@ -247,39 +252,39 @@ export const ProjekteMenus = () => {
             }`}
           >
             Filter 2
-          </Button>
+          </WidthButton>
         </Tooltip>
       )}
       {isDesktopView && !!projId && (
         <Tooltip title="EK und EKF planen">
-          <Button
+          <WidthButton
             variant="text"
             onClick={onClickEkPlanung}
             width={101}
             className={styles.button}
           >
             EK-Planung
-          </Button>
+          </WidthButton>
         </Tooltip>
       )}
       <Tooltip title="Dokumentation anzeigen">
         {isDesktopView ?
-          <Button
+          <WidthButton
             variant="text"
             onClick={onClickDocs}
             width={129}
             className={styles.dokuButton}
           >
             Dokumentation
-          </Button>
-        : <Button
+          </WidthButton>
+        : <WidthButton
             variant="text"
             onClick={onClickDocs}
             width={46}
             className={styles.iconButton}
           >
             <MdInfoOutline />
-          </Button>
+          </WidthButton>
         }
       </Tooltip>
       <More

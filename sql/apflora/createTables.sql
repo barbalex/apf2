@@ -632,6 +632,9 @@ CREATE TABLE apflora.user(
   -- enforce role to prevent errors when no role is set
   role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512(length(ROLE) < 512),
   pass text DEFAULT NULL CHECK pass_length_minimum_6(length(pass) > 5),
+  -- false until the forced password change is activated
+  -- (sql/apflora/migrations/04_set_allrequire.sql)
+  require_new_password_on_next_login boolean DEFAULT false,
   adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE
   -- reverted created_at and updated_at: authorizing apflora_ap_writer did not work any more!
   --created_at timestamptz NOT NULL DEFAULT now(),
@@ -953,6 +956,11 @@ COMMENT ON COLUMN apflora.ap_history.bearbeiter IS 'Verantwortliche(r) für die 
 COMMENT ON COLUMN apflora.ap_history.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
 
 COMMENT ON COLUMN apflora.ap_history.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+-- deleting an art propagates to its history:
+-- ap -> ap_history -> pop_history -> tpop_history
+ALTER TABLE apflora.ap_history
+  ADD CONSTRAINT fk_ap_history_ap FOREIGN KEY (id) REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE apflora.ap_history ENABLE ROW LEVEL SECURITY;
 
@@ -1281,7 +1289,6 @@ CREATE TABLE apflora.apber(
   situation text,
   vergleich_vorjahr_gesamtziel text,
   beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
-  veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
   -- analyse is a reserved word!!!
   apber_analyse text DEFAULT NULL,
   konsequenzen_umsetzung text,
@@ -1318,8 +1325,6 @@ COMMENT ON COLUMN apflora.apber.situation IS 'Beschreibung der Situation im Beri
 COMMENT ON COLUMN apflora.apber.vergleich_vorjahr_gesamtziel IS 'Vergleich zu Vorjahr und Ausblick auf das Gesamtziel';
 
 COMMENT ON COLUMN apflora.apber.beurteilung IS 'Beurteilung des Erfolgs des Aktionsplans bisher';
-
-COMMENT ON COLUMN apflora.apber.veraenderung_zum_vorjahr IS 'Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen';
 
 COMMENT ON COLUMN apflora.apber.apber_analyse IS 'Was sind die Ursachen fuer die beobachtete Entwicklung?';
 
@@ -1883,7 +1888,10 @@ ALTER TABLE apflora.pop_history
   DROP CONSTRAINT IF EXISTS fk_ap;
 
 ALTER TABLE apflora.pop_history
-  ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE NO action ON UPDATE CASCADE;
+  ADD CONSTRAINT fk_ap_history FOREIGN KEY (ap_id, year) REFERENCES apflora.ap_history(id, year) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE apflora.pop_history
+  ADD CONSTRAINT fk_pop_history_ap FOREIGN KEY (ap_id) REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE INDEX ON apflora.pop_history USING btree(id);
 
@@ -2381,7 +2389,7 @@ CREATE TABLE apflora.tpop_history(
 );
 
 ALTER TABLE apflora.tpop_history
-  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT fk_pop_history FOREIGN KEY (year, pop_id) REFERENCES apflora.pop_history(year, id) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 COMMENT ON TABLE apflora.tpop_history IS E'@foreignKey (pop_id) references pop (id)\n@foreignKey (status) references pop_status_werte (code)\n@foreignKey (apber_relevant_grund) references tpop_apberrelevant_grund_werte (code)\n@foreignKey (ekfrequenz) references ekfrequenz (id)\n@foreignKey (ekf_kontrolleur) references adresse (id)';
 
@@ -2625,23 +2633,23 @@ COMMENT ON COLUMN apflora.tpopkontr.idealbiotop_uebereinstimmung IS 'Übereinsti
 
 COMMENT ON COLUMN apflora.tpopkontr.handlungsbedarf IS 'Handlungsbedarf bezüglich Biotop';
 
-COMMENT ON COLUMN apflora.tpopkontr.flaeche_ueberprueft IS 'Überprüfte Fläche in m2. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.flaeche_ueberprueft IS 'Überprüfte Fläche in m2. Nur für Freiwilligen-Kontrolle';
 
-COMMENT ON COLUMN apflora.tpopkontr.plan_vorhanden IS 'Fläche / Wuchsort auf Plan eingezeichnet? Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.plan_vorhanden IS 'Fläche / Wuchsort auf Plan eingezeichnet? Nur für Freiwilligen-Kontrolle';
 
-COMMENT ON COLUMN apflora.tpopkontr.deckung_vegetation IS 'Von Pflanzen, Streu oder Moos bedeckter Boden (%). Nur für Freiwilligen-Erfolgskontrolle. Nur bis 2012 erfasst.';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_vegetation IS 'Von Pflanzen, Streu oder Moos bedeckter Boden (%). Nur für Freiwilligen-Kontrolle. Nur bis 2012 erfasst.';
 
-COMMENT ON COLUMN apflora.tpopkontr.deckung_nackter_boden IS 'Flächenanteil nackter Boden (%). Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_nackter_boden IS 'Flächenanteil nackter Boden (%). Nur für Freiwilligen-Kontrolle';
 
-COMMENT ON COLUMN apflora.tpopkontr.deckung_ap_art IS 'Flächenanteil der überprüften Pflanzenart (%). Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_ap_art IS 'Flächenanteil der überprüften Pflanzenart (%). Nur für Freiwilligen-Kontrolle';
 
 COMMENT ON COLUMN apflora.tpopkontr.jungpflanzen_vorhanden IS 'Gibt es neben alten Pflanzen auch junge? EK & EKF';
 
-COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_maximum IS 'Maximale Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_maximum IS 'Maximale Vegetationshöhe in cm. Nur für Freiwilligen-Kontrolle';
 
-COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_mittel IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_mittel IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Kontrolle';
 
-COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwilligen-Kontrolle';
 
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 

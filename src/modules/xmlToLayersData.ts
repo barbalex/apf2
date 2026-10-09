@@ -10,35 +10,43 @@ import { sortBy } from 'es-toolkit'
 
 import { xmlToJson } from './xmlToJson.ts'
 
-export const xmlToLayersData = (xml) => {
+const asObj = (value: unknown): Record<string, unknown> | undefined =>
+  value && typeof value === 'object' ? (value as Record<string, unknown>) : undefined
+
+export const xmlToLayersData = (xml: Document) => {
   const obj = xmlToJson(xml)
 
   // extract layers
-  let outputs =
-    obj?.HTML?.BODY?.['WFS:FEATURECOLLECTION']?.['GML:FEATUREMEMBER'] ?? []
+  const featureMembers = asObj(asObj(asObj(obj)?.['HTML'])?.['BODY'])?.[
+    'WFS:FEATURECOLLECTION'
+  ]
+  let outputs: unknown[] = (asObj(featureMembers)?.['GML:FEATUREMEMBER'] ??
+    []) as unknown[]
 
   // the output is object in points and lines, array in polygons
   // want array in all cases
-  if (outputs.constructor !== Array) {
+  if (!Array.isArray(outputs)) {
     outputs = [outputs]
   }
 
-  const returnValues = []
+  const returnValues: { label: string; properties: [string, unknown][] }[] = []
   for (const output1 of outputs) {
     // output is value of key beginning with QGS:
     // rest of keys name depends on ap
-    const keysOfOutput1 = Object.keys(output1)
+    const output1Obj = asObj(output1)
+    if (!output1Obj) break
+    const keysOfOutput1 = Object.keys(output1Obj)
     const neededKey = keysOfOutput1.filter((v) => v.startsWith('QGS:'))
-    const output = output1[neededKey]
+    const output = asObj(output1Obj[neededKey as unknown as number])
     if (!output) break
-    if (!Object.entries(output)) break
+    if (Object.entries(output).length === 0) break
 
     // build simpler object
-    let properties = {}
+    const properties: Record<string, unknown> = {}
     for (const [key, value] of Object.entries(output)) {
       if (key.includes('QGS:'))
         properties[key.replace('QGS:', '')] =
-          value?.['#text'] === 'NULL' ? '' : value?.['#text']
+          asObj(value)?.['#text'] === 'NULL' ? '' : asObj(value)?.['#text']
     }
 
     const label = `${properties.MASSNAHMENDATUM}: ${properties.MASSNAHMENTYP}`

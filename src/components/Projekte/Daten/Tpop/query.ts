@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import {
   ap,
@@ -8,7 +8,7 @@ import {
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query tpopByIdQuery($id: UUID!) {
     tpopById(id: $id) {
       ...TpopFields

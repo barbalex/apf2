@@ -9,18 +9,21 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useParams, useLocation, Form } from 'react-router'
+import { useParams, useLocation } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { standardQkYear } from '../../../../../modules/standardQkYear.ts'
 import { query } from './query.ts'
-import { createMessageFunctions } from './createMessageFunctions.ts'
+import {
+  createMessageFunctions,
+  type QkQueryData,
+} from './createMessageFunctions.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.tsx'
+import type { QkName } from '../../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
@@ -34,22 +37,6 @@ interface QkProps {
   qks: QkNode[]
 }
 
-interface QkNode {
-  name: QkName
-  titel: string | null
-}
-
-interface QkProps {
-  qkNameQueries: Record<string, boolean>
-  qks: QkNode[]
-}
-
-// QK query returns a very large, dynamic structure with many optional fields
-// Using Record for flexibility since the structure varies based on which QK checks are enabled
-interface QkQueryResult {
-  [key: string]: any
-}
-
 export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const { apId, projId } = useParams()
   const { search } = useLocation()
@@ -60,10 +47,17 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const [filter, setFilter] = useState('')
 
   const apolloClient = useApolloClient()
-  const { data, refetch, isFetching } = useQuery<QkQueryResult>({
+  const now = new Date()
+  const minDatum = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate())
+    .toISOString()
+    .split('T')[0]
+  const maxDatum = new Date(now.getFullYear() + 100, now.getMonth(), now.getDate())
+    .toISOString()
+    .split('T')[0]
+  const { data, refetch, isFetching } = useQuery({
     queryKey: ['qk', apId, projId, berichtjahr, qkNameQueries],
     queryFn: async () => {
-      const result = await apolloClient.query<QkQueryResult>({
+      const result = await apolloClient.query<QkQueryData>({
         query,
         variables: {
           ...qkNameQueries,
@@ -71,6 +65,8 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
           notIsBerichtjahr: !berichtjahr,
           apId,
           projId,
+          minDatum,
+          maxDatum,
         },
       })
       if (result.error) throw result.error
@@ -93,7 +89,7 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
     .filter((qk) => !!messageFunctions[qk.name])
     .map((qk) => ({
       title: qk.titel,
-      messages: messageFunctions[qk.name](),
+      messages: messageFunctions[qk.name]?.() ?? [],
     }))
     .filter((q) => q.messages.length)
 
@@ -137,7 +133,7 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
         </FormControl>
         {isFetching ?
           <Button
-            onClick={refetch}
+            onClick={() => void refetch()}
             variant="outlined"
             className={styles.analyzingButton}
           >
@@ -152,7 +148,7 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
               color="primary"
             >
               <Button
-                onClick={() => refetch()}
+                onClick={() => void refetch()}
                 variant="outlined"
                 className={styles.analyzingButton}
               >
@@ -181,7 +177,8 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
                       className={styles.styledA}
                       onClick={() =>
                         openTree2WithActiveNodeArray({
-                          activeNodeArray: m.url,
+                          // message urls are built from existing db rows
+                          activeNodeArray: m.url as (string | number)[],
                           search,
                           projekteTabs,
                           setProjekteTabs,

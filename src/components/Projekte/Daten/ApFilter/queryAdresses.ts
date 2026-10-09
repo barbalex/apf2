@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryAdresses = gql`
+export const queryAdresses = graphql(`
   query ApFilterAdressesQuery {
     allAdresses(orderBy: NAME_ASC) {
       nodes {
@@ -9,4 +9,4 @@ export const queryAdresses = gql`
       }
     }
   }
-`
+`)

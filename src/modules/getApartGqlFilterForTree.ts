@@ -1,8 +1,9 @@
+import type { ApartFilter } from '../gql/graphql.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
-export const getApartGqlFilterForTree = (apId: string) => {
+export const getApartGqlFilterForTree = (_apId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
-  const gqlFilter = {}
+  const gqlFilter: ApartFilter = {}
 
   // Don't include apId in filter - query is already scoped to ap
   if (nodeLabelFilter.apart) {

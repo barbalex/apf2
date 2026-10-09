@@ -2,6 +2,13 @@
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
  */
+import type {
+  PopFieldsFragment,
+  TpopFieldsFragment,
+  TpopkontrFieldsFragment,
+  TpopkontrzaehlFieldsFragment,
+  TpopmassnFieldsFragment,
+} from '../../gql/graphql.ts'
 import { tables } from '../tables.ts'
 import { copyTpopsOfPop } from '../copyTpopsOfPop.ts'
 import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.ts'
@@ -18,23 +25,35 @@ import { createPop } from './createPop.ts'
 
 import {
   store,
-  apolloClientAtom,
-  tsQueryClientAtom,
   addNotificationAtom,
   copyingAtom,
+  type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
+
+type CopiedRow =
+  | TpopkontrzaehlFieldsFragment
+  | TpopkontrFieldsFragment
+  | TpopmassnFieldsFragment
+  | TpopFieldsFragment
+  | PopFieldsFragment
 
 // copyTpopsOfPop can pass table and id separately
 export const copyTo = async ({
   parentId,
   table: tablePassed,
   id: idPassed,
+}: {
+  parentId?: string | undefined
+  table?: string | undefined
+  id?: string | undefined
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
 
   const copying = store.get(copyingAtom)
   const table = tablePassed ?? copying.table
@@ -47,48 +66,59 @@ export const copyTo = async ({
   const dbTable = tabelle?.dbTable ?? table
 
   // get data
-  let row
+  let row: CopiedRow | undefined
   switch (dbTable) {
     case 'tpopkontrzaehl': {
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<{
+        tpopkontrzaehlById?: TpopkontrzaehlFieldsFragment | null
+      }>({
         query: queryTpopkontrzaehlById,
         variables: { id },
       })
-      row = data?.tpopkontrzaehlById
+      row = data?.tpopkontrzaehlById ?? undefined
       break
     }
     case 'tpopkontr': {
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<{
+        tpopkontrById?: TpopkontrFieldsFragment | null
+      }>({
         query: queryTpopKontrById,
         variables: { id },
       })
-      row = data?.tpopkontrById
+      row = data?.tpopkontrById ?? undefined
       break
     }
     case 'tpopmassn': {
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<{
+        tpopmassnById?: TpopmassnFieldsFragment | null
+      }>({
         query: queryTpopmassnById,
         variables: { id },
       })
-      row = data?.tpopmassnById
+      row = data?.tpopmassnById ?? undefined
       break
     }
     case 'tpop': {
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<{
+        tpopById?: TpopFieldsFragment | null
+      }>({
         query: queryTpopById,
         variables: { id },
       })
-      row = data?.tpopById
+      row = data?.tpopById ?? undefined
       break
     }
     case 'pop': {
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<{
+        popById?: PopFieldsFragment | null
+      }>({
         query: queryPopById,
         variables: { id },
       })
-      row = data?.popById
+      row = data?.popById ?? undefined
       break
     }
+    case null:
     default:
       // do nothing
       break
@@ -104,215 +134,244 @@ export const copyTo = async ({
   }
 
   // insert
-  let response
-  let newId
+  let newId: string | null | undefined
   switch (dbTable) {
     case 'tpopkontrzaehl':
       // TODO: this never happens, right?
-      response = await apolloClient.mutate({
-        mutation: createTpopkontrzaehl,
-        variables: {
-          tpopkontrId: parentId,
-          anzahl: row.anzahl,
-          einheit: row.einheit,
-          methode: row.methode,
-        },
-      })
-      newId = response?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+      {
+        const kontrRow = row as TpopkontrzaehlFieldsFragment
+        const response = await apolloClient.mutate<{
+          createTpopkontrzaehl?: { tpopkontrzaehl?: { id: string } | null }
+        }>({
+          mutation: createTpopkontrzaehl,
+          variables: {
+            tpopkontrId: parentId,
+            anzahl: kontrRow.anzahl,
+            einheit: kontrRow.einheit,
+            methode: kontrRow.methode,
+          },
+        })
+        newId = response?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+      }
       break
     case 'tpopkontr':
-      response = await apolloClient.mutate({
-        mutation: createTpopkontr,
-        variables: {
-          tpopId: parentId,
-          typ: row.typ,
-          datum: row.datum,
-          jahr: row.jahr,
-          vitalitaet: row.vitalitaet,
-          ueberlebensrate: row.ueberlebensrate,
-          entwicklung: row.entwicklung,
-          ursachen: row.ursachen,
-          erfolgsbeurteilung: row.erfolgsbeurteilung,
-          umsetzungAendern: row.umsetzungAendern,
-          kontrolleAendern: row.kontrolleAendern,
-          bemerkungen: row.bemerkungen,
-          lrDelarze: row.lrDelarze,
-          flaeche: row.flaeche,
-          lrUmgebungDelarze: row.lrUmgebungDelarze,
-          vegetationstyp: row.vegetationstyp,
-          konkurrenz: row.konkurrenz,
-          moosschicht: row.moosschicht,
-          krautschicht: row.krautschicht,
-          strauchschicht: row.strauchschicht,
-          baumschicht: row.baumschicht,
-          idealbiotopUebereinstimmung: row.idealbiotopUebereinstimmung,
-          handlungsbedarf: row.handlungsbedarf,
-          flaecheUeberprueft: row.flaecheUeberprueft,
-          deckungVegetation: row.deckungVegetation,
-          deckungNackterBoden: row.deckungNackterBoden,
-          deckungApArt: row.deckungApArt,
-          vegetationshoeheMaximum: row.vegetationshoeheMaximum,
-          vegetationshoeheMittel: row.vegetationshoeheMittel,
-          gefaehrdung: row.gefaehrdung,
-          bearbeiter: row.bearbeiter,
-          planVorhanden: row.planVorhanden,
-          jungpflanzenVorhanden: row.jungpflanzenVorhanden,
-        },
-        // update does not work because query contains filter
-      })
-      newId = response?.data?.createTpopkontr?.tpopkontr?.id
+      {
+        const kontrRow = row as TpopkontrFieldsFragment
+        const response = await apolloClient.mutate<{
+          createTpopkontr?: { tpopkontr?: { id: string } | null }
+        }>({
+          mutation: createTpopkontr,
+          variables: {
+            tpopId: parentId,
+            typ: kontrRow.typ,
+            datum: kontrRow.datum,
+            jahr: kontrRow.jahr,
+            vitalitaet: kontrRow.vitalitaet,
+            ueberlebensrate: kontrRow.ueberlebensrate,
+            entwicklung: kontrRow.entwicklung,
+            ursachen: kontrRow.ursachen,
+            erfolgsbeurteilung: kontrRow.erfolgsbeurteilung,
+            umsetzungAendern: kontrRow.umsetzungAendern,
+            kontrolleAendern: kontrRow.kontrolleAendern,
+            bemerkungen: kontrRow.bemerkungen,
+            lrDelarze: kontrRow.lrDelarze,
+            flaeche: kontrRow.flaeche,
+            lrUmgebungDelarze: kontrRow.lrUmgebungDelarze,
+            vegetationstyp: kontrRow.vegetationstyp,
+            konkurrenz: kontrRow.konkurrenz,
+            moosschicht: kontrRow.moosschicht,
+            krautschicht: kontrRow.krautschicht,
+            strauchschicht: kontrRow.strauchschicht,
+            baumschicht: kontrRow.baumschicht,
+            idealbiotopUebereinstimmung: kontrRow.idealbiotopUebereinstimmung,
+            handlungsbedarf: kontrRow.handlungsbedarf,
+            flaecheUeberprueft: kontrRow.flaecheUeberprueft,
+            deckungVegetation: kontrRow.deckungVegetation,
+            deckungNackterBoden: kontrRow.deckungNackterBoden,
+            deckungApArt: kontrRow.deckungApArt,
+            vegetationshoeheMaximum: kontrRow.vegetationshoeheMaximum,
+            vegetationshoeheMittel: kontrRow.vegetationshoeheMittel,
+            gefaehrdung: kontrRow.gefaehrdung,
+            bearbeiter: kontrRow.bearbeiter,
+            planVorhanden: kontrRow.planVorhanden,
+            jungpflanzenVorhanden: kontrRow.jungpflanzenVorhanden,
+          },
+          // update does not work because query contains filter
+        })
+        newId = response?.data?.createTpopkontr?.tpopkontr?.id
+      }
       break
     case 'tpopmassn':
-      response = await apolloClient.mutate({
-        mutation: createTpopmassn,
-        variables: {
-          tpopId: parentId,
-          typ: row.typ,
-          beschreibung: row.beschreibung,
-          jahr: row.jahr,
-          datum: row.datum,
-          bemerkungen: row.bemerkungen,
-          planBezeichnung: row.planBezeichnung,
-          flaeche: row.flaeche,
-          markierung: row.markierung,
-          anzTriebe: row.anzTriebe,
-          anzPflanzen: row.anzPflanzen,
-          anzPflanzstellen: row.anzPflanzstellen,
-          zieleinheitEinheit: row.zieleinheitEinheit,
-          zieleinheitAnzahl: row.zieleinheitAnzahl,
-          wirtspflanze: row.wirtspflanze,
-          herkunftPop: row.herkunftPop,
-          sammeldatum: row.sammeldatum,
-          vonAnzahlIndividuen: row.vonAnzahlIndividuen,
-          form: row.form,
-          pflanzanordnung: row.pflanzanordnung,
-          bearbeiter: row.bearbeiter,
-          planVorhanden: row.planVorhanden,
-        },
-      })
-      newId = response?.data?.createTpopmassn?.tpopmassn?.id
+      {
+        const massnRow = row as TpopmassnFieldsFragment
+        const response = await apolloClient.mutate<{
+          createTpopmassn?: { tpopmassn?: { id: string } | null }
+        }>({
+          mutation: createTpopmassn,
+          variables: {
+            tpopId: parentId,
+            typ: massnRow.typ,
+            beschreibung: massnRow.beschreibung,
+            jahr: massnRow.jahr,
+            datum: massnRow.datum,
+            bemerkungen: massnRow.bemerkungen,
+            planBezeichnung: massnRow.planBezeichnung,
+            flaeche: massnRow.flaeche,
+            markierung: massnRow.markierung,
+            anzTriebe: massnRow.anzTriebe,
+            anzPflanzen: massnRow.anzPflanzen,
+            anzPflanzstellen: massnRow.anzPflanzstellen,
+            zieleinheitEinheit: massnRow.zieleinheitEinheit,
+            zieleinheitAnzahl: massnRow.zieleinheitAnzahl,
+            wirtspflanze: massnRow.wirtspflanze,
+            herkunftPop: massnRow.herkunftPop,
+            sammeldatum: massnRow.sammeldatum,
+            vonAnzahlIndividuen: massnRow.vonAnzahlIndividuen,
+            form: massnRow.form,
+            pflanzanordnung: massnRow.pflanzanordnung,
+            bearbeiter: massnRow.bearbeiter,
+            planVorhanden: massnRow.planVorhanden,
+          },
+        })
+        newId = response?.data?.createTpopmassn?.tpopmassn?.id
+      }
       break
     case 'tpop':
-      response = await apolloClient.mutate({
-        mutation: createTpop,
-        variables: {
-          popId: parentId,
-          nr: row.nr,
-          gemeinde: row.gemeinde,
-          flurname: row.flurname,
-          geomPoint:
-            row?.geomPoint?.geojson ? JSON.parse(row.geomPoint.geojson) : null,
-          radius: row.radius,
-          hoehe: row.hoehe,
-          exposition: row.exposition,
-          klima: row.klima,
-          neigung: row.neigung,
-          bodenTyp: row.bodenTyp,
-          bodenKalkgehalt: row.bodenKalkgehalt,
-          bodenDurchlaessigkeit: row.bodenDurchlaessigkeit,
-          bodenHumus: row.bodenHumus,
-          bodenNaehrstoffgehalt: row.bodenNaehrstoffgehalt,
-          bodenAbtrag: row.bodenAbtrag,
-          wasserhaushalt: row.wasserhaushalt,
-          beschreibung: row.beschreibung,
-          katasterNr: row.katasterNr,
-          status: row.status,
-          statusUnklarGrund: row.statusUnklarGrund,
-          apberRelevant: row.apberRelevant,
-          apberRelevantGrund: row.apberRelevantGrund,
-          bekanntSeit: row.bekanntSeit,
-          eigentuemer: row.eigentuemer,
-          kontakt: row.kontakt,
-          nutzungszone: row.nutzungszone,
-          bewirtschafter: row.bewirtschafter,
-          bewirtschaftung: row.bewirtschaftung,
-          ekfrequenz: row.ekfrequenz,
-          ekfrequenzAbweichend: row.ekfrequenzAbweichend,
-          ekfKontrolleur: row.ekfKontrolleur,
-          bemerkungen: row.bemerkungen,
-          statusUnklar: row.statusUnklar,
-        },
-      })
-      newId = response?.data?.createTpop?.tpop?.id
+      {
+        const tpopRow = row as TpopFieldsFragment
+        const response = await apolloClient.mutate<{
+          createTpop?: { tpop?: { id: string } | null }
+        }>({
+          mutation: createTpop,
+          variables: {
+            popId: parentId,
+            nr: tpopRow.nr,
+            gemeinde: tpopRow.gemeinde,
+            flurname: tpopRow.flurname,
+            geomPoint:
+              tpopRow?.geomPoint?.geojson ?
+                JSON.parse(String(tpopRow.geomPoint.geojson))
+              : null,
+            radius: tpopRow.radius,
+            hoehe: tpopRow.hoehe,
+            exposition: tpopRow.exposition,
+            klima: tpopRow.klima,
+            neigung: tpopRow.neigung,
+            bodenTyp: tpopRow.bodenTyp,
+            bodenKalkgehalt: tpopRow.bodenKalkgehalt,
+            bodenDurchlaessigkeit: tpopRow.bodenDurchlaessigkeit,
+            bodenHumus: tpopRow.bodenHumus,
+            bodenNaehrstoffgehalt: tpopRow.bodenNaehrstoffgehalt,
+            bodenAbtrag: tpopRow.bodenAbtrag,
+            wasserhaushalt: tpopRow.wasserhaushalt,
+            beschreibung: tpopRow.beschreibung,
+            katasterNr: tpopRow.katasterNr,
+            status: tpopRow.status,
+            statusUnklarGrund: tpopRow.statusUnklarGrund,
+            apberRelevant: tpopRow.apberRelevant,
+            apberRelevantGrund: tpopRow.apberRelevantGrund,
+            bekanntSeit: tpopRow.bekanntSeit,
+            eigentuemer: tpopRow.eigentuemer,
+            kontakt: tpopRow.kontakt,
+            nutzungszone: tpopRow.nutzungszone,
+            bewirtschafter: tpopRow.bewirtschafter,
+            bewirtschaftung: tpopRow.bewirtschaftung,
+            ekfrequenz: tpopRow.ekfrequenz,
+            ekfrequenzAbweichend: tpopRow.ekfrequenzAbweichend,
+            ekfKontrolleur: tpopRow.ekfKontrolleur,
+            bemerkungen: tpopRow.bemerkungen,
+            statusUnklar: tpopRow.statusUnklar,
+          },
+        })
+        newId = response?.data?.createTpop?.tpop?.id
+      }
       break
     case 'pop':
-      response = await apolloClient.mutate({
-        mutation: createPop,
-        variables: {
-          apId: parentId,
-          nr: row.nr,
-          name: row.name,
-          status: row.status,
-          statusUnklar: row.statusUnklar,
-          statusUnklarBegruendung: row.statusUnklarBegruendung,
-          bekanntSeit: row.bekanntSeit,
-          geomPoint:
-            row?.geomPoint?.geojson ? JSON.parse(row.geomPoint.geojson) : null,
-        },
-      })
-      newId = response?.data?.createPop?.pop?.id
+      {
+        const popRow = row as PopFieldsFragment
+        const response = await apolloClient.mutate<{
+          createPop?: { pop?: { id: string } | null }
+        }>({
+          mutation: createPop,
+          variables: {
+            apId: parentId,
+            nr: popRow.nr,
+            name: popRow.name,
+            status: popRow.status,
+            statusUnklar: popRow.statusUnklar,
+            statusUnklarBegruendung: popRow.statusUnklarBegruendung,
+            bekanntSeit: popRow.bekanntSeit,
+            geomPoint:
+              popRow?.geomPoint?.geojson ?
+                JSON.parse(String(popRow.geomPoint.geojson))
+              : null,
+          },
+        })
+        newId = response?.data?.createPop?.pop?.id
+      }
       break
+    case null:
     default:
       // do nothing
       break
   }
   // update tree data
   if (table === 'pop') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeApFolders'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopmassn'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfeldkontr') {
     // always copy Zaehlungen
-    copyZaehlOfTpopKontr({
-      tpopkontrIdFrom: id,
+    void copyZaehlOfTpopKontr({
+      tpopkontrIdFrom: id as string,
       tpopkontrIdTo: newId,
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfreiwkontr') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopfreiwkontr'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
-    copyTpopsOfPop({
-      popIdFrom: id,
+    void copyTpopsOfPop({
+      popIdFrom: id as string,
       popIdTo: newId,
     })
   }

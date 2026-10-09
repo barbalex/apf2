@@ -1,11 +1,10 @@
-import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
+import { useState } from 'react'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Select } from '../../../../shared/Select.tsx'
-
-import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
 interface ApUser {
   userByUserName?: {
@@ -26,9 +25,9 @@ interface BenutzerQueryResult {
 }
 
 interface NewUserProps {
-  apId: ApId
+  apId: string
   apUsers: ApUser[]
-  refetch: () => void
+  refetch: () => Promise<unknown>
 }
 
 export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
@@ -36,11 +35,11 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
 
   const [error, setError] = useState<string | null>(null)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['benutzerForNewUser'],
     queryFn: async () => {
       const result = await apolloClient.query<BenutzerQueryResult>({
-        query: gql`
+        query: graphql(`
           query benutzerForNewUser {
             allUsers(
               orderBy: NAME_ASC
@@ -55,12 +54,12 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as BenutzerQueryResult
     },
-    suspense: true,
   })
   const userData = data.allUsers.nodes ?? []
   const apUserIds = apUsers.map((u) => u?.userByUserName?.id)
@@ -71,11 +70,11 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
       label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const name = event.target.value as string | null
     try {
-      await apolloClient.mutate<any>({
-        mutation: gql`
+      await apolloClient.mutate({
+        mutation: graphql(`
           mutation createApUserForApMutation($apId: UUID!, $name: String) {
             createApUser(input: { apUser: { apId: $apId, userName: $name } }) {
               apUser {
@@ -83,13 +82,13 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId, name },
       })
     } catch (error) {
       return setError((error as Error).message)
     }
-    refetch()
+    void refetch()
   }
 
   return (
@@ -99,8 +98,8 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
       label="Neuem Benutzer Zugriff erteilen"
       name="neuerBenutzer"
       options={options}
-      error={error}
-      saveToDb={saveToDb}
+      error={error ?? ''}
+      saveToDb={(event) => void saveToDb(event)}
     />
   )
 }

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId } from '../../../../models/apflora/index.tsx'
+import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -15,7 +15,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApAnzmassnsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -31,12 +31,12 @@ interface ApAnzmassnsQueryResult {
         text?: string
       }
       vApAnzmassnsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           anzahlMassnahmen?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 
@@ -44,14 +44,14 @@ export const AnzMassn = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAnzMassnProAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApAnzmassnsQueryResult }
+    let result: { data?: ApAnzmassnsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApAnzmassnsQueryResult>({
-        query: gql`
+        query: graphql(`
           query apAnzmassnsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -78,7 +78,7 @@ export const AnzMassn = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -89,7 +89,7 @@ export const AnzMassn = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAps?.nodes ?? []).map((z) => ({
       id: z.id,
       artname: z?.aeTaxonomyByArtId?.artname ?? '',
       bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -107,14 +107,14 @@ export const AnzMassn = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApAnzahlMassnahmen' })
+    void exportModule({ data: rows, fileName: 'ApAnzahlMassnahmen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickAnzMassnProAp}
+      onClick={() => void onClickAnzMassnProAp()}
       color="inherit"
       disabled={!!queryState}
     >

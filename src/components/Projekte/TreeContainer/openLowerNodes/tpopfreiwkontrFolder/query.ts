@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query ekfFolderOpenLowerNodesQuery($id: UUID!) {
     tpopById(id: $id) {
       id
       tpopkontrsByTpopId(
-        filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+        filter: { typ: { equalTo: "Freiwilligen-Kontrolle" } }
       ) {
         nodes {
           id
@@ -18,4 +18,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -7,7 +7,7 @@ import { FaPlus } from 'react-icons/fa6'
 import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import type { ErfkritId, ApId } from '../../../../models/apflora/index.tsx'
+import type { ErfkritId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -19,12 +19,10 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateErfkritResult {
-  data?: {
-    createErfkrit?: {
-      erfkrit?: {
-        id: ErfkritId
-        apId: ApId
-      }
+  createErfkrit?: {
+    erfkrit?: {
+      id: ErfkritId
+      apId: ApId
     }
   }
 }
@@ -49,10 +47,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   )
 
   const onClickAdd = async () => {
-    let result: CreateErfkritResult | undefined
+    let result: { data?: CreateErfkritResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateErfkritResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createErfkritForErfkritsForm($apId: UUID!) {
             createErfkrit(input: { erfkrit: { apId: $apId } }) {
               erfkrit {
@@ -61,7 +59,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -72,17 +70,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createErfkrit?.erfkrit?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickCopy = () => setOpenChooseApToCopyErfkritsFrom(true)
@@ -94,7 +92,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neues Erfolgs-Kriterium erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

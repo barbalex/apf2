@@ -2,7 +2,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 export const ZhWaelderVegetation = () => (
   <WMSTileLayer
-    url="//wms.zh.ch/WaldVKWMS"
+    url="//wms.zh.ch/WaldVKZH"
     layers="waldgesellschaften,beschriftung-einheit-nach-ek72"
     opacity={0.5}
     transparent={true}

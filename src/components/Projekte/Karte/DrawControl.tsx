@@ -2,12 +2,21 @@ import { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
-import { useAtomValue, useSetAtom, useAtom } from 'jotai'
+import { useAtomValue, useAtom } from 'jotai'
+import type { PrimitiveAtom } from 'jotai'
+import type { Control as LeafletControl, DrawEvents, LeafletEvent } from 'leaflet'
+import type { FeatureCollection, Geometry } from 'geojson'
 
 import {
   treeMapFilterAtom,
   treeMapFilterResetterAtom,
 } from '../../../store/index.ts'
+
+// the atom is typed as undefined (its initial value) but holds
+// a GeoJSON geometry at runtime
+const mapFilterAtom = treeMapFilterAtom as unknown as PrimitiveAtom<
+  Geometry | undefined
+>
 
 window.L.drawLocal.draw.toolbar.buttons.polygon =
   'Umriss zeichnen, um räumlich zu filtern'
@@ -47,7 +56,7 @@ window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-
 
 export const DrawControl = () => {
   const map = useMap()
-  const [mapFilter, setMapFilter] = useAtom(treeMapFilterAtom)
+  const [mapFilter, setMapFilter] = useAtom(mapFilterAtom)
   const mapFilterResetter = useAtomValue(treeMapFilterResetterAtom)
 
   useEffect(() => {
@@ -72,43 +81,50 @@ export const DrawControl = () => {
       // },
     })
     const drawControlEditOnly = new window.L.Control.Draw({
-      draw: false,
+      // leaflet-draw supports draw: false to disable all draw handlers,
+      // but its typings only allow false per handler
+      draw: false as unknown as LeafletControl.DrawOptions,
       edit: {
         featureGroup: drawnItems,
       },
     })
 
     if (mapFilter) {
-      drawControlFull.remove(map)
+      drawControlFull.remove()
       drawControlEditOnly.addTo(map)
     } else {
       map.addControl(drawControlFull)
     }
 
-    const onDrawCreated = (e) => {
+    const onDrawCreated = (e: LeafletEvent) => {
       // console.log('map, draw:created')
-      drawnItems.addLayer(e.layer)
-      drawControlFull.remove(map)
+      // leaflet-draw emits its own event shape for draw:created
+      drawnItems.addLayer((e as DrawEvents.Created).layer)
+      drawControlFull.remove()
       drawControlEditOnly.addTo(map)
-      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+      setMapFilter(
+        (drawnItems.toGeoJSON() as FeatureCollection)?.features?.[0]?.geometry,
+      )
     }
     const onDrawEdited = () => {
       // console.log('map, draw:edited')
-      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+      setMapFilter(
+        (drawnItems.toGeoJSON() as FeatureCollection)?.features?.[0]?.geometry,
+      )
     }
     const onDrawDeleted = () => {
       // console.log('map, draw:deleted')
       setMapFilter(undefined)
       if (drawnItems.getLayers().length === 0) {
-        drawControlEditOnly.remove(map)
-        drawControlFull.remove(map)
+        drawControlEditOnly.remove()
+        drawControlFull.remove()
         drawControlFull.addTo(map)
       }
     }
     const onDrawDeletedFromOutside = () => {
       // console.log('map, draw:deletedFromOutside')
-      drawControlEditOnly.remove(map)
-      drawControlFull.remove(map)
+      drawControlEditOnly.remove()
+      drawControlFull.remove()
       drawControlFull.addTo(map)
     }
     const onDrawClearFromOutside = () => {
@@ -124,8 +140,8 @@ export const DrawControl = () => {
 
     return () => {
       map.removeLayer(drawnItems)
-      drawControlFull.remove(map)
-      drawControlEditOnly.remove(map)
+      drawControlFull.remove()
+      drawControlEditOnly.remove()
       map.off('draw:created', onDrawCreated)
       map.off('draw:edited', onDrawEdited)
       map.off('draw:deleted', onDrawDeleted)

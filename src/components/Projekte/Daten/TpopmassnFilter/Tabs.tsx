@@ -11,7 +11,7 @@ import styles from './Tabs.module.css'
 interface TabsProps {
   activeTab: number
   setActiveTab: (tab: number) => void
-  dataFilter: any[]
+  dataFilter: Record<string, unknown>[]
 }
 
 export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
@@ -22,7 +22,7 @@ export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
       (v) => v !== null,
     ).length === 0
 
-  const onChangeTab = (event: SyntheticEvent, value: number) => {
+  const onChangeTab = (_event: SyntheticEvent, value: number) => {
     if (value > dataFilter.length - 1) {
       addDataFilterOr({ table: 'tpopmassn', val: tpopmassn })
       setTimeout(() => setActiveTab(value), 0)
@@ -43,7 +43,7 @@ export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
         scrollButtons="auto"
         className={styles.tabs}
       >
-        {dataFilter.map((filter, index) => (
+        {dataFilter.map((_filter, index) => (
           <Tab
             key={index}
             label={index + 1}

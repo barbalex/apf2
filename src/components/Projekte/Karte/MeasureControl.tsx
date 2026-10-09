@@ -1,6 +1,11 @@
 import 'leaflet'
 import { createControlComponent } from '@react-leaflet/core'
 import 'leaflet-measure'
+import type {
+  Control as LeafletControl,
+  Map as LeafletMap,
+  Marker as LeafletMarker,
+} from 'leaflet'
 
 const options = {
   primaryLengthUnit: 'meters',
@@ -14,10 +19,21 @@ const options = {
   decPoint: '.',
 }
 
+interface MeasureControlMixin {
+  _captureMarker: LeafletMarker
+  _map: LeafletMap
+}
+
+// the leaflet-measure plugin registers L.Control.Measure without typings
+interface MeasurePlugin {
+  include: (mixin: Record<string, unknown>) => void
+  new (measureOptions: typeof options): LeafletControl
+}
+
 // see: https://github.com/ljagis/leaflet-measure/issues/171#issuecomment-1137483548
-window.L.Control.Measure.include({
+;(window.L.Control as unknown as { Measure: MeasurePlugin }).Measure.include({
   // set icon on the capture marker
-  _setCaptureMarkerIcon: function () {
+  _setCaptureMarkerIcon: function (this: MeasureControlMixin) {
     // disable autopan
     this._captureMarker.options.autoPanOnFocus = false
 
@@ -31,5 +47,8 @@ window.L.Control.Measure.include({
 })
 
 export const MeasureControl = createControlComponent(
-  () => new window.L.Control.Measure(options),
+  () =>
+    new (window.L.Control as unknown as { Measure: MeasurePlugin }).Measure(
+      options,
+    ),
 )

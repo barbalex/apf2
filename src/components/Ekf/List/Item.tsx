@@ -1,15 +1,23 @@
 import { useNavigate, useParams, useLocation } from 'react-router'
 
+import type { EkfRow } from '../getEkfFromData.ts'
+
 import styles from './Item.module.css'
 
-export const Item = ({ projektCount, row }) => {
+export const Item = ({
+  projektCount,
+  row,
+}: {
+  projektCount: number
+  row: EkfRow
+}) => {
   const { search } = useLocation()
   const { ekfId, userId, ekfYear } = useParams()
   const navigate = useNavigate()
   const innerContainerHeight = projektCount > 1 ? 110 : 91
 
   const onClick = () =>
-    navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${row.id}${search}`)
+    void navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${row.id}${search}`)
 
   return (
     <div

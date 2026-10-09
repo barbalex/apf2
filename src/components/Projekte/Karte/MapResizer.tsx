@@ -1,10 +1,19 @@
 import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 import { useAtomValue } from 'jotai'
+import type { LatLngBoundsExpression } from 'leaflet'
 
 import { mapBoundsAtom } from '../../../store/index.ts'
 
-export const MapResizer = ({ children, mapContainerRef }) => {
+interface MapResizerProps {
+  children: React.ReactNode
+  mapContainerRef: React.RefObject<HTMLDivElement | null>
+}
+
+export const MapResizer = ({
+  children,
+  mapContainerRef,
+}: MapResizerProps) => {
   const map = useMap()
   const bounds = useAtomValue(mapBoundsAtom)
 
@@ -37,7 +46,9 @@ export const MapResizer = ({ children, mapContainerRef }) => {
         // Uncaught TypeError: Cannot read properties of undefined (reading '_leaflet_pos')
         // thus: try/catch
         try {
-          map.fitBounds(bounds)
+          // atomWithStorage provides the bounds as number[][],
+          // which is a valid LatLngBoundsLiteral at runtime
+          map.fitBounds(bounds as LatLngBoundsExpression)
         } catch (error) {
           console.log('MapResizer error fitting bounds:', error)
         }

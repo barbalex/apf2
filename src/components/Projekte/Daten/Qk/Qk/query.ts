@@ -1,13 +1,15 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { ap, ziel } from '../../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query QkQuery(
     $berichtjahr: Int
     $notIsBerichtjahr: Boolean!
     $projId: UUID!
     $apId: UUID!
+    $minDatum: Date
+    $maxDatum: Date
     $apMitApOhneUmsetzung: Boolean!
     $apMitAktKontrOhneZielrelevanteEinheit: Boolean!
     $apOhneBearbeitung: Boolean!
@@ -100,13 +102,13 @@ export const query = gql`
     $tpopberOhneEntwicklung: Boolean!
     $tpopberOhneJahr: Boolean!
     $tpopfeldkontrOhneBearb: Boolean!
-    $tpopfeldkontrOhneJahr: Boolean!
+    $tpopfeldkontrDatum: Boolean!
     $tpopfeldkontrOhneZaehlung: Boolean!
     $tpopfreiwkontrOhneBearb: Boolean!
-    $tpopfreiwkontrOhneJahr: Boolean!
+    $tpopfreiwkontrDatum: Boolean!
     $tpopfreiwkontrOhneZaehlung: Boolean!
     $tpopmassnOhneBearb: Boolean!
-    $tpopmassnOhneJahr: Boolean!
+    $tpopmassnDatum: Boolean!
     $tpopmassnOhneTyp: Boolean!
     $anpflanzungOhneZielrelevanteEinheit: Boolean!
     $anpflanzungZielrelevanteEinheitFalsch: Boolean!
@@ -1562,8 +1564,7 @@ export const query = gql`
         }
       }
     }
-    tpopmassnOhneJahr: projektById(id: $projId)
-      @include(if: $tpopmassnOhneJahr) {
+    tpopmassnDatum: projektById(id: $projId) @include(if: $tpopmassnDatum) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1575,7 +1576,14 @@ export const query = gql`
                 nodes {
                   id
                   tpopmassnsByTpopId(
-                    filter: { jahr: { isNull: true } }
+                    filter: {
+                      or: [
+                        { jahr: { isNull: true } }
+                        { datum: { isNull: true } }
+                        { datum: { lessThan: $minDatum } }
+                        { datum: { greaterThan: $maxDatum } }
+                      ]
+                    }
                     orderBy: ID_ASC
                   ) {
                     nodes {
@@ -1809,8 +1817,8 @@ export const query = gql`
         }
       }
     }
-    tpopfeldkontrOhneJahr: projektById(id: $projId)
-      @include(if: $tpopfeldkontrOhneJahr) {
+    tpopfeldkontrDatum: projektById(id: $projId)
+      @include(if: $tpopfeldkontrDatum) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1823,8 +1831,13 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      jahr: { isNull: true }
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
+                      or: [
+                        { jahr: { isNull: true } }
+                        { datum: { isNull: true } }
+                        { datum: { lessThan: $minDatum } }
+                        { datum: { greaterThan: $maxDatum } }
+                      ]
                     }
                     orderBy: ID_ASC
                   ) {
@@ -1848,8 +1861,8 @@ export const query = gql`
         }
       }
     }
-    tpopfreiwkontrOhneJahr: projektById(id: $projId)
-      @include(if: $tpopfreiwkontrOhneJahr) {
+    tpopfreiwkontrDatum: projektById(id: $projId)
+      @include(if: $tpopfreiwkontrDatum) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1862,8 +1875,13 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      jahr: { isNull: true }
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
+                      or: [
+                        { jahr: { isNull: true } }
+                        { datum: { isNull: true } }
+                        { datum: { lessThan: $minDatum } }
+                        { datum: { greaterThan: $maxDatum } }
+                      ]
                     }
                     orderBy: ID_ASC
                   ) {
@@ -1902,7 +1920,7 @@ export const query = gql`
                   tpopkontrsByTpopId(
                     filter: {
                       bearbeiter: { isNull: true }
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -1942,7 +1960,7 @@ export const query = gql`
                   tpopkontrsByTpopId(
                     filter: {
                       bearbeiter: { isNull: true }
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -1981,7 +1999,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2023,7 +2041,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2065,7 +2083,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2116,7 +2134,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2167,7 +2185,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                   ) {
@@ -2233,7 +2251,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2289,7 +2307,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                   ) {
@@ -2355,7 +2373,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC

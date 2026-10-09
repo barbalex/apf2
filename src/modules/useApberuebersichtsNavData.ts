@@ -1,16 +1,15 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useApberuebersichtsNavData = (props) => {
+export const useApberuebersichtsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
@@ -20,11 +19,11 @@ export const useApberuebersichtsNavData = (props) => {
     treeApberuebersichtGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeApberuebersicht', apberuebersichtGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavApberuebersichtsQuery(
             $apberuebersichtFilter: ApberuebersichtFilter!
           ) {
@@ -42,19 +41,19 @@ export const useApberuebersichtsNavData = (props) => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           apberuebersichtFilter: apberuebersichtGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const count = data.filtered.nodes.length
-  const totalCount = data.unfiltered.totalCount
+  const count = data.filtered?.nodes.length
+  const totalCount = data.unfiltered?.totalCount
 
   const navData = {
     id: 'AP-Berichte',
@@ -71,15 +70,15 @@ export const useApberuebersichtsNavData = (props) => {
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: data.filtered.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.filtered?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'apberuebersicht',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: projId,
-      treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
+      treeUrl: ['Projekte', projId, 'AP-Berichte', p?.id],
       hasChildren: false,
     })),
   }

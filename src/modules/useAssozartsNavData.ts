@@ -1,24 +1,24 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getAssozartGqlFilterForTree } from './getAssozartGqlFilterForTree.ts'
 
-export const useAssozartsNavData = (props) => {
+export const useAssozartsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
   const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeAssozart', apId, assozartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeAssozartsQuery(
             $assozartsFilter: AssozartFilter!
             $apId: UUID!
@@ -36,16 +36,16 @@ export const useAssozartsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           assozartsFilter: assozartGqlFilterForTree,
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   const count = data.apById?.assozartsByApId?.nodes?.length ?? 0
@@ -57,15 +57,15 @@ export const useAssozartsNavData = (props) => {
     listFilter: 'assozart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
     label: `Assoziierte Arten (${count}/${totalCount})`,
-    menus: (data.apById.assozartsByApId.nodes ?? []).map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: (data.apById?.assozartsByApId.nodes ?? []).map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'assozart',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', p?.id],
       hasChildren: false,
     })),
   }

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId } from '../../../../models/apflora/index.tsx'
+import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApOhnepopQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -32,7 +32,7 @@ interface ApOhnepopQueryResult {
       popsByApId?: {
         totalCount: number
       }
-    }>
+    }[]
   }
 }
 
@@ -40,14 +40,14 @@ export const ApOhnePop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApOhnePop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApOhnepopQueryResult }
+    let result: { data?: ApOhnepopQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApOhnepopQueryResult>({
-        query: gql`
+        query: graphql(`
           query apOhnepopForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -71,7 +71,7 @@ export const ApOhnePop = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -82,11 +82,11 @@ export const ApOhnePop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? [])
+    const rows = (result?.data?.allAps?.nodes ?? [])
       .filter((z) => z?.popsByApId?.totalCount === 0)
       .map((z) => ({
         id: z.id,
-        artname: z?.aeTaxonomyByArtId.artname ?? '',
+        artname: z?.aeTaxonomyByArtId?.artname ?? '',
         bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
         start_jahr: z.startJahr,
         umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
@@ -100,14 +100,14 @@ export const ApOhnePop = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApOhnePopulationen' })
+    void exportModule({ data: rows, fileName: 'ApOhnePopulationen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickApOhnePop}
+      onClick={() => void onClickApOhnePop()}
       color="inherit"
       disabled={!!queryState}
     >

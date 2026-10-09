@@ -1,9 +1,23 @@
 import Linkify from 'linkify-react'
+import type { ReactNode } from 'react'
 
 // Somehow emotions styles were not applied
 // So need to style inline
 
-export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
+export interface LayerData {
+  label: string
+  properties: [string, unknown][]
+}
+
+interface PopupProps {
+  layersData: LayerData[]
+  mapSize?: { x: number; y: number } | undefined
+}
+
+export const Popup = ({
+  layersData,
+  mapSize = { x: 1000, y: 1000 },
+}: PopupProps) => (
   <div
     style={{
       overflow: 'auto',
@@ -39,7 +53,7 @@ export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
               }}
             >{`${key}:`}</div>
             <Linkify options={{ target: '_blank' }}>
-              <div style={{ overflowWrap: 'anywhere' }}>{value}</div>
+              <div style={{ overflowWrap: 'anywhere' }}>{value as ReactNode}</div>
             </Linkify>
           </div>
         ))}

@@ -4,15 +4,13 @@ import {
   defaultDataIdFromObject,
   ApolloLink,
   CombinedGraphQLErrors,
-  type NormalizedCacheObject,
 } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { setContext } from '@apollo/client/link/context'
+import { SetContextLink } from '@apollo/client/link/context'
 import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
-import { useSetAtom } from 'jotai'
 
 import { graphQlUri } from './modules/graphQlUri.ts'
 import { existsPermissionError } from './modules/existsPermissionError.ts'
@@ -23,21 +21,23 @@ import {
   addNotificationAtom,
   userTokenAtom,
   treeMapFilterAtom,
+  type Notification,
 } from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 interface JwtPayload {
   exp: number
 }
 
-export const buildApolloClient = (): ApolloClient<NormalizedCacheObject> => {
+export const buildApolloClient = (): ApolloClient => {
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
-  const authLink = setContext((_, { headers }) => {
+  // note: SetContextLink flips the arguments — prevContext comes first
+  const authLink = new SetContextLink(({ headers }) => {
     const token = store.get(userTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode<JwtPayload>(token)

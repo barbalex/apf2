@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
@@ -16,13 +16,11 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateAdresseResult {
-  data?: {
-    createAdresse?: {
-      adresse?: {
-        id: AdresseId
-      }
-    }
-  }
+  createAdresse: {
+    adresse: {
+      id: AdresseId
+    } | null
+  } | null
 }
 
 const iconStyle = { color: 'white' }
@@ -33,17 +31,17 @@ interface MenuProps {
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   const navigate = useNavigate()
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateAdresseResult | undefined
+    let result: { data?: CreateAdresseResult | null | undefined } | undefined
     try {
-      result = await apolloClient.mutate({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateAdresseResult>({
+        mutation: graphql(`
           mutation createAdresseForAdressesForm {
             createAdresse(input: { adresse: {} }) {
               adresse {
@@ -51,7 +49,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({
@@ -61,14 +59,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAdresse`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id = result?.data?.createAdresse?.adresse?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -78,7 +76,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Adresse erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

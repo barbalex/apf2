@@ -1,9 +1,10 @@
-import { useState, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState } from 'react'
 import { isEqual } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -22,32 +23,48 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { ziel as zielFragment } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type { ZielId } from '../../../../models/apflora/ZielId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
-import type { ZielTypWerteCode } from '../../../../models/apflora/ZielTypWerteCode.ts'
+import type { ComponentType } from 'react'
+
+import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
+
+interface ZielNode {
+  id: ZielId
+  apId: ApId
+  typ: number | null
+  jahr: number | null
+  bezeichnung: string | null
+  erreichung: string | null
+  bemerkungen: string | null
+  changedBy: string | null
+}
 
 interface ZielQueryResult {
-  zielById: {
-    id: ZielId
-    apId: ApId
-    typ: ZielTypWerteCode | null
-    jahr: number | null
-    bezeichnung: string | null
-    erreichung: string | null
-    bemerkungen: string | null
-    changedBy: string | null
-  } | null
+  zielById: ZielNode | null
   allZielTypWertes: {
-    nodes: Array<{
-      value: ZielTypWerteCode
-      label: string
-    }>
+    nodes: {
+      value: number
+      label: string | null
+    }[]
   }
 }
 
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: number; label: string | null }[]
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
 import styles from './Ziel.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   apId: 'UUID',
   typ: 'Int',
   jahr: 'Int',
@@ -77,7 +94,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ziel', id],
     queryFn: async () => {
       const result = await apolloClient.query<ZielQueryResult>({
@@ -87,13 +104,12 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.zielById ?? {}
+  const row: Partial<ZielNode> = data?.zielById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -103,7 +119,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateZiel(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -137,22 +153,22 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['ziel', id],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
     // if jahr of ziel is updated, activeNodeArray und openNodes need to change
     if (field === 'jahr') {
       const newActiveNodeArray = [...activeNodeArray]
-      newActiveNodeArray[5] = +value
+      newActiveNodeArray[5] = Number(value)
       const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
       const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
       const newOpenNodes = openNodes.map((n) => {
@@ -160,7 +176,7 @@ export const Component = () => {
         if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
         return n
       })
-      navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+      void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
       setOpenNodes(newOpenNodes)
     }
   }
@@ -181,12 +197,12 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={fieldErrors.jahr}
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="typ"
             label="Zieltyp"
             dataSource={data?.allZielTypWertes?.nodes ?? []}
             value={row.typ}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.typ}
           />
           <TextField
@@ -205,9 +221,9 @@ export const Component = () => {
             label="Ziel-Erreichung"
             options={erreichungOptions}
             loading={false}
-            value={row.erreichung}
-            saveToDb={saveToDb}
-            error={fieldErrors.erreichung}
+            value={row.erreichung ?? null}
+            saveToDb={(event) => void saveToDb(event)}
+            error={fieldErrors.erreichung ?? ''}
           />
           <TextField
             name="bemerkungen"

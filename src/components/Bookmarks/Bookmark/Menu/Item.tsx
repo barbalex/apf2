@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { isEqual } from 'es-toolkit'
 import { useAtomValue, useSetAtom } from 'jotai'
 
+import type { NavMenuData } from '../../types.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import {
   treeActiveNodeArrayAtom,
@@ -10,7 +11,15 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
-export const Item = ({ menu, baseUrl, onClose }) => {
+export const Item = ({
+  menu,
+  baseUrl,
+  onClose,
+}: {
+  menu: NavMenuData
+  baseUrl?: string
+  onClose: () => void
+}) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
@@ -31,10 +40,10 @@ export const Item = ({ menu, baseUrl, onClose }) => {
 
   const onClick = () => {
     // 1. navigate
-    const pathname = `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`
-    navigate({ pathname, search })
+    const targetPathname = `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`
+    void navigate({ pathname: targetPathname, search })
     // 2. sync tree openNodes
-    const url = pathname
+    const url = targetPathname
       .split('/')
       .filter((e) => !!e)
       .slice(1)

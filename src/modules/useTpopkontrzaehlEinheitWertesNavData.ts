@@ -1,10 +1,9 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -16,14 +15,14 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpopkontrzaehlEinheitWerte',
       tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeTpopkontrzaehlEinheitWertesQuery(
             $filter: TpopkontrzaehlEinheitWerteFilter!
           ) {
@@ -40,19 +39,19 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           filter: tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const count = data.allTpopkontrzaehlEinheitWertes.nodes.length
-  const totalCount = data.totalCount.totalCount
+  const count = data.allTpopkontrzaehlEinheitWertes?.nodes.length
+  const totalCount = data.totalCount?.totalCount
 
   const navData = {
     id: 'TpopkontrzaehlEinheitWerte',
@@ -68,14 +67,14 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: data.allTpopkontrzaehlEinheitWertes.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.allTpopkontrzaehlEinheitWertes?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopkontrzaehlEinheitWerte',
-      treeId: p.id,
-      treeTableId: p.id,
-      treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
+      treeId: p?.id,
+      treeTableId: p?.id,
+      treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p?.id],
       hasChildren: false,
     })),
   }

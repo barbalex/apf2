@@ -11,9 +11,18 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import type { MenuTpopNode, MenuTpopkontrNode } from '../types.ts'
 import styles from './Ekf.module.css'
 
-export const Ekf = ({ tpop, ekf, border }) => {
+export const Ekf = ({
+  tpop,
+  ekf,
+  border,
+}: {
+  tpop: MenuTpopNode | undefined
+  ekf: MenuTpopkontrNode
+  border: boolean
+}) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = () => setOpen(!open)
   const zaehls = ekf?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
@@ -22,7 +31,7 @@ export const Ekf = ({ tpop, ekf, border }) => {
   const projId = tpop?.popByPopId?.apByApId?.projId
   const apId = tpop?.popByPopId?.apByApId?.id
   const popId = tpop?.popByPopId?.id
-  const tpopId = tpop.id
+  const tpopId = tpop?.id
   const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${
     ekf.id
   }`

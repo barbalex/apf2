@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import type { ChangeEvent, KeyboardEvent, RefObject } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
+import type { TextFieldProps } from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
 import { useLocation } from 'react-router'
@@ -12,12 +14,13 @@ import {
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
   treeSetNodeLabelFilterKeyAtom,
-  treeEmptyNodeLabelFilterAtom,
 } from '../../../store/index.ts'
 import styles from './FilterInput.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
-const StyledTextField = styled((props) => <TextField {...props} />)(() => ({
+const StyledTextField = styled((props: TextFieldProps) => (
+  <TextField {...props} />
+))(() => ({
   label: { color: 'white' },
   input: { color: 'white' },
   '& .MuiFormLabel-root.Mui-focused': {
@@ -32,7 +35,15 @@ const StyledTextField = styled((props) => <TextField {...props} />)(() => ({
     },
 }))
 
-export const FilterInput = ({ toggleFilterInputIsVisible, ref: inputRef }) => {
+export interface FilterInputProps {
+  toggleFilterInputIsVisible: () => void
+  ref?: RefObject<HTMLInputElement | null>
+}
+
+export const FilterInput = ({
+  toggleFilterInputIsVisible,
+  ref: inputRef,
+}: FilterInputProps) => {
   // ISSUE: doc is not covered by active node array
   // thus activeFilterTable is not set for /Dokumentation
   const { pathname } = useLocation()
@@ -41,21 +52,23 @@ export const FilterInput = ({ toggleFilterInputIsVisible, ref: inputRef }) => {
   const activeFilterTable = isDocs ? 'doc' : activeFilterTableIn
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
-  const empty = useSetAtom(treeEmptyNodeLabelFilterAtom)
 
   const isFiltered = Object.values(nodeLabelFilter).some(
     (v) => v !== null && v !== '',
   )
 
-  const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+  const filterValue = activeFilterTable ?
+    (nodeLabelFilter?.[activeFilterTable] ?? '')
+  : ''
   const [value, setValue] = useState(filterValue)
+  const [prevFilterValue, setPrevFilterValue] = useState(filterValue)
   // value should update when changed from outside
-  useEffect(() => {
-    if (filterValue === value) return
+  if (prevFilterValue !== filterValue) {
+    setPrevFilterValue(filterValue)
     setValue(filterValue)
-  }, [filterValue])
+  }
 
-  const setNodeLabelFilter = (val) => {
+  const setNodeLabelFilter = (val: string) => {
     if (!activeFilterTable) return
     setNodeLabelFilterKey({
       value: val,
@@ -63,18 +76,18 @@ export const FilterInput = ({ toggleFilterInputIsVisible, ref: inputRef }) => {
     })
   }
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     // remove some values as they can cause exceptions in regular expressions
     const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
     setValue(val)
   }
 
-  const onKeyUp = (e) => {
+  const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setNodeLabelFilter(value)
       // on coarse pointers, move focus out to close the keyboard
       if (matchMedia('(pointer: coarse)').matches) {
-        inputRef.current.blur()
+        inputRef?.current?.blur()
       }
     }
   }
@@ -114,7 +127,6 @@ export const FilterInput = ({ toggleFilterInputIsVisible, ref: inputRef }) => {
                     <IconButton
                       aria-label="Filter entfernen"
                       onClick={onClickEmpty}
-                      fontSize="small"
                       className={styles.iconButton}
                     >
                       <FaTimes />

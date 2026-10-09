@@ -46,6 +46,7 @@ export const TpopfreiwkontrFilter = () => {
   useEffect(() => {
     if (dataFilter.tpopfreiwkontr.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.tpopfreiwkontr.length])
@@ -54,7 +55,7 @@ export const TpopfreiwkontrFilter = () => {
 
   const apolloClient = useApolloClient()
 
-  const { data: dataTpopkontrs } = useQuery<TpopkontrsQueryResult>({
+  const { data: dataTpopkontrs } = useQuery({
     queryKey: ['tpopfreiwkontrsCount', ekfGqlFilter.filtered, ekfGqlFilter.all],
     queryFn: async () => {
       const result = await apolloClient.query<TpopkontrsQueryResult>({

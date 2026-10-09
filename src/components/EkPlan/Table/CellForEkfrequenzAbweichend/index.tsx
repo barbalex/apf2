@@ -6,15 +6,20 @@ import {
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
 } from '../../../../store/index.ts'
+import type { TpopRow } from '../tableTypes.ts'
 
 import indexStyles from '../index.module.css'
 
 export const CellForEkfrequenzAbweichend = ({
-  field,
   row,
   isOdd,
   ekfrequenzAbweichend,
   width,
+}: {
+  row: TpopRow
+  isOdd: boolean
+  ekfrequenzAbweichend: boolean | null | undefined
+  width: number | undefined
 }) => {
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
@@ -41,7 +46,7 @@ export const CellForEkfrequenzAbweichend = ({
     >
       <Checkbox
         row={row.tpop}
-        value={ekfrequenzAbweichend}
+        value={ekfrequenzAbweichend ?? null}
         field="ekfrequenzAbweichend"
       />
     </div>

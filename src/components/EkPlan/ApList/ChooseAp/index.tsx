@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -10,7 +10,11 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 
-export const ChooseAp = ({ setShowChoose }) => {
+export const ChooseAp = ({
+  setShowChoose,
+}: {
+  setShowChoose: (show: boolean) => void
+}) => {
   const { projId } = useParams()
 
   const aps = useAtomValue(ekPlanApsAtom)
@@ -19,9 +23,12 @@ export const ChooseAp = ({ setShowChoose }) => {
 
   const apValues = aps.map((a) => a.value)
 
-  const data = useRef({})
-  const error = useRef({})
-  const loadOptions = async (inputValue, cb) => {
+  const data = useRef<unknown>(null)
+  const [error, setError] = useState<unknown>(null)
+  const loadOptions = async (
+    inputValue: string,
+    cb: (options: unknown) => void,
+  ) => {
     const filter =
       inputValue ?
         {
@@ -34,7 +41,7 @@ export const ChooseAp = ({ setShowChoose }) => {
           id: { notIn: apValues },
           projId: { equalTo: projId },
         }
-    let result
+    let result: { data?: unknown } | undefined
     try {
       result = await apolloClient.query({
         query: queryApsToChoose,
@@ -43,16 +50,17 @@ export const ChooseAp = ({ setShowChoose }) => {
         },
       })
     } catch (err) {
-      error.current = err
+      setError(err)
     }
-    data.current = result.data
-    const options = data.current?.allAps?.nodes ?? []
+    data.current = result?.data
+    const options = ((data.current as { allAps?: { nodes?: { value: string; label: string }[] } } | null
+      | undefined)?.allAps?.nodes ?? []) as { value: string; label: string }[]
     cb(options)
   }
 
-  const onChange = (option) => {
-    if (option && option.value) {
-      addAp(option)
+  const onChange = (option: unknown) => {
+    if (option && (option as { value?: string }).value) {
+      addAp(option as { value: string; label: string })
       setShowChoose(false)
     }
   }
@@ -76,7 +84,6 @@ export const ChooseAp = ({ setShowChoose }) => {
           placeholder="Bitte Tippen für Vorschläge"
           isSearchable
           // remove as can't select without typing
-          nocaret
           // don't show a no options message if a value exists
           noOptionsMessage={() =>
             value.value ? null : '(Bitte Tippen für Vorschläge)'
@@ -84,16 +91,16 @@ export const ChooseAp = ({ setShowChoose }) => {
           // enable deleting typed values
           backspaceRemovesValue
           classNamePrefix="react-select"
-          loadOptions={loadOptions}
+          loadOptions={loadOptions as never}
           openMenuOnFocus
           autoFocus
           className={`ekplan-aplist-chooseap select-height-limited select-nocaret ${styles.select}`}
           menuPortalTarget={document.body}
           styles={{ menuPortal: (base) => ({ ...base, zIndex: 4 }) }}
         />
-        {error.current && (
-          <div className={styles.errorClass}>{error.current.message}</div>
-        )}
+        {error ? (
+          <div className={styles.errorClass}>{(error as Error).message}</div>
+        ) : null}
       </div>
     </ErrorBoundary>
   )

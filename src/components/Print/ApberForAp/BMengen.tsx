@@ -1,6 +1,15 @@
+import type { ApberForApJberAbcNode } from './types.ts'
+
 import styles from './BMengen.module.css'
 
-export const BMengen = ({ jahr, loading, node }) => {
+interface BMengenProps {
+  apId?: string | undefined
+  jahr?: number | undefined
+  loading: boolean
+  node?: ApberForApJberAbcNode | undefined
+}
+
+export const BMengen = ({ jahr, loading, node }: BMengenProps) => {
   const b1LPop = node?.b1LPop
   const b1LTpop = node?.b1LTpop
   const b1RPop = node?.b1RPop

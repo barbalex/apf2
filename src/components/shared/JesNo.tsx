@@ -1,3 +1,4 @@
+import type { ChangeEvent, MouseEvent } from 'react'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
@@ -18,6 +19,17 @@ const dataSource = [
   },
 ]
 
+export interface JesNoProps {
+  label?: string | undefined
+  helperText?: string | undefined
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | boolean | null }
+  }) => void | Promise<void>
+  value?: boolean | null | undefined
+  name: string
+  error?: string | null | undefined
+}
+
 export const JesNo = ({
   label,
   helperText = '',
@@ -25,20 +37,20 @@ export const JesNo = ({
   value,
   name,
   error,
-}) => {
-  const onClickButton = (event) => {
+}: JesNoProps) => {
+  const onClickButton = (event: MouseEvent<HTMLLabelElement>) => {
     /**
      * if clicked element is active value: set null
      * Problem: does not work on change event on RadioGroup
      * because that only fires on changes
      * Solution: do this in click event of button
      */
-    const targetValue = event.target.value === 'true'
+    const targetValue = (event.target as HTMLInputElement).value === 'true'
     const fakeEvent = {
       target: {
         value: targetValue,
         name,
-      },
+      } as { name?: string; value: string | number | boolean | null },
     }
     if (targetValue === value) {
       // an already active option was clicked
@@ -48,17 +60,17 @@ export const JesNo = ({
     // It is possible to directly click an option after editing an other field
     // this creates a race condition in the two submits which can lead to lost inputs!
     // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
+    setTimeout(() => void saveToDb(fakeEvent))
   }
 
-  const onChangeGroup = (event) => {
+  const onChangeGroup = (event: ChangeEvent<HTMLInputElement>) => {
     // group only changes if value changes
     const targetValue = event.target.value
     // values are passed as strings > need to convert
     const valueToUse =
       targetValue === 'true' ? true
       : targetValue === 'false' ? false
-      : isNaN(targetValue) ? targetValue
+      : isNaN(Number(targetValue)) ? targetValue
       : +targetValue
     const fakeEvent = {
       target: {
@@ -69,7 +81,7 @@ export const JesNo = ({
     // It is possible to directly click an option after editing an other field
     // this creates a race condition in the two submits which can lead to lost inputs!
     // so timeout inputs in option fields
-    setTimeout(() => saveToDb(fakeEvent))
+    setTimeout(() => void saveToDb(fakeEvent))
   }
 
   const valueSelected =
@@ -95,7 +107,7 @@ export const JesNo = ({
         onChange={onChangeGroup}
       >
         {dataSource.map((e, index) => {
-          const valueToUse = e.value.toString ? e.value.toString() : e.value
+          const valueToUse = e.value.toString()
 
           return (
             <FormControlLabel

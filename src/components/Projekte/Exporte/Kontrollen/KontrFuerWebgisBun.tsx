@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -12,7 +12,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TpopkontrWebgisBunQueryResult {
   allVTpopkontrWebgisbuns: {
-    nodes: Array<{
+    nodes: {
       APARTID?: string
       APART?: string
       POPGUID?: string
@@ -62,7 +62,7 @@ interface TpopkontrWebgisBunQueryResult {
       ZAEHLEINHEITEN?: string
       ANZAHLEN?: string
       METHODEN?: string
-    }>
+    }[]
   }
 }
 
@@ -70,19 +70,16 @@ export const KontrFuerWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: TpopkontrWebgisBunQueryResult }
-        try {
-          result = await apolloClient.query<TpopkontrWebgisBunQueryResult>({
-            query: gql`
+  const onClickKontrFuerWebgisBun = async () => {
+    setQueryState('lade Daten...')
+    let result:
+      | { data?: TpopkontrWebgisBunQueryResult | undefined }
+      | undefined
+    try {
+      result = await apolloClient.query<TpopkontrWebgisBunQueryResult>({
+        query: graphql(`
               query viewTpopkontrWebgisbuns {
                 allVTpopkontrWebgisbuns {
                   nodes {
@@ -138,33 +135,40 @@ export const KontrFuerWebgisBun = () => {
                   }
                 }
               }
-            `,
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopkontrWebgisbuns?.nodes ?? []
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'KontrollenWebGisBun',
-        })
-        setQueryState(undefined)
-      }}
+            `),
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVTpopkontrWebgisbuns?.nodes ?? []
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'KontrollenWebGisBun',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickKontrFuerWebgisBun()}
     >
       Kontrollen für WebGIS BUN
       {queryState ?

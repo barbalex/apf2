@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryEkfTpops = gql`
+export const queryEkfTpops = graphql(`
   query ekfTpopsForUserQuery($id: UUID!, $jahr: Int!, $include: Boolean!) {
     ekfTpops: allTpops(filter: { ekfKontrolleur: { equalTo: $id } })
       @include(if: $include) {
@@ -9,7 +9,7 @@ export const queryEkfTpops = gql`
         id
         ekfInJahr: tpopkontrsByTpopId(
           filter: {
-            typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+            typ: { equalTo: "Freiwilligen-Kontrolle" }
             # accept empty year - in case ekf was manually created
             or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
           }
@@ -19,4 +19,4 @@ export const queryEkfTpops = gql`
       }
     }
   }
-`
+`)

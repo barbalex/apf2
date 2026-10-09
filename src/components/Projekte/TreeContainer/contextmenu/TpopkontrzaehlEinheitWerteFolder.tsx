@@ -4,12 +4,18 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 const insertData = {
   action: 'insert',
   table: 'tpopkontrzaehl_einheit_werte',
 }
 
-export const TpopkontrzaehlEinheitWerteFolder = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const TpopkontrzaehlEinheitWerteFolder = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeTpopkontrzaehlEinheitWerteFolder"

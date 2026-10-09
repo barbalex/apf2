@@ -7,9 +7,10 @@ import { TextField } from '../../../../../shared/TextField.tsx'
 import { userNameAtom } from '../../../../../../store/index.ts'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
+import type { TpopkontrzaehlRow } from './index.tsx'
 
 interface GeschaetztProps {
-  row: any
+  row: Partial<TpopkontrzaehlRow>
   refetch: () => void
 }
 
@@ -19,9 +20,14 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [, setErrors] = useState<Record<string, string>>({})
 
-  const onChange = async (event) => {
+  const onChange = async (event: {
+    target: {
+      name?: string
+      value: string | number | boolean | null
+    }
+  }) => {
     const val = ifIsNumericAsNumber(event.target.value)
     /*console.log('Geschaetzt, onChange:', {
         row,
@@ -46,7 +52,7 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
       return setErrors({ anzahl: (error as Error).message })
     }
     refetch()
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontrzaehl`],
     })
   }
@@ -55,10 +61,10 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
     <TextField
       value={row.methode === 1 ? row.anzahl : null}
       label=""
+      error={undefined}
       name="anzahl"
       type="number"
       saveToDb={onChange}
-      errors={errors}
     />
   )
 }

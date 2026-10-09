@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import type { ChangeEvent, FocusEvent } from 'react'
 import 'leaflet'
+import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -13,24 +15,33 @@ import panCentreIcon from '../../../../etc/panTo.png'
 
 import styles from './PanToCoordinates.module.css'
 
-const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
-const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
+const xIsValid = (x: string | number) =>
+  !x || (+x >= 2485071 && +x < 2828516)
+const yIsValid = (y: string | number) =>
+  !y || (+y >= 1075346 && +y < 1299942)
 
-export const PanToCoordinates = ({ setControlType, map }) => {
-  const xkoordField = useRef(null)
+interface PanToCoordinatesProps {
+  setControlType: (value: string) => void
+  map: LeafletMap
+}
+
+export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps) => {
+  const xkoordField = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    xkoordField.current.getElementsByTagName('input')[0].focus()
+    xkoordField.current?.getElementsByTagName('input')[0]?.focus()
   }, [])
 
-  const [x, setX] = useState('')
-  const [y, setY] = useState('')
-  const [marker, setMarker] = useState(null)
+  const [x, setX] = useState<string | number>('')
+  const [y, setY] = useState<string | number>('')
+  const [marker, setMarker] = useState<LeafletMarker | null>(null)
   const [xError, changeXError] = useState('')
   const [yError, changeYError] = useState('')
   // on dealing with focus of div with children, see:
   // https://medium.com/@jessebeach/dealing-with-focus-and-blur-in-a-composite-widget-in-react-90d3c3b49a9b
-  const [timeoutId, changeTimeoutId] = useState('')
+  const [timeoutId, changeTimeoutId] = useState<ReturnType<
+    typeof setTimeout
+  > | ''>('')
   const [gotoFocused, changeGotoFocused] = useState(false)
 
   const onFocusGotoContainer = () => {
@@ -67,7 +78,8 @@ export const PanToCoordinates = ({ setControlType, map }) => {
    */
   const onClickGoto = () => {
     if (x && y && !xError && !yError) {
-      const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
+      const [lat = 0, lng = 0] = epsg2056to4326(x, y)
+      const latLng = new window.L.LatLng(lat, lng)
       map.flyTo(latLng)
       const newMarker = window.L.marker(latLng, {
         title: `${x}/${y}`,
@@ -82,8 +94,8 @@ export const PanToCoordinates = ({ setControlType, map }) => {
     }
   }
 
-  const onChangeX = (event) => {
-    let { value } = event.target
+  const onChangeX = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let { value }: { value: string | number } = event.target
     // convert string to number
     value = value ? +value : value
     setX(value)
@@ -91,8 +103,8 @@ export const PanToCoordinates = ({ setControlType, map }) => {
     if (xIsValid(value)) changeXError('')
   }
 
-  const onChangeY = (event) => {
-    let { value } = event.target
+  const onChangeY = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let { value }: { value: string | number } = event.target
     // convert string to number
     value = value ? +value : value
     setY(value)
@@ -100,14 +112,14 @@ export const PanToCoordinates = ({ setControlType, map }) => {
     if (yIsValid(value)) changeYError('')
   }
 
-  const onBlurX = (event) => {
+  const onBlurX = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // prevent onBlurGotoContainer
     event.stopPropagation()
     if (xIsValid(x)) return changeXError('')
     changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
   }
 
-  const onBlurY = (event) => {
+  const onBlurY = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // prevent onBlurGotoContainer
     event.stopPropagation()
     if (yIsValid(y)) return changeYError('')
@@ -137,8 +149,7 @@ export const PanToCoordinates = ({ setControlType, map }) => {
           id="XKoordinate"
           value={x}
           type="number"
-          min="2485071"
-          max="2828516"
+          {...({ min: '2485071', max: '2828516' } as Record<string, string>)}
           onChange={onChangeX}
           onBlur={onBlurX}
           ref={xkoordField}
@@ -157,8 +168,7 @@ export const PanToCoordinates = ({ setControlType, map }) => {
           id="YKoordinate"
           value={y}
           type="number"
-          min="1075346"
-          max="1299942"
+          {...({ min: '1075346', max: '1299942' } as Record<string, string>)}
           onChange={onChangeY}
           onBlur={onBlurY}
           className={styles.input}

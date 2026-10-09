@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   LineChart,
   XAxis,
@@ -56,7 +56,7 @@ export const TpopKontrolliert = ({
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['tpopKontrolliert', id, jahr ?? new Date().getFullYear()],
     queryFn: async () => {
       const result = await apolloClient.query<TpopKontrolliertQueryResult>({
@@ -64,9 +64,8 @@ export const TpopKontrolliert = ({
         variables: { id, year: jahr ?? new Date().getFullYear() },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as TpopKontrolliertQueryResult
     },
-    suspense: true,
   })
   const erfolgData = data.tpopKontrolliertForJber.nodes.map((d) => ({
     jahr: d.year,

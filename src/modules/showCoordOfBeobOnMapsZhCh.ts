@@ -1,6 +1,6 @@
 import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.ts'
 
-export const showCoordOfBeobOnMapsZhCh = async ({ id }) => {
+export const showCoordOfBeobOnMapsZhCh = async ({ id }: { id: string }) => {
   const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({ id })
   if (lv95X && lv95Y) {
     window.open(

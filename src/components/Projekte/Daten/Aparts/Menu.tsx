@@ -1,10 +1,9 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
-import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -12,21 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { ApartId } from '../../../../models/apflora/Apart.ts'
-import type { ApId } from '../../../../models/apflora/Ap.ts'
-
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreateApartResult {
-  data?: {
-    createApart?: {
-      apart?: {
-        id: ApartId
-        apId: ApId
-      }
-    }
-  }
-}
 
 const iconStyle = { color: 'white' }
 
@@ -44,10 +29,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateApartResult | undefined
+    let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApartForApartsForm($apId: UUID!) {
             createApart(input: { apart: { apId: $apId } }) {
               apart {
@@ -56,8 +41,8 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
-        variables: { apId },
+        `),
+        variables: { apId: apId as string },
       })
     } catch (error) {
       return addNotification({
@@ -67,17 +52,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApart`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createApart?.apart?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -87,7 +72,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neues Taxon erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

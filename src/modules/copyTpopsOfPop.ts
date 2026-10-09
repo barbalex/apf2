@@ -1,13 +1,21 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 
 import { copyTo } from './copyTo/index.ts'
-import { store, apolloClientAtom } from '../store/index.ts'
+import {
+  getApolloClientFromStore,
+} from '../store/index.ts'
 
-export const copyTpopsOfPop = async ({ popIdFrom, popIdTo }) => {
-  const apolloClient = store.get(apolloClientAtom)
+export const copyTpopsOfPop = async ({
+  popIdFrom,
+  popIdTo,
+}: {
+  popIdFrom: string
+  popIdTo: string | null | undefined
+}) => {
+  const apolloClient = getApolloClientFromStore()
   // 1. fetch all tpops
   const { data } = await apolloClient.query({
-    query: gql`
+    query: graphql(`
       query tpopsForCopyTpopsOfPopQuery($popId: UUID!) {
         allTpops(filter: { popId: { equalTo: $popId } }) {
           nodes {
@@ -15,17 +23,17 @@ export const copyTpopsOfPop = async ({ popIdFrom, popIdTo }) => {
           }
         }
       }
-    `,
+    `),
     variables: { popId: popIdFrom },
   })
   const tpops = data?.allTpops?.nodes ?? []
 
   // 2. add tpops to new pop
   tpops.forEach((tpop) =>
-    copyTo({
-      parentId: popIdTo,
+    void copyTo({
+      parentId: popIdTo ?? undefined,
       table: 'tpop',
-      id: tpop.id,
+      id: tpop?.id ?? '',
     }),
   )
 }

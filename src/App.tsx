@@ -1,4 +1,4 @@
-import { lazy, Suspense, createRef, useEffect } from 'react'
+import { lazy, createRef, Suspense, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
 import { Analytics } from '@vercel/analytics/react'
+import { version as appVersion } from '../package.json'
 
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -19,6 +20,7 @@ import { buildApolloClient } from './apolloClient.ts'
 import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
+import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
@@ -34,9 +36,6 @@ const NotificationDismisser = lazy(async () => ({
 const Router = lazy(async () => ({
   default: (await import('./components/Router/index.tsx')).Router,
 }))
-// const UnterhaltsRouter = lazy(async () => ({
-//   default: (await import('./components/Router/indexUnterhalt.tsx')).Router,
-// }))
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.tsx')).IsPrintSetter,
 }))
@@ -52,10 +51,6 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.tsx'))
     .LegacyBrowserInformer,
 }))
-const Spinner = lazy(async () => ({
-  default: (await import('./components/shared/Spinner.tsx')).Spinner,
-}))
-
 registerLocale('de', de)
 setDefaultLocale('de')
 
@@ -71,7 +66,12 @@ const queryClient = new QueryClient({
 
 export const App = () => {
   const apolloClient = buildApolloClient()
-  const uploaderRef = createRef<HTMLElement>(null)
+  const uploaderRef = createRef<UploadCtxProvider | null>()
+
+  useEffect(() => {
+    const baseTitle = 'apflora'
+    document.title = `${baseTitle} ${appVersion}`
+  }, [])
 
   useEffect(() => {
     navigateToLastActiveNodeArray()
@@ -95,13 +95,16 @@ export const App = () => {
                 action={(key) => <NotificationDismisser nKey={key} />}
               >
                 <UploaderContext value={uploaderRef}>
-                  <Router />
-                  {/*<UnterhaltsRouter />*/}
-                  <Notifier />
-                  <IsPrintSetter />
-                  <LastTouchedNodeSetter />
-                  <MouseWheelHandler />
-                  <LegacyBrowserInformer />
+                  {/* these are all lazy: give them a boundary so they
+                      don't suspend the whole app without a fallback */}
+                  <Suspense fallback={null}>
+                    <Router />
+                    <Notifier />
+                    <IsPrintSetter />
+                    <LastTouchedNodeSetter />
+                    <MouseWheelHandler />
+                    <LegacyBrowserInformer />
+                  </Suspense>
                 </UploaderContext>
               </SnackbarProvider>
             </ThemeProvider>

@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import {
+import type {
   ApId,
   ZielId,
   AdresseId,
   ZielTypWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -20,7 +20,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ZielsQueryResult {
   allZiels: {
-    nodes: Array<{
+    nodes: {
       id: ZielId
       jahr?: number
       typ?: ZielTypWerteCode
@@ -51,7 +51,7 @@ interface ZielsQueryResult {
           artname?: string
         }
       }
-    }>
+    }[]
   }
 }
 
@@ -59,14 +59,14 @@ export const Ziele = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickZiele = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ZielsQueryResult }
+    let result: { data?: ZielsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ZielsQueryResult>({
-        query: gql`
+        query: graphql(`
           query zielsForExportQuery {
             allZiels(
               orderBy: [
@@ -110,7 +110,7 @@ export const Ziele = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -121,7 +121,7 @@ export const Ziele = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allZiels?.nodes ?? []).map((z) => ({
       ap_id: z.id,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -142,14 +142,14 @@ export const Ziele = () => {
         },
       })
     }
-    exportModule({ data: sortBy(rows, ['artname']), fileName: 'ApZiele' })
+    void exportModule({ data: sortBy(rows, ['artname']), fileName: 'ApZiele' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickZiele}
+      onClick={() => void onClickZiele()}
       color="inherit"
       disabled={!!queryState}
     >

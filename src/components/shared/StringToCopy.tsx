@@ -5,10 +5,15 @@ import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './StringToCopy.module.css'
 
-export const StringToCopy = ({ text, label }) => {
+export interface StringToCopyProps {
+  text: string | null | undefined
+  label: string
+}
+
+export const StringToCopy = ({ text, label }: StringToCopyProps) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
-    navigator.clipboard.writeText(text)
+    void navigator.clipboard.writeText(text ?? '')
     setCopied(true)
     // can fire after component was unmounted...
     setTimeout(() => {

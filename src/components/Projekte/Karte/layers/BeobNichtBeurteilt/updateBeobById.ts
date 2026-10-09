@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import {
   aeTaxonomies,
@@ -6,7 +6,7 @@ import {
   popStatusWerte,
 } from '../../../../shared/fragments.ts'
 
-export const updateBeobById = gql`
+export const updateBeobById = dynamicGql`
   mutation updateBeobForKarteBeobNichtBeurteilt($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: { id: $id, beobPatch: { id: $id, tpopId: $tpopId } }

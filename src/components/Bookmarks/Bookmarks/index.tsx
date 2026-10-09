@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react'
-import { useMatches } from 'react-router'
+import { useMatches, type UIMatch } from 'react-router'
 import { TransitionGroup } from 'react-transition-group'
 
 import { FetcherImporter } from './FetcherImporter.tsx'
 import styles from './index.module.css'
 
-const matchesFromAllMatches = (allMatches) =>
+interface BookmarkHandle extends Record<string, unknown> {
+  bookmarkFetcher?: boolean
+  bookmarkFetcherName?: string
+}
+
+const matchesFromAllMatches = (allMatches: UIMatch[]) =>
   allMatches
-    .filter((m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName)
+    .filter(
+      (m) => (m.handle as BookmarkHandle | undefined)?.bookmarkFetcher && (m.handle as BookmarkHandle | undefined)?.bookmarkFetcherName,
+    )
     .reverse()
 
 // this component extracts matches

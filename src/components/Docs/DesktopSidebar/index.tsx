@@ -15,7 +15,7 @@ export const Sidebar = () => {
 
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
-  const setFilter = (val) =>
+  const setFilter = (val: string) =>
     setNodeLabelFilterKey({
       value: val,
       key: 'doc',

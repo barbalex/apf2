@@ -1,25 +1,25 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getEkfrequenzGqlFilterForTree } from './getEkfrequenzGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useEkfrequenzsNavData = (props) => {
+export const useEkfrequenzsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
   const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeEkfrequenzsQuery(
             $ekfrequenzsFilter: EkfrequenzFilter!
             $apId: UUID!
@@ -37,20 +37,20 @@ export const useEkfrequenzsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           ekfrequenzsFilter: ekfrequenzGqlFilterForTree,
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const totalCount = data.apById.totalCount.totalCount
-  const rows = data.apById.ekfrequenzsByApId.nodes
+  const totalCount = data.apById?.totalCount.totalCount
+  const rows = data.apById?.ekfrequenzsByApId?.nodes ?? []
 
   const navData = {
     id: 'EK-Frequenzen',
@@ -66,14 +66,14 @@ export const useEkfrequenzsNavData = (props) => {
     hasChildren: !!rows.length,
     component: NodeWithList,
     menus: rows.map((p) => ({
-      id: p.id,
-      label: p.label ?? '(kein Kürzel)',
+      id: p?.id,
+      label: p?.label ?? '(kein Kürzel)',
       treeNodeType: 'table',
       treeMenuType: 'ekfrequenz',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p?.id],
       hasChildren: false,
     })),
   }

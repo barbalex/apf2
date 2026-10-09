@@ -33,17 +33,29 @@ import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 
+import type { TpopNode } from './index.tsx'
+
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
-const getIconHtml = ({ isHighlighted, tpop, tpopIconName }) => {
+interface GetIconHtmlProps {
+  isHighlighted: boolean
+  tpop: TpopNode
+  tpopIconName: string
+}
+
+const getIconHtml = ({
+  isHighlighted,
+  tpop,
+  tpopIconName,
+}: GetIconHtmlProps) => {
   let html = isHighlighted ? tpopIconHighlighted : tpopIcon
   if (tpopIconName === 'statusGroup') {
     html = isHighlighted ? qIconHighlighted : qIcon
     if (tpop.status === 300) {
       html = isHighlighted ? pIconHighlighted : pIcon
-    } else if (tpop.status >= 200) {
+    } else if ((tpop.status as number) >= 200) {
       html = isHighlighted ? aIconHighlighted : aIcon
-    } else if (tpop.status >= 100) {
+    } else if ((tpop.status as number) >= 100) {
       html = isHighlighted ? uIconHighlighted : uIcon
     }
   } else if (tpopIconName === 'statusGroupSymbols') {
@@ -65,7 +77,7 @@ const getIconHtml = ({ isHighlighted, tpop, tpopIconName }) => {
   return html
 }
 
-export const Marker = ({ tpop }) => {
+export const Marker = ({ tpop }: { tpop: TpopNode }) => {
   const { apId, projId, tpopId } = useParams()
   const { search } = useLocation()
 
@@ -81,7 +93,6 @@ export const Marker = ({ tpop }) => {
 
   const popId = tpop?.popByPopId?.id ?? ''
 
-  // eslint-disable-next-line
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const openTpopInTree2 = () =>
     openTree2WithActiveNodeArray({
@@ -94,7 +105,8 @@ export const Marker = ({ tpop }) => {
         popId,
         'Teil-Populationen',
         tpop.id,
-      ],
+        // route params are present for map markers
+      ] as (string | number)[],
       search,
       projekteTabs,
       setProjekteTabs,
@@ -112,7 +124,7 @@ export const Marker = ({ tpop }) => {
 
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
   const icon = window.L.divIcon({ html: iconHtml })
-  let title = nrLabel
+  let title: string | null = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
   if (tpopLabelName === 'none') title = ''
   const artname = tpop?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? ''
@@ -121,7 +133,8 @@ export const Marker = ({ tpop }) => {
     <LeafletMarker
       position={latLng}
       icon={icon}
-      title={title}
+      // flurname can be null; leaflet treats falsy titles alike
+      title={title as string}
     >
       <Popup>
         <>

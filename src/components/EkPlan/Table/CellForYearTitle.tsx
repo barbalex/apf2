@@ -9,10 +9,17 @@ import {
   ekPlanResetHoveredAtom,
 } from '../../../store/index.ts'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
+import type { TpopRow } from './tableTypes.ts'
 
 import indexStyles from './index.module.css'
 
-export const CellForYearTitle = ({ row, isOdd }) => {
+export const CellForYearTitle = ({
+  row,
+  isOdd,
+}: {
+  row: TpopRow
+  isOdd: boolean
+}) => {
   const showEk = useAtomValue(ekPlanShowEkAtom)
   const showEkf = useAtomValue(ekPlanShowEkfAtom)
   const showMassn = useAtomValue(ekPlanShowMassnAtom)

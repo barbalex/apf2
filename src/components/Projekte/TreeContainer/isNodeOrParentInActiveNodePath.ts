@@ -2,7 +2,19 @@ import { isEqual } from 'es-toolkit'
 
 import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.ts'
 
-export const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
+export const isNodeOrParentInActiveNodePath = ({
+  node,
+  activeNodeArray,
+}: {
+  node?:
+    | {
+        url?: (string | number)[] | null | undefined
+        urlLabel?: string | number | null | undefined
+      }
+    | null
+    | undefined
+  activeNodeArray?: (string | number)[] | null | undefined
+}) => {
   if (!node) return false
   if (!node.url) return false
   if (!activeNodeArray) return false

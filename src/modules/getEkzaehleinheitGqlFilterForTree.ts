@@ -1,8 +1,9 @@
+import type { EkzaehleinheitFilter } from '../gql/graphql.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
-export const getEkzaehleinheitGqlFilterForTree = (apId: string) => {
+export const getEkzaehleinheitGqlFilterForTree = (_apId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
-  const gqlFilter = {}
+  const gqlFilter: EkzaehleinheitFilter = {}
 
   // Don't include apId in filter - query is already scoped to ap
   if (nodeLabelFilter.ekzaehleinheit) {

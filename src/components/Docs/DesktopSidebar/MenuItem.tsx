@@ -3,7 +3,13 @@ import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
 import Highlighter from 'react-highlight-words'
 
-export const MenuItem = ({ node, highlightSearchString }) => {
+export const MenuItem = ({
+  node,
+  highlightSearchString,
+}: {
+  node: { id: string; label?: React.ReactNode }
+  highlightSearchString?: string | null | undefined
+}) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
@@ -11,7 +17,7 @@ export const MenuItem = ({ node, highlightSearchString }) => {
   const activeUrl = `/Dokumentation/${id}`
   const active = activeUrl === pathname || `${activeUrl}/` === pathname
 
-  const onClickMenuItem = () => navigate(`${activeUrl}/${search}`)
+  const onClickMenuItem = () => void navigate(`${activeUrl}/${search}`)
 
   return (
     <>

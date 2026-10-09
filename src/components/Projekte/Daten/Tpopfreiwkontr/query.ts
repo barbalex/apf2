@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import {
   aeTaxonomies,
@@ -11,7 +11,7 @@ import {
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query tpopkontrByIdQueryForEkf($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfreiwkontrFields

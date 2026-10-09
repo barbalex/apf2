@@ -1,23 +1,36 @@
 import { useRef } from 'react'
 import { Transition } from 'react-transition-group'
+import type { TransitionStatus } from 'react-transition-group'
+import type { ComponentType } from 'react'
 
-import { Node } from './Node.tsx'
-import { NodeWithList } from './NodeWithList.tsx'
+import type { TreeMenu } from './types.ts'
 
 import styles from './Folders.module.css'
 
-const transitionStyles = {
+const transitionStyles: Partial<
+  Record<TransitionStatus, { opacity: number }>
+> = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
 }
 
-export const Folders = ({ navData, in: inProp }) => {
-  const ref = useRef(null)
+interface FoldersProps {
+  // callers pass the navData as the menu prop
+  menu?: TreeMenu | undefined
+  navData?: TreeMenu | undefined
+  in?: boolean | undefined
+}
+
+export const Folders = ({ navData, in: inProp }: FoldersProps) => {
+  const ref = useRef<HTMLDivElement | null>(null)
 
   // self menu has no component
-  const menus = (navData?.menus ?? []).filter((m) => !!m.component)
+  const menus = (navData?.menus ?? []).filter(
+    (m): m is TreeMenu & { component: ComponentType<{ menu: TreeMenu }> } =>
+      !!m.component,
+  )
 
   return (
     <Transition

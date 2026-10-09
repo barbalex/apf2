@@ -1,0 +1,9 @@
+.absenzIcon {
+  align-self: flex-start;
+  paint-order: stroke;
+
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+}

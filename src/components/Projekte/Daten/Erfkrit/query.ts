@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { erfkrit } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query erfkritByIdQuery($id: UUID!) {
     erfkritById(id: $id) {
       ...ErfkritFields

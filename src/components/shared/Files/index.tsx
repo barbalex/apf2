@@ -1,10 +1,10 @@
 import { useRef, useContext, Suspense } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
-import { useNavigate, Outlet, useParams, useLocation } from 'react-router'
+import { useNavigate, Outlet, useLocation } from 'react-router'
 
 import { ErrorBoundary } from '../ErrorBoundary.tsx'
 import { Error } from '../Error.tsx'
@@ -16,10 +16,16 @@ import {
   tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
-} from '../fragments'
+} from '../fragments.ts'
 import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.ts'
 import { Menu } from './Menu/index.tsx'
+import type { FileNode, FileParent } from './types.ts'
+import type {
+  FileUploadSuccessEvent,
+  FileUploadFailedEvent,
+  CommonUploadSuccessEvent,
+} from '../Uploader/index.tsx'
 
 import './index.css'
 import styles from './index.module.css'
@@ -29,22 +35,7 @@ import {
 } from '../../../store/index.ts'
 
 
-interface FileNode {
-  id: string
-  fileId: string | null
-  name: string | null
-  beschreibung: string | null
-  fileMimeType: string | null
-  [key: string]: any
-}
-
-interface FileQueryResult {
-  data: {
-    [key: string]: {
-      nodes: FileNode[]
-    }
-  }
-}
+type FilesQueryData = Record<string, { nodes: FileNode[] } | undefined>
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -55,10 +46,13 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const FilesRouter =
-  ({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+export interface FilesRouterProps {
+  parentId?: string | undefined
+  parent: FileParent
+}
+
+export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999', parent }: FilesRouterProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-    const { fileId } = useParams()
     const { search } = useLocation()
     const navigate = useNavigate()
 
@@ -66,16 +60,16 @@ export const FilesRouter =
 
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
-    const infoUuidsProcessed = useRef([])
+    const infoUuidsProcessed = useRef<string[]>([])
 
-    const containerRef = useRef(null)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     const queryName = `all${upperFirst(parent)}Files`
     const parentIdName = `${parent}Id`
     const fields = `${upperFirst(parent)}FileFields`
     const fragment = fragmentObject[parent]
 
-    const query = gql`
+    const query = dynamicGql`
         query FileQuery($parentId: UUID!) {
           ${queryName}(
             orderBy: NAME_ASC
@@ -88,18 +82,20 @@ export const FilesRouter =
         }
         ${fragment}
       `
-    const { data, error, isLoading, refetch } = useQuery<FileQueryResult>({
+    const { data, error, isLoading, refetch } = useQuery({
       queryKey: ['FileQuery', parentId],
-      queryFn: () =>
-        apolloClient.query({
+      queryFn: async () => {
+        const result = await apolloClient.query({
           query,
           variables: { parentId },
-        }),
+        })
+        return result.data as FilesQueryData
+      },
     })
 
-    const files = data?.data?.[`all${upperFirst(parent)}Files`].nodes ?? []
+    const files = data?.[`all${upperFirst(parent)}Files`]?.nodes ?? []
 
-    const onCommonUploadSuccess = (info) => {
+    const onCommonUploadSuccess = (_info: CommonUploadSuccessEvent | null | undefined) => {
       // reset infoUuidsProcessed
       infoUuidsProcessed.current = []
       // close the uploader or it will be open when navigating to the list
@@ -107,18 +103,22 @@ export const FilesRouter =
       // clear the uploader or it will show the last uploaded file when opened next time
       api?.removeAllFiles?.()
       // somehow this needs to be delayed or sometimes not all files will be uploaded
-      setTimeout(() => refetch(), 500)
+      setTimeout(() => void refetch(), 500)
     }
 
     // ISSUE: sometimes this is called multiple times with the same info.uuid
-    const onFileUploadSuccess = async (info) => {
+    const onFileUploadSuccess = async (
+      info: FileUploadSuccessEvent | null | undefined,
+    ) => {
       if (info) {
         if (infoUuidsProcessed.current.includes(info.uuid)) return
         infoUuidsProcessed.current.push(info.uuid)
-        let responce
+        let responce:
+          | { data?: Record<string, Record<string, FileNode> | undefined> }
+          | undefined
         try {
-          responce = await apolloClient.mutate({
-            mutation: gql`
+          responce = (await apolloClient.mutate({
+            mutation: dynamicGql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
                   input: {
@@ -137,11 +137,11 @@ export const FilesRouter =
               }
               ${fragment}
             `,
-          })
+          })) as { data?: Record<string, Record<string, FileNode> | undefined> }
         } catch (error) {
           console.log(error)
           addNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },
@@ -152,15 +152,19 @@ export const FilesRouter =
         const newFile =
           responce?.data?.[`create${upperFirst(parent)}File`]?.[`${parent}File`]
         if (newFile) {
-          navigate(`${newFile.fileId}/Vorschau${search}`)
+          void navigate(`${newFile.fileId}/Vorschau${search}`)
         }
       }
     }
 
-    const onFileUploadFailed = (error) => {
+    const onFileUploadFailed = (
+      error: FileUploadFailedEvent | null | undefined,
+    ) => {
       console.error('Upload failed:', error)
       addNotification({
-        message: error?.message ?? 'Upload fehlgeschlagen',
+        message:
+        (error as { message?: string } | null | undefined)?.message ??
+        'Upload fehlgeschlagen',
         options: {
           variant: 'error',
         },
@@ -170,7 +174,7 @@ export const FilesRouter =
       // clear the uploader or it will show the last uploaded file when opened next time
       api?.removeAllFiles?.()
       // somehow this needs to be delayed or sometimes not all files will be uploaded
-      setTimeout(() => refetch(), 500)
+      setTimeout(() => void refetch(), 500)
     }
 
     if (isLoading) return <Spinner />
@@ -191,12 +195,12 @@ export const FilesRouter =
           <Menu
             parent={parent}
             files={files}
-            refetch={refetch}
+            refetch={() => void refetch()}
             containerRef={containerRef}
           />
           <div className={styles.outletContainer}>
             <Suspense fallback={<Spinner />}>
-              <Outlet context={{ files, parent, refetch }} />
+              <Outlet context={{ files, parent, refetch: () => void refetch() }} />
             </Suspense>
           </div>
         </div>

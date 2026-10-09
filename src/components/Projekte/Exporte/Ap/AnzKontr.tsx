@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId } from '../../../../models/apflora/index.tsx'
+import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApAnzkontrsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -30,12 +30,12 @@ interface ApAnzkontrsQueryResult {
         text?: string
       }
       vApAnzkontrsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           anzahlKontrollen?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 
@@ -43,14 +43,14 @@ export const AnzKontr = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAnzKontrProAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApAnzkontrsQueryResult }
+    let result: { data?: ApAnzkontrsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApAnzkontrsQueryResult>({
-        query: gql`
+        query: graphql(`
           query apAnzkontrsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -77,7 +77,7 @@ export const AnzKontr = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -88,7 +88,7 @@ export const AnzKontr = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAps.nodes ?? []).map((z) => ({
       id: z.id,
       artname: z?.aeTaxonomyByArtId?.artname ?? '',
       bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -106,14 +106,14 @@ export const AnzKontr = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApAnzahlKontrollen' })
+    void exportModule({ data: rows, fileName: 'ApAnzahlKontrollen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickAnzKontrProAp}
+      onClick={() => void onClickAnzKontrProAp()}
       color="inherit"
       disabled={!!queryState}
     >

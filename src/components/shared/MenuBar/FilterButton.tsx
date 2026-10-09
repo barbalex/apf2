@@ -4,7 +4,11 @@ import { MdFilterAlt } from 'react-icons/md'
 
 import styles from './FilterButton.module.css'
 
-export const FilterButton = ({ toggleFilterInput }) => {
+export const FilterButton = ({
+  toggleFilterInput,
+}: {
+  toggleFilterInput: () => void
+}) => {
   const onClick = () => toggleFilterInput()
 
   return (

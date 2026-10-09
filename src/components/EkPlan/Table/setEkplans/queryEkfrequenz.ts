@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryEkfrequenz = gql`
+export const queryEkfrequenz = graphql(`
   query EkfrequenzQuery($id: UUID!) {
     allEkfrequenzs(filter: { id: { equalTo: $id }, ektyp: { isNull: false } }) {
       nodes {
@@ -10,4 +10,4 @@ export const queryEkfrequenz = gql`
       }
     }
   }
-`
+`)

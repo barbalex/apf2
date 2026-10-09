@@ -1,12 +1,12 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontrTypWerte } from '../../components/shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   query copyEkfToQuery($tpop: UUID!) {
     allTpopkontrs(
       filter: {
-        typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+        typ: { equalTo: "Freiwilligen-Kontrolle" }
         tpopId: { equalTo: $tpop }
       }
     ) {

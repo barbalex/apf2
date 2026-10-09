@@ -1,6 +1,6 @@
-import { type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
@@ -10,30 +10,49 @@ import { TextField } from '../../../../shared/TextField.tsx'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
-import type { EkfrequenzId } from '../../../../../models/apflora/EkfrequenzId.ts'
-import type { AdresseId } from '../../../../../models/apflora/AdresseId.ts'
+import type {
+  EkfrequenzId,
+  AdresseId,
+} from '../../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
 interface TpopEkFilterQueryResult {
   allEkfrequenzs: {
-    nodes: Array<{
+    nodes: {
       id: EkfrequenzId
       code: string | null
       anwendungsfall: string | null
-    }>
+    }[]
   }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 
+interface EkRow {
+  id?: string
+  ekfrequenz?: string | null
+  ekfrequenzAbweichend?: boolean | null
+  ekfrequenzStartjahr?: number | null
+  ekfKontrolleur?: string | null
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopEkFilterUseQueryOptions = UseQueryOptions<
+  TpopEkFilterQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
+}
+
 interface EkProps {
-  saveToDb: (event: ChangeEvent<HTMLInputElement>) => void
-  row: any
+  saveToDb: (event: SaveToDbEvent) => void
+  row: EkRow | undefined
   fieldErrors: Record<string, string>
 }
 
@@ -41,7 +60,7 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data: dataEk } = useQuery<TpopEkFilterQueryResult>({
+  const tpopEkFilterQueryOptions: TpopEkFilterUseQueryOptions = {
     queryKey: ['tpopFilterEk', apId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopEkFilterQueryResult>({
@@ -52,7 +71,8 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data: dataEk } = useQuery(tpopEkFilterQueryOptions)
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
   const longestAnwendungsfall = Math.max(
@@ -76,9 +96,9 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
         <div className={styles.ekfrequenzOptionsContainer}>
           <RadioButtonGroup
             name="ekfrequenz"
-            dataSource={ekfrequenzOptions}
+            dataSource={ekfrequenzOptions as never[]}
             label="EK-Frequenz"
-            value={row.ekfrequenz}
+            value={row.ekfrequenz as null}
             saveToDb={saveToDb}
             error={fieldErrors.ekfrequenz}
           />
@@ -89,6 +109,7 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
           value={row.ekfrequenzAbweichend}
           saveToDb={saveToDb}
           error={fieldErrors.ekfrequenzAbweichend}
+          helperText=""
         />
         <TextField
           name="ekfrequenzStartjahr"
@@ -103,9 +124,9 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
           name="ekfKontrolleur"
           label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
           options={dataEk?.allAdresses?.nodes ?? []}
-          value={row.ekfKontrolleur}
+          value={row.ekfKontrolleur ?? null}
           saveToDb={saveToDb}
-          error={fieldErrors.ekfKontrolleur}
+          error={fieldErrors.ekfKontrolleur ?? ''}
         />
       </div>
     </ErrorBoundary>

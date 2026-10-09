@@ -20,28 +20,30 @@ export const KontrolljahrFieldEmpty = ({
   kontrolljahre,
   refetch,
 }: KontrolljahrFieldEmptyProps) => {
-  const [value, setValue] = useState<string | number>('')
+  const [value, setValue] = useState<number | string | null>('')
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setValue(ifIsNumericAsNumber(event.target.value))
 
   const onBlur = async () => {
     if (value === '') return
-    const newVal = [...kontrolljahre, value]
+    // value comes from a numeric input and is a number at runtime
+    const newVal = [...kontrolljahre, value as number]
     await saveToDb({ target: { name, value: newVal } })
     refetch()
   }
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) =>
-    e.key === 'Enter' && onBlur()
+  const onKeyDown = (
+    e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => e.key === 'Enter' && onBlur()
 
   return (
     <Input
       value={value}
       type="number"
       onChange={onChange}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
+      onBlur={() => void onBlur()}
+      onKeyDown={(e) => void onKeyDown(e)}
       autoFocus={true}
       className={styles.styledInput}
     />

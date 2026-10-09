@@ -6,8 +6,9 @@ import { useNavigate, useLocation } from 'react-router'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { UploaderContext } from '../../../../UploaderContext.ts'
+import type { FileNode } from '../types.ts'
 
-export const ListMenus = ({ files }) => {
+export const ListMenus = ({ files }: { files: FileNode[] }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const uploaderCtx = useContext(UploaderContext)
@@ -15,7 +16,7 @@ export const ListMenus = ({ files }) => {
 
   const firstFileId = files?.[0]?.fileId
 
-  const onClickPreview = () => navigate(`${firstFileId}/Vorschau${search}`)
+  const onClickPreview = () => void navigate(`${firstFileId}/Vorschau${search}`)
 
   return (
     <ErrorBoundary>
@@ -36,7 +37,7 @@ export const ListMenus = ({ files }) => {
         key="dateien_hochladen"
         title="Dateien hochladen"
       >
-        <IconButton onClick={api?.initFlow}>
+        <IconButton onClick={() => api?.initFlow()}>
           <FaPlus />
         </IconButton>
       </Tooltip>

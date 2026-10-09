@@ -6,10 +6,8 @@ import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
-import {
-  isMobileViewAtom,
-  treeActiveNodeArrayAtom,
-} from '../../store/index.ts'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
+import { isMobileViewAtom, treeActiveNodeArrayAtom } from '../../store/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'
@@ -32,12 +30,18 @@ export const Component = () => {
     // but only if activeNodeArray is not empty
     // otherwise first time users are navigated to the login
     if (pathname === '/' && activeNodeArray.length > 0) {
-      navigate('/Daten/' + activeNodeArray.join('/') + search)
+      void navigate('/Daten/' + activeNodeArray.join('/') + search)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isInIframe) return <Outlet />
+  if (isInIframe) {
+    return (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    )
+  }
 
   const showEkf =
     !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
@@ -53,9 +57,13 @@ export const Component = () => {
           <EkfBar />
         : <Bar />}
       </div>
-      <Suspense fallback={<Spinner />}>
-        <Outlet />
-      </Suspense>
+      {/* ErrorBoundary above Suspense: query errors of routed pages
+          render locally instead of replacing the whole route */}
+      <ErrorBoundary>
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }

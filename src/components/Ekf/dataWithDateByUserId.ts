@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { aeTaxonomies, projekt } from '../shared/fragments.ts'
 
-export const dataWithDateByUserId = gql`
+export const dataWithDateByUserId = dynamicGql`
   query ekfDataWithDateByUseridQuery($id: UUID!, $jahr: Int!) {
     userById(id: $id) {
       id
@@ -10,7 +10,7 @@ export const dataWithDateByUserId = gql`
         id
         tpopkontrsByBearbeiter(
           filter: {
-            typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+            typ: { equalTo: "Freiwilligen-Kontrolle" }
             jahr: { equalTo: $jahr }
           }
         ) {

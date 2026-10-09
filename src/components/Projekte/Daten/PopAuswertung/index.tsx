@@ -1,6 +1,5 @@
-import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
@@ -26,8 +25,7 @@ import type {
   TpopId,
   EkzaehleinheitId,
   TpopkontrzaehlEinheitWerteId,
-  TpopStatusWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
@@ -35,7 +33,7 @@ interface TpopData {
   id: TpopId
   nr: number | null
   label: string | null
-  status: TpopStatusWerteCode | null
+  status: number | null
 }
 
 interface PopAuswertungQueryResult {
@@ -44,19 +42,19 @@ interface PopAuswertungQueryResult {
     label: string | null
   }
   popAuswTpopMenge?: {
-    nodes: Array<{
+    nodes: {
       jahr: number | null
-      values: string | null
-    }>
+      values: string
+    }[]
   }
   allEkzaehleinheits?: {
-    nodes: Array<{
+    nodes: {
       id: EkzaehleinheitId
       tpopkontrzaehlEinheitWerteByZaehleinheitId?: {
         id: TpopkontrzaehlEinheitWerteId
         text: string | null
       }
-    }>
+    }[]
   }
   allTpops?: {
     nodes: TpopData[]
@@ -65,7 +63,7 @@ interface PopAuswertungQueryResult {
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
-const formatNumber = (tickItem) => {
+const formatNumber = (tickItem: number) => {
   const value =
     exists(tickItem) && tickItem?.toLocaleString
       ? tickItem.toLocaleString('de-ch')
@@ -81,7 +79,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
   const { apId, popId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['popAuswertung', apId, popId],
     queryFn: async () => {
       const result = await apolloClient.query<PopAuswertungQueryResult>({
@@ -89,28 +87,26 @@ export const Component = ({ height = 400 }: ComponentProps) => {
         variables: { apId, id: popId },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as PopAuswertungQueryResult
     },
-    suspense: true,
   })
 
   const popLabel = data?.popById?.label ?? 'Population'
   const tpopsData = data?.allTpops?.nodes ?? []
   const tpopMengeRawData = data?.popAuswTpopMenge?.nodes ?? []
-  const tpopMengeData = tpopMengeRawData.map((e) => ({
-    jahr: e.jahr,
-    ...JSON.parse(e.values),
-  }))
+  const tpopMengeData: Record<string, unknown>[] = tpopMengeRawData.map(
+    (e) => ({
+      jahr: e.jahr,
+      ...JSON.parse(e.values),
+    }),
+  )
   const nonUniqueTpopIdsWithData = tpopMengeData.flatMap((d) =>
     Object.entries(d)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => key !== 'jahr')
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => exists(value))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(([key, value]) => key),
+      .filter(([key]) => key !== 'jahr')
+      .filter(([, value]) => exists(value))
+      .map(([key]) => key),
   )
-  const tpopIdsWithData = [...new Set(nonUniqueTpopIdsWithData)]
+  const tpopIdsWithData = [...new Set(nonUniqueTpopIdsWithData)] as TpopId[]
   const tpopIdsWithDataSorted = sortBy(tpopIdsWithData, [
     (id) => {
       const tpop = tpopsData.find((d) => d.id === id)
@@ -156,7 +152,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
           <ResponsiveContainer
             width="99%"
             height={height}
-            className={styles.container}
+            className={styles.container as string}
           >
             <AreaChart
               width={600}
@@ -173,15 +169,15 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                   position: 'insideLeft',
                   offset: -15,
                 }}
-                tickFormatter={formatNumber}
+                tickFormatter={formatNumber as (value: number) => string}
               />
               {tpopIdsWithDataSorted.reverse().map((id) => {
                 const tpop = tpopsData.find((p) => p.id === id)
-                let color
+                let color: string
                 if (!tpop) {
                   color = 'grey'
                 } else {
-                  const isUrspruenglich = tpop?.status < 200
+                  const isUrspruenglich = (tpop?.status ?? 0) < 200
                   color = isUrspruenglich
                     ? colorUrspruenglich
                     : colorAngesiedelt

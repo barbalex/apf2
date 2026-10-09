@@ -32,7 +32,8 @@ export const DatasetDeleteModal = () => {
     question = `${tableName} löschen?`
   }
 
-  const onClickLoeschen = () => deleteModule({ search })
+  const onClickLoeschen = () =>
+    deleteModule({ search, toDelete })
 
   return (
     <ErrorBoundary>
@@ -50,7 +51,7 @@ export const DatasetDeleteModal = () => {
           </Button>
           <Button
             color="primary"
-            onClick={onClickLoeschen}
+            onClick={() => void onClickLoeschen()}
           >
             Löschen
           </Button>

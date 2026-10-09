@@ -1,7 +1,7 @@
 import { sortBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
-import { fields } from './fields.ts'
+import { fields, type EkPlanField } from './fields.ts'
 import { CellHeaderFixed } from './CellHeaderFixed/index.tsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.tsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.tsx'
@@ -17,11 +17,16 @@ export const EkplanTableHeader = ({
   refetch,
   tpopFilter,
   years,
+}: {
+  tpopLength: number | string
+  refetch: () => void
+  tpopFilter: Record<string, unknown>
+  years: number[]
 }) => {
   const fieldsShown = useAtomValue(ekPlanFieldsAtom)
 
   const headerFieldsFixed = sortBy(
-    Object.values(fields).filter(
+    (Object.values(fields) as EkPlanField[]).filter(
       (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
     ),
     ['sort'],
@@ -31,7 +36,7 @@ export const EkplanTableHeader = ({
     <ErrorBoundary>
       <div className={styles.container}>
         <h4 className={styles.title}>{`${tpopLength} Teilpopulationen`}</h4>
-        {headerFieldsFixed.map((column, index) => {
+        {headerFieldsFixed.map((column) => {
           const field = column.name
           if (field === 'ekfrequenz') {
             return (
@@ -75,7 +80,7 @@ export const EkplanTableHeader = ({
             />
           )
         })}
-        {years.map((year, index) => (
+        {years.map((year: number) => (
           <CellHeaderYear
             key={`yearsColumn/${year}`}
             column={year}

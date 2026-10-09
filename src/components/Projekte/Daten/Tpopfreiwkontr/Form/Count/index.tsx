@@ -14,45 +14,42 @@ import {
   setToDeleteAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../../../store/index.ts'
+import type {
+  EkzaehleinheitNode,
+  ZaehleinheitWerteNode,
+} from '../index.tsx'
 
-import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
-import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+import type { TpopkontrzaehlId } from '../../../../../../models/apflora/Tpopkontrzaehl.ts'
+import type { TpopkontrId } from '../../../../../../models/apflora/Tpopkontr.ts'
+
+export interface TpopkontrzaehlRow {
+  id: TpopkontrzaehlId
+  einheit: number
+  anzahl: number | null
+  methode: number | null
+}
 
 interface TpopkontrzaehlQueryResult {
-  tpopkontrzaehlById: {
-    id: TpopkontrzaehlId
-    einheit: TpopkontrzaehlEinheitWerteCode
-    anzahl: number | null
-    methode: number | null
-  } | null
+  tpopkontrzaehlById: TpopkontrzaehlRow | null
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
-      code: TpopkontrzaehlEinheitWerteCode
+    nodes: {
       id: string
+      code: number
       text: string
-    }>
+    }[]
   }
 }
 
 interface CountProps {
-  id?: TpopkontrzaehlId
-  tpopkontrId: TpopkontrId
-  nr: number
+  id?: TpopkontrzaehlId | null | undefined
+  tpopkontrId?: TpopkontrId | undefined
+  nr: string
   showEmpty?: boolean
   showNew?: boolean
   refetch: () => void
-  einheitsUsed?: TpopkontrzaehlEinheitWerteCode[]
-  ekzaehleinheits?: Array<{
-    code: TpopkontrzaehlEinheitWerteCode
-    text: string
-  }>
-  ekzaehleinheitsOriginal?: Array<{
-    tpopkontrzaehlEinheitWerteByZaehleinheitId: {
-      code: TpopkontrzaehlEinheitWerteCode
-    }
-    sort: number | null
-  }>
+  einheitsUsed?: (number | null)[]
+  ekzaehleinheits?: ZaehleinheitWerteNode[]
+  ekzaehleinheitsOriginal?: EkzaehleinheitNode[]
 }
 
 import styles from './index.module.css'
@@ -63,6 +60,12 @@ const getZaehleinheitWerte = ({
   ekzaehleinheits,
   ekzaehleinheitsOriginal,
   row,
+}: {
+  data: TpopkontrzaehlQueryResult | undefined
+  einheitsUsed: (number | null)[]
+  ekzaehleinheits: ZaehleinheitWerteNode[]
+  ekzaehleinheitsOriginal: EkzaehleinheitNode[]
+  row: Partial<TpopkontrzaehlRow>
 }) => {
   const allEinheits = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
   // do list this count's einheit
@@ -82,7 +85,7 @@ const getZaehleinheitWerte = ({
   return sortBy(zaehleinheitWerte, [
     (z) => {
       const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code === z.code,
       )
       if (!ekzaehleinheitOriginal) return 999
       return ekzaehleinheitOriginal.sort || 999
@@ -110,7 +113,7 @@ export const Count = ({
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
-    const { data, refetch: refetchMe } = useQuery<TpopkontrzaehlQueryResult>({
+    const { data, refetch: refetchMe } = useQuery({
       queryKey: ['tpopkontrzaehl', id],
       queryFn: async () => {
         const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
@@ -122,10 +125,9 @@ export const Count = ({
         if (result.error) throw result.error
         return result.data
       },
-      suspense: true,
     })
 
-    const row = data?.tpopkontrzaehlById ?? {}
+    const row: Partial<TpopkontrzaehlRow> = data?.tpopkontrzaehlById ?? {}
 
     const createNew = () =>
       apolloClient
@@ -135,10 +137,10 @@ export const Count = ({
         })
         .then(() => {
           refetch()
-          tsQueryClient.invalidateQueries({
+          void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfreiwkontrzaehl`],
           })
-          tsQueryClient.invalidateQueries({
+          void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfreiwkontrzaehlFolders`],
           })
         })
@@ -151,21 +153,21 @@ export const Count = ({
       row,
     })
 
-    const showDelete = nr > 1
+    const showDelete = Number(nr) > 1
 
-    const remove = ({ row }) => {
+    const remove = ({ row }: { row: Partial<TpopkontrzaehlRow> }) => {
       const afterDeletionHook = () => {
         refetch()
-        tsQueryClient.invalidateQueries({
+        void tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopfreiwkontrzaehl`],
         })
-        tsQueryClient.invalidateQueries({
+        void tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopfreiwkontrzaehlFolders`],
         })
       }
       setToDelete({
         table: 'tpopkontrzaehl',
-        id: row.id,
+        id: row.id ?? null,
         label: null,
         url: activeNodeArray,
         afterDeletionHook,
@@ -195,7 +197,7 @@ export const Count = ({
           <div className={styles.showNewClass}>
             <Button
               color="primary"
-              onClick={createNew}
+              onClick={() => void createNew()}
             >
               <MdAddCircleOutline className={styles.styledAddIcon} /> Neu
             </Button>
@@ -231,13 +233,13 @@ export const Count = ({
         <div className={styles.gezaehltVal}>
           <Gezaehlt
             row={row}
-            refetch={refetchMe}
+            refetch={() => void refetchMe()}
           />
         </div>
         <div className={styles.geschaetztVal}>
           <Geschaetzt
             row={row}
-            refetch={refetchMe}
+            refetch={() => void refetchMe()}
           />
         </div>
         {showDelete && (

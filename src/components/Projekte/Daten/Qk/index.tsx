@@ -10,7 +10,7 @@ import type {
   ApId,
   QkName,
   ApqkQkName,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 interface QkNode {
   name: QkName
@@ -39,7 +39,7 @@ export const Component = () => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data, isLoading } = useQuery<QkQueryResult>({
+  const { data, isLoading } = useQuery({
     queryKey: ['qk', apId],
     queryFn: async () => {
       const result = await apolloClient.query<QkQueryResult>({

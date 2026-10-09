@@ -6,8 +6,16 @@ import FormHelperText from '@mui/material/FormHelperText'
 
 import styles from './TextFieldNonUpdatable.module.css'
 
-export const TextFieldNonUpdatable = ({ label, value = '' }) => {
-  const [error, setError] = useState(null)
+export interface TextFieldNonUpdatableProps {
+  label?: string
+  value?: string | number | null
+}
+
+export const TextFieldNonUpdatable = ({
+  label,
+  value = '',
+}: TextFieldNonUpdatableProps) => {
+  const [error, setError] = useState<string | null>(null)
   const onChange = () => {
     setError('Dieser Wert ist nicht veränderbar')
     // can fire after component was unmounted...

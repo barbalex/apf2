@@ -10,15 +10,22 @@ import {
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
+import type { TreeNodeData } from './types.ts'
 
 export const toggleNodeSymbol = ({
   node,
   search,
   doNotSwitchToNodesParent = false,
+}: {
+  // only url is used; some callers pass a partial node
+  node: Pick<TreeNodeData, 'url'>
+  search: string
+  doNotSwitchToNodesParent?: boolean
 }) => {
   if (!node.url) throw new Error('passed node has no url')
 
-  const navigate = store.get(navigateAtom)
+  // navigate is set before the tree is rendered
+  const navigate = store.get(navigateAtom) as (path: string) => void
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 

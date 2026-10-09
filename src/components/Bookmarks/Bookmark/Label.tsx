@@ -1,4 +1,7 @@
 import { useLocation } from 'react-router'
+import type { CSSProperties, Ref, RefObject } from 'react'
+
+import type { NavData } from '../types.ts'
 import Tooltip from '@mui/material/Tooltip'
 
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.ts'
@@ -6,7 +9,17 @@ import { PrefetchLink } from '../../shared/PrefetchLink.tsx'
 
 import styles from './Label.module.css'
 
-export const Label = ({ navData, outerContainerRef, labelStyle, ref }) => {
+export const Label = ({
+  navData,
+  outerContainerRef,
+  labelStyle,
+  ref,
+}: {
+  navData: NavData
+  outerContainerRef: RefObject<HTMLDivElement | null>
+  labelStyle?: CSSProperties | undefined
+  ref?: Ref<HTMLDivElement | null> | undefined
+}) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???
@@ -42,7 +55,7 @@ export const Label = ({ navData, outerContainerRef, labelStyle, ref }) => {
       <PrefetchLink
         to={{ pathname: navData.url, search }}
         onClick={onClick}
-        ref={ref}
+        ref={ref as unknown as Ref<HTMLAnchorElement> | undefined}
         style={{ ...labelStyle }}
         className={styles.link}
       >

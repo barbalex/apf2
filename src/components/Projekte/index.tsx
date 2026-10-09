@@ -41,9 +41,9 @@ export const Component = () => {
     if (Array.isArray(iFrameSearch.projekteTabs)) {
       iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
         // - remove non-tree2 values
-        .filter((t) => t.includes('2'))
+        .filter((t) => (t ?? '').includes('2'))
         // - rewrite tree2 values to tree values
-        .map((t) => t.replace('2', ''))
+        .map((t) => (t ?? '').replace('2', ''))
     } else if (iFrameSearch.projekteTabs) {
       iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
         // - remove non-tree2 values

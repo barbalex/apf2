@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { ekplan } from '../../../shared/fragments.ts'
 
-export const mutationCreateEkplan = gql`
+export const mutationCreateEkplan = dynamicGql`
   mutation createEkplan(
     $tpopId: UUID
     $jahr: Int

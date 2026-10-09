@@ -1,26 +1,33 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
+  type Notification,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const historizeForAp = async ({ year, apId }) => {
-  const apolloClient = store.get(apolloClientAtom)
+export const historizeForAp = async ({
+  year,
+  apId,
+}: {
+  year: number
+  apId: string
+}) => {
+  const apolloClient = getApolloClientFromStore()
 
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: graphql(`
         mutation historizeForAp($year: Int!, $apId: UUID!) {
           historizeForAp(input: { _year: $year, apId: $apId }) {
             boolean
           }
         }
-      `,
+      `),
       variables: {
         year,
         apId,
@@ -29,7 +36,7 @@ export const historizeForAp = async ({ year, apId }) => {
   } catch (error) {
     console.log('Error from mutating historize:', error)
     return addNotification({
-      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
+      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },

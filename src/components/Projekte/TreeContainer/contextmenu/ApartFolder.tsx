@@ -8,13 +8,19 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
   table: 'apart',
 }
 
-export const ApartFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const ApartFolder = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
 
   return (

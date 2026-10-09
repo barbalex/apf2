@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryLists = gql`
+export const queryLists = graphql(`
   query apFilterListsQuery {
     allApBearbstandWertes(orderBy: SORT_ASC) {
       nodes {
@@ -15,4 +15,4 @@ export const queryLists = gql`
       }
     }
   }
-`
+`)

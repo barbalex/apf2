@@ -7,7 +7,25 @@ const labelFromValue = {
   5: 'sehr',
 }
 
-export const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
+interface CustomTickProps {
+  payload?: {
+    value?: number
+  }
+  x?: number
+  y?: number
+  textAnchor?: 'inherit' | 'end' | 'start' | 'middle'
+  stroke?: string
+  radius?: number
+}
+
+export const CustomTick = ({
+  payload,
+  x,
+  y,
+  textAnchor,
+  stroke,
+  radius,
+}: CustomTickProps) => {
   return (
     <g className="recharts-layer recharts-polar-angle-axis-tick">
       <text
@@ -22,7 +40,7 @@ export const CustomTick = ({ payload, x, y, textAnchor, stroke, radius }) => {
           x={x}
           dy="0.3em"
         >
-          {labelFromValue[payload?.value]}
+          {labelFromValue[payload?.value as keyof typeof labelFromValue]}
         </tspan>
       </text>
     </g>

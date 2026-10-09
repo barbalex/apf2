@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql/index.ts'
 
-export const query = gql`
+export const query = graphql(`
   query apAuswertungPopMenge($id: UUID!, $jahr: Int!) {
     # function: apflora.ap_ausw_pop_menge
     apAuswPopMenge(apid: $id, jahr: $jahr) {
@@ -30,4 +30,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

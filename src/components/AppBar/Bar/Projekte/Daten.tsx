@@ -9,7 +9,14 @@ import { isDesktopViewAtom } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-export const Daten = ({ treeNr = '', hide = false }) => {
+interface DatenProps {
+  treeNr?: string
+  hide?: boolean
+  // read by MenuBar to compute the menu widths
+  width?: number
+}
+
+export const Daten = ({ treeNr = '' }: DatenProps) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)

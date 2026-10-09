@@ -12,7 +12,7 @@ export const LegacyBrowserInformer = () => {
     style: 'bottom',
     // test: true,
   }
-  import('browser-update').then((module) =>
+  void import('browser-update').then((module) =>
     module.default(browserUpdateConfiguration),
   )
 

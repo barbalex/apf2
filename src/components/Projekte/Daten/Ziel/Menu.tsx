@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { useSetAtom } from 'jotai'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -9,32 +9,25 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { ZielId } from '../../../../models/apflora/ZielId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
 
 interface CreateZielResult {
-  data: {
-    createZiel: {
-      ziel: {
-        id: ZielId
-        apId: ApId
-      }
+  createZiel?: {
+    ziel?: {
+      id: ZielId
+      apId: ApId
     }
   }
 }
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 const iconStyle = { color: 'white' }
 
@@ -44,17 +37,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, jahr, zielId } = useParams()
 
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateZielResult | undefined
+    let result: { data?: CreateZielResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateZielResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateZielResult>({
+        mutation: graphql(`
           mutation createZielForZielForm($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId } }) {
               ziel {
@@ -63,7 +53,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -74,17 +64,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
     const id = result?.data?.createZiel?.ziel?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
     )
   }
@@ -94,56 +84,27 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    let result
-    try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation deleteZiel($id: UUID!) {
-            deleteZielById(input: { id: $id }) {
-              ziel {
-                id
-              }
-            }
-          }
-        `,
-        variables: { id: zielId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'ziel',
+        id: zielId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeZiel`],
+      },
     })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeZieljahrs`],
-    })
-    tsQueryClient.invalidateQueries({
-      queryKey: [`treeZielsOfJahr`],
-    })
-    // navigate to parent
-    navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}${search}`,
-    )
-  }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neues Ziel erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -163,7 +124,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

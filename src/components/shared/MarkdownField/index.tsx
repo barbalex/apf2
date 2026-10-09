@@ -4,6 +4,7 @@ import React from 'react'
 import { useFocusWithin } from 'react-aria'
 
 import { Editor } from './Editor/index.tsx'
+import type { EditorProps } from './Editor/index.tsx'
 import { Presenter } from './Presenter.tsx'
 import { TextField } from '../TextField.tsx'
 
@@ -12,14 +13,11 @@ import { TextField } from '../TextField.tsx'
 // - markdown presenter if value exists
 // - markdown editor if is focused
 // problems with react-focus-within: maybe use https://stackoverflow.com/a/63857071/712005
-export const MarkdownField = (props) => {
+export const MarkdownField = (props: EditorProps) => {
   const { label, value } = props
 
-  let [events, setEvents] = React.useState<string[]>([])
-  let [isFocusWithin, setFocusWithin] = React.useState(false)
-  let { focusWithinProps } = useFocusWithin({
-    onFocusWithin: (e) => setEvents((events) => [...events, 'focus within']),
-    onBlurWithin: (e) => setEvents((events) => [...events, 'blur within']),
+  const [isFocusWithin, setFocusWithin] = React.useState(false)
+  const { focusWithinProps } = useFocusWithin({
     onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
   })
 

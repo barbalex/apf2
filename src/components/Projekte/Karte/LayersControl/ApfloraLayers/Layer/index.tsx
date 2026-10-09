@@ -45,6 +45,13 @@ interface ApfloraLayersQueryResult {
   pop?: {
     nodes: PopNode[]
   }
+  /**
+   * tpop layers read their nodes from tpopByPop
+   * but a path for the layer value must exist
+   */
+  tpop?: {
+    nodes: NodeWithCoords[]
+  }
   tpopByPop?: {
     nodes: PopNode[]
   }
@@ -62,9 +69,24 @@ interface ApfloraLayersQueryResult {
   }
 }
 
+export interface ApfloraLayer {
+  label: string
+  value:
+    | 'pop'
+    | 'tpop'
+    | 'beobZugeordnet'
+    | 'beobNichtBeurteilt'
+    | 'beobNichtZuzuordnen'
+    | 'beobZugeordnetAssignPolylines'
+}
+
+interface LayerProps {
+  apfloraLayer: ApfloraLayer
+}
+
 import styles from './index.module.css'
 
-export const Layer = ({ apfloraLayer }) => {
+export const Layer = ({ apfloraLayer }: LayerProps) => {
   const { apId, popId, tpopId, beobId } = useParams()
 
   const map = useMap()

@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -11,18 +11,16 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopmassnberId } from '../../../../models/apflora/Tpopmassnber.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopmassnberResult {
-  data: {
-    createTpopmassnber: {
-      tpopmassnber: {
-        id: TpopmassnberId
-        tpopId: TpopId
-      }
+  createTpopmassnber: {
+    tpopmassnber: {
+      id: TpopmassnberId
+      tpopId: TpopId
     }
   }
 }
@@ -43,10 +41,10 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateTpopmassnberResult | undefined
+    let result: { data?: CreateTpopmassnberResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopmassnberResult['data']>({
-        mutation: gql`
+      result = await apolloClient.mutate<CreateTpopmassnberResult>({
+        mutation: graphql(`
           mutation createTpopmassnberForTpopmassnbersForm($tpopId: UUID!) {
             createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
               tpopmassnber {
@@ -55,8 +53,8 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
-        variables: { tpopId },
+        `),
+        variables: { tpopId: tpopId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -66,14 +64,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassnber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopmassnber?.tpopmassnber?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -83,7 +81,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Massnahmen-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

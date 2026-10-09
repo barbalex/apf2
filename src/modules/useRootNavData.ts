@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
@@ -9,11 +9,11 @@ export const useRootNavData = () => {
   const apolloClient = useApolloClient()
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeRoot', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavRootQuery($usersFilter: UserFilter!) {
             allProjekts {
               totalCount
@@ -31,22 +31,22 @@ export const useRootNavData = () => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           usersFilter: userGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
-  const projectsCount = data.allProjekts.totalCount
-  const usersCount = data.allUsers.totalCount
-  const usersFilteredCount = data.filteredUsers.totalCount
-  const messagesCount = data.allMessages.totalCount
-  const currentIssuesCount = data.allCurrentissues.totalCount
+  const projectsCount = data.allProjekts?.totalCount
+  const usersCount = data.allUsers?.totalCount
+  const usersFilteredCount = data.filteredUsers?.totalCount
+  const messagesCount = data.allMessages?.totalCount
+  const currentIssuesCount = data.allCurrentissues?.totalCount
   const navData = {
     id: 'Daten',
     url: '/Daten',

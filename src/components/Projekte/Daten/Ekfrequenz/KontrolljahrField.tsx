@@ -27,9 +27,12 @@ export const KontrolljahrField = ({
   kontrolljahre,
   refetch,
 }: KontrolljahrFieldProps) => {
-  const [value, setValue] = useState(kontrolljahre[index])
+  const [value, setValue] = useState<number | string | null>(
+    kontrolljahre[index] ?? null,
+  )
   useEffect(() => {
-    setValue(kontrolljahre[index])
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync local input state with server data after refetch
+    setValue(kontrolljahre[index] ?? null)
   }, [index, kontrolljahre])
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -38,7 +41,8 @@ export const KontrolljahrField = ({
   const onBlur = async () => {
     const newVal = [...kontrolljahre]
     if (value || value === 0) {
-      newVal[index] = value
+      // value comes from a numeric input and is a number at runtime
+      newVal[index] = value as number
     } else {
       newVal.splice(index, 1)
     }
@@ -46,16 +50,17 @@ export const KontrolljahrField = ({
     refetch()
   }
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) =>
-    e.key === 'Enter' && onBlur()
+  const onKeyDown = (
+    e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => e.key === 'Enter' && onBlur()
 
   return (
     <Input
       value={value}
       type="number"
       onChange={onChange}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
+      onBlur={() => void onBlur()}
+      onKeyDown={(e) => void onKeyDown(e)}
       className={styles.styledInput}
     />
   )

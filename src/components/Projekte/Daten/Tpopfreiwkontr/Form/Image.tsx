@@ -2,8 +2,13 @@ import { useState } from 'react'
 
 import styles from './Image.module.css'
 
-export const Image = ({ artname, apId }) => {
-  const [notif, setNotif] = useState(null)
+interface ImageProps {
+  artname: string
+  apId: string
+}
+
+export const Image = ({ artname, apId }: ImageProps) => {
+  const [notif, setNotif] = useState<string | undefined>()
 
   // show notification if image is not found
   // also: do not show image when notification is shown

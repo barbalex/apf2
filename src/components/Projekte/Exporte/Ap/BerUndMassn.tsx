@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { ApId, AdresseId } from '../../../../models/apflora/index.tsx'
+import type { ApId, AdresseId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApApberUndMassnsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -35,18 +35,18 @@ interface ApApberUndMassnsQueryResult {
         name?: string
       }
       vApApberundmassnsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           massnJahr?: number
           massnAnzahl?: number
           massnAnzahlBisher?: number
           berichtErstellt?: boolean
-        }>
+        }[]
       }
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 
@@ -54,14 +54,14 @@ export const BerUndMassn = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApBerUndMassn = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApApberUndMassnsQueryResult }
+    let result: { data?: ApApberUndMassnsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApApberUndMassnsQueryResult>({
-        query: gql`
+        query: graphql(`
           query ApApberUndMassnsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -99,7 +99,7 @@ export const BerUndMassn = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({
@@ -110,7 +110,7 @@ export const BerUndMassn = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAps?.nodes ?? []).map((z) => ({
       ap_id: z.id,
       artname: z?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -137,14 +137,14 @@ export const BerUndMassn = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApJahresberichteUndMassnahmen' })
+    void exportModule({ data: rows, fileName: 'ApJahresberichteUndMassnahmen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickApBerUndMassn}
+      onClick={() => void onClickApBerUndMassn()}
       color="inherit"
       disabled={!!queryState}
     >

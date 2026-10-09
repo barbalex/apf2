@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import { MdDragHandle, MdInfoOutline } from 'react-icons/md'
 import {
   DndContext,
@@ -10,6 +11,7 @@ import {
   useSensors,
   DragOverlay,
 } from '@dnd-kit/core'
+import type { Active, DragEndEvent, DragStartEvent, Over } from '@dnd-kit/core'
 import {
   SortableContext,
   sortableKeyboardCoordinates,
@@ -32,13 +34,35 @@ import {
 
 import styles from './Overlays.module.css'
 
+interface Overlay {
+  label: string
+  value: string
+}
+
+/**
+ * dnd-kit passes its own Active object on drag start,
+ * which is stored here and used like an overlay
+ */
+interface DraggingOverlay extends Active {
+  label: string
+  value: string
+}
+
+interface SortableItemProps {
+  id: string
+  overlay: Overlay
+  activeOverlays: string[]
+  setActiveOverlays: (value: string[]) => void
+  apId: string | undefined
+}
+
 const SortableItem = ({
   id,
   overlay,
   activeOverlays,
   setActiveOverlays,
   apId,
-}) => {
+}: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
 
@@ -79,16 +103,27 @@ const SortableItem = ({
                 className={styles.icons}
                 key={layer.name}
               >
-                <div>
-                  <Button
-                    className={styles.iconButton}
-                    color="inherit"
-                    title={`Legende für ${layer.name} öffnen`}
-                    onClick={() => window.open(layer.url, '_blank')}
-                  >
+                <Tooltip
+                  title={
+                    <>
+                      <div className={styles.legendTooltipTitle}>
+                        {layer.name}
+                      </div>
+                      <img
+                        src={layer.url}
+                        alt={`Legende für ${layer.name}`}
+                        className={styles.legendTooltipImage}
+                        onClick={() => window.open(layer.url, '_blank')}
+                      />
+                    </>
+                  }
+                  placement="left"
+                  arrow
+                >
+                  <span>
                     <MdInfoOutline className={styles.legendIcon} />
-                  </Button>
-                </div>
+                  </span>
+                </Tooltip>
               </div>
             ))}
         </div>
@@ -108,7 +143,15 @@ const SortableItem = ({
   )
 }
 
-export const Overlays = () => {
+interface OverlaysProps {
+  /**
+   * overlaysString enforces rererender
+   * even when only the sorting changes
+   */
+  overlaysString: string
+}
+
+export const Overlays = (_props: OverlaysProps) => {
   const { apId } = useParams()
 
   const overlays = useAtomValue(mapOverlaysAtom)
@@ -116,14 +159,18 @@ export const Overlays = () => {
   const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
   const setActiveOverlays = useSetAtom(setMapActiveOverlaysAtom)
 
-  const [draggingOverlay, setDraggingOverlay] = useState(null)
-  const onDragStart = ({ active }) => setDraggingOverlay(active)
+  const [draggingOverlay, setDraggingOverlay] = useState<DraggingOverlay | null>(
+    null,
+  )
+  const onDragStart = ({ active }: DragStartEvent) =>
+    setDraggingOverlay(active as DraggingOverlay)
 
-  const onDragEnd = ({ active, over }) => {
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
     setDraggingOverlay(null)
-    if (active.id !== over.id) {
+    // over is only null when dropping outside all droppables
+    if (active.id !== (over as Over).id) {
       const oldIndex = overlays.findIndex((e) => e.value === active.id)
-      const newIndex = overlays.findIndex((e) => e.value === over.id)
+      const newIndex = overlays.findIndex((e) => e.value === (over as Over).id)
 
       return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
     }

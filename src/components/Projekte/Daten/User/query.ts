@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { user } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query userById($id: UUID!) {
     userById(id: $id) {
       ...UserFields

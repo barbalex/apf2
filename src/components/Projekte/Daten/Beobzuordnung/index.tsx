@@ -1,8 +1,8 @@
-import { type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
@@ -31,51 +31,66 @@ import {
 } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type BeobType from '../../../../models/apflora/Beob.ts'
-import type Ap from '../../../../models/apflora/Ap.ts'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
-import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-import type { PopStatusWerteCode } from '../../../../models/apflora/PopStatusWerte.ts'
+import type {
+  BeobId,
+  AeTaxonomiesId,
+  TpopId,
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
-interface BeobzuordnungQueryResult {
-  beobById: BeobType & {
-    aeTaxonomyByArtId?: {
-      artname: string
-      taxid: number
-      apByArtId?: Ap
-    }
-    aeTaxonomyByArtIdOriginal?: {
-      artname: string
-      taxid: number
-    }
-  }
-  apById: Ap & {
-    popsByApId: {
-      nodes: Array<{
-        id: string
-        nr: number
-        tpopsByPopId: {
-          nodes: Array<{
-            id: TpopId
-            nr: number
-            lv95X: number
-            lv95Y: number
-            popStatusWerteByStatus?: {
-              text: string
-            }
-            popByPopId?: {
-              nr: number
-            }
-          }>
-        }
-      }>
-    }
-  }
+interface BeobzuordnungBeob {
+  id: BeobId
+  artId: AeTaxonomiesId | null
+  artIdOriginal: AeTaxonomiesId | null
+  tpopId: TpopId | null
+  nichtZuordnen: boolean | null
+  bemerkungen: string | null
+  quelle: string | null
+  data: string | null
+  lv95X: number | null
+  lv95Y: number | null
+  infofloraInformiertDatum: string | null
+  aeTaxonomyByArtId?: {
+    artname: string
+    taxid: number
+  } | null
+  aeTaxonomyByArtIdOriginal?: {
+    artname: string
+    taxid: number
+  } | null
 }
 
-const fieldTypes = {
+interface BeobzuordnungTpopNode {
+  id: TpopId
+  nr: number | null
+  lv95X: number | null
+  lv95Y: number | null
+  popStatusWerteByStatus?: {
+    text: string | null
+  } | null
+  popByPopId?: {
+    nr: number | null
+  } | null
+}
+
+interface BeobzuordnungAp {
+  popsByApId?: {
+    nodes: {
+      id: string
+      tpopsByPopId?: {
+        nodes: BeobzuordnungTpopNode[]
+      } | null
+    }[]
+  } | null
+}
+
+interface BeobzuordnungQueryResult {
+  beobById: BeobzuordnungBeob | null
+  apById: BeobzuordnungAp | null
+}
+
+const fieldTypes: Record<string, string> = {
   idField: 'String',
   datum: 'Date',
   autor: 'String',
@@ -103,7 +118,13 @@ const nichtZuordnenPopover = (
   </div>
 )
 
-const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
+const getTpopZuordnenSource = ({
+  row,
+  ap,
+}: {
+  row: Partial<BeobzuordnungBeob>
+  ap: Partial<BeobzuordnungAp>
+}) => {
   // get all popIds of active ap
   const popList = ap?.popsByApId?.nodes ?? []
   // get all tpop
@@ -115,8 +136,8 @@ const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
     .filter((t) => !!t.lv95X || t.id === row.tpopId)
     .map((t) => {
       // calculate their distance to this beob
-      const dX = Math.abs(row.lv95X - t.lv95X)
-      const dY = Math.abs(row.lv95Y - t.lv95Y)
+      const dX = Math.abs((row.lv95X ?? 0) - (t.lv95X ?? 0))
+      const dY = Math.abs((row.lv95Y ?? 0) - (t.lv95Y ?? 0))
       const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
       const distance = distNr?.toLocaleString('de-ch')
       // build label
@@ -140,7 +161,14 @@ const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
 }
 
 export const Component = () => {
-  const { beobId: id, apId } = useParams<{ beobId: string; apId: string }>()
+  // this component only renders on routes containing beobId and apId
+  const { beobId: id, apId } = useParams<{
+    beobId: string
+    apId: string
+  }>() as {
+    beobId: string
+    apId: string
+  }
   const { search, pathname } = useLocation()
   const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
     ? 'nichtZuzuordnen'
@@ -164,12 +192,11 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.beobById ?? {}
-  const ap = data?.apById ?? {}
+  const row = data?.beobById ?? ({} as Partial<BeobzuordnungBeob>)
+  const ap = data?.apById ?? ({} as Partial<BeobzuordnungAp>)
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = (inputValue: string) =>
@@ -180,9 +207,9 @@ export const Component = () => {
         }
       : { artname: { isNull: false }, apartsByArtIdExist: true }
 
-  const onSaveArtIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const onSaveArtIdToDb = (event: SaveToDbEvent) =>
     saveArtIdToDb({
-      value: event.target.value,
+      value: event.target.value as string,
       row,
       search,
     })
@@ -195,18 +222,20 @@ export const Component = () => {
       search,
     })
 
-  const onSaveTpopIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    saveTpopIdToDb({
-      value: event.target.value,
+  const onSaveTpopIdToDb = (event: SaveToDbEvent) => {
+    void saveTpopIdToDb({
+      value: event.target.value as string | number | null,
       id,
       type,
       search,
     })
+  }
 
-  const onUpdateField = (event: ChangeEvent<HTMLInputElement>) => {
+  const onUpdateField = (event: SaveToDbEvent) => {
     const changedField = event.target.name
-    apolloClient.mutate({
-      mutation: gql`
+    if (!changedField) return
+    void apolloClient.mutate({
+      mutation: dynamicGql`
           mutation updateBeobForBeobzuordnung(
             $id: UUID!
             $${changedField}: ${fieldTypes[changedField]}
@@ -262,7 +291,7 @@ export const Component = () => {
         `,
       variables: {
         id,
-        [event.target.name]: event.target.value,
+        [changedField]: event.target.value,
         changedBy: userName,
       },
     })
@@ -290,7 +319,10 @@ export const Component = () => {
               key={`${row.id}artId`}
               field="artId"
               valueLabelPath="aeTaxonomyByArtId.artname"
+              valueLabel={undefined}
               label="Art"
+              labelSize={undefined}
+              error={undefined}
               row={row}
               saveToDb={onSaveArtIdToDb}
               query={queryAeTaxonomies}
@@ -301,9 +333,11 @@ export const Component = () => {
               key={`${row.id}nichtZuordnen`}
               name="nichtZuordnen"
               label="Nicht zuordnen"
-              value={row.nichtZuordnen}
+              // the shared component's props are untyped (value inferred as null)
+              value={row.nichtZuordnen as unknown as null}
               saveToDb={onSaveNichtZuordnenToDb}
               popover={nichtZuordnenPopover}
+              error={undefined}
             />
             <Select
               key={`${row.id}tpopId`}
@@ -322,6 +356,7 @@ export const Component = () => {
               type="text"
               multiLine
               saveToDb={onUpdateField}
+              errors={undefined}
             />
             <div className={styles.infofloraRow}>
               <DateField
@@ -330,6 +365,7 @@ export const Component = () => {
                 label="Info Flora informiert am:"
                 value={row.infofloraInformiertDatum}
                 saveToDb={onUpdateField}
+                error={undefined}
               />
               <Button
                 variant="outlined"
@@ -345,9 +381,9 @@ export const Component = () => {
                   }`
                   const bemerkungen = row.bemerkungen
                   // remove all keys with null
-                  const dataArray = Object.entries(JSON.parse(row.data)).filter(
-                    (a) => !!a[1] || a[1] === 0 || a[1] === false,
-                  )
+                  const dataArray = Object.entries(
+                    JSON.parse(row.data as string),
+                  ).filter((a) => !!a[1] || a[1] === 0 || a[1] === false)
                   let data = ''
                   dataArray.forEach((d) => {
                     data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`

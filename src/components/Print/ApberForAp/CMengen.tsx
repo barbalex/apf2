@@ -1,6 +1,14 @@
+import type { ApberForApJberAbcNode } from './types.ts'
+
 import styles from './CMengen.module.css'
 
-export const CMengen = ({ jahr, loading, node }) => {
+interface CMengenProps {
+  jahr?: number | undefined
+  loading: boolean
+  node?: ApberForApJberAbcNode | undefined
+}
+
+export const CMengen = ({ jahr, loading, node }: CMengenProps) => {
   const c1LPop = loading ? '...' : node?.c1LPop
   const c1LTpop = loading ? '...' : node?.c1LTpop
   const c1RPop = loading ? '...' : node?.c1RPop

@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 
 import { assozart } from '../../../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   query assozartByIdForDelete($id: UUID!) {
     assozartById(id: $id) {
       ...AssozartFields

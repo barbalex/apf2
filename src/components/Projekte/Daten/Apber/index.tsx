@@ -1,11 +1,11 @@
-import { useState, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { gql } from '@apollo/client'
+import { useQuery, type UseQueryOptions, useQueryClient } from '@tanstack/react-query'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
@@ -14,28 +14,22 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
+import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type Apber from '../../../../models/apflora/Apber.ts'
+import type { ApberId } from '../../../../models/apflora/Apber.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
-import type { ApErfkritWerteCode } from '../../../../models/apflora/ApErfkritWerte.ts'
 
 import styles from './index.module.css'
-import { ref } from 'node:process'
 
-const veraenGegenVorjahrWerte = [
-  { value: '+', label: '+' },
-  { value: '-', label: '–' },
-]
-
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   jahr: 'Int',
   situation: 'String',
   vergleichVorjahrGesamtziel: 'String',
   beurteilung: 'Int',
-  veraenderungZumVorjahr: 'String',
   apberAnalyse: 'String',
   konsequenzenUmsetzung: 'String',
   konsequenzenErfolgskontrolle: 'String',
@@ -51,19 +45,54 @@ const fieldTypes = {
 }
 
 interface ApberQueryResult {
-  apberById: Apber
+  apberById: {
+    id: ApberId
+    label: string | null
+    jahr: number | null
+    situation: string | null
+    vergleichVorjahrGesamtziel: string | null
+    beurteilung: number | null
+    apberAnalyse: string | null
+    konsequenzenUmsetzung: string | null
+    konsequenzenErfolgskontrolle: string | null
+    biotopeNeue: string | null
+    biotopeOptimieren: string | null
+    massnahmenOptimieren: string | null
+    wirkungAufArt: string | null
+    datum: string | null
+    massnahmenApBearb: string | null
+    massnahmenPlanungVsAusfuehrung: string | null
+    apId: ApId | null
+    bearbeiter: AdresseId | null
+    changedBy: string | null
+    apByApId: {
+      apbersByApId: {
+        nodes: {
+          jahr: number | null
+          beurteilung: number | null
+        }[]
+      } | null
+    } | null
+  }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
-      label: string
-    }>
+      label: string | null
+    }[]
   }
   allApErfkritWertes: {
-    nodes: Array<{
-      value: ApErfkritWerteCode
-      label: string
-    }>
+    nodes: {
+      value: number
+      label: string | null
+      sort: number | null
+    }[]
   }
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type ApberUseQueryOptions = UseQueryOptions<ApberQueryResult | undefined, Error> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -76,7 +105,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, refetch } = useQuery({
+  const queryOptions: ApberUseQueryOptions = {
     queryKey: ['apber', apberId],
     queryFn: async () => {
       const result = await apolloClient.query<ApberQueryResult>({
@@ -89,22 +118,40 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
+  }
+
+  const { data, refetch } = useQuery(queryOptions)
+
+  const row = data?.apberById
+
+  const sortsByCode = new Map(
+    (data?.allApErfkritWertes?.nodes ?? []).map((w) => [w.value, w.sort]),
+  )
+  const jahr = row?.jahr
+  const beurteilungVorjahr =
+    jahr == null
+      ? null
+      : ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
+          (apber) => apber.jahr === jahr - 1,
+        )?.beurteilung ?? null)
+  const veraenderung = veraenderungZumVorjahr({
+    beurteilung: row?.beurteilung,
+    beurteilungVorjahr,
+    sortsByCode,
   })
 
-  const row = data.apberById as Apber
-
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: SaveToDbEvent) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
-      id: row.id,
+      id: row?.id,
       [field]: value,
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate<any>({
-        mutation: gql`
+      await apolloClient.mutate({
+        mutation: dynamicGql`
             mutation updateApber(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -138,9 +185,9 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    refetch()
+    void refetch()
     if (field === 'jahr') {
-      tsQueryClient.invalidateQueries({ queryKey: [`treeApber`] })
+      void tsQueryClient.invalidateQueries({ queryKey: [`treeApber`] })
     }
   }
 
@@ -156,103 +203,108 @@ export const Component = () => {
             name="jahr"
             label="Jahr"
             type="number"
-            value={row.jahr}
+            value={row?.jahr}
             saveToDb={saveToDb}
             error={fieldErrors.jahr}
           />
-          <MarkdownField
-            name="vergleichVorjahrGesamtziel"
-            label="Vergleich Vorjahr - Gesamtziel"
-            value={row.vergleichVorjahrGesamtziel}
-            saveToDb={saveToDb}
-            error={fieldErrors.vergleichVorjahrGesamtziel}
-          />
-          <Select
-            key={`${apberId}beurteilung`}
-            name="beurteilung"
-            label="Beurteilung"
-            options={data.allApErfkritWertes.nodes}
-            value={row.beurteilung}
-            saveToDb={saveToDb}
-            error={fieldErrors.beurteilung}
-          />
-          <Select
-            key={`${apberId}veraenderungZumVorjahr`}
-            name="veraenderungZumVorjahr"
-            label="Veränderung zum Vorjahr"
-            options={veraenGegenVorjahrWerte}
-            loading={false}
-            value={row.veraenderungZumVorjahr}
-            saveToDb={saveToDb}
-            error={fieldErrors.veraenderungZumVorjahr}
-          />
+          <fieldset className={styles.koordinationsstelleGroup}>
+            <legend className={styles.koordinationsstelleLegend}>
+              Wird durch die Koordinationsstelle nachgeführt
+            </legend>
+            <MarkdownField
+              name="vergleichVorjahrGesamtziel"
+              label="Vergleich Vorjahr - Gesamtziel"
+              value={row?.vergleichVorjahrGesamtziel}
+              saveToDb={saveToDb}
+              error={fieldErrors.vergleichVorjahrGesamtziel}
+            />
+            <Select
+              key={`${apberId}beurteilung`}
+              name="beurteilung"
+              label="Beurteilung"
+              options={data?.allApErfkritWertes?.nodes ?? []}
+              value={row?.beurteilung ?? null}
+              saveToDb={(event) => void saveToDb(event)}
+              error={fieldErrors.beurteilung ?? ''}
+            />
+            <TextField
+              name="veraenderungZumVorjahr"
+              label="Veränderung zum Vorjahr"
+              value={veraenderung ?? ''}
+              disabled
+              saveToDb={() => {
+                // computed value, cannot be saved
+              }}
+              helperText="Berechnet aus den Beurteilungen dieses und des Vorjahres"
+            />
+          </fieldset>
           <MarkdownField
             name="apberAnalyse"
             label="Analyse"
-            value={row.apberAnalyse}
+            value={row?.apberAnalyse}
             saveToDb={saveToDb}
             error={fieldErrors.apberAnalyse}
           />
           <MarkdownField
             name="konsequenzenUmsetzung"
             label="Konsequenzen für die Umsetzung"
-            value={row.konsequenzenUmsetzung}
+            value={row?.konsequenzenUmsetzung}
             saveToDb={saveToDb}
             error={fieldErrors.konsequenzenUmsetzung}
           />
           <MarkdownField
             name="konsequenzenErfolgskontrolle"
             label="Konsequenzen für die Erfolgskontrolle"
-            value={row.konsequenzenErfolgskontrolle}
+            value={row?.konsequenzenErfolgskontrolle}
             saveToDb={saveToDb}
             error={fieldErrors.konsequenzenErfolgskontrolle}
           />
           <MarkdownField
             name="biotopeNeue"
             label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-            value={row.biotopeNeue}
+            value={row?.biotopeNeue}
             saveToDb={saveToDb}
             error={fieldErrors.biotopeNeue}
           />
           <MarkdownField
             name="biotopeOptimieren"
             label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-            value={row.biotopeOptimieren}
+            value={row?.biotopeOptimieren}
             saveToDb={saveToDb}
             error={fieldErrors.biotopeOptimieren}
           />
           <MarkdownField
             name="massnahmenApBearb"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Art-Verantwortlichen"
-            value={row.massnahmenApBearb}
+            value={row?.massnahmenApBearb}
             saveToDb={saveToDb}
             error={fieldErrors.massnahmenApBearb}
           />
           <MarkdownField
             name="massnahmenPlanungVsAusfuehrung"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-            value={row.massnahmenPlanungVsAusfuehrung}
+            value={row?.massnahmenPlanungVsAusfuehrung}
             saveToDb={saveToDb}
             error={fieldErrors.massnahmenPlanungVsAusfuehrung}
           />
           <MarkdownField
             name="massnahmenOptimieren"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-            value={row.massnahmenOptimieren}
+            value={row?.massnahmenOptimieren}
             saveToDb={saveToDb}
             error={fieldErrors.massnahmenOptimieren}
           />
           <MarkdownField
             name="wirkungAufArt"
             label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-            value={row.wirkungAufArt}
+            value={row?.wirkungAufArt}
             saveToDb={saveToDb}
             error={fieldErrors.wirkungAufArt}
           />
           <DateField
             name="datum"
             label="Datum"
-            value={row.datum}
+            value={row?.datum}
             saveToDb={saveToDb}
             error={fieldErrors.datum}
           />
@@ -260,10 +312,10 @@ export const Component = () => {
             key={`${apberId}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
-            options={data.allAdresses.nodes}
-            value={row.bearbeiter}
-            saveToDb={saveToDb}
-            error={fieldErrors.bearbeiter}
+            options={data?.allAdresses?.nodes ?? []}
+            value={row?.bearbeiter ?? null}
+            saveToDb={(event) => void saveToDb(event)}
+            error={fieldErrors.bearbeiter ?? ''}
           />
         </div>
       </div>

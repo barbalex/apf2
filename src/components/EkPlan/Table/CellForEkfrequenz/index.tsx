@@ -9,9 +9,9 @@ import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
-  ekPlanApValuesAtom,
 } from '../../../../store/index.ts'
 import { processChange } from './processChange.ts'
+import type { RowQueryForEkPlanResult, TpopRow } from '../tableTypes.ts'
 
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -23,11 +23,17 @@ export const CellForEkfrequenz = ({
   width,
   setProcessing,
   data,
+}: {
+  row: TpopRow
+  isOdd: boolean
+  field: Record<string, unknown>
+  width: number | undefined
+  setProcessing: (processing: boolean) => void
+  data: RowQueryForEkPlanResult | undefined
 }) => {
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
-  const apValues = useAtomValue(ekPlanApValuesAtom)
 
   const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
@@ -37,8 +43,8 @@ export const CellForEkfrequenz = ({
 
   const onMouseEnter = () => setHoveredTpopId(row.id)
 
-  const onChange = async (e) => {
-    const value = e.target.value || null
+  const onChange = async (e: { target: { value: unknown } }) => {
+    const value = (e.target.value as string) || null
     setProcessing(true)
     await processChange({
       value,
@@ -84,7 +90,7 @@ export const CellForEkfrequenz = ({
         <List sx={{ pt: 0 }}>
           <ListItemButton
             onClick={() => {
-              onChange({ target: { value: '' } })
+              void onChange({ target: { value: '' } })
               onClose()
             }}
             dense
@@ -101,7 +107,7 @@ export const CellForEkfrequenz = ({
             <ListItemButton
               key={e.id}
               onClick={() => {
-                onChange({ target: { value: e.id } })
+                void onChange({ target: { value: e.id } })
                 onClose()
               }}
               dense
@@ -114,7 +120,6 @@ export const CellForEkfrequenz = ({
             >
               <span
                 className={styles.codeText}
-                width={maxCodeLength}
                 style={{ minWidth: `${maxCodeLength * 0.65}rem` }}
               >
                 {e.code}

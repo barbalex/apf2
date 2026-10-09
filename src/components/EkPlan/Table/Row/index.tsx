@@ -1,13 +1,24 @@
 import { useRef } from 'react'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 import { useOnScreen } from '../../../../modules/useOnScreen.ts'
 import { Visible } from './Visible.tsx'
 
 import styles from './index.module.css'
 
-export const TpopRow = ({ tpopId, index, setProcessing, years }) => {
-  const ref = useRef(null)
-  const isVisible = useOnScreen(ref)
+export const TpopRow = ({
+  tpopId,
+  index,
+  setProcessing,
+  years,
+}: {
+  tpopId: TpopId
+  index: number
+  setProcessing: (processing: boolean) => void
+  years: number[]
+}) => {
+  const ref = useRef<HTMLDivElement | null>(null)
+  const isVisible = useOnScreen(ref as React.RefObject<HTMLElement>)
 
   return (
     <div

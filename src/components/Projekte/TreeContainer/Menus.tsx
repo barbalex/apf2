@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react'
+import type { MouseEvent, TouchEvent } from 'react'
 import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
-import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -222,7 +222,6 @@ import { insertDataset } from './insertDataset.ts'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.ts'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.ts'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.ts'
-import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import {
@@ -246,7 +245,6 @@ export const Menus = () => {
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
@@ -266,14 +264,18 @@ export const Menus = () => {
   const closeNewTpopFromBeobDialog = () => setNewTpopFromBeobDialogOpen(false)
 
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-  const showMapIfNotYetVisible = (projekteTabs) => {
+  const showMapIfNotYetVisible = (projekteTabs: string[]) => {
     const isVisible = projekteTabs.includes('karte')
     if (!isVisible) {
       setProjekteTabs([...projekteTabs, 'karte'])
     }
   }
 
-  const handleClick = (e, data, element) => {
+  const handleClick = (
+    _e: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
+    data: Record<string, unknown>,
+    element: EventTarget | null | undefined,
+  ) => {
     // console.log('TreeContainer, handleClick', { e, data, element })
     if (!data) {
       return addNotification({
@@ -291,8 +293,13 @@ export const Menus = () => {
         },
       })
     }
-    const { table, action, actionTable } = data
-    const { firstElementChild } = element
+    const { table, action, actionTable } = data as {
+      table?: string | undefined
+      action?: string | undefined
+      actionTable?: string | undefined
+    }
+    const firstElementChild =
+      element instanceof HTMLElement ? element.firstElementChild : null
     if (!firstElementChild) {
       return addNotification({
         message: 'no firstElementChild passed with click',
@@ -301,13 +308,13 @@ export const Menus = () => {
         },
       })
     }
-    const id = firstElementChild.getAttribute('data-id')
+    const id = firstElementChild.getAttribute('data-id') ?? ''
     const parentId = firstElementChild.getAttribute('data-parentid')
     const urlPassed = firstElementChild.getAttribute('data-url')
-    const url = JSON.parse(urlPassed)
+    const url = JSON.parse(urlPassed as string) as (string | number)[]
     const label = firstElementChild.getAttribute('data-label')
     const nodeType = firstElementChild.getAttribute('data-nodetype')
-    const menuType = firstElementChild.getAttribute('data-menutype')
+    const menuType = firstElementChild.getAttribute('data-menutype') ?? ''
     const singleElementName = firstElementChild.getAttribute(
       'data-singleelementname',
     )
@@ -327,7 +334,7 @@ export const Menus = () => {
     //   singleElementName,
     //   jahr,
     // })
-    const actions = {
+    const actions: Record<string, () => void> = {
       insert() {
         const urlForInsert = [...url]
         // when inserting on same level, remove last url element
@@ -338,13 +345,12 @@ export const Menus = () => {
           // db sets year 1 as standard
           urlForInsert.push(1)
         }
-        insertDataset({
-          tablePassed: table,
+        void insertDataset({
+          tablePassed: table ?? '',
           parentId: parentId || id,
           url: urlForInsert,
           menuType,
-          singleElementName,
-          id,
+          singleElementUrlName: singleElementName,
           search,
           jahr,
         })
@@ -361,28 +367,28 @@ export const Menus = () => {
         })
       },
       closeLowerNodes() {
-        closeLowerNodes({
+        void closeLowerNodes({
           url,
           search,
         })
       },
       delete() {
         setToDelete({
-          table,
+          table: table ?? null,
           id,
           label,
           url,
           afterDeletionHook: () => {
             const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
             setOpenNodes(newOpenNodes)
-            tsQueryClient.invalidateQueries({
-              queryKey: [`tree${upperFirst(table)}`],
+            void tsQueryClient.invalidateQueries({
+              queryKey: [`tree${upperFirst(table ?? '')}`],
             })
             // also invalidate parent queries for folder counts
-            tsQueryClient.invalidateQueries({
+            void tsQueryClient.invalidateQueries({
               queryKey: [`treeApFolders`],
             })
-            tsQueryClient.invalidateQueries({
+            void tsQueryClient.invalidateQueries({
               queryKey: [`treeAp`],
             })
           },
@@ -392,12 +398,12 @@ export const Menus = () => {
         // 1. open map if not yet open
         showMapIfNotYetVisible(projekteTabs)
         // 2 add layer for actionTable
-        if (activeApfloraLayers.includes(actionTable)) {
+        if (activeApfloraLayers.includes(actionTable ?? '')) {
           setActiveApfloraLayers(
             activeApfloraLayers.filter((o) => o !== actionTable),
           )
         } else {
-          setActiveApfloraLayers([...activeApfloraLayers, actionTable])
+          setActiveApfloraLayers([...activeApfloraLayers, actionTable ?? ''])
         }
       },
       localizeOnMap() {
@@ -415,7 +421,7 @@ export const Menus = () => {
         })
       },
       move() {
-        moveTo({
+        void moveTo({
           id,
         })
       },
@@ -435,7 +441,7 @@ export const Menus = () => {
       },
       copy() {
         // issue: tpop-folder passes no parentId
-        copyTo({
+        void copyTo({
           parentId: nodeType === 'folder' ? (parentId ?? id) : id,
         })
       },
@@ -446,13 +452,13 @@ export const Menus = () => {
         setCopyingBiotop({ id: null, label: null })
       },
       copyBiotop() {
-        copyBiotopTo({ id })
+        void copyBiotopTo({ id })
       },
       copyTpopKoordToPop() {
-        copyTpopKoordToPop({ id })
+        void copyTpopKoordToPop({ id })
       },
       createNewPopFromBeob() {
-        createNewPopFromBeob({
+        void createNewPopFromBeob({
           id,
           apId,
           projId,
@@ -464,31 +470,32 @@ export const Menus = () => {
         setNewTpopFromBeobDialogOpen(true)
       },
       copyBeobZugeordnetKoordToTpop() {
-        copyBeobZugeordnetKoordToTpop({ id })
+        void copyBeobZugeordnetKoordToTpop({ id })
       },
       async showCoordOfTpopOnMapsZhCh() {
-        showCoordOfTpopOnMapsZhCh({
+        void showCoordOfTpopOnMapsZhCh({
           id,
         })
       },
       async showCoordOfTpopOnMapGeoAdminCh() {
-        showCoordOfTpopOnMapGeoAdminCh({
+        void showCoordOfTpopOnMapGeoAdminCh({
           id,
         })
       },
       async showCoordOfBeobOnMapsZhCh() {
-        showCoordOfBeobOnMapsZhCh({
+        void showCoordOfBeobOnMapsZhCh({
           id,
         })
       },
       async showCoordOfBeobOnMapGeoAdminCh() {
-        showCoordOfBeobOnMapGeoAdminCh({
+        void showCoordOfBeobOnMapGeoAdminCh({
           id,
         })
       },
     }
-    if (Object.keys(actions).includes(action)) {
-      actions[action]()
+    const actionFunction = actions[action ?? '']
+    if (actionFunction) {
+      actionFunction()
     } else {
       addNotification({
         message: `action "${action}" unknown, therefore not executed`,

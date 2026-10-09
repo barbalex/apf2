@@ -1,15 +1,18 @@
 import { useState, Suspense } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 
 import { queryAll } from './queryAll.ts'
+import type { EkPlanTpopFilter } from './tableTypes.ts'
 import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'
 import { getYears } from './getYears.ts'
-import { Error } from '../../shared/Error.tsx'
-import { exportRowFromTpop } from './exportRowFromTpop.ts'
+import {
+  exportRowFromTpop,
+  type ExportTpopNode,
+} from './exportRowFromTpop.ts'
 import { exportModule } from '../../../modules/export.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
@@ -21,12 +24,8 @@ import type { TpopId } from '../../../models/apflora/Tpop.ts'
 
 import {
   addNotificationAtom,
-  ekPlanApsAtom,
   ekPlanApValuesAtom,
   ekPlanYearMenuAnchorAtom,
-  ekPlanShowEkAtom,
-  ekPlanShowEkfAtom,
-  ekPlanShowMassnAtom,
   ekPlanFilterApAtom,
   ekPlanFilterPopNrAtom,
   ekPlanFilterPopNameAtom,
@@ -53,6 +52,13 @@ import {
 
 import styles from './index.module.css'
 
+interface PopFilter {
+  apId: { in: string[] }
+  nr?: { equalTo: number }
+  name?: { includesInsensitive: string }
+  popStatusWerteByStatus?: { code: { in: number[] } }
+}
+
 const getTpopFilter = ({
   apValues,
   filterAp,
@@ -76,19 +82,47 @@ const getTpopFilter = ({
   filterAnsiedlungYear,
   filterKontrolleYear,
   filterEkplanYear,
-}) => {
-  const tpopFilter = { popByPopId: { apId: { in: apValues } } }
+}: {
+  apValues: string[]
+  filterAp: string | null
+  filterPopNr: number | null
+  filterPopName: string | null
+  filterPopStatus: number[] | null
+  filterNr: number | null
+  filterGemeinde: string | null
+  filterFlurname: string | null
+  filterStatus: number[] | null
+  filterBekanntSeit: number | null
+  filterLv95X: number | null
+  filterLv95Y: number | null
+  filterEkfKontrolleur: string | null
+  filterEkfrequenzAbweichend: boolean
+  filterEkAbrechnungstyp: string | null
+  filterEkfrequenz: string | null
+  filterEkfrequenzStartjahr: number | null
+  filterEkfrequenzEmpty: boolean
+  filterEkfrequenzStartjahrEmpty: boolean
+  filterAnsiedlungYear: number | null
+  filterKontrolleYear: number | null
+  filterEkplanYear: number | null
+}): EkPlanTpopFilter => {
+  const popFilter: PopFilter = {
+    apId: { in: apValues },
+  }
+  const tpopFilter: EkPlanTpopFilter = {
+    popByPopId: popFilter,
+  }
   if (filterAp) {
     tpopFilter.apName = { includesInsensitive: filterAp }
   }
   if (filterPopNr) {
-    tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
+    popFilter.nr = { equalTo: filterPopNr }
   }
   if (filterPopName) {
-    tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
+    popFilter.name = { includesInsensitive: filterPopName }
   }
   if (filterPopStatus) {
-    tpopFilter.popByPopId.popStatusWerteByStatus = {
+    popFilter.popStatusWerteByStatus = {
       code: {
         in: filterPopStatus,
       },
@@ -177,12 +211,8 @@ export const EkPlanTable = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const aps = useAtomValue(ekPlanApsAtom)
   const apValues = useAtomValue(ekPlanApValuesAtom)
   const yearMenuAnchor = useAtomValue(ekPlanYearMenuAnchorAtom)
-  const showEk = useAtomValue(ekPlanShowEkAtom)
-  const showEkf = useAtomValue(ekPlanShowEkfAtom)
-  const showMassn = useAtomValue(ekPlanShowMassnAtom)
   const filterAp = useAtomValue(ekPlanFilterApAtom)
   const filterPopNr = useAtomValue(ekPlanFilterPopNrAtom)
   const filterPopName = useAtomValue(ekPlanFilterPopNameAtom)
@@ -249,7 +279,7 @@ export const EkPlanTable = () => {
     filterEkplanYear,
   })
 
-  const { data, refetch } = useQuery<EkplanTpopQueryResult>({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['EkplanTpopQuery', tpopFilter],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -258,21 +288,12 @@ export const EkPlanTable = () => {
       })
 
       if (result.error) throw result.error
-      return result.data
+      return result.data as EkplanTpopQueryResult
     },
-    suspense: true,
   })
 
-  const tpops = data.allTpops.nodes as TpopNode[]
+  const tpops = (data.allTpops?.nodes ?? []) as TpopNode[]
   const years = getYears(pastYears)
-
-  // when this value changes, year columns are re-rendered as it is added as key
-  // needed because otherwise when changing filters column widths can be off
-  const yearHeaderRerenderValue = JSON.stringify([
-    filterAnsiedlungYear,
-    filterKontrolleYear,
-    filterEkplanYear,
-  ])
 
   const onClickExport = async () => {
     let result
@@ -289,12 +310,18 @@ export const EkPlanTable = () => {
         },
       })
     }
-    const tpops = result?.data?.allTpops?.nodes ?? []
-    const ekfrequenzs = result?.data?.allEkfrequenzs?.nodes ?? []
+    const tpops = (
+      (result?.data as { allTpops?: { nodes?: unknown[] } } | undefined)
+        ?.allTpops?.nodes ?? []
+    ) as ExportTpopNode[]
+    const ekfrequenzs = (
+      (result?.data as { allEkfrequenzs?: { nodes?: unknown[] } } | undefined)
+        ?.allEkfrequenzs?.nodes ?? []
+    ) as { id: string; code: string | null }[]
     const data = tpops.map((tpop) =>
       exportRowFromTpop({ tpop, years, ekfrequenzs }),
     )
-    exportModule({ data, fileName: 'ek-planung' })
+    void exportModule({ data, fileName: 'ek-planung' })
   }
 
   // TODO: give button to remove all filters in case something goes wrong
@@ -307,7 +334,7 @@ export const EkPlanTable = () => {
       <Suspense fallback={<Spinner />}>
         <Button
           variant="outlined"
-          onClick={onClickExport}
+          onClick={() => void onClickExport()}
           color="inherit"
           className={styles.exportButton}
         >
@@ -318,7 +345,7 @@ export const EkPlanTable = () => {
             <EkplanTableHeader
               tpopLength={tpops.length !== 0 ? tpops.length : '...'}
               tpopFilter={tpopFilter}
-              refetch={refetch}
+              refetch={() => void refetch()}
               years={years}
             />
             {tpops.map((tpop, index) => (

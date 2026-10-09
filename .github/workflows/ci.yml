@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  lint-and-typecheck:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck (baseline — fails on new errors only)
+        run: npm run typecheck:ci
+      - name: Generated GraphQL code is fresh
+        run: |
+          npm run codegen
+          git diff --exit-code src/gql || (echo "src/gql is stale — run: npm run codegen" && exit 1)

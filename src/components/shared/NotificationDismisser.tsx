@@ -2,8 +2,9 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { useSnackbar } from 'notistack'
+import type { SnackbarKey } from 'notistack'
 
-export const NotificationDismisser = ({ nKey }) => {
+export const NotificationDismisser = ({ nKey }: { nKey: SnackbarKey }) => {
   const { closeSnackbar } = useSnackbar()
   const onClick = () => closeSnackbar(nKey)
 

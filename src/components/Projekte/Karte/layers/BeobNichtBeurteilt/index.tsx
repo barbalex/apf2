@@ -3,35 +3,17 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
+import type { Marker as LeafletMarkerType } from 'leaflet'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
+import type { BeobNichtBeurteiltNode } from './Marker.tsx'
 import { query } from './query.ts'
-
-import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
-import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
   addNotificationAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../store/index.ts'
-
-
-interface BeobNichtBeurteiltNode {
-  id: BeobId
-  wgs84Lat: number
-  wgs84Long: number
-  lv95X: number | null
-  lv95Y: number | null
-  datum: string | null
-  autor: string | null
-  quelle: string | null
-  absenz: boolean | null
-  aeTaxonomyByArtId: {
-    id: AeTaxonomyId
-    artname: string | null
-  } | null
-}
 
 interface BeobNichtBeurteiltQueryResult {
   allBeobs: {
@@ -39,23 +21,26 @@ interface BeobNichtBeurteiltQueryResult {
   }
 }
 
-const iconCreateFunction = function (cluster) {
+const iconCreateFunction = (cluster: {
+  getAllChildMarkers: () => LeafletMarkerType[]
+}) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedBeob = markers.some(
-    (m) => m.options.icon.options.className === 'beobIconHighlighted',
+    (m) => m.options.icon?.options.className === 'beobIconHighlighted',
   )
   const className =
     hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
 
   return window.L.divIcon({
-    html: markers.length,
+    html: String(markers.length),
     className,
     iconSize: window.L.point(40, 40),
   })
 }
 
-const BeobNichtBeurteiltMarker = ({ clustered }) => {
+const BeobNichtBeurteiltMarker = ({ clustered }: { clustered: boolean }) => {
   // const leafletMap = useMap()
+  const addNotification = useSetAtom(addNotificationAtom)
   const beobNichtBeurteiltGqlFilter = useAtomValue(treeBeobGqlFilterAtom('nichtBeurteilt'))
 
   const apolloClient = useApolloClient()
@@ -65,14 +50,17 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
       'BeobNichtBeurteiltForMapQuery',
       beobNichtBeurteiltGqlFilter.filtered,
     ],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobNichtBeurteiltQueryResult>({
         query: query,
         variables: { beobFilter: beobNichtBeurteiltGqlFilter.filtered },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   // const [refetchProvoker, setRefetchProvoker] = useState(1)
   // useEffect(() => {
   //   // DO NOT use:
@@ -95,7 +83,7 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
     })
   }
 
-  const beobMarkers = (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
+  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Marker
       key={beob.id}
       beob={beob}
@@ -116,8 +104,7 @@ const BeobNichtBeurteiltMarker = ({ clustered }) => {
   return beobMarkers
 }
 
-export const BeobNichtBeurteilt = ({ clustered }) => {
-  const addNotification = useSetAtom(addNotificationAtom)
+export const BeobNichtBeurteilt = ({ clustered }: { clustered: boolean }) => {
   const beobNichtBeurteiltGqlFilter = useAtomValue(treeBeobGqlFilterAtom('nichtBeurteilt'))
 
   const { apId } = useParams()

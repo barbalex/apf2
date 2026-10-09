@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { tpop } from '../../../shared/fragments.ts'
 
-export const mutationUpdateTpop = gql`
+export const mutationUpdateTpop = dynamicGql`
   mutation updateTpopForStartjahr(
     $id: UUID!
     $ekfrequenzStartjahr: Int

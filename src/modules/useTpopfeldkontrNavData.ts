@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -23,6 +23,11 @@ const getLabelRightElements = ({
   copyingBiotopId,
   movingId,
   tpopkontrId,
+}: {
+  copyingId: string | null
+  copyingBiotopId: string | null
+  movingId: string | null
+  tpopkontrId: string
 }) => {
   const labelRightElements = []
   const isMoving = movingId === tpopkontrId
@@ -41,14 +46,14 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopfeldkontrNavData = (props) => {
+export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
 
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -56,7 +61,7 @@ export const useTpopfeldkontrNavData = (props) => {
   const tpopkontrzaehlGqlFilterForTree =
     getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpopfeldkontr',
       tpopkontrId,
@@ -64,7 +69,7 @@ export const useTpopfeldkontrNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavTpopfeldkontrQuery(
             $tpopkontrId: UUID!
             $tpopkontrzaehlFilter: TpopkontrzaehlFilter!
@@ -85,16 +90,16 @@ export const useTpopfeldkontrNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopkontrId,
           tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   const [, setRerenderer] = useState(0)
@@ -104,7 +109,7 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(copyingBiotopAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -112,7 +117,7 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -120,16 +125,16 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 
   const label = data.tpopkontrById?.label
   const tpopkontrzaehlCount =
-    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.totalCount
+    data.tpopkontrById?.tpopkontrzaehlsByTpopkontrId.totalCount
   const filteredTpopkontrzaehlCount =
-    data.tpopkontrById.filteredTpopkontrzaehls.totalCount
-  const filesCount = data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
+    data.tpopkontrById?.filteredTpopkontrzaehls.totalCount
+  const filesCount = data.tpopkontrById?.tpopkontrFilesByTpopkontrId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,

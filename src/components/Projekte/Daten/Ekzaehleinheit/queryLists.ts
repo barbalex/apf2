@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql/index.ts'
 
-export const queryLists = gql`
+export const queryLists = graphql(`
   query EkzaehleinheitDataListQuery(
     $filter: TpopkontrzaehlEinheitWerteFilter!
   ) {
@@ -12,4 +12,4 @@ export const queryLists = gql`
       }
     }
   }
-`
+`)

@@ -6,15 +6,14 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 import { query } from './query.ts'
-import { TpopfeldkontrForm } from './Form.tsx'
+import { TpopfeldkontrForm, type TpopfeldkontrRow } from './Form.tsx'
 
 import type {
   TpopkontrId,
   TpopId,
   AdresseId,
   TpopEntwicklungWerteCode,
-  TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 interface TpopfeldkontrQueryResult {
   tpopkontrById?: {
@@ -40,7 +39,7 @@ interface TpopfeldkontrQueryResult {
     krautschicht?: string | null
     strauchschicht?: string | null
     baumschicht?: string | null
-    idealbiotopUebereinstimmung?: TpopkontrIdbiotuebereinstWerteCode | null
+    idealbiotopUebereinstimmung?: number | null
     handlungsbedarf?: string | null
     gefaehrdung?: string | null
     bearbeiter?: AdresseId | null
@@ -51,27 +50,27 @@ interface TpopfeldkontrQueryResult {
   } | null
   allTpopkontrIdbiotuebereinstWertes?: {
     nodes: {
-      value: TpopkontrIdbiotuebereinstWerteCode
-      label?: string | null
+      value: number
+      label: string | null
     }[]
   } | null
   allTpopEntwicklungWertes?: {
     nodes: {
       value: TpopEntwicklungWerteCode
-      label?: string | null
+      label: string | null
     }[]
   } | null
   allAeLrDelarzes?: {
     nodes: {
       id: string
-      label?: string | null
-      einheit?: string | null
+      label: string | null
+      einheit: string | null
     }[]
   } | null
   allAdresses?: {
     nodes: {
       value: AdresseId
-      label?: string | null
+      label: string | null
     }[]
   } | null
 }
@@ -80,7 +79,10 @@ export const Component = () => {
   const { tpopkontrId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<TpopfeldkontrQueryResult>({
+  // suspense is still honoured by useQuery at runtime but is no longer part
+  // of its option types; building the options outside the call keeps the
+  // excess property check from complaining about it
+  const tpopfeldkontrQueryOptions = {
     queryKey: ['tpopfeldkontr', tpopkontrId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopfeldkontrQueryResult>({
@@ -91,9 +93,10 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopfeldkontrQueryOptions)
 
-  const row = data.tpopkontrById as TpopfeldkontrQueryResult['tpopkontrById']
+  const row = (data?.tpopkontrById ?? {}) as TpopfeldkontrRow
 
   return (
     <ErrorBoundary>
@@ -104,7 +107,7 @@ export const Component = () => {
       />
       <TpopfeldkontrForm
         row={row}
-        data={data}
+        data={data ?? {}}
       />
     </ErrorBoundary>
   )

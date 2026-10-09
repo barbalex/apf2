@@ -1,4 +1,5 @@
-import { useEffect, Suspense } from 'react'
+import { useEffect } from 'react'
+import type { ReactNode } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { DndProvider } from 'react-dnd'
@@ -11,21 +12,18 @@ import { exists } from '../../../../modules/exists.ts'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
 import {
   sortedBeobFieldsAtom,
   setSortedBeobFieldsAtom,
 } from '../../../../store/index.ts'
 
-import type BeobType from '../../../../models/apflora/Beob.ts'
-
 import styles from './index.module.css'
 
 interface BeobQueryResult {
-  data?: {
-    beobById: BeobType
-  }
+  beobById: {
+    data: string | null
+  } | null
 }
 
 export const Beob = () => {
@@ -37,7 +35,7 @@ export const Beob = () => {
 
   const apolloClient = useApolloClient()
 
-  const sortFn = (a: [string, any], b: [string, any]) => {
+  const sortFn = (a: [string, ReactNode], b: [string, ReactNode]) => {
     const keyA = a[0]
     const keyB = b[0]
     const indexOfA = sortedBeobFields.indexOf(keyA)
@@ -56,22 +54,25 @@ export const Beob = () => {
     return 0
   }
 
-  const { data, error } = useQuery<BeobQueryResult>({
+  const { data, error } = useQuery({
     queryKey: ['beobByIdQueryForBeob', id],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobQueryResult>({
         query,
         variables: {
           id,
         },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  const row = data?.data?.beobById ?? {}
-  const rowData = row.data ? JSON.parse(row.data) : {}
+  const rowData: Record<string, ReactNode> = data?.beobById?.data
+    ? JSON.parse(data.beobById.data)
+    : {}
   const fields = Object.entries(rowData)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    .filter(([key, value]) => exists(value))
+    .filter(([, value]) => exists(value))
     .sort(sortFn)
   const keys = fields.map((f) => f[0])
 
@@ -93,8 +94,8 @@ export const Beob = () => {
     const itemBeingHovered = keys[hoverIndex]
     // move from dragIndex to hoverIndex
     // in sortedBeobFields
-    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged)
-    const toIndex = sortedBeobFields.indexOf(itemBeingHovered)
+    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged ?? '')
+    const toIndex = sortedBeobFields.indexOf(itemBeingHovered ?? '')
     // catch some edge cases
     if (fromIndex === toIndex) return
     if (fromIndex === -1) return
@@ -104,7 +105,7 @@ export const Beob = () => {
     setSortedBeobFields(newArray)
   }
 
-  const renderField = (field: [string, any], index: number) => (
+  const renderField = (field: [string, ReactNode], index: number) => (
     <BeobField
       key={field[0]}
       label={field[0]}
@@ -127,14 +128,12 @@ export const Beob = () => {
           Die Felder können beliebig sortiert werden (drag and drop).
         </p>
         <div className={styles.container}>
-          <Suspense fallback={<Spinner />}>
-            <DndProvider
-              backend={HTML5Backend}
-              context={window}
-            >
-              {fields.map((field, i) => renderField(field, i))}
-            </DndProvider>
-          </Suspense>
+          <DndProvider
+            backend={HTML5Backend}
+            context={window}
+          >
+            {fields.map((field, i) => renderField(field, i))}
+          </DndProvider>
         </div>
       </div>
     </ErrorBoundary>

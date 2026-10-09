@@ -1,25 +1,25 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useErfkritsNavData = (props) => {
+export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
   const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeErfkritsQuery(
             $erfkritsFilter: ErfkritFilter!
             $apId: UUID!
@@ -40,16 +40,16 @@ export const useErfkritsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           erfkritsFilter: erfkritGqlFilterForTree,
           apId,
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as NonNullable<typeof result.data>
     },
-    suspense: true,
   })
 
   const count = data.apById?.erfkritsByApId?.nodes?.length ?? 0
@@ -68,15 +68,15 @@ export const useErfkritsNavData = (props) => {
     treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.apById.erfkritsByApId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.apById?.erfkritsByApId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'erfkrit',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p?.id],
       hasChildren: false,
     })),
   }

@@ -8,6 +8,8 @@ import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { userTokenAtom, copyingAtom, movingAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const openLowerNodesData = {
   action: 'openLowerNodes',
@@ -45,7 +47,11 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Pop = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const Pop = ({ onClick }: Props) => {
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const userToken = useAtomValue(userTokenAtom)

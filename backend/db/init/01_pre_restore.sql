@@ -16,5 +16,7 @@ CREATE ROLE apflora_freiwillig;
 
 CREATE ROLE anon;
 
-CREATE ROLE authenticator WITH LOGIN PASSWORD '${AUTHENTICATOR_PASSWORD}' noinherit;
+-- authenticator is created by 01b_create_authenticator.sh:
+-- psql does not expand env vars in .sql init files, so the password
+-- has to be set from a shell script
 

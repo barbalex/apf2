@@ -1,0 +1,1 @@
+Ab Version 1.127.0: Bestehende Qualitätskontrollen erweitert: Massnahmen und Kontrollen brauchen ein Jahr (wie bisher, wird beim Erfassen des Datums schon lange automatisch gesetzt) und neu auch ein Datum ([Issue #798](https://github.com/barbalex/apf2/issues/798))

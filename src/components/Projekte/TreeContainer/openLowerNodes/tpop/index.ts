@@ -4,6 +4,8 @@
  * 3. update openNodes
  * 4. refresh tree
  */
+import type { ApolloClient } from '@apollo/client'
+
 import { query } from './query.ts'
 import {
   store,
@@ -11,15 +13,34 @@ import {
   treeAddOpenNodesAtom,
 } from '../../../../../store/index.ts'
 
+interface TpopForLowerNodesQueryResult {
+  tpopById?: {
+    tpopmassnsByTpopId?: { nodes: { id: string }[] }
+    tpopmassnbersByTpopId?: { nodes: { id: string }[] }
+    tpopfeldkontrs?: { nodes: { id: string }[] }
+    tpopfreiwkontrs?: { nodes: { id: string }[] }
+    tpopbersByTpopId?: { nodes: { id: string }[] }
+    beobsByTpopId?: { nodes: { id: string }[] }
+  }
+}
+
+interface TpopParams {
+  id?: string | null | undefined
+  popId?: string | null | undefined
+  apId?: string | null | undefined
+  projId?: string | null | undefined
+}
+
 export const tpop = async ({
   id,
   popId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-}) => {
-  const apolloClient = store.get(apolloClientAtom)
+}: TpopParams) => {
+  // apolloClient is set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   // 1. load all data
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<TpopForLowerNodesQueryResult>({
     query: query,
     variables: { id },
   })
@@ -292,5 +313,5 @@ export const tpop = async ({
   })
 
   // 3. update openNodes
-  store.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes as (string | number)[][])
 }

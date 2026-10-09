@@ -1,8 +1,14 @@
 import { DateTime } from 'luxon'
 
+import type { ApberForApTpopmassnNode } from './types.ts'
+
 import styles from './Massnahmen.module.css'
 
-export const Massnahmen = ({ massns }) => (
+interface MassnahmenProps {
+  massns: ApberForApTpopmassnNode[]
+}
+
+export const Massnahmen = ({ massns }: MassnahmenProps) => (
   <div className={styles.container}>
     <div className={styles.title}>Massnahmen im Berichtsjahr:</div>
     <div className={styles.titleRow}>

@@ -1,6 +1,14 @@
+import type { ApberForApJberAbcNode } from './types.ts'
+
 import styles from './AMengen.module.css'
 
-export const AMengen = ({ loading, jahr, node }) => {
+interface AMengenProps {
+  loading: boolean
+  jahr?: number | undefined
+  node?: ApberForApJberAbcNode | undefined
+}
+
+export const AMengen = ({ loading, jahr, node }: AMengenProps) => {
   const a3LPop = node?.a3LPop
   const a3LTpop = node?.a3LTpop
   const a4LPop = node?.a4LPop
@@ -14,13 +22,29 @@ export const AMengen = ({ loading, jahr, node }) => {
   const a9LPop = node?.a9LPop
   const a9LTpop = node?.a9LTpop
   const a1LPop =
-    loading ? '...' : a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
+    loading ?
+      '...'
+    : (a3LPop ?? 0) +
+      (a4LPop ?? 0) +
+      (a5LPop ?? 0) +
+      (a7LPop ?? 0) +
+      (a8LPop ?? 0) +
+      (a9LPop ?? 0)
   const a1LTpop =
-    loading ? '...' : a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
-  const a2LPop = loading ? '...' : a3LPop + a4LPop + a5LPop
-  const a2LTpop = loading ? '...' : a3LTpop + a4LTpop + a5LTpop
-  const a6LPop = loading ? '...' : a7LPop + a8LPop
-  const a6LTpop = loading ? '...' : a7LTpop + a8LTpop
+    loading ?
+      '...'
+    : (a3LTpop ?? 0) +
+      (a4LTpop ?? 0) +
+      (a5LTpop ?? 0) +
+      (a7LTpop ?? 0) +
+      (a8LTpop ?? 0) +
+      (a9LTpop ?? 0)
+  const a2LPop =
+    loading ? '...' : (a3LPop ?? 0) + (a4LPop ?? 0) + (a5LPop ?? 0)
+  const a2LTpop =
+    loading ? '...' : (a3LTpop ?? 0) + (a4LTpop ?? 0) + (a5LTpop ?? 0)
+  const a6LPop = loading ? '...' : (a7LPop ?? 0) + (a8LPop ?? 0)
+  const a6LTpop = loading ? '...' : (a7LTpop ?? 0) + (a8LTpop ?? 0)
 
   return (
     <div className={styles.container}>

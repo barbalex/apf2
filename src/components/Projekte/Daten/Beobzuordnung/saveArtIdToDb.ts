@@ -1,5 +1,7 @@
 import { isEqual } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import type { ApolloClient } from '@apollo/client'
+import type { QueryClient } from '@tanstack/react-query'
+import { graphql } from '../../../../gql/index.ts'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -13,11 +15,24 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
-export const saveArtIdToDb = async ({ value, row, search }) => {
+interface SaveArtIdToDbParams {
+  value: string
+  row: {
+    id?: string
+  }
+  search: string
+}
+
+export const saveArtIdToDb = async ({
+  value,
+  row,
+  search,
+}: SaveArtIdToDbParams) => {
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodes = store.get(treeOpenNodesAtom)
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  // both clients are set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
+  const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
 
   if (!value) return
@@ -31,9 +46,8 @@ export const saveArtIdToDb = async ({ value, row, search }) => {
     variables,
   })
 
-  let result = {}
-  result = await apolloClient.query({
-    query: gql`
+  const result = await apolloClient.query({
+    query: graphql(`
       query saveArtIdToDbQuery($id: UUID!) {
         aeTaxonomyById(id: $id) {
           id
@@ -42,7 +56,7 @@ export const saveArtIdToDb = async ({ value, row, search }) => {
           }
         }
       }
-    `,
+    `),
     variables: { id: value },
   })
   // activeNodeArray is already loaded
@@ -58,7 +72,7 @@ export const saveArtIdToDb = async ({ value, row, search }) => {
     newApId,
     activeNodeArray[4],
     activeNodeArray[5],
-  ]
+  ] as (string | number)[]
   const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
   const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
 
@@ -94,25 +108,25 @@ export const saveArtIdToDb = async ({ value, row, search }) => {
       activeNodeArray[4],
       activeNodeArray[5],
     ],
-  ]
+  ] as (string | number)[][]
   store.set(treeSetOpenNodesAtom, newOpenNodes)
-  navigate(`/Daten/${newANA.join('/')}${search}`)
-  tsQueryClient.invalidateQueries({
+  navigate?.(`/Daten/${newANA.join('/')}${search}`)
+  void tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobnichtbeurteilt`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
   store.set(setTreeLastTouchedNodeAtom, newANA)

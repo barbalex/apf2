@@ -2,10 +2,17 @@ import { useAtomValue } from 'jotai'
 
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
 import { isPrintAtom } from '../../../../../store/index.ts'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 
 import styles from './Map.module.css'
 
-export const Map = ({ saveToDb, row, errors }) => {
+interface MapProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const Map = ({ saveToDb, row, errors }: MapProps) => {
   const isPrint = useAtomValue(isPrintAtom)
 
   const onSaveFalse = () => {
@@ -15,7 +22,7 @@ export const Map = ({ saveToDb, row, errors }) => {
         value: row?.planVorhanden === false ? null : false,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   const onSaveTrue = () => {
@@ -25,7 +32,7 @@ export const Map = ({ saveToDb, row, errors }) => {
         value: row?.planVorhanden === true ? null : true,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   // in print nein shall not be set as it is preset in db
@@ -42,8 +49,10 @@ export const Map = ({ saveToDb, row, errors }) => {
         <RadioButton
           key={`${row?.id}planVorhanden`}
           name="planVorhanden"
+          label={undefined}
           value={row?.planVorhanden}
           saveToDb={onSaveTrue}
+          error={undefined}
         />
       </div>
       <div className={styles.label2}>nein</div>
@@ -54,6 +63,7 @@ export const Map = ({ saveToDb, row, errors }) => {
         <RadioButton
           key={`${row?.id}planVorhanden2`}
           name="planVorhanden"
+          label={undefined}
           value={falseValue}
           saveToDb={onSaveFalse}
           error={errors?.planVorhanden}

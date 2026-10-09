@@ -1,6 +1,8 @@
 import { bufferBoundsTo50m } from './bufferBoundsTo50m.ts'
 
-export const getBounds = (os) => {
+export const getBounds = (
+  os: { wgs84Lat: number; wgs84Long: number }[],
+): [number, number][] => {
   if (os.length === 0) return []
   const xKoords = os.map((p) => p.wgs84Lat)
   const yKoords = os.map((p) => p.wgs84Long)
@@ -8,7 +10,7 @@ export const getBounds = (os) => {
   const minX = Math.min(...xKoords)
   const maxY = Math.max(...yKoords)
   const minY = Math.min(...yKoords)
-  const bounds = [
+  const bounds: [number, number][] = [
     [minX, minY],
     [maxX, maxY],
   ]

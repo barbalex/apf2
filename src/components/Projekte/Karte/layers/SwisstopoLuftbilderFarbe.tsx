@@ -5,6 +5,12 @@ import { Pane, WMSTileLayer } from 'react-leaflet'
 // URL: https://wms.geo.admin.ch/
 // Quelle: crs=epsg:2056&dpiMode=7&format=image/png&layers=ch.swisstopo.swissimage&styles&url=https://wms.geo.admin.ch/
 
+// QGIS-specific WMS parameter, not typed in leaflet's WMSOptions
+// but forwarded to the WMS request by react-leaflet
+const qgisWmsParams = {
+  dpiMode: 7,
+}
+
 export const SwisstopoLuftbilderFarbe = () => (
   <Pane
     className="SwisstopoLuftbilderFarbe"
@@ -21,7 +27,7 @@ export const SwisstopoLuftbilderFarbe = () => (
       // eventHandlers={{
       //   tileerror: onTileErrorDebounced,
       // }}
-      dpiMode={7}
+      {...qgisWmsParams}
     />
   </Pane>
 )

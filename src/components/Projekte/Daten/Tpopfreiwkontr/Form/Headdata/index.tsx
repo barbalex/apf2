@@ -1,5 +1,6 @@
+import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { useState } from 'react'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -18,21 +19,26 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../../shared/fragments.ts'
 
-import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
+import type { AdresseId } from '../../../../../../models/apflora/Adresse.ts'
+import type {
+  TpopkontrRow,
+  TpopfreiwkontrPopRow,
+  TpopfreiwkontrTpopRow,
+} from '../index.tsx'
 
 interface TpopfreiwkontrAdressesQueryResult {
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
-      label: string
-    }>
+      label: string | null
+    }[]
   }
 }
 
 interface HeaddataProps {
-  pop: any
-  tpop: any
-  row: any
+  pop: Partial<TpopfreiwkontrPopRow>
+  tpop: Partial<TpopfreiwkontrTpopRow>
+  row: Partial<TpopkontrRow>
 }
 
 import styles from './index.module.css'
@@ -46,7 +52,7 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
 
   const [errors, setErrors] = useState<string | null>(null)
 
-  const { data } = useQuery<TpopfreiwkontrAdressesQueryResult>({
+  const { data } = useQuery({
     queryKey: ['tpopfreiwkontrAdresses'],
     queryFn: async () => {
       const result =
@@ -56,19 +62,18 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const { value } = event.target
     const variables = {
       id: row.id,
       bearbeiter: value,
-      changedBy: user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updateTpopkontrForEkfHeaddata(
             $id: UUID!
             $bearbeiter: UUID
@@ -129,7 +134,7 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
     } catch (error) {
       return setErrors((error as Error).message)
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['tpopkontrByIdQueryForEkf'],
     })
     setErrors(null)
@@ -139,7 +144,9 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
 
   const statusValue = tpop?.status ?? ''
   const status =
-    [200, 201, 202].includes(statusValue) ? 'angesiedelt' : 'natürlich'
+    ([200, 201, 202] as (number | string)[]).includes(statusValue) ?
+      'angesiedelt'
+    : 'natürlich'
 
   return (
     <div className={styles.container}>
@@ -160,14 +167,14 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
         <Select
           key={`${row.id}bearbeiter`}
           name="bearbeiter"
-          value={row.bearbeiter}
+          value={row.bearbeiter ?? null}
           field="bearbeiter"
           options={data?.allAdresses?.nodes ?? []}
-          saveToDb={saveToDb}
+          saveToDb={(event) => void saveToDb(event)}
           error={
             row.bearbeiter && !userCount && !isPrint ?
               'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
-            : errors
+            : (errors ?? '')
           }
         />
       </div>

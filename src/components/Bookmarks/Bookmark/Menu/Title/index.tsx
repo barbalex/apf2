@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect, type RefObject } from 'react'
+
+import type { NavData } from '../../../types.ts'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Collapse from '@mui/material/Collapse'
@@ -17,8 +19,15 @@ export const Title = ({
   toggleFilterInput,
   setTitleWidth,
   ref: filterInputRef,
+}: {
+  navData: NavData
+  width?: number | null | undefined
+  filterInputIsVisible: boolean
+  toggleFilterInput: () => void
+  setTitleWidth: React.Dispatch<React.SetStateAction<number>>
+  ref?: RefObject<HTMLInputElement | null> | undefined
 }) => {
-  const isUuidList = navData.menus.some((menu) => isUuid.anyNonNil(menu.id))
+  const isUuidList = navData.menus.some((menu) => isUuid.anyNonNil(String(menu.id)))
 
   // if is Aps, need to add ApFilter
   const isAps = navData.id === 'Arten'
@@ -39,7 +48,7 @@ export const Title = ({
         32 +
         8,
     )
-  }, [titleWidth, setTitleWidth, isUuidList])
+  }, [titleWidth, setTitleWidth, isUuidList, isAps])
 
   // minWidth is the larger of parentWidth and width
   const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
@@ -64,7 +73,6 @@ export const Title = ({
             <div className={styles.filters}>
               <Tooltip
                 title="Filtern"
-                show={isUuidList.toString()}
                 style={isUuidList ? {} : { display: 'none' }}
               >
                 <IconButton
@@ -87,7 +95,7 @@ export const Title = ({
             width={parentWidth}
             filterInputIsVisible={filterInputIsVisible}
             toggleFilterInput={toggleFilterInput}
-            ref={filterInputRef}
+            ref={filterInputRef ?? undefined}
           />
         </Collapse>
       </div>

@@ -1,21 +1,12 @@
 import { useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
-import { sortBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
 
 import { isPrintAtom, isEkfSinglePrintAtom } from '../../store/index.ts'
 
-import type { UserId } from '../../models/apflora/User.ts'
-import type { AdresseId } from '../../models/apflora/Adresse.ts'
-import type { TpopkontrId } from '../../models/apflora/Tpopkontr.ts'
-import type { TpopId } from '../../models/apflora/Tpop.ts'
-import type { PopId } from '../../models/apflora/Pop.ts'
-import type { ApId } from '../../models/apflora/Ap.ts'
-import type { ProjektId } from '../../models/apflora/Projekt.ts'
-import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy.ts'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -23,87 +14,9 @@ import { EkfList } from './List/index.tsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
+import { getEkfFromData, type EkfQueryResult } from './getEkfFromData.ts'
 
 import styles from './index.module.css'
-
-interface AeTaxonomyNode {
-  id: AeTaxonomyId
-  artname: string | null
-}
-
-interface ProjektNode {
-  id: ProjektId
-  name: string | null
-}
-
-interface ApNode {
-  id: ApId
-  aeTaxonomyByArtId: AeTaxonomyNode | null
-  projektByProjId: ProjektNode | null
-}
-
-interface PopNode {
-  id: PopId
-  nr: number | null
-  name: string | null
-  apByApId: ApNode | null
-}
-
-interface TpopNode {
-  id: TpopId
-  nr: number | null
-  flurname: string | null
-  gemeinde: string | null
-  popByPopId: PopNode | null
-}
-
-interface TpopkontrNode {
-  id: TpopkontrId
-  datum: string | null
-  tpopByTpopId: TpopNode | null
-}
-
-interface AdresseNode {
-  id: AdresseId
-  tpopkontrsByBearbeiter: {
-    nodes: TpopkontrNode[]
-  } | null
-}
-
-interface UserNode {
-  id: UserId
-  adresseByAdresseId: AdresseNode | null
-}
-
-interface EkfQueryResult {
-  userById: UserNode | null
-}
-
-const getEkfFromData = ({ data }) => {
-  const ekfNodes =
-    data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
-
-  const ekf = ekfNodes.map((e) => ({
-    projekt: e?.tpopByTpopId?.popByPopId?.apByApId?.projektByProjId?.name ?? '',
-    projId: e?.tpopByTpopId?.popByPopId?.apByApId?.projektByProjId?.id,
-    art:
-      e?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-    apId: e?.tpopByTpopId?.popByPopId?.apByApId?.id,
-    pop: `${e?.tpopByTpopId?.popByPopId?.nr ?? '(keine Nr)'}: ${
-      e?.tpopByTpopId?.popByPopId?.name ?? '(kein Name)'
-    }`,
-    popId: e?.tpopByTpopId?.popByPopId?.id,
-    popSort: e?.tpopByTpopId?.popByPopId?.nr ?? '(keine Nr)',
-    tpop: `${e?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
-      e?.tpopByTpopId?.flurname ?? '(kein Flurname)'
-    }`,
-    tpopId: e?.tpopByTpopId?.id,
-    tpopSort: e?.tpopByTpopId?.nr ?? '(keine Nr)',
-    id: e.id,
-  }))
-
-  return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
-}
 
 export const Component = () => {
   const { search } = useLocation()
@@ -117,19 +30,20 @@ export const Component = () => {
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
   const query =
-    ekfRefYear === ekfYear ? dataByUserIdGql : dataWithDateByUserIdGql
+    ekfRefYear === +(ekfYear ?? 0) ? dataByUserIdGql : dataWithDateByUserIdGql
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ekf', userId, ekfYear],
     queryFn: async () => {
-      const result = await apolloClient.query<EkfQueryResult>({
+      const result = await apolloClient.query({
         query,
-        variables: { id: userId, jahr: +ekfYear },
+        variables: { id: userId, jahr: +(ekfYear ?? 0) },
       })
       if (result.error) throw result.error
-      return result.data
+      // the query document is built dynamically, so type the result by hand
+      // errors are thrown above; an empty fallback renders the no-data notice
+      return (result.data as EkfQueryResult | undefined) ?? { userById: null }
     },
-    suspense: true,
   })
 
   const ekf = getEkfFromData({ data })
@@ -138,7 +52,10 @@ export const Component = () => {
     // navigate to first kontrId so form is shown for first ekf
     // IF none is chosen yet
     if (ekf.length > 0 && !ekfId) {
-      navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
+      const firstEkf = ekf[0]
+      if (firstEkf) {
+        void navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${firstEkf.id}${search}`)
+      }
     }
     // adding ekf as dependency causes infinite loop
     // https://github.com/barbalex/apf2/issues/629
@@ -172,7 +89,7 @@ export const Component = () => {
 
   return (
     <div className={styles.container}>
-      <SplitPane split="vertical">
+      <SplitPane direction="horizontal">
         <Pane
           size="350px"
           minSize={100}

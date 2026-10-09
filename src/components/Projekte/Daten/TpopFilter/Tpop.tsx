@@ -1,8 +1,10 @@
-import { Dispatch, SetStateAction, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import type { Dispatch, SetStateAction } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
@@ -14,7 +16,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
 
-import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora/TpopApberrelevantGrundWerteCode.ts'
+import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora/index.ts'
 
 import styles from './Tpop.module.css'
 
@@ -22,24 +24,78 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {
-    nodes: Array<{
+    nodes: {
       value: TpopApberrelevantGrundWerteCode
       label: string
-    }>
+    }[]
   }
   allChAdministrativeUnits: {
-    nodes: Array<{
+    nodes: {
       value: string
       label: string
-    }>
+    }[]
   }
 }
 
+interface TpopFilterRow {
+  id?: string
+  nr?: string | number | null
+  gemeinde?: string | null
+  flurname?: string | null
+  lv95X?: number | null
+  geomPoint?: { geojson?: string | null } | null
+  radius?: number | null
+  hoehe?: number | null
+  exposition?: string | null
+  klima?: string | null
+  neigung?: string | null
+  bodenTyp?: string | null
+  bodenKalkgehalt?: string | null
+  bodenDurchlaessigkeit?: string | null
+  bodenHumus?: string | null
+  bodenNaehrstoffgehalt?: string | null
+  bodenAbtrag?: string | null
+  wasserhaushalt?: string | null
+  beschreibung?: string | null
+  katasterNr?: string | null
+  status?: number | null
+  statusUnklar?: boolean | null
+  statusUnklarGrund?: string | null
+  apberRelevant?: boolean | null
+  apberRelevantGrund?: string | number | null
+  bekanntSeit?: number | null
+  eigentuemer?: string | null
+  kontakt?: string | null
+  nutzungszone?: string | null
+  bewirtschafter?: string | null
+  bewirtschaftung?: string | null
+  bemerkungen?: string | null
+}
+
+interface GemeindeQueryResult {
+  allChAdministrativeUnits?: {
+    nodes?: {
+      id: string
+      text: string | null
+    }[]
+  }
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopListsUseQueryOptions = UseQueryOptions<
+  TpopListsQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
+}
+
 interface TpopProps {
-  saveToDb: (event: ChangeEvent<HTMLInputElement>) => void
+  saveToDb: (event: SaveToDbEvent) => void
   fieldErrors: Record<string, string>
   setFieldErrors: Dispatch<SetStateAction<Record<string, string>>>
-  row: any
+  row: TpopFilterRow | undefined
+  rowStringified?: string
   apJahr?: number
 }
 
@@ -55,11 +111,11 @@ export const Tpop = ({
 
   //console.log('Tpop rendering')
 
-  const { data: dataLists } = useQuery<TpopListsQueryResult>({
+  const tpopListsQueryOptions: TpopListsUseQueryOptions = {
     queryKey: ['tpopFilterLists'],
     queryFn: async () => {
       const result = await apolloClient.query<TpopListsQueryResult>({
-        query: gql`
+        query: graphql(`
           query TpopListsQueryForTpopFilter {
             allTpopApberrelevantGrundWertes(
               orderBy: SORT_ASC
@@ -80,13 +136,14 @@ export const Tpop = ({
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data: dataLists } = useQuery(tpopListsQueryOptions)
 
   if (!row) return null
 
@@ -110,13 +167,13 @@ export const Tpop = ({
         error={fieldErrors.flurname}
       />
       <Status
-        apJahr={apJahr}
+        apJahr={(apJahr ?? null) as null}
         showFilter={true}
         saveToDb={saveToDb}
         errors={fieldErrors}
         row={row}
         // this is just to enforce re-render on change
-        status={row.status}
+        {...{ status: row.status }}
       />
       <Checkbox2States
         name="statusUnklar"
@@ -124,6 +181,7 @@ export const Tpop = ({
         value={row.statusUnklar}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklar}
+        helperText=""
       />
       <TextField
         name="statusUnklarGrund"
@@ -140,13 +198,14 @@ export const Tpop = ({
         value={row.apberRelevant}
         saveToDb={saveToDb}
         error={fieldErrors.apberRelevant}
+        helperText=""
       />
       <RadioButtonGroupWithInfo
         name="apberRelevantGrund"
         dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
         popover={TpopAbBerRelevantInfoPopover}
         label="Grund für AP-Bericht (Nicht-)Relevanz"
-        value={row.apberRelevantGrund}
+        value={row.apberRelevantGrund as string}
         saveToDb={saveToDb}
         error={fieldErrors.apberRelevantGrund}
       />
@@ -169,12 +228,12 @@ export const Tpop = ({
           if (!geojson) return
           const geojsonParsed = JSON.parse(geojson)
           if (!geojsonParsed) return
-          let result
+          let result: { data?: GemeindeQueryResult | undefined } | undefined
           try {
-            result = await apolloClient.query({
+            result = await apolloClient.query<GemeindeQueryResult>({
               // this is a hack
               // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-              query: gql`
+              query: dynamicGql`
                         query tpopGemeindeFilterQuery {
                           allChAdministrativeUnits(
                             filter: {

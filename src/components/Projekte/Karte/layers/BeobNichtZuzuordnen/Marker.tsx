@@ -12,9 +12,34 @@ import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
 
+import type {
+  BeobId,
+  AeTaxonomiesId,
+} from '../../../../../models/apflora/index.ts'
+
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
-export const Marker = ({ beob }) => {
+export interface BeobNichtZuzuordnenNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  absenz: boolean | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomiesId
+    artname: string | null
+  } | null
+}
+
+interface MarkerProps {
+  beob: BeobNichtZuzuordnenNode
+}
+
+export const Marker = ({ beob }: MarkerProps) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
 
@@ -34,7 +59,8 @@ export const Marker = ({ beob }) => {
   // some dates are not valid
   // need to account for that
   let datum = '(kein Datum)'
-  if (!isValid(new Date(beob.datum))) {
+  // null is turned into the epoch date, which isValid accepts
+  if (!isValid(new Date(beob.datum ?? 0))) {
     datum = '(ungültiges Datum)'
   } else if (beob.datum) {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
@@ -48,9 +74,9 @@ export const Marker = ({ beob }) => {
     openTree2WithActiveNodeArray({
       activeNodeArray: [
         'Projekte',
-        projId,
+        projId ?? '',
         'Arten',
-        apId,
+        apId ?? '',
         'nicht-zuzuordnende-Beobachtungen',
         beob.id,
       ],

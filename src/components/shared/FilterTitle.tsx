@@ -19,13 +19,21 @@ import { tableIsFiltered } from '../../modules/tableIsFiltered.ts'
 
 import styles from './FilterTitle.module.css'
 
+export interface FilterTitleProps {
+  title: string
+  table: string
+  totalNr?: number | string | undefined
+  filteredNr?: number | string | undefined
+  activeTab?: number
+}
+
 export const FilterTitle = ({
   title,
   table,
   totalNr,
   filteredNr,
   activeTab,
-}) => {
+}: FilterTitleProps) => {
   const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
   const setApFilter = useSetAtom(treeApFilterAtom)
   const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
@@ -38,7 +46,11 @@ export const FilterTitle = ({
   const tables = Object.keys(dataFilter)
   const existsTreeFilter = tables.some((table) => tableIsFiltered({ table }))
 
-  const onEmptyTab = () => emptyDataFilterTab({ table, activeTab })
+  const onEmptyTab = () => {
+    // the button calling this is only rendered when activeTab is defined
+    if (activeTab === undefined) return
+    emptyDataFilterTab({ table, activeTab })
+  }
   const onEmptyTable = () => emptyDataFilterTable({ table })
 
   const onEmptyTree = () => {

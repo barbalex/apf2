@@ -1,5 +1,3 @@
-import localForage from 'localforage'
-
 import {
   store,
   navigateAtom,

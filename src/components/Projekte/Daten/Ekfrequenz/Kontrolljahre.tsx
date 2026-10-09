@@ -8,9 +8,9 @@ import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.tsx'
 import styles from './Kontrolljahre.module.css'
 
 interface KontrolljahrProps {
-  kontrolljahre?: number[]
+  kontrolljahre?: number[] | undefined
   saveToDb: (event: {
-    target: { name: string; value: number[] }
+    target: { name?: string | undefined; value: number[] }
   }) => Promise<void>
   refetch: () => void
 }
@@ -24,8 +24,17 @@ export const Kontrolljahre = ({
     (a, b) => (a ?? 999999) - b,
   )
 
+  const onClickDelete = async (index: number) => {
+    const newVal = [...kontrolljahreSorted]
+    newVal.splice(index, 1)
+    await saveToDb({
+      target: { name: 'kontrolljahre', value: newVal },
+    })
+    refetch()
+  }
+
   return [
-    kontrolljahreSorted.map((kontrolljahr, index) => (
+    kontrolljahreSorted.map((_, index) => (
       <div key={index}>
         <KontrolljahrField
           saveToDb={saveToDb}
@@ -36,14 +45,7 @@ export const Kontrolljahre = ({
         <Tooltip title={`${kontrolljahreSorted[index]} entfernen`}>
           <IconButton
             aria-label={`${kontrolljahreSorted[index]} entfernen`}
-            onClick={async () => {
-              const newVal = [...kontrolljahreSorted]
-              newVal.splice(index, 1)
-              await saveToDb({
-                target: { name: 'kontrolljahre', value: newVal },
-              })
-              refetch()
-            }}
+            onClick={() => void onClickDelete(index)}
             className={styles.delIcon}
           >
             <FaTimes />

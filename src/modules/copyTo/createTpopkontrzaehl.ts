@@ -1,8 +1,9 @@
-import { gql } from '@apollo/client'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontrzaehl } from '../../components/shared/fragments.ts'
 
-export const createTpopkontrzaehl = gql`
+export const createTpopkontrzaehl = dynamicGql`
   mutation createTpopkontrzaehlForCopyTo(
     $anzahl: Float
     $einheit: Int
@@ -25,4 +26,7 @@ export const createTpopkontrzaehl = gql`
     }
   }
   ${tpopkontrzaehl}
-`
+` as unknown as TypedDocumentNode<
+  { createTpopkontrzaehl?: { tpopkontrzaehl?: { id: string } | null } | null },
+  Record<string, unknown>
+>
