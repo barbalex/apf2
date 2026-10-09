@@ -19,3 +19,5 @@ lets implement https://github.com/barbalex/apf2/issues/779. So we need:
 5. create a migration script to change the sql on the production server parallel to updating the app code
 
 I started implementing it in the current branch but decided to hand it to you instead.
+
+---
