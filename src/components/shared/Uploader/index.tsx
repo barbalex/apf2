@@ -1,10 +1,11 @@
 import { useContext } from 'react'
+import { useApolloClient } from '@apollo/client/react'
 import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import type { TProps } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 
-import { signature, expire } from '../../../utils/uploadcareSignature.ts'
 import { UploaderContext } from '../../../UploaderContext.ts'
+import { graphql } from '../../../gql/index.ts'
 import { locale } from './locale.ts'
 
 defineLocale('de', locale as unknown as Parameters<typeof defineLocale>[1])
@@ -42,7 +43,33 @@ export const Uploader = ({
   onCommonUploadSuccess,
 }: UploaderProps) => {
   const uploaderCtx = useContext(UploaderContext)
+  const apolloClient = useApolloClient()
   const api = uploaderCtx?.current?.getAPI?.()
+
+  // the signature is built server-side (apflora.upload_signature(), gated to
+  // logged-in roles) so the uploadcare secret never reaches the browser.
+  // the resolver is called before each upload once the previous signature
+  // has expired - no more stale expire from page load
+  const secureUploadsSignatureResolver = async () => {
+    const result = await apolloClient.query({
+      query: graphql(`
+        query UploadSignature {
+          uploadSignature {
+            expire
+            signature
+          }
+        }
+      `),
+    })
+    const uploadSignature = result.data?.uploadSignature
+    if (!uploadSignature?.signature) {
+      return null
+    }
+    return {
+      secureSignature: uploadSignature.signature,
+      secureExpire: String(uploadSignature.expire),
+    }
+  }
 
   // the upstream config typings are inconsistent (e.g. multipleMax is typed
   // as number in one package and string in the other), so assemble the props
@@ -53,8 +80,7 @@ export const Uploader = ({
     pubkey: import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY,
     effects: 'crop',
     imageShrink: '2056x2056',
-    secureSignature: signature,
-    secureExpire: String(expire),
+    secureUploadsSignatureResolver,
     id: 'file',
     name: 'file',
     multiple: true,
