@@ -20,11 +20,16 @@ services:
       # make the Postgres database accessible from outside the Docker container on port 5432
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      # since PG 18 the image manages version-specific data dirs itself,
+      # so mount the volume at /var/lib/postgresql, not .../data
+      - db_data:/var/lib/postgresql
       - sik_data:/sik_data
     platform: linux/amd64
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
+      # give the first-run restore of apflora.backup time to finish
+      # before health failures are counted
+      start_period: 5m
       interval: 5s
       timeout: 5s
       retries: 5
