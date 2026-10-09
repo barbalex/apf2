@@ -88,6 +88,8 @@ The "second tree" (`tree2`) is the same app embedded in an iframe (see `tree2Src
 
 Login is a GraphQL mutation in [src/components/User.tsx](src/components/User.tsx); the returned JWT is stored in `userAtom` (`{ name, token, id }`). `apolloClient.ts`'s `authLink` injects and validates the token's `exp` on every request. Logout ([src/modules/logout.ts](src/modules/logout.ts)) reloads the window.
 
+Uploadcare uploads are signed server-side: the `Uploader` component ([src/components/shared/Uploader/index.tsx](src/components/shared/Uploader/index.tsx)) resolves signatures via the `uploadSignature` GraphQL query, backed by `apflora.upload_signature()` — EXECUTE is granted only to the roles that may create file records (`apflora_freiwillig`, `apflora_ap_writer`, `apflora_manager`), not to readers or anon. The secret lives in the `app.uploadcare_secret` database setting — never compute signatures in the client.
+
 ## Conventions
 
 - **Always include file extensions in imports** (`.ts`/`.tsx`) — enforced by `eslint-plugin-import` (`import/extensions`) and used everywhere. MUI/Emotion is a dependency only because `@mui/material` needs it.

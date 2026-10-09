@@ -221,6 +221,7 @@ type Documents = {
     "\n          query apForErfkritfolder($filter: ApFilter) {\n            allAps(orderBy: [LABEL_ASC], filter: $filter) {\n              nodes {\n                value: id\n                label\n                erfkritsByApId {\n                  totalCount\n                }\n              }\n            }\n          }\n        ": typeof types.ApForErfkritfolderDocument,
     "\n          mutation logIn($name: String, $password: String) {\n            login(input: { username: $name, pass: $password }) {\n              jwtToken\n            }\n          }\n        ": typeof types.LogInDocument,
     "\n          query userLoginQuery($name: String!) {\n            userByName(name: $name) {\n              id\n            }\n          }\n        ": typeof types.UserLoginQueryDocument,
+    "\n        query UploadSignature {\n          uploadSignature {\n            expire\n            signature\n          }\n        }\n      ": typeof types.UploadSignatureDocument,
     "\n  fragment AdresseFields on Adresse {\n    id\n    label\n    name\n    adresse\n    telefon\n    email\n    freiwErfko\n    changedBy\n  }\n": typeof types.AdresseFieldsFragmentDoc,
     "\n  fragment AeTaxonomiesFields on AeTaxonomy {\n    taxonomieId\n    taxonomieName\n    id\n    taxid\n    familie\n    artname\n    taxArtName\n    artwert\n  }\n": typeof types.AeTaxonomiesFieldsFragmentDoc,
     "\n  fragment AeLrDelarzeFields on AeLrDelarze {\n    id\n    label\n    einheit\n  }\n": typeof types.AeLrDelarzeFieldsFragmentDoc,
@@ -538,6 +539,7 @@ const documents: Documents = {
     "\n          query apForErfkritfolder($filter: ApFilter) {\n            allAps(orderBy: [LABEL_ASC], filter: $filter) {\n              nodes {\n                value: id\n                label\n                erfkritsByApId {\n                  totalCount\n                }\n              }\n            }\n          }\n        ": types.ApForErfkritfolderDocument,
     "\n          mutation logIn($name: String, $password: String) {\n            login(input: { username: $name, pass: $password }) {\n              jwtToken\n            }\n          }\n        ": types.LogInDocument,
     "\n          query userLoginQuery($name: String!) {\n            userByName(name: $name) {\n              id\n            }\n          }\n        ": types.UserLoginQueryDocument,
+    "\n        query UploadSignature {\n          uploadSignature {\n            expire\n            signature\n          }\n        }\n      ": types.UploadSignatureDocument,
     "\n  fragment AdresseFields on Adresse {\n    id\n    label\n    name\n    adresse\n    telefon\n    email\n    freiwErfko\n    changedBy\n  }\n": types.AdresseFieldsFragmentDoc,
     "\n  fragment AeTaxonomiesFields on AeTaxonomy {\n    taxonomieId\n    taxonomieName\n    id\n    taxid\n    familie\n    artname\n    taxArtName\n    artwert\n  }\n": types.AeTaxonomiesFieldsFragmentDoc,
     "\n  fragment AeLrDelarzeFields on AeLrDelarze {\n    id\n    label\n    einheit\n  }\n": types.AeLrDelarzeFieldsFragmentDoc,
@@ -1487,6 +1489,10 @@ export function graphql(source: "\n          mutation logIn($name: String, $pass
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n          query userLoginQuery($name: String!) {\n            userByName(name: $name) {\n              id\n            }\n          }\n        "): (typeof documents)["\n          query userLoginQuery($name: String!) {\n            userByName(name: $name) {\n              id\n            }\n          }\n        "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n        query UploadSignature {\n          uploadSignature {\n            expire\n            signature\n          }\n        }\n      "): (typeof documents)["\n        query UploadSignature {\n          uploadSignature {\n            expire\n            signature\n          }\n        }\n      "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
