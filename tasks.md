@@ -10,14 +10,10 @@ What's deliberately still open, no urgency today:
 
 ---
 
-lets implement https://github.com/barbalex/apf2/issues/779. So we need:
+rotate uploadcare secret in a few days (from 9.10.2026)
 
-1. remove the apber.veraenderung_zum_vorjahr column and all its usages
-2. remove the value from the export it is used in (/home/alex/Documents/GitHub/apf2/src/components/Projekte/Exporte/Ap/Ber.tsx)
-3. ensure the value is calculated in the AP-Bericht form as soon as "Beurteilung" exists for current and previous year (http://localhost:5173/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Arten/6c52d173-4f62-11e7-aebe-2bd3a2ea4576/AP-Berichte/cdd111f4-ead7-11f0-99c4-13a346d3861f). Here +,- and = are to be used
-4. ensure the value is calculated in the report (Jahresbericht, Erfolg) but only + and - are shown (should match what is implemented now)
-5. create a migration script to change the sql on the production server parallel to updating the app code
+---
 
-I started implementing it in the current branch but decided to hand it to you instead.
+there is a special form for EKF-Kontrolleure: "AP Flora EKF von (username)": It is used for EKF-Kontrolleure: they log in and see their list of Kontrollen, and only that - they dont need anything else. it has its own top menu. Lets add a "(username) abmelden und Cache leeren" menu there. Where: richt side. Lets use a reload icon.
 
 ---
