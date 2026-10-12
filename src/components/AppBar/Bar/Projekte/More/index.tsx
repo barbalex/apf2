@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -138,7 +138,14 @@ export const More = ({
           gelöschte Datensätze wiederherstellen
         </MenuItem>
         {['apflora_manager', 'apflora_ap_writer'].includes(role ?? '') && (
-          <EkfUser closeMenu={closeMenu} />
+          // EkfUser suspends while its user list loads.
+          // Without a boundary here the suspension bubbles up and React
+          // tears down and rebuilds the committed app tree (falling back),
+          // which in dev destroys the leaflet map ("Map container is being
+          // reused by another instance"). Contain it to the menu instead.
+          <Suspense fallback={<MenuItem disabled>Lade Benutzer…</MenuItem>}>
+            <EkfUser closeMenu={closeMenu} />
+          </Suspense>
         )}
         <MenuItem>
           <EnforceMobileNavigation />
