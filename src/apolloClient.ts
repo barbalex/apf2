@@ -110,8 +110,9 @@ export const buildApolloClient = (): ApolloClient => {
           })
         })
       }
-    }
-    if (error) {
+    } else if (error) {
+      // only network errors reach this branch:
+      // graphql errors were notified above and must not notify twice
       console.log(`apollo client Network error:`, error.message)
       addNotification({
         message: `apollo client Network error: ${error.message}`,
