@@ -20,6 +20,7 @@ import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.ts'
+import { clearSiteData } from '../../../../../modules/clearSiteData.ts'
 import { EkfUser } from './EkfUser/index.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { ShowBookmarksMenu } from './ShowBookmarksMenu.tsx'
@@ -157,6 +158,10 @@ export const More = ({
           onClick={() => void logout()}
           data-id="appbar-more-logout"
         >{`${userName} abmelden`}</MenuItem>
+        <MenuItem
+          onClick={() => void clearSiteData()}
+          data-id="appbar-more-clear-site-data"
+        >{`${userName} abmelden und Cache leeren`}</MenuItem>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>
