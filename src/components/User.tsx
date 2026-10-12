@@ -138,7 +138,9 @@ export const User = () => {
   }
 
   // login happens on Enter and on the anmelden button, not on blur (#823)
-  const onKeyPressName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  // BEWARE: onKeyDown, not onKeyPress - browsers no longer fire
+  // keypress for Enter, so the handler never ran (#823)
+  const onKeyDownName = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
     if (!e.currentTarget.value) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
@@ -150,7 +152,7 @@ export const User = () => {
     }
     void fetchLogin()
   }
-  const onKeyPressPassword = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDownPassword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
     if (!e.currentTarget.value) {
       setPasswordErrorText('Bitte Passwort eingeben')
@@ -184,7 +186,7 @@ export const User = () => {
               inputRef={nameInput}
               onBlur={onBlurName}
               autoFocus
-              onKeyPress={onKeyPressName}
+              onKeyDown={onKeyDownName}
               className={`user-name ${styles.input}`}
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
@@ -201,7 +203,7 @@ export const User = () => {
               inputRef={passwordInput}
               type={showPass ? 'text' : 'password'}
               onBlur={onBlurPassword}
-              onKeyPress={onKeyPressPassword}
+              onKeyDown={onKeyDownPassword}
               autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"

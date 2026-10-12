@@ -106,7 +106,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     const value = (e.target as HTMLInputElement).value
     setPasswordErrorText('')
     setPassword(value)
-    if (!password) {
+    if (!value) {
       setPasswordErrorText('Bitte Passwort eingeben')
     } else {
       setPassword2('')
@@ -117,9 +117,9 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     const value = (event.target as HTMLInputElement).value
     setPassword2ErrorText('')
     setPassword2(value)
-    if (!password2) {
+    if (!value) {
       setPassword2ErrorText('Bitte Passwort eingeben')
-    } else if (password !== password2) {
+    } else if (password !== value) {
       setPassword2ErrorText('Die Passwörter stimmen nicht überein')
     } else {
       // edit password
@@ -129,7 +129,9 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
           mutation: updateUserByIdGql,
           variables: {
             id: row?.id,
-            pass: password2,
+            // value, not the state variable: on Enter the state
+            // still holds the previous value (#823)
+            pass: value,
           },
         })
       } catch (error) {
@@ -190,14 +192,16 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                     </Button>
                   </div>
                 )}
-                <Button
-                  className={styles.abmeldenButton}
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => void logout()}
-                >
-                  Abmelden
-                </Button>
+                {!editPassword && (
+                  <Button
+                    className={styles.abmeldenButton}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => void logout()}
+                  >
+                    Abmelden
+                  </Button>
+                )}
                 {editPassword && (
                   <FormControl
                     error={!!passwordErrorText}
@@ -212,7 +216,8 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                       type={showPass ? 'text' : 'password'}
                       defaultValue={password}
                       onBlur={onBlurPassword}
-                      onKeyPress={(e) => {
+                      // keypress no longer fires for Enter in browsers (#823)
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           onBlurPassword(e)
                         }
@@ -259,9 +264,10 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                       type={showPass2 ? 'text' : 'password'}
                       defaultValue={password2}
                       onBlur={(e) => void onBlurPassword2(e)}
-                      onKeyPress={(e) => {
+                      // keypress no longer fires for Enter in browsers (#823)
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          onBlurPassword(e)
+                          void onBlurPassword2(e)
                         }
                       }}
                       autoCorrect="off"
