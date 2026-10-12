@@ -30,19 +30,22 @@ export const clearSiteData = async () => {
 
   // 3. Wipe IndexedDB.
   // localForage keeps its connection open, which blocks deleting its own
-  // database until page unload - so clear it through the open connection
-  // and delete all other databases (blocked deletions resolve, not hang)
-  const idbWork: Promise<unknown>[] = [localForage.clear()]
+  // database until page unload - so if it exists, clear it through the open
+  // connection instead; all other databases are deleted.
+  // (blocked deletions resolve, so they cannot hang the reload)
+  const idbWork: Promise<unknown>[] = []
   if (indexedDB.databases) {
     const databases = await indexedDB.databases()
     for (const { name } of databases) {
-      if (!name || name === 'localforage') continue
+      if (!name) continue
       idbWork.push(
-        new Promise<void>((resolve) => {
-          const request = indexedDB.deleteDatabase(name)
-          request.onsuccess = request.onerror = request.onblocked = () =>
-            resolve()
-        }),
+        name === 'localforage' ?
+          localForage.clear()
+        : new Promise<void>((resolve) => {
+            const request = indexedDB.deleteDatabase(name)
+            request.onsuccess = request.onerror = request.onblocked = () =>
+              resolve()
+          }),
       )
     }
   }
