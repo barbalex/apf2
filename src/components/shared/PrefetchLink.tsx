@@ -17,8 +17,9 @@ export const PrefetchLink = ({
       onMouseEnter?.(e)
 
       // Prefetch the route data
+      // string targets can contain a search string - prefetch the path only
       const path =
-        typeof to === 'string' ? to
+        typeof to === 'string' ? to.split('?')[0]
         : typeof to === 'object' && 'pathname' in to ? to.pathname
         : null
 

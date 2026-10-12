@@ -302,8 +302,12 @@ export const prefetchRouteData = async (path: string) => {
   const apolloClient = getApolloClientFromStore()
   if (!tsQueryClient || !apolloClient) return
 
+  // strip search and hash: callers pass navigation urls like
+  // `/Daten/Projekte/<id>?projekteTabs=tree&...`; the query string
+  // must not end up inside an id (#824)
+  const pathWithoutSearch = path.split('?')[0]?.split('#')[0] ?? path
   // Decode the path to handle URL-encoded characters
-  const decodedPath = decodeURIComponent(path)
+  const decodedPath = decodeURIComponent(pathWithoutSearch)
 
   // Find matching route config
   for (const config of routeConfigs) {
