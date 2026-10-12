@@ -55,4 +55,38 @@ test.describe('User login with password helper', () => {
 
     await expect(page.locator('#dialog-title')).not.toBeVisible()
   })
+
+  // #823: Enter must log in too. Keypress no longer fires for Enter in
+  // browsers, so this guards against onKeyPress regressions.
+  test('logs in when Enter is pressed after a password helper filled the fields', async ({
+    page,
+  }) => {
+    await openLoginPage(page)
+
+    // the password helper sets both fields directly in the dom,
+    // without focus, change or blur events
+    await page.evaluate(([name, password]) => {
+      const setValue = (el: HTMLInputElement, value: string) => {
+        const setter = Object.getOwnPropertyDescriptor(
+          HTMLInputElement.prototype,
+          'value',
+        )!.set!
+        setter.call(el, value)
+      }
+      setValue(
+        document.querySelector('#name') as HTMLInputElement,
+        name as string,
+      )
+      setValue(
+        document.querySelector('#passwort') as HTMLInputElement,
+        password as string,
+      )
+    }, [loginData.name, loginData.password])
+
+    // Enter in the password field must log in
+    await page.locator('#passwort').click()
+    await page.locator('#passwort').press('Enter')
+
+    await expect(page.locator('#dialog-title')).not.toBeVisible()
+  })
 })
