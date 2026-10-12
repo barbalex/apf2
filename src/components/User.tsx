@@ -46,8 +46,6 @@ export const User = () => {
   const apolloClient = useApolloClient()
   const [user, setUser] = useAtom(userAtom)
 
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
@@ -65,20 +63,11 @@ export const User = () => {
     dispatchTokenState({ type: 'set', payload: user.token })
   }, [user.token])
 
-  // callbacks pass name or password
-  // because state is not up to date yet
-  // also used directly as the anmelden button's onClick handler,
-  // where the click event destructures to no name/password
-  const fetchLogin = async ({
-    name: namePassed,
-    password: passwordPassed,
-  }: {
-    name?: string
-    password?: string
-  }) => {
-    const nameToUse = namePassed || name || nameInput.current?.value || ''
-    const passwordToUse =
-      passwordPassed || password || passwordInput.current?.value || ''
+  // reads the live dom values: password helpers fill the fields
+  // without focus or change events, so state would be stale (#823)
+  const fetchLogin = async () => {
+    const nameToUse = nameInput.current?.value ?? ''
+    const passwordToUse = passwordInput.current?.value ?? ''
     let result
     try {
       result = await apolloClient.mutate({
@@ -134,40 +123,41 @@ export const User = () => {
     window.location.reload()
   }
 
-  const onBlurName = (
-    e:
-      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const onBlurName = (e: React.FocusEvent<HTMLInputElement>) => {
     setNameErrorText('')
-    const name = e.currentTarget.value
-    setName(name)
-    if (!name) {
+    if (!e.currentTarget.value) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
-    } else if (password) {
-      setTimeout(() => void fetchLogin({ name }))
     }
   }
 
-  const onBlurPassword = (
-    e:
-      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const onBlurPassword = (e: React.FocusEvent<HTMLInputElement>) => {
     setPasswordErrorText('')
-    const password = e.currentTarget.value
-    setPassword(password)
-    if (!password) {
+    if (!e.currentTarget.value) {
       setPasswordErrorText('Bitte Passwort eingeben')
-    } else if (name) {
-      setTimeout(() => void fetchLogin({ password }))
     }
   }
 
-  const onKeyPressName = (e: React.KeyboardEvent<HTMLInputElement>) =>
-    e.key === 'Enter' && onBlurName(e)
-  const onKeyPressPassword = (e: React.KeyboardEvent<HTMLInputElement>) =>
-    e.key === 'Enter' && onBlurPassword(e)
+  // login happens on Enter and on the anmelden button, not on blur (#823)
+  const onKeyPressName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return
+    if (!e.currentTarget.value) {
+      setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
+      return
+    }
+    if (!passwordInput.current?.value) {
+      passwordInput.current?.focus()
+      return
+    }
+    void fetchLogin()
+  }
+  const onKeyPressPassword = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return
+    if (!e.currentTarget.value) {
+      setPasswordErrorText('Bitte Passwort eingeben')
+      return
+    }
+    void fetchLogin()
+  }
   const onClickShowPass = () => setShowPass(!showPass)
   const onMouseDownShowPass = (e: React.MouseEvent<HTMLButtonElement>) =>
     e.preventDefault()
@@ -192,7 +182,6 @@ export const User = () => {
             <Input
               id="name"
               inputRef={nameInput}
-              defaultValue={name}
               onBlur={onBlurName}
               autoFocus
               onKeyPress={onKeyPressName}
@@ -211,7 +200,6 @@ export const User = () => {
               id="passwort"
               inputRef={passwordInput}
               type={showPass ? 'text' : 'password'}
-              defaultValue={password}
               onBlur={onBlurPassword}
               onKeyPress={onKeyPressPassword}
               autoComplete="current-password"
@@ -240,10 +228,7 @@ export const User = () => {
           </FormControl>
         </div>
         <DialogActions>
-          <Button
-            color="primary"
-            onClick={() => void fetchLogin({})}
-          >
+          <Button color="primary" onClick={() => void fetchLogin()}>
             anmelden
           </Button>
         </DialogActions>
