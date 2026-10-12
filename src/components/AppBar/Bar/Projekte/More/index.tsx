@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -20,6 +20,7 @@ import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.ts'
+import { clearSiteData } from '../../../../../modules/clearSiteData.ts'
 import { EkfUser } from './EkfUser/index.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { ShowBookmarksMenu } from './ShowBookmarksMenu.tsx'
@@ -137,7 +138,14 @@ export const More = ({
           gelöschte Datensätze wiederherstellen
         </MenuItem>
         {['apflora_manager', 'apflora_ap_writer'].includes(role ?? '') && (
-          <EkfUser closeMenu={closeMenu} />
+          // EkfUser suspends while its user list loads.
+          // Without a boundary here the suspension bubbles up and React
+          // tears down and rebuilds the committed app tree (falling back),
+          // which in dev destroys the leaflet map ("Map container is being
+          // reused by another instance"). Contain it to the menu instead.
+          <Suspense fallback={<MenuItem disabled>Lade Benutzer…</MenuItem>}>
+            <EkfUser closeMenu={closeMenu} />
+          </Suspense>
         )}
         <MenuItem>
           <EnforceMobileNavigation />
@@ -157,6 +165,10 @@ export const More = ({
           onClick={() => void logout()}
           data-id="appbar-more-logout"
         >{`${userName} abmelden`}</MenuItem>
+        <MenuItem
+          onClick={() => void clearSiteData()}
+          data-id="appbar-more-clear-site-data"
+        >{`${userName} abmelden und Cache leeren`}</MenuItem>
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>

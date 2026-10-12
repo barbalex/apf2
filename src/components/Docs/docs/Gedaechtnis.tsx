@@ -29,6 +29,13 @@ export const Component = () => (
       Erinnern früherer Zustände birgt auch die Gefahr, sich an Zustände zu
       erinnern, die Fehler enthalten und daher das Arbeiten stören 😝
     </p>
+    <p>
+      Seit dem 12.10.2026 gibt es im Mehr-Menü direkt darunter zusätzlich den
+      Befehl &quot;abmelden und Cache leeren&quot;. Er meldet euch ab und
+      entfernt alles, was apflora im Browser gespeichert hat: Zustände,
+      Anmeldung, Cache und Service-Worker. apflora startet danach wie bei einem
+      ersten Besuch.
+    </p>
     <p>&nbsp;</p>
   </>
 )

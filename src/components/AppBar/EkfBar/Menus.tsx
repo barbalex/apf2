@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
-import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
+import { MdPrint, MdHourglassEmpty, MdRefresh } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -21,6 +21,7 @@ import {
 } from '../../../store/index.ts'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
+import { clearSiteData } from '../../../modules/clearSiteData.ts'
 
 import type { UserId } from '../../../models/apflora/User.ts'
 import type { TpopkontrId } from '../../../models/apflora/Tpopkontr.ts'
@@ -180,6 +181,16 @@ export const Menus = () => {
         >
           Dokumentation
         </Button>
+      </Tooltip>
+      <Tooltip title={`${username} abmelden und Cache leeren`}>
+        <IconButton
+          className={styles.iconButton}
+          aria-label={`${username} abmelden und Cache leeren`}
+          data-id="ekf-bar-clear-site-data"
+          onClick={() => void clearSiteData()}
+        >
+          <MdRefresh />
+        </IconButton>
       </Tooltip>
     </>
   )
