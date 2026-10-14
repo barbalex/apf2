@@ -10,10 +10,17 @@ What's deliberately still open, no urgency today:
 
 ---
 
-rotate uploadcare secret in a few days (from 9.10.2026)
-
 ---
 
 there is a special form for EKF-Kontrolleure: "AP Flora EKF von (username)": It is used for EKF-Kontrolleure: they log in and see their list of Kontrollen, and only that - they dont need anything else. it has its own top menu. Lets add a "(username) abmelden und Cache leeren" menu there. Where: richt side. Lets use a reload icon.
 
 ---
+
+2026.10.14: new server. 172.105.87.183 > 139.162.172.88
+
+tonight:
+fresh dump from live, wipe/rebuild/verify on the new server, then you flip api.apflora.ch → 139.162.172.88 on Vercel. After the flip, a real browser login on apflora.ch is the final confirmation
+
+---
+
+rotate uploadcare secret in a few days (from 9.10.2026)
