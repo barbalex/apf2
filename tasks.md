@@ -19,3 +19,10 @@ there is a special form for EKF-Kontrolleure: "AP Flora EKF von (username)": It 
 ---
 
 2026.10.14: new server. 172.105.87.183 > 139.162.172.88
+
+tonight:
+fresh dump from live, wipe/rebuild/verify on the new server, then you flip api.apflora.ch → 139.162.172.88 on Vercel. After the flip, a real browser login on apflora.ch is the final confirmation
+
+---
+
+lets enable dnssec on vercel for apflora.ch
