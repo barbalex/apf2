@@ -1,0 +1,1 @@
+apflora auf neuen Server migriert. Neue Versionen von Datenbank, übrige Software und Backup-Skripten installiert. Rechte der Daten-Schnittstelle reduziert. Dient einerseits einer erhöhten Sicherheit. Es ist wahrscheinlich (aber nicht sicher spürbar), dass einige datenbank-intensive Prozesse schneller ablaufen (z.B. Jahres-Bericht, EK-Planungen).
