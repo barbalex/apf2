@@ -1,6 +1,0 @@
-export { default as ContextMenu } from './ContextMenu.tsx'
-export { default as ContextMenuTrigger } from './ContextMenuTrigger.tsx'
-export { default as MenuItem } from './MenuItem.tsx'
-export { default as SubMenu } from './SubMenu.tsx'
-export { default as connectMenu } from './connectMenu.tsx'
-export { hideMenu, showMenu } from './actions.ts'
