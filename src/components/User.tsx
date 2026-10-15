@@ -12,11 +12,13 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { graphql } from '../gql/index.ts'
+import { gql as dynamicGql } from '../apolloGql.ts'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
+import { Password } from './Projekte/Daten/User/Password.tsx'
 import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
@@ -24,6 +26,13 @@ import styles from './User.module.css'
 interface TokenState {
   token: string | null
   fetchingToken: boolean
+}
+
+interface CheckUserPasswordResult {
+  userByName: {
+    id: string
+    requireNewPasswordOnNextLogin: boolean
+  } | null
 }
 
 type TokenAction = { type: 'reset' } | { type: 'set'; payload: string | null }
@@ -46,9 +55,16 @@ export const User = () => {
   const apolloClient = useApolloClient()
   const [user, setUser] = useAtom(userAtom)
 
+  const [name, setName] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
+  // the account must set a new password before logging in
+  // (require_new_password_on_next_login)
+  const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
+  // set by the server when a password exists already: it must be
+  // proved before a new one is accepted
+  const [oldPasswordRequired, setOldPasswordRequired] = useState(false)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
@@ -57,17 +73,56 @@ export const User = () => {
 
   const nameInput = useRef<HTMLInputElement | null>(null)
   const passwordInput = useRef<HTMLInputElement | null>(null)
+  const oldPasswordInput = useRef<HTMLInputElement | null>(null)
 
   // Sync tokenState with user atom from Jotai
   useEffect(() => {
     dispatchTokenState({ type: 'set', payload: user.token })
   }, [user.token])
 
+  // runs as anon: anon may read id, name and
+  // require_new_password_on_next_login, but never pass
+  const checkUserPassword = async (nameToCheck: string) => {
+    try {
+      const userResult = await apolloClient.query<CheckUserPasswordResult>({
+        query: dynamicGql`
+          query checkUserPassword($name: String!) {
+            userByName(name: $name) {
+              id
+              requireNewPasswordOnNextLogin
+            }
+          }
+        `,
+        variables: { name: nameToCheck },
+      })
+      return userResult?.data?.userByName
+    } catch (error) {
+      // never block the login attempt on a failed precheck
+      console.log(error)
+      return null
+    }
+  }
+
   // reads the live dom values: password helpers fill the fields
   // without focus or change events, so state would be stale (#823)
-  const fetchLogin = async () => {
-    const nameToUse = nameInput.current?.value ?? ''
-    const passwordToUse = passwordInput.current?.value ?? ''
+  // credentialsPassed is used after a password setup: the login
+  // fields are unmounted then, so their refs are empty
+  const fetchLogin = async (credentialsPassed?: {
+    name?: string
+    password?: string
+  }) => {
+    const nameToUse =
+      credentialsPassed?.name ?? nameInput.current?.value ?? ''
+    const passwordToUse =
+      credentialsPassed?.password ?? passwordInput.current?.value ?? ''
+    // a forced password change must not be bypassable by logging in
+    // with the old password
+    const userData = nameToUse ? await checkUserPassword(nameToUse) : null
+    if (userData?.requireNewPasswordOnNextLogin) {
+      setName(nameToUse)
+      setNeedsPasswordSetup(true)
+      return
+    }
     let result
     try {
       result = await apolloClient.mutate({
@@ -123,14 +178,28 @@ export const User = () => {
     window.location.reload()
   }
 
-  const onBlurName = (e: React.FocusEvent<HTMLInputElement>) => {
+  const onBlurName = async (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setNameErrorText('')
-    if (!e.currentTarget.value) {
+    const nameToCheck = e.currentTarget.value
+    setName(nameToCheck)
+    if (!nameToCheck) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
+      return
+    }
+    // switch to the setup dialog before the password is entered
+    // (the fetchLogin guard catches what blur misses, e.g. fields
+    // filled by password helpers without events)
+    const userData = await checkUserPassword(nameToCheck)
+    if (userData?.requireNewPasswordOnNextLogin) {
+      setNeedsPasswordSetup(true)
     }
   }
 
-  const onBlurPassword = (e: React.FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setPasswordErrorText('')
     if (!e.currentTarget.value) {
       setPasswordErrorText('Bitte Passwort eingeben')
@@ -160,11 +229,94 @@ export const User = () => {
     }
     void fetchLogin()
   }
+
+  const savePassword = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    const oldPass = oldPasswordInput.current?.value
+
+    try {
+      await apolloClient.mutate({
+        mutation: dynamicGql`
+          mutation setPassword($pUsername: String!, $pNewPass: String!, $pOldPass: String) {
+            setPassword(input: { pUsername: $pUsername, pNewPass: $pNewPass, pOldPass: $pOldPass }) {
+              uuid
+            }
+          }
+        `,
+        variables: {
+          pUsername: name,
+          pNewPass: value,
+          pOldPass: oldPasswordRequired ? oldPass : null,
+        },
+      })
+    } catch (error) {
+      // Apollo Client 4 rejects with CombinedGraphQLErrors:
+      // the server message is on the error itself
+      const message = (error as Error).message ?? ''
+      if (message.includes('altes Passwort erforderlich')) {
+        // the account has a password already: ask for it, then retry
+        setOldPasswordRequired(true)
+      }
+      // Password displays the error message
+      throw error
+    }
+
+    // Password set successfully, proceed with login
+    setNeedsPasswordSetup(false)
+    void fetchLogin({ name, password: value })
+  }
+
   const onClickShowPass = () => setShowPass(!showPass)
   const onMouseDownShowPass = (e: React.MouseEvent<HTMLButtonElement>) =>
     e.preventDefault()
 
   const { token, fetchingToken } = tokenState
+
+  if (needsPasswordSetup) {
+    return (
+      <ErrorBoundary>
+        <Dialog
+          aria-labelledby="dialog-title"
+          open={true}
+          maxWidth="sm"
+          fullWidth
+          scroll="body"
+        >
+          <DialogTitle id="dialog-title">
+            Passwort einrichten für {name}
+          </DialogTitle>
+          <div className={styles.setupDiv}>
+            <p className={styles.setupMessage}>
+              {oldPasswordRequired ?
+                'Sie müssen ein neues Passwort setzen. Bestätigen Sie es mit dem aktuellen Passwort.'
+              : 'Bitte richten Sie ein neues, sicheres Passwort ein.'}
+            </p>
+            {oldPasswordRequired && (
+              <FormControl fullWidth variant="standard">
+                <InputLabel htmlFor="altes-passwort">
+                  Aktuelles Passwort
+                </InputLabel>
+                <Input
+                  id="altes-passwort"
+                  inputRef={oldPasswordInput}
+                  type="password"
+                  autoComplete="current-password"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  className={`user-altes-passwort ${styles.input}`}
+                />
+              </FormControl>
+            )}
+            <Password
+              errors={{}}
+              saveToDb={savePassword}
+              showChangePasswordButton={false}
+            />
+          </div>
+        </Dialog>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -184,7 +336,7 @@ export const User = () => {
             <Input
               id="name"
               inputRef={nameInput}
-              onBlur={onBlurName}
+              onBlur={(e) => void onBlurName(e)}
               autoFocus
               onKeyDown={onKeyDownName}
               className={`user-name ${styles.input}`}
