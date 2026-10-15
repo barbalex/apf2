@@ -62,9 +62,10 @@ export const User = () => {
   // the account must set a new password before logging in
   // (require_new_password_on_next_login)
   const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
-  // set by the server when a password exists already: it must be
-  // proved before a new one is accepted
-  const [oldPasswordRequired, setOldPasswordRequired] = useState(false)
+  // anon cannot read whether the account has a password - and nearly
+  // every flagged account has one. So the field is always shown; the
+  // server ignores the old password for accounts without one
+  const [oldPasswordRequired, setOldPasswordRequired] = useState(true)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
@@ -287,9 +288,8 @@ export const User = () => {
           </DialogTitle>
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
-              {oldPasswordRequired ?
-                'Sie müssen ein neues Passwort setzen. Bestätigen Sie es mit dem aktuellen Passwort.'
-              : 'Bitte richten Sie ein neues, sicheres Passwort ein.'}
+              Sie müssen ein neues Passwort setzen. Bestätigen Sie es
+              mit dem aktuellen Passwort (falls vorhanden).
             </p>
             {oldPasswordRequired && (
               <FormControl fullWidth variant="standard">
