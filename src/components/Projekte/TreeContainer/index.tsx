@@ -13,8 +13,8 @@ const ApFilter = lazy(async () => ({
 const TreeComponent = lazy(async () => ({
   default: (await import('./Tree/index.tsx')).TreeComponent,
 }))
-const Menus = lazy(async () => ({
-  default: (await import('./Menus.tsx')).Menus,
+const TreeContextMenu = lazy(async () => ({
+  default: (await import('./ContextMenu/TreeContextMenu.tsx')).TreeContextMenu,
 }))
 const DeleteDatasetModal = lazy(async () => ({
   default: (await import('./DeleteDatasetModal/index.tsx')).DatasetDeleteModal,
@@ -63,7 +63,7 @@ export const TreeContainer = () => {
         </Suspense>
         {!matchMedia('(pointer: coarse)').matches && (
           <Suspense fallback={null}>
-            <Menus />
+            <TreeContextMenu />
           </Suspense>
         )}
       </div>
