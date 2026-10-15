@@ -10,8 +10,6 @@ What's deliberately still open, no urgency today:
 
 ---
 
-We are now using a local copy of react-contextmenu for context menus in the nav tree as that project was abandoned. Can we migrate to a pure css & js implementation? What do you propose?
-
 ---
 
 ---
