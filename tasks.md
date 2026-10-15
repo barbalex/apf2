@@ -14,8 +14,6 @@ It seems the map is reinitialized when closing, then opening. This may be a good
 
 ---
 
-why is .npmrc gitignored?
-
 ---
 
 2026.10.14: new server. 172.105.87.183 > 139.162.172.88

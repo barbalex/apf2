@@ -1,7 +1,8 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
+import type { MapContainerProps } from 'react-leaflet'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -56,6 +57,7 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapFilterListener } from './MapFilterListener.tsx'
+import { MapPersister } from './MapPersister.tsx'
 import { ClickListener } from './ClickListener/index.tsx'
 
 import 'leaflet/dist/leaflet.css'
@@ -67,6 +69,8 @@ import {
   assigningBeobAtom,
   mapHideControlsAtom,
   mapBoundsAtom,
+  mapViewAtom,
+  store,
   mapActiveApfloraLayersAtom,
   mapShowApfLayersForMultipleApsAtom,
   mapOverlaysAtom,
@@ -147,6 +151,23 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const hideMapControls = useAtomValue(mapHideControlsAtom)
   const bounds = useAtomValue(mapBoundsAtom)
+  // captured once per mount because react-leaflet applies these props
+  // only when creating the map.
+  // Read imperatively (not via useAtomValue) so that persisting the view
+  // on every moveend does not re-render the whole map
+  const [initialView] = useState(() => store.get(mapViewAtom))
+  // react-leaflet applies center/zoom/bounds only when creating the map.
+  // Restore the exact persisted view if one exists: unlike fitBounds,
+  // setView does not depend on the container size.
+  // Fall back to stored bounds when no view has been persisted yet.
+  // atomWithStorage provides the bounds as number[][],
+  // which is a valid LatLngBoundsLiteral at runtime
+  const initialViewProps: MapContainerProps = initialView
+    ? {
+        center: [initialView.center.lat, initialView.center.lng],
+        zoom: initialView.zoom,
+      }
+    : { bounds: bounds as LatLngBoundsExpression }
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showApfLayersForMultipleAps = useAtomValue(
     mapShowApfLayersForMultipleApsAtom,
@@ -223,12 +244,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
     >
       <ErrorBoundary>
         <MapContainer
-          // bounds need to be set using map.fitBounds sice v3
-          // but keep bounds in store as last bound will be reapplied
-          // when map is re-opened
-          // atomWithStorage provides the bounds as number[][],
-          // which is a valid LatLngBoundsLiteral at runtime
-          bounds={bounds as LatLngBoundsExpression}
+          {...initialViewProps}
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
@@ -314,6 +330,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
             <BeobZugeordnetAssignPolylines />
           )}
           <ClickListener />
+          <MapPersister />
           <ScaleControl imperial={false} />
           <Control
             position="topright"
