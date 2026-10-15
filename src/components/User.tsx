@@ -279,17 +279,14 @@ export const User = () => {
         <Dialog
           aria-labelledby="dialog-title"
           open={true}
-          maxWidth="sm"
           fullWidth
-          scroll="body"
+          maxWidth="xs"
         >
-          <DialogTitle id="dialog-title">
-            Passwort einrichten für {name}
-          </DialogTitle>
+          <DialogTitle id="dialog-title">Passwort für {name}</DialogTitle>
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
               Sie müssen ein neues Passwort setzen. Bestätigen Sie es
-              mit dem aktuellen Passwort (falls vorhanden).
+              mit dem aktuellen (falls vorhanden).
             </p>
             {oldPasswordRequired && (
               <FormControl
@@ -327,6 +324,8 @@ export const User = () => {
       <Dialog
         aria-labelledby="dialog-title"
         open={!token && !fetchingToken}
+        fullWidth
+        maxWidth="xs"
       >
         <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
         <div className={styles.div}>

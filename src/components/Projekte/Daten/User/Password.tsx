@@ -19,6 +19,16 @@ interface PasswordProps {
   showChangePasswordButton?: boolean
 }
 
+// checklist labels: darker than MUI's disabled grey (matches the tip
+// below) - via sx because the CSS-module rule loses against the
+// Typography styles MUI puts on the label
+const requirementLabelSx = {
+  '& .MuiFormControlLabel-label': {
+    fontSize: '0.75rem !important',
+    color: 'rgba(0, 0, 0, 0.6) !important',
+  },
+}
+
 export const Password = ({
   errors,
   saveToDb,
@@ -221,15 +231,7 @@ export const Password = ({
           </FormControl>
           <div className={styles.passwordRequirements}>
             <FormControlLabel
-              control={
-                <Checkbox
-                  checked={passwordValidation.minLength}
-                  disabled
-                />
-              }
-              label="Mindestlänge 16"
-            />
-            <FormControlLabel
+              sx={requirementLabelSx}
               control={
                 <Checkbox
                   checked={passwordValidation.hasLowercase}
@@ -239,6 +241,7 @@ export const Password = ({
               label="Enthält Kleinbuchstaben"
             />
             <FormControlLabel
+              sx={requirementLabelSx}
               control={
                 <Checkbox
                   checked={passwordValidation.hasUppercase}
@@ -248,6 +251,7 @@ export const Password = ({
               label="Enthält Grossbuchstaben"
             />
             <FormControlLabel
+              sx={requirementLabelSx}
               control={
                 <Checkbox
                   checked={passwordValidation.hasNumbers}
@@ -257,6 +261,7 @@ export const Password = ({
               label="Enthält Nummern"
             />
             <FormControlLabel
+              sx={requirementLabelSx}
               control={
                 <Checkbox
                   checked={passwordValidation.hasSpecialChars}
@@ -264,6 +269,17 @@ export const Password = ({
                 />
               }
               label="Enthält Sonderzeichen"
+            />
+            {/* last on purpose: min length is met last while typing */}
+            <FormControlLabel
+              sx={requirementLabelSx}
+              control={
+                <Checkbox
+                  checked={passwordValidation.minLength}
+                  disabled
+                />
+              }
+              label={`Mindestlänge 16 (aktuell: ${password.length})`}
             />
           </div>
           <div className={styles.passwordHint}>
