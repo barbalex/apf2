@@ -10,7 +10,11 @@ What's deliberately still open, no urgency today:
 
 ---
 
+It seems the map is reinitialized when closing, then opening. This may be a good thing to save ressources? It does lead to the map not looking the same after reopening: Though the layers are same, zoom layer and position are not. Can we enhance this? The goal being that the map when reopened looks as much as possible exactly same as before closing it?
+
 ---
+
+why is .npmrc gitignored?
 
 ---
 
