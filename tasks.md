@@ -16,7 +16,7 @@ direct deep-links like https://apflora.ch/Daten return a Vercel 404 — only cli
 
 ---
 
-"Passwort einrichten für {username}" form: lets make the vertical distance between "Aktuelles Passwort" and "Neues Passwort" larger. Plus: lets add "Tipp: gut merkbar ist eine Wortkombination, zum Beispiel «Gratiola 2026 im Zürichsee!»" under "Enthält sonderzeichen"
+Also: "Passwort einrichten für {username}" form: lets use "Passwort" instead. And "Bestätigen Sie es mit dem aktuellen (falls vorhanden)." is enough, Passwort was already mentioned. Plus: lets place the checkbox for min length 16 last
 
 ---
 
