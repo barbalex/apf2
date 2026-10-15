@@ -20,11 +20,23 @@ Built:
 - the setup dialog asks for the current password when the
   server demands it (rotation case)
 
-Deploy:
-1. merge this branch
-2. run migrations 01, 03 and 08
-3. restart the graphql server
-4. test: a user without a password can set one via the login
+Deploy (order matters: the DB changes are backward-compatible
+with the old frontend, so run them BEFORE merging, otherwise the
+new setPassword-based login dialog hits a missing function):
+1. run migrations 01, 03 and 08 on the live server
+   (03 also fixes #825: non-manager roles were missing SELECT on
+   require_new_password_on_next_login, which logged out every
+   ap_writer/freiwillig right after login - run it even if you
+   deploy nothing else from this branch)
+2. restart the graphql server
+3. verify the grants (all must be true):
+     docker exec apf_db psql -U postgres -d apflora -Atc \
+       "SELECT r, has_column_privilege(r, 'apflora.user', 'require_new_password_on_next_login', 'SELECT') FROM unnest(ARRAY['anon','apflora_reader','apflora_ap_reader','apflora_freiwillig','apflora_ap_writer','apflora_manager']) r;"
+4. verify login works again for a non-manager account
+   (e.g. chsalzmann, see #825): no error snackbar, no empty
+   login form after the reload
+5. merge this branch (frontend deploy)
+6. test: a user without a password can set one via the login
    dialog; setting a password for an account that has one
    requires the old password
 
