@@ -1,0 +1,8 @@
+Ab Version 1.137.0: Die Sicherheit der Anwendung wird erhöht.
+
+**Passwörter müssen neu mindestens 16 Zeichen lang sein sowie Gross- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.**
+
+Das eigene Passwort kann direkt im Anmelde-Dialog gesetzt oder geändert werden – für einen Wechsel muss das bisherige Passwort einmal bestätigt werden.
+Ab sofort werden alle Benutzerinnen und Benutzer bei der nächsten Anmeldung aufgefordert, ein neues, sicheres Passwort zu wählen.
+
+Tipp: gut merkbar ist eine Wortkombination, zum Beispiel «Gratiola 2026 im Zürichsee!»
