@@ -14,13 +14,3 @@
   scrollbar-width: thin;
   padding: 10px;
 }
-
-.input {
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-}
-
-.passwordMessage {
-  padding-bottom: 10px;
-}
