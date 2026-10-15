@@ -1,0 +1,54 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  padding: 5px 0;
+  margin: -1px;
+  font-size: 14px;
+  text-align: left;
+  background-color: rgb(66, 66, 66);
+  background-clip: padding-box;
+  border: 1px solid grey;
+  border-radius: 0.25rem;
+  outline: none;
+  color: white;
+  z-index: 1000;
+  font-family: system-ui;
+}
+
+.title {
+  color: #b3b3b3;
+  padding-left: 10px;
+  padding-right: 15px;
+  padding-bottom: 3px;
+}
+
+.title::after {
+  content: ':';
+}
+
+.item {
+  padding: 3px 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: white;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.item:hover,
+.itemSelected {
+  color: #f57c00;
+  border-color: #0275d8;
+  text-decoration: none;
+}
+
+.secondLine {
+  margin-left: 15px;
+}
+
+.dialog {
+  .MuiDialog-paper {
+    overflow-y: hidden;
+  }
+}

@@ -143,8 +143,6 @@
     "workbox-window": "7.4.1"
   },
   "dependenciesComments": {
-    "react-contextmenu": "extracted into modules because: archived, caused conflicting peer dependency (old react versions)",
-    "classnames": "needed by react-contextmenu",
     "graphql": "peer dependency of @apollo/client",
     "rxjs": "peer dependency of @apollo/client",
     "@emotion/react": "unfortunately needed by @mui/material",
