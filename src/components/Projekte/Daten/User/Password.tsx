@@ -266,6 +266,10 @@ export const Password = ({
               label="Enthält Sonderzeichen"
             />
           </div>
+          <div className={styles.passwordHint}>
+            Tipp: gut merkbar ist eine Wortkombination, zum Beispiel
+            «Gratiola 2026 im Zürichsee!»
+          </div>
 
           {passwordValidation.minLength &&
             passwordValidation.hasLowercase &&

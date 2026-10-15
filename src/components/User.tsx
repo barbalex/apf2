@@ -292,7 +292,11 @@ export const User = () => {
               mit dem aktuellen Passwort (falls vorhanden).
             </p>
             {oldPasswordRequired && (
-              <FormControl fullWidth variant="standard">
+              <FormControl
+                fullWidth
+                variant="standard"
+                className={styles.oldPasswordField}
+              >
                 <InputLabel htmlFor="altes-passwort">
                   Aktuelles Passwort
                 </InputLabel>
