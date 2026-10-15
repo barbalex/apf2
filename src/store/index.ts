@@ -1929,7 +1929,8 @@ export const setMapMouseCoordinatesAtom = atom(
     set(mapMouseCoordinatesAtom, { x, y }),
 )
 // setting bounds works imperatively with map.fitBounds since v3
-// but keeping bounds in store as last used bounds will be re-applied on next map opening
+// kept in store as a fallback for map openings before mapView existed
+// (see mapViewAtom for the exact view that is restored)
 export const mapBoundsAtom = atomWithStorage(
   'mapBounds',
   [
@@ -1942,6 +1943,19 @@ export const mapBoundsAtom = atomWithStorage(
 export const setMapBoundsAtom = atom(
   (get) => get(mapBoundsAtom),
   (_get, set, value: number[][]) => set(mapBoundsAtom, value),
+)
+// exact view of the last open map, restored when the map is re-opened.
+// center/zoom (not bounds) because restoring via fitBounds re-derives the zoom
+// from the container size and can be off by a zoom level
+export interface MapView {
+  center: { lat: number; lng: number }
+  zoom: number
+}
+export const mapViewAtom = atomWithStorage<MapView | undefined>(
+  'mapView',
+  undefined,
+  undefined,
+  { getOnInit: true },
 )
 export const idOfTpopBeingLocalizedAtom = atom<string | null>(null)
 export const setIdOfTpopBeingLocalizedAtom = atom(

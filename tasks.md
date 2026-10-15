@@ -10,10 +10,12 @@ What's deliberately still open, no urgency today:
 
 ---
 
+---
+
+---
+
+2026.10.14: new server. 172.105.87.183 > 139.162.172.88
+
+---
+
 rotate uploadcare secret in a few days (from 9.10.2026)
-
----
-
-there is a special form for EKF-Kontrolleure: "AP Flora EKF von (username)": It is used for EKF-Kontrolleure: they log in and see their list of Kontrollen, and only that - they dont need anything else. it has its own top menu. Lets add a "(username) abmelden und Cache leeren" menu there. Where: richt side. Lets use a reload icon.
-
----

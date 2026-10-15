@@ -3,7 +3,7 @@ import { useMap } from 'react-leaflet'
 import { useAtomValue } from 'jotai'
 import type { LatLngBoundsExpression } from 'leaflet'
 
-import { mapBoundsAtom } from '../../../store/index.ts'
+import { mapBoundsAtom, mapViewAtom, store } from '../../../store/index.ts'
 
 interface MapResizerProps {
   children: React.ReactNode
@@ -39,6 +39,8 @@ export const MapResizer = ({
 
   // this is a bad hack to make sure bounds are set
   // somehow on reload of the page they are not set
+  // only needed as long as no exact view (center/zoom) has been persisted;
+  // otherwise this would move the map away from the restored view
   useEffect(() => {
     if (map) {
       // console.log('MapResizer fitting bounds')
@@ -46,9 +48,11 @@ export const MapResizer = ({
         // Uncaught TypeError: Cannot read properties of undefined (reading '_leaflet_pos')
         // thus: try/catch
         try {
-          // atomWithStorage provides the bounds as number[][],
-          // which is a valid LatLngBoundsLiteral at runtime
-          map.fitBounds(bounds as LatLngBoundsExpression)
+          if (!store.get(mapViewAtom)) {
+            // atomWithStorage provides the bounds as number[][],
+            // which is a valid LatLngBoundsLiteral at runtime
+            map.fitBounds(bounds as LatLngBoundsExpression)
+          }
         } catch (error) {
           console.log('MapResizer error fitting bounds:', error)
         }

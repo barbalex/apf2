@@ -7,6 +7,12 @@ REVOKE connect ON DATABASE apflora FROM public;
 
 REVOKE ALL ON ALL tables IN SCHEMA apflora FROM public;
 
+-- anon is the default role for unauthenticated requests (see docker-compose).
+-- its only job: the pre-auth login mutation.
+GRANT connect ON DATABASE apflora TO anon;
+
+GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO anon;
+
 -- apflora_reader can see all but change nothing
 --drop role if exists apflora_reader;
 --create role apflora_reader;

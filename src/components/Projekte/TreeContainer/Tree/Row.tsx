@@ -6,8 +6,8 @@ import {
 } from 'react-icons/md'
 import Highlighter from 'react-highlight-words'
 import { useLocation } from 'react-router'
-import { upperFirst } from 'es-toolkit'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useRef } from 'react'
 import type { Ref } from 'react'
 import type { TransitionStatus } from 'react-transition-group'
 
@@ -21,7 +21,11 @@ import {
   treeActiveNodeArrayAtom,
   treeNodeLabelFilterAtom,
 } from '../../../../store/index.ts'
-import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
+import {
+  treeContextMenuAtom,
+  holdToDisplayMs,
+  nextMenuOpenId,
+} from '../ContextMenu/treeContextMenuAtom.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
 import type { TreeNodeData } from './types.ts'
@@ -49,6 +53,7 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const openTreeContextMenu = useSetAtom(treeContextMenuAtom)
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath({
     node,
@@ -82,7 +87,6 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
     useSymbolSpan = true
     useSymbolIcon = false
   }
-  const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
 
@@ -100,6 +104,47 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
     void prefetchNodeData(node)
   }
 
+  // holding the left mouse button (or touch) opens the menu, as before
+  const holdToDisplayTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const holdToDisplayStart = useRef<{ x: number; y: number } | null>(null)
+  const clearHoldToDisplay = () => {
+    if (holdToDisplayTimer.current) {
+      clearTimeout(holdToDisplayTimer.current)
+      holdToDisplayTimer.current = null
+    }
+    holdToDisplayStart.current = null
+  }
+  const onPointerDownNode = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return
+    const start = { x: e.clientX, y: e.clientY }
+    holdToDisplayStart.current = start
+    holdToDisplayTimer.current = setTimeout(() => {
+      openTreeContextMenu({ id: nextMenuOpenId(), node, x: start.x, y: start.y })
+    }, holdToDisplayMs)
+  }
+  const onPointerMoveNode = (e: React.PointerEvent<HTMLDivElement>) => {
+    const start = holdToDisplayStart.current
+    // moving away means dragging or scrolling, not holding still
+    if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 9) {
+      clearHoldToDisplay()
+    }
+  }
+
+  // open the context menu; suppress the browser menu like the former
+  // trigger did, also when no menu exists for this menuType
+  const onContextMenuNode = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    // keep the menu's own contextmenu listener from closing the new menu
+    e.stopPropagation()
+    clearHoldToDisplay()
+    openTreeContextMenu({
+      id: nextMenuOpenId(),
+      node,
+      x: e.clientX,
+      y: e.clientY,
+    })
+  }
+
   const labelFilter = nodeLabelFilter?.[node.menuType]
 
   const nodeStyle = {
@@ -111,90 +156,79 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
   if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
 
   return (
-    <ContextMenuTrigger
-      // need this id for the menu to work
-      id={`tree${upperFirst(node.menuType)}`}
-      collect={(props) => props}
-      nodeId={node.id}
-      tableId={node.tableId}
-      nodeLabel={node.label}
+    <div
+      // need this id to scroll elements into view
+      id={node.id ?? undefined}
+      ref={ref}
+      className={styles.node}
+      style={nodeStyle}
+      onMouseEnter={onMouseEnterNode}
+      onContextMenu={onContextMenuNode}
+      onPointerDown={onPointerDownNode}
+      onPointerMove={onPointerMoveNode}
+      onPointerUp={clearHoldToDisplay}
+      onPointerCancel={clearHoldToDisplay}
+      onPointerLeave={clearHoldToDisplay}
     >
-      <div
-        data-id={node.tableId || node.id}
-        data-parentid={node.treeParentTableId || node.parentId}
-        data-url={dataUrl}
-        data-nodetype={node.nodeType}
-        data-label={node.label}
-        data-menutype={node.menuType}
-        data-singleelementname={node.singleElementName}
-        data-jahr={node.jahr}
-        // need this id to scroll elements into view
-        id={node.id ?? undefined}
-        ref={ref}
-        className={styles.node}
-        style={nodeStyle}
-        onMouseEnter={onMouseEnterNode}
-      >
-        {useSymbolIcon && (
-          <div
-            className={styles.symbol}
-            onClick={onClickNodeSymbol}
-          >
-            {symbolIcon === 'openNodeIcon' && (
-              <MdExpandMore
-                viewBox="4 3 17 17"
-                height={23}
-                style={{
-                  color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
-                }}
-                className={styles.openNode}
-              />
-            )}
-            {symbolIcon === 'closedNodeWithChildrenIcon' && (
-              <MdChevronRight className={styles.closedNodeWithChildren} />
-            )}
-            {symbolIcon === 'loadingIcon' && (
-              <MdMoreHoriz
-                style={{
-                  color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
-                }}
-                className={styles.loading}
-              />
-            )}
-          </div>
-        )}
-        {useSymbolSpan && (
-          <div
-            className={styles.symbol}
-            onClick={onClickNode}
-          >
-            <MdRemove className={styles.leaf} />
-          </div>
-        )}
-        {node.labelLeftElements?.length &&
-          node.labelLeftElements.map((El, index) => <El key={index} />)}
-        <span
-          className={styles.label}
-          {...({ node } as Record<string, unknown>)}
-          onClick={onClickNode}
-          style={{
-            fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
-            color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
-          }}
+      {useSymbolIcon && (
+        <div
+          className={styles.symbol}
+          onClick={onClickNodeSymbol}
         >
-          {labelFilter ?
-            <Highlighter
-              searchWords={[labelFilter]}
-              textToHighlight={node.label}
+          {symbolIcon === 'openNodeIcon' && (
+            <MdExpandMore
+              viewBox="4 3 17 17"
+              height={23}
+              style={{
+                color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+              }}
+              className={styles.openNode}
             />
-          : node.label
-              .split('\n')
-              .map((part, index) => <div key={index}>{part}</div>)
-          }
-        </span>
-        {node.labelRightElements?.length &&
-          node.labelRightElements.map((El, index) => <El key={index} />)}
-      </div>
-    </ContextMenuTrigger>
+          )}
+          {symbolIcon === 'closedNodeWithChildrenIcon' && (
+            <MdChevronRight className={styles.closedNodeWithChildren} />
+          )}
+          {symbolIcon === 'loadingIcon' && (
+            <MdMoreHoriz
+              style={{
+                color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+              }}
+              className={styles.loading}
+            />
+          )}
+        </div>
+      )}
+      {useSymbolSpan && (
+        <div
+          className={styles.symbol}
+          onClick={onClickNode}
+        >
+          <MdRemove className={styles.leaf} />
+        </div>
+      )}
+      {node.labelLeftElements?.length &&
+        node.labelLeftElements.map((El, index) => <El key={index} />)}
+      <span
+        className={styles.label}
+        {...({ node } as Record<string, unknown>)}
+        onClick={onClickNode}
+        style={{
+          fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
+          color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+        }}
+      >
+        {labelFilter ?
+          <Highlighter
+            searchWords={[labelFilter]}
+            textToHighlight={node.label}
+          />
+        : node.label
+          .split('\n')
+          .map((part, index) => <div key={index}>{part}</div>)
+        }
+      </span>
+      {node.labelRightElements?.length &&
+        node.labelRightElements.map((El, index) => <El key={index} />)}
+    </div>
   )
 }
