@@ -16,6 +16,10 @@ direct deep-links like https://apflora.ch/Daten return a Vercel 404 — only cli
 
 ---
 
+"Passwort einrichten für {username}" form: lets make the vertical distance between "Aktuelles Passwort" and "Neues Passwort" larger
+
+---
+
 2026.10.14: new server. 172.105.87.183 > 139.162.172.88
 
 ---
