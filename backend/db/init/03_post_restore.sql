@@ -126,25 +126,23 @@ GRANT ALL ON apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl T
 -- lost roles: \du
 -- check privileges on table: \z apflora.user
 -- secure pass and role in apflora.user:
+-- This section mirrors the production grants (see
+-- sql/apflora/migrations/03_grant_require_new_password_permissions.sql).
+-- Every column must be granted to every app role: postgraphile passes
+-- whole rows (e.g. to the user_label computed function), which
+-- requires SELECT on ALL columns - one missing column logs every
+-- non-manager out right after login (#825).
+-- anon additionally gets neither email nor pass: the pre-auth login
+-- flow (checkUserPassword) needs id, name and
+-- require_new_password_on_next_login only.
 REVOKE ALL ON apflora.user FROM public, apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
--- pass is deliberately NOT granted to anon: it holds bcrypt hashes.
--- anon additionally gets neither email nor role: the pre-auth login
--- flow needs id and name only.
--- (require_new_password_on_next_login is granted by migration 05
--- after migration 02 added the column - a restored backup does not
--- have it yet)
--- The REVOKE is essential: the restored backup carries the OLD
--- grants incl. pass in its ACLs.
--- Authenticated roles DO get pass: postgraphile passes whole rows
--- (e.g. to the user_label computed function), which requires column
--- privileges on all of them.
 REVOKE ALL ON apflora.user FROM anon;
-GRANT SELECT (id, name) ON apflora.user TO anon;
+GRANT SELECT (id, name, require_new_password_on_next_login) ON apflora.user TO anon;
 
-GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
+GRANT SELECT (id, name, email, pass, ROLE, adresse_id, require_new_password_on_next_login), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
-GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, ROLE, pass, adresse_id) ON apflora.user TO apflora_manager;
+GRANT SELECT (id, name, email, pass, ROLE, adresse_id, require_new_password_on_next_login), UPDATE (id, name, email, ROLE, pass, adresse_id, require_new_password_on_next_login) ON apflora.user TO apflora_manager;
 
 -- even pure readers need to write to usermessage:
 GRANT ALL ON apflora.usermessage TO apflora_reader, apflora_ap_reader, apflora_freiwillig;
