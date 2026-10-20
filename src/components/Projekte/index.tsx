@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
 import { SplitPane, Pane } from 'react-split-pane'
@@ -12,10 +11,6 @@ import { ProjektContainer } from './ProjektContainer.tsx'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { inIframe } from '../../modules/inIframe.ts'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
-
-const ApFilterController = lazy(async () => ({
-  default: (await import('./ApFilterController.tsx')).ApFilterController,
-}))
 
 import styles from './index.module.css'
 
@@ -83,9 +78,6 @@ export const Component = () => {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <ApFilterController />
-      </Suspense>
       <div className={styles.container}>
         {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />

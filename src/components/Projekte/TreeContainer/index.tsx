@@ -10,6 +10,9 @@ const LabelFilter = lazy(async () => ({
 const ApFilter = lazy(async () => ({
   default: (await import('./ApFilter/index.tsx')).ApFilter,
 }))
+const ApFilterWarning = lazy(async () => ({
+  default: (await import('./ApFilterWarning.tsx')).ApFilterWarning,
+}))
 const TreeComponent = lazy(async () => ({
   default: (await import('./Tree/index.tsx')).TreeComponent,
 }))
@@ -58,6 +61,11 @@ export const TreeContainer = () => {
             </Suspense>
           )}
         </div>
+        {!!projId && (
+          <Suspense fallback={null}>
+            <ApFilterWarning />
+          </Suspense>
+        )}
         <Suspense fallback={<Spinner />}>
           <TreeComponent />
         </Suspense>

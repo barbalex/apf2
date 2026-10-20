@@ -414,6 +414,16 @@ export const treeApGqlFilterForTreeAtom = atom((get) => {
     (el) => Object.keys(el).length > 0,
   )
 
+  // if a url is opened, the ap should always show in the tree
+  // even if it was filtered away
+  // (only when a filter exists: with no filter everything shows anyway)
+  const apIdInActiveNodeArray = get(treeApIdInActiveNodeArrayAtom)
+  if (apIdInActiveNodeArray && filterArrayWithoutEmptyObjects.length > 0) {
+    filterArrayWithoutEmptyObjects.push({
+      id: { equalTo: apIdInActiveNodeArray },
+    })
+  }
+
   const apGqlFilter = { or: filterArrayWithoutEmptyObjects }
 
   return apGqlFilter
