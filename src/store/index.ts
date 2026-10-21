@@ -16,7 +16,7 @@ import type {
   TpopmassnFilter,
   UserFilter,
 } from '../gql/graphql.ts'
-import isUuid from 'is-uuid'
+import { validate as isUuid } from 'uuid'
 import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -47,7 +47,7 @@ const createUnsubscribedStorage = <T>() => {
 }
 
 const isNonNilUuid = (value: unknown): value is string =>
-  typeof value === 'string' && isUuid.anyNonNil(value)
+  typeof value === 'string' && isUuid(value)
 
 // localStorage-backed atoms are typed via their initial value, but jotai's
 // untyped JSON storage makes getters resolve to `T | Promise<T>`.

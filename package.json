@@ -56,7 +56,6 @@
     "framer-motion": "14.0.0",
     "get-urls": "12.1.0",
     "graphql": "17.0.2",
-    "is-uuid": "1.0.2",
     "jotai": "3.0.1",
     "js-file-download": "0.4.12",
     "jwt-decode": "4.0.0",
@@ -96,7 +95,8 @@
     "rxjs": "7.8.2",
     "screenfull": "6.0.2",
     "typography": "0.16.24",
-    "use-debounce": "10.1.1"
+    "use-debounce": "10.1.1",
+    "uuid": "14.0.3"
   },
   "devDependencies": {
     "@babel/preset-react": "8.0.1",
@@ -109,7 +109,6 @@
     "@rolldown/plugin-babel": "0.2.4",
     "@types/blueimp-md5": "2.18.2",
     "@types/file-saver": "2.0.7",
-    "@types/is-uuid": "1.0.2",
     "@types/leaflet": "1.9.22",
     "@types/leaflet-draw": "1.0.13",
     "@types/luxon": "3.7.6",
