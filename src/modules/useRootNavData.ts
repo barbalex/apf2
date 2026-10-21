@@ -54,7 +54,7 @@ export const useRootNavData = () => {
     // leave totalCount undefined as the menus are folders
     menus: [
       {
-        id: 'Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13',
+        id: 'Projekte/017d3474-6b07-7c56-86ef-84b0af1de903',
         label: `Projekte (${projectsCount})`,
       },
       {

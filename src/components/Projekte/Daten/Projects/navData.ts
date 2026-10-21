@@ -5,7 +5,7 @@ export const navData = {
   totalCount: 1,
   menus: [
     {
-      id: 'e57f56f4-4376-11e8-ab21-4314b6749d13',
+      id: '017d3474-6b07-7c56-86ef-84b0af1de903',
       label: `AP Flora Kt. Zürich`,
     },
   ],
