@@ -16,6 +16,9 @@ with kontrolle_mit_groesster_anzahl AS (
     zaehl0.anzahl DESC
 )
 SELECT
+  -- TODO: since the uuidv7-id-migration (2026-10): info flora knows kontrollen
+  -- that existed before the migration by their previous id.
+  -- Use coalesce(kontr.old_id, kontr.id) instead of kontr.id
   kontr.id AS id_projektintern,
   tax.taxid AS taxonomie_id,
   tax.taxonomie_name AS taxonomie,

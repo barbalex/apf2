@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Collapse from '@mui/material/Collapse'
 import { MdFilterAlt } from 'react-icons/md'
-import isUuid from 'is-uuid'
+import { validate as isUuid } from 'uuid'
 import { useResizeDetector } from 'react-resize-detector'
 import { FilterInput } from './FilterInput.tsx'
 import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.tsx'
@@ -27,7 +27,7 @@ export const Title = ({
   setTitleWidth: React.Dispatch<React.SetStateAction<number>>
   ref?: RefObject<HTMLInputElement | null> | undefined
 }) => {
-  const isUuidList = navData.menus.some((menu) => isUuid.anyNonNil(String(menu.id)))
+  const isUuidList = navData.menus.some((menu) => isUuid(String(menu.id)))
 
   // if is Aps, need to add ApFilter
   const isAps = navData.id === 'Arten'

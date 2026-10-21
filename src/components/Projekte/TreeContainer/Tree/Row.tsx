@@ -159,6 +159,8 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
     <div
       // need this id to scroll elements into view
       id={node.id ?? undefined}
+      // need this data-url for the IntoViewScroller to find the node
+      data-url={JSON.stringify(node.url)}
       ref={ref}
       className={styles.node}
       style={nodeStyle}

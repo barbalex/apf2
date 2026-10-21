@@ -1,5 +1,8 @@
 .container {
-  height: calc(100% - 53px - 8px);
+  /* fills the remaining height of the flex-column TreeContainer,
+     next to the label filter row and the optional ap-filter warning */
+  flex: 1;
+  min-height: 0;
   width: 100%;
   overflow: auto;
   scrollbar-width: thin;

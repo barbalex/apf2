@@ -16,7 +16,7 @@ import type {
   TpopmassnFilter,
   UserFilter,
 } from '../gql/graphql.ts'
-import isUuid from 'is-uuid'
+import { validate as isUuid } from 'uuid'
 import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -47,7 +47,7 @@ const createUnsubscribedStorage = <T>() => {
 }
 
 const isNonNilUuid = (value: unknown): value is string =>
-  typeof value === 'string' && isUuid.anyNonNil(value)
+  typeof value === 'string' && isUuid(value)
 
 // localStorage-backed atoms are typed via their initial value, but jotai's
 // untyped JSON storage makes getters resolve to `T | Promise<T>`.
@@ -413,6 +413,16 @@ export const treeApGqlFilterForTreeAtom = atom((get) => {
   const filterArrayWithoutEmptyObjects = filterArray.filter(
     (el) => Object.keys(el).length > 0,
   )
+
+  // if a url is opened, the ap should always show in the tree
+  // even if it was filtered away
+  // (only when a filter exists: with no filter everything shows anyway)
+  const apIdInActiveNodeArray = get(treeApIdInActiveNodeArrayAtom)
+  if (apIdInActiveNodeArray && filterArrayWithoutEmptyObjects.length > 0) {
+    filterArrayWithoutEmptyObjects.push({
+      id: { equalTo: apIdInActiveNodeArray },
+    })
+  }
 
   const apGqlFilter = { or: filterArrayWithoutEmptyObjects }
 
