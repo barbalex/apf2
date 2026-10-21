@@ -10,15 +10,11 @@ What's deliberately still open, no urgency today:
 
 ---
 
-2026.10.14: new server. 172.105.87.183 > 139.162.172.88
-
 ---
 
 ---
 
 ---
-
-> 017d3474-6b07-7c56-86ef-84b0af1de903
 
 ---
 
