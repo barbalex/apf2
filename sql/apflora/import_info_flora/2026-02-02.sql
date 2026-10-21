@@ -198,6 +198,10 @@ FROM
 -- 2026.02.02: 60'551
 --
 -- 5 mark apflora kontrollen with is_apflora_ek = TRUE
+-- TODO: since the uuidv7-id-migration (2026-10): kontrollen that existed before
+-- the migration are identified by their previous id. Compare with old_id if it
+-- exists, else with id:
+-- WHERE external_id IN (SELECT coalesce(old_id, id) FROM apflora.tpopkontr)
 UPDATE
   apflora.infoflora20260202beob
 SET

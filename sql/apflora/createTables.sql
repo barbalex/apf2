@@ -1,5 +1,14 @@
 
 
+-- Note on old_id columns: migration 0061 (2026-10) rewrote existing ids to
+-- uuidv7 and added an old_id column with the previous id to every table with
+-- a local uuid id. The old_id columns are temporary and can be dropped about
+-- a year after the migration (~2027-10), once it is clear they are no longer
+-- needed - EXCEPT apflora.tpopkontr.old_id, which must NEVER be removed:
+-- info flora correlates kontrollen by it (see export_info_flora /
+-- import_info_flora).
+
+
 -- tpopkontrzaehl_einheit_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 
@@ -2524,6 +2533,10 @@ DROP TABLE IF EXISTS apflora.tpopkontr;
 
 CREATE TABLE apflora.tpopkontr(
   id uuid PRIMARY KEY DEFAULT uuidv7(),
+  -- the id this kontrolle had before the uuidv7 migration (2026-10)
+  -- NEVER REMOVE: info flora correlates kontrollen by this id
+  -- (see export_info_flora / import_info_flora)
+  old_id uuid DEFAULT NULL,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte(text) ON DELETE SET NULL ON UPDATE CASCADE,
   datum date DEFAULT NULL,
