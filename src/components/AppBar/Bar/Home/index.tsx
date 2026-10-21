@@ -13,7 +13,7 @@ export const HomeMenus = () => {
       <Button
         variant="text"
         component={PrefetchLink}
-        to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
+        to={`/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903${search}`}
         className={styles.button}
       >
         Daten

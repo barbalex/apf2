@@ -1,9 +1,7 @@
 export const constants = {
   testAps: [
-    '6c52d174-4f62-11e7-aebe-67a303eb0640',
-    '862333db-31cf-444c-b8ea-021c640c7a44',
-    '0aba83f3-d515-4806-bc14-838f8f6d0fe6',
-    '96efab5c-8bfc-11e7-a848-2b4184d2c8eb',
+    '017d3472-d75d-735d-8197-b6db29e70db3',
+    '017d3472-d75d-712f-8006-a0d491e144c5',
   ],
   mobileViewMaxWidth: 999,
 }

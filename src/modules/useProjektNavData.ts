@@ -14,7 +14,7 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId =
-    props?.projId ?? params?.projId ?? 'e57f56f4-4376-11e8-ab21-4314b6749d13'
+    props?.projId ?? params?.projId ?? '017d3474-6b07-7c56-86ef-84b0af1de903'
 
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
   const apberuebersichtGqlFilterForTree = useAtomValue(
