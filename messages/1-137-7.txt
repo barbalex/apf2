@@ -1,1 +1,1 @@
-Ab Version 1.137.7: apflora verwendet ab sofort UUIDs Version 7 (neue Fähigkeit der kürzlich aktualisierten Datenbank). Sollte Vorgänge beschleunigen.
+Ab Version 1.137.7: apflora verwendet ab sofort UUIDs Version 7 (neue Fähigkeit der kürzlich aktualisierten Datenbank). Sollte Vorgänge beschleunigen. Sollte etwas beim ersten Start seit diesem Update nicht funktionieren: 1. Cache für apflora leeren 2. bei https://apflora.ch neu starten (nicht bei einer früheren URL, denn diese haben soeben geändert)
