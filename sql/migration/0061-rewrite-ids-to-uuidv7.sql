@@ -14,6 +14,9 @@
 -- - ae_taxonomies and beob keep their ids (externally owned:
 --   arteigenschaften.ch / Info Flora-Evab imports). Their FK columns
 --   pointing at rewritten tables are updated automatically (ON UPDATE CASCADE).
+--   BEWARE: contrary to the intention, beob WAS included in the generated
+--   table list below (its inert uuid default made it slip in) and got
+--   rewritten. Corrected the same day in 0062: ids restored from old_id.
 -- - *_history snapshot ids are synced to the new ids so the next historize
 --   run does not create duplicate (id, year) rows. History rows of
 --   since-deleted entities keep their old ids (consistent among themselves).
