@@ -29,7 +29,7 @@ const baseLayers: BaseLayerItem[] = [
   },
   // https://wms.zh.ch/upwms?SERVICE=WMS&Request=GetCapabilities
   { label: 'ZH Übersichtsplan', value: 'ZhUep', cors: true },
-  // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
+  // https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
   {
     label: 'ZH Orthofoto aktuell (2024)',
     value: 'ZhOrthoAktuellRgb',

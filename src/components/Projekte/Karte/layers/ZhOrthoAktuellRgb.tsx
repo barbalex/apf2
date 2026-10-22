@@ -1,7 +1,7 @@
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
-// https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
-// was: https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
+// https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
+// before 2026.10.22 (OGD*ZH services were renamed to *ZHWMS): https://wms.zh.ch/OGDOrthoZH
 // 2026.02.12, Fabio:
 // Orthofoto ZH Sommer 2024/25 aus QGIS mit folgendem WMS-Link:
 // URL: https://wms.zh.ch/OrthoZHWMS
@@ -22,7 +22,7 @@ export const ZhOrthoAktuellRgb = () => (
   >
     <WMSTileLayer
       url="//wms.zh.ch/OrthoZHWMS"
-      // layers="OGDOrthoZH"
+      // layers="OrthoZHWMS"
       // above layer adds tiling which is not desired here
       // WARNING: when updating, also update layer name here:
       // ../LayersControl/BaseLayers/index.tsx
