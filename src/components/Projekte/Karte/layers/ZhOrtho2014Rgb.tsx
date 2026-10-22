@@ -1,6 +1,6 @@
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
-// https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
+// https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
 
 export const ZhOrtho2014Rgb = () => (
   <Pane

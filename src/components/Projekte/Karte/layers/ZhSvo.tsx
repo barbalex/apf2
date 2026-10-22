@@ -1,13 +1,14 @@
 import { WMSTileLayer } from 'react-leaflet'
 
-// https://wms.zh.ch/FnsSchutzanordnungenZH?SERVICE=WMS&Request=GetCapabilities
+// https://wms.zh.ch/FnsSchutzanordnungenZHWMS?SERVICE=WMS&Request=GetCapabilities
 //
 // before 2026.06.05:
 // wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
 // layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
+// before 2026.10.22 (OGD*ZH services were renamed to *ZHWMS): //wms.zh.ch/FnsSchutzanordnungenZH
 export const ZhSvo = () => (
   <WMSTileLayer
-    url="//wms.zh.ch/FnsSchutzanordnungenZH"
+    url="//wms.zh.ch/FnsSchutzanordnungenZHWMS"
     layers="objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,schutzzonen-labels" // altrechtliche-schutzverordnungen-a,altrechtliche-schutzverordnungen-c,
     opacity={0.5}
     transparent={true}

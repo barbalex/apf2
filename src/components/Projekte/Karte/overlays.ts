@@ -29,7 +29,7 @@ export const overlays = [
     label: 'Schutzanordnungen',
     value: 'ZhSvo',
     name: 'ZhSvo',
-    wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZH',
+    wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZHWMS',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
@@ -78,20 +78,20 @@ export const overlays = [
     label: 'Lebensraum- und Vegetationskartierungen',
     value: 'ZhLrVegKartierungen',
     name: 'ZhLrVegKartierungen',
-    wmsUrl: '//wms.zh.ch/FnsLRKZH',
+    wmsUrl: '//wms.zh.ch/FnsLRKZHWMS',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'FnsLRKZH,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
+      'FnsLRKZHWMS,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
     wmsQueryLayers:
-      'FnsLRKZH,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
+      'FnsLRKZHWMS,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
     label: 'Wälder: lichte',
     value: 'ZhLichteWaelder',
     name: 'ZhLichteWaelder',
-    wmsUrl: '//wms.zh.ch/FnsLWZH',
+    wmsUrl: '//wms.zh.ch/FnsLWZHWMS',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers: 'objekte-lichte-waelder-kanton-zuerich',
@@ -103,7 +103,7 @@ export const overlays = [
     value: 'ZhWaelderVegetation',
     // get info works, returns data
     name: 'ZhWaelderVegetation',
-    wmsUrl: '//wms.zh.ch/FnsLWZH',
+    wmsUrl: '//wms.zh.ch/FnsLWZHWMS',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers: 'waldgesellschaften',

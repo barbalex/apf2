@@ -18,7 +18,7 @@ scroll into view issue: does it exist in vermehrung too?
 
 ---
 
-I got this info:
+I got this info in an email roundletter:
 
 "Umstellung der OGD*ZH WMS-Dienste
 
