@@ -1,0 +1,1 @@
+Ab Version 1.137.10: GIS-ZH hat diverse Layer umbenannt: "Die OGD*ZH WMS-Dienste wurden auf eine neue und einheitliche Namenskonvention umbenannt: OGD*ZH heisst neu *ZHWMS". In apflora nachvollzogen, damit diese Layer weiterhin funktionieren.
