@@ -14,25 +14,7 @@ What's deliberately still open, no urgency today:
 
 ---
 
-scroll into view issue: does it exist in vermehrung too?
-
 ---
-
-I got this info in an email roundletter:
-
-"Umstellung der OGD*ZH WMS-Dienste
-
-Die OGD*ZH WMS-Dienste wurden auf eine neue und einheitliche Namenskonvention umbenannt: OGD*ZH heisst neu *ZHWMS.
-
-Beispiel Amtliche Vermessung:
-
-Alt: https://wms.zh.ch/OGDAVswZH?SERVICE=WMS&REQUEST=GetCapabilities
-
-Neu: https://wms.zh.ch/AVswZHWMS?SERVICE=WMS&REQUEST=GetCapabilities
-
-Falls Sie die betroffenen Dienste in Ihren Anwendungen integriert haben, prüfen Sie die URLs und passen Sie sie auf die neue Namenskonvention (*ZHWMS) an, so dass die Dienste einwandfrei funktionieren."
-
-Lets rename the affected layers. Then list them to test.
 
 ---
 
