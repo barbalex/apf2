@@ -25,7 +25,7 @@ export const ApFilterWarning = () => {
 
   // same document as the former ApFilterController
   // (kept identical so codegen knows it)
-  const { data } = useQuery<ApFilterWarningQueryResult>(graphql(`
+  const { data, loading } = useQuery<ApFilterWarningQueryResult>(graphql(`
     query apFilterControllerQuery($id: UUID!) {
       apById(id: $id) {
         id
@@ -37,8 +37,12 @@ export const ApFilterWarning = () => {
     skip: !apFilter || !apId,
   })
 
-  const bearbeitung = data?.apById?.bearbeitung ?? null
-  const isAp = bearbeitung !== null && bearbeitung > 0 && bearbeitung < 4
+  // only warn once the ap is loaded and known to be no ap.
+  // Otherwise the warning would flicker while the query loads.
+  // bearbeitung null means "no ap" (same as the former ApFilterController)
+  const apById = data?.apById ?? null
+  const bearbeitung = apById?.bearbeitung ?? 0
+  const isNoAp = !loading && !!apById && !(bearbeitung > 0 && bearbeitung < 4)
 
   // dismissal only counts for the ap it was dismissed for:
   // opening another ap is a new situation
@@ -47,7 +51,7 @@ export const ApFilterWarning = () => {
   >(undefined)
   const dismissed = dismissedForApId === apId
 
-  if (!apFilter || !apId || isAp || dismissed) return null
+  if (!apFilter || !apId || !isNoAp || dismissed) return null
 
   return (
     <div className={styles.container}>
