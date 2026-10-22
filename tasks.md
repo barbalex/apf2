@@ -32,7 +32,7 @@ Neu: https://wms.zh.ch/AVswZHWMS?SERVICE=WMS&REQUEST=GetCapabilities
 
 Falls Sie die betroffenen Dienste in Ihren Anwendungen integriert haben, prüfen Sie die URLs und passen Sie sie auf die neue Namenskonvention (*ZHWMS) an, so dass die Dienste einwandfrei funktionieren."
 
-Lets rename the affected layers.
+Lets rename the affected layers. Then list them to test.
 
 ---
 
