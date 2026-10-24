@@ -3,7 +3,7 @@ import desktopStyles from '../DesktopDocs.module.css'
 export const Component = () => (
   <>
     <h1>Historisierung</h1>
-    <p className={desktopStyles.dokuDate}>10.12.2020</p>
+    <p className={desktopStyles.dokuDate}>21.10.2026</p>
     <h2>Wunsch</h2>
     <p>Stand: Ende 2019</p>
     <p>Die Daten in apflora werden je länger je intensiver ausgewertet. </p>
@@ -230,5 +230,11 @@ export const Component = () => (
         </tr>
       </tbody>
     </table>
+    <h2>Manuelle Ergänzungen</h2>
+    <p>
+      2026 wurde die Möglichkeit eingeführt, manuelle Ergänzungen in den
+      Historien vorzunehmen. Als Grundregel gilt: Es braucht eine Historie,
+      damit Daten in Diagrammen dargestellt werden können.
+    </p>
   </>
 )
