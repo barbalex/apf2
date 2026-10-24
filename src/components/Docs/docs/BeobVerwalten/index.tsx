@@ -4,7 +4,7 @@ import beobTable from './beobTable.webp'
 export const Component = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
-    <p className={desktopStyles.dokuDate}>16.04.2023</p>
+    <p className={desktopStyles.dokuDate}>24.10.2026</p>
     <h2>1. Datenstruktur</h2>
     <p>
       Beobachtungen werden in der Tabelle{' '}
