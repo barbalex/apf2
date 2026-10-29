@@ -8,7 +8,6 @@ import {
   treeApGqlFilterForTreeAtom,
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useProjektNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -88,7 +87,6 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
     hasChildren: true,
     fetcherName: 'useProjektNavData',
     fetcherParams: { projId },
-    component: NodeWithList,
     menus: [
       {
         id: 'Projekt',
@@ -107,7 +105,6 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
         hasChildren: !!artsCount,
         fetcherName: 'useApsNavData',
         fetcherParams: { projId },
-        component: NodeWithList,
       },
       {
         id: 'AP-Berichte',
@@ -121,7 +118,6 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
         hasChildren: !!apberuebersichtsCount,
         fetcherName: 'useApberuebersichtsNavData',
         fetcherParams: { projId },
-        component: NodeWithList,
       },
     ],
   }

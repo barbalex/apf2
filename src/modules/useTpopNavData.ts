@@ -27,8 +27,6 @@ import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/
 import { tpopIcons } from './useTpopsNavData.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 const getLabelRightElements = ({
   movingId,
@@ -293,7 +291,6 @@ const { data } = useSuspenseQuery({
     labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
-    component: NodeWithList,
     menus: [
       {
         id: 'Teil-Population',
@@ -326,7 +323,6 @@ const { data } = useSuspenseQuery({
         fetcherName: 'useTpopmassnsNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredMassnCount,
-        component: NodeWithList,
       },
       {
         id: 'Massnahmen-Berichte',
@@ -350,7 +346,6 @@ const { data } = useSuspenseQuery({
         fetcherName: 'useTpopmassnbersNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredTpopmassnbersCount,
-        component: NodeWithList,
       },
       {
         id: 'Feld-Kontrollen',
@@ -420,7 +415,6 @@ const { data } = useSuspenseQuery({
         fetcherName: 'useTpopbersNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredTpopbersCount,
-        component: NodeWithList,
       },
       {
         id: 'Beobachtungen',
@@ -446,7 +440,6 @@ const { data } = useSuspenseQuery({
         hasChildren: !!filteredBeobZugeordnetCount,
         labelLeftElements:
           showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
-        component: NodeWithList,
       },
       {
         id: 'EK',
@@ -468,7 +461,6 @@ const { data } = useSuspenseQuery({
           'EK',
         ],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Dateien',
@@ -490,7 +482,6 @@ const { data } = useSuspenseQuery({
           'Dateien',
         ],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Historien',
@@ -512,7 +503,6 @@ const { data } = useSuspenseQuery({
           'Historien',
         ],
         hasChildren: false,
-        component: Node,
       },
     ],
   }

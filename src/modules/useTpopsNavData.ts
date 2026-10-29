@@ -39,7 +39,6 @@ import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const tpopIcons = {
   normal: {
@@ -201,7 +200,6 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
     fetcherParams: { projId, apId, popId },
     hasChildren: !!count,
     labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
-    component: NodeWithList,
     menus: data.popById?.tpopsByPopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p?.id

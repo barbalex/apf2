@@ -7,7 +7,6 @@ import { useAtomValue } from 'jotai'
 import {
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useApberuebersichtsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -69,7 +68,6 @@ export const useApberuebersichtsNavData = (props?: { projId?: string | undefined
     hasChildren: !!count,
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
-    component: NodeWithList,
     menus: data.filtered?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

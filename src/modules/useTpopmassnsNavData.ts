@@ -13,7 +13,6 @@ import {
 } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -123,7 +122,6 @@ export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId
     fetcherName: 'useTpopmassnsNavData',
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
-    component: NodeWithList,
     menus: data.tpopById?.tpopmassnsByTpopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p?.id
