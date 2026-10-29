@@ -4,7 +4,7 @@ import beobTable from './beobTable.webp'
 export const Component = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
-    <p className={desktopStyles.dokuDate}>16.04.2023</p>
+    <p className={desktopStyles.dokuDate}>24.10.2026</p>
     <h2>1. Datenstruktur</h2>
     <p>
       Beobachtungen werden in der Tabelle{' '}
@@ -151,15 +151,19 @@ export const Component = () => (
       </li>
     </ul>
     <h2>2. Beobachtungen importieren</h2>
-    <p>Folgende Import wurden bisher durchgeführt:</p>
+    <p>Folgende Importe wurden bisher durchgeführt:</p>
     <ul>
       <li>EvAB 2016: 228'791</li>
       <li>Info Flora 2017: 192'606</li>
       <li>FloZ 2017: 30'935</li>
       <li>Info Flora 2021.05: 17'638</li>
       <li>Info Flora 2022.03: 15'012</li>
+      <li>Info Flora 2025.01: 3'854</li>
+      <li>Info Flora 2026.02.02: 3'802</li>
+      <li>Info Flora 2023.12: 3'745</li>
       <li>Info Flora 2022.12 gesamt: 3'029</li>
       <li>Info Flora 2022.01: 459</li>
+      <li>Info Flora 2025.04.07: 378</li>
       <li>Info Flora 2023.02 Utricularia: 215</li>
       <li>Info Flora 2022.08: 208</li>
       <li>Info Flora 2022.04: 87</li>

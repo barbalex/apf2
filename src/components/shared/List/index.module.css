@@ -3,24 +3,30 @@
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 45px;
 }
 
 .list {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   overflow: auto;
   scrollbar-width: thin;
 }
 
+/* spacer element giving the virtualized rows their total height */
+.rows {
+  position: relative;
+  width: 100%;
+}
+
 .row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
   padding: 5px 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-grow: 0;
   min-height: 35px;
   cursor: pointer;
   user-select: none;
@@ -28,7 +34,9 @@
     background-color: rgba(103, 216, 101, 0.07);
   }
   border-top: rgba(46, 125, 50, 0.5) solid 1px;
-  &:last-child {
-    border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
-  }
+}
+
+/* virtualization means the last rendered row is not always the last item */
+.rowLast {
+  border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
 }

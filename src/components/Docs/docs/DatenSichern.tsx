@@ -4,11 +4,11 @@ import desktopStyles from '../DesktopDocs.module.css'
 export const Component = () => (
   <>
     <h1>Daten sichern 🔒</h1>
-    <p className={desktopStyles.dokuDate}>18.04.2019</p>
+    <p className={desktopStyles.dokuDate}>24.10.2026</p>
     <p>
       Täglich nach Mitternacht wird von der Datenbank ein SQL-Dumpfile erstellt
-      und in eine Dropbox übermittelt. Diese wird mehrfach auf Festplatten
-      gesichert.
+      und in eine Nextcloud übermittelt. Diese wird auf Festplatten und
+      verschlüsselt in einer weiteren Cloud gesichert.
     </p>
     <p>Alle paar Tage wird der gesammte virtuelle Server gesichert.</p>
     <p>

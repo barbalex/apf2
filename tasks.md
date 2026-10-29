@@ -1,41 +1,25 @@
-What I recommend but deliberately didn't do (your call, each is a separate project):
+---
 
-- add login rate-limiting before phase 3 (cost-12 bcrypt now slows online guessing too);
+✅ done 29.10.2026 — lists built with @tanstack/react-virtual 3.14.24
 
-What's deliberately still open, no urgency today:
-
-- rotate the JWT secret and the postgres password in a few days (both were pasted into this chat, and dev/prod share them — JWT rotation just logs everyone out once)
-- phase 2 on the password-strength branch (the set_initial_password SECURITY DEFINER flow replacing the anonymous updateUserById)
-- phase 3 whenever you're ready (run 04_set_allrequire.sql + restart to force the password reset wave, after informing users)
+- `src/components/shared/List/index.tsx` now uses `useVirtualizer` (own scroll container, 35px estimate, `measureElement` for wrapping labels, `getItemKey` = row id). This one component powers all ~35 list pages under `Projekte/Daten/*` (incl. Beobachtungen lists with thousands of rows) plus `Docs/MobileList`.
+- `index.module.css`: rows are absolutely positioned inside a total-size spacer; `content-visibility` perf hack removed (superseded); last-row border via `.rowLast` class since `:last-child` no longer works with windowing.
+- `'use no memo'` added to the file: TanStack Virtual is on React Compiler's incompatible-library list (eslint warns `react-hooks/incompatible-library`).
+- verified in browser on Cypripedium calceolus "Beobachtungen nicht beurteilt" (2675 rows): ~27 rows in DOM, scroll window shifts correctly, row click navigates, rows at exact 35px pitch. typecheck + lint clean.
+- note: this List is the mobile view of list routes; on desktop, list routes show the parent form and rows render in the tree.
 
 ---
 
----
+tree building: optimizable?
 
 ---
 
-scroll into view issue: does it exist in vermehrung too?
+More virtual list candidates:
+
+- Tree
+- EkPlan's table
+- Mitteilungen lists
 
 ---
-
-I got this info in an email roundletter:
-
-"Umstellung der OGD*ZH WMS-Dienste
-
-Die OGD*ZH WMS-Dienste wurden auf eine neue und einheitliche Namenskonvention umbenannt: OGD*ZH heisst neu *ZHWMS.
-
-Beispiel Amtliche Vermessung:
-
-Alt: https://wms.zh.ch/OGDAVswZH?SERVICE=WMS&REQUEST=GetCapabilities
-
-Neu: https://wms.zh.ch/AVswZHWMS?SERVICE=WMS&REQUEST=GetCapabilities
-
-Falls Sie die betroffenen Dienste in Ihren Anwendungen integriert haben, prüfen Sie die URLs und passen Sie sie auf die neue Namenskonvention (*ZHWMS) an, so dass die Dienste einwandfrei funktionieren."
-
-Lets rename the affected layers. Then list them to test.
-
----
-
-rotate uploadcare secret in a few days (from 9.10.2026)
 
 ---
