@@ -14,6 +14,12 @@ tree building: optimizable?
 
 ---
 
+More virtual list candidates:
+
+- Tree
+- EkPlan's table
+- Mitteilungen lists
+
 ---
 
 ---
