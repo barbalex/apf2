@@ -18,8 +18,6 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 const getLabelRightElements = ({
   movingId,
@@ -171,7 +169,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
     labelLeftElements: showPopIcon ? [PopIcon] : undefined,
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
-    component: NodeWithList,
     menus: [
       {
         id: 'Population',
@@ -201,7 +198,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
         fetcherName: 'useTpopsNavData',
         fetcherParams: { projId, apId, popId },
         hasChildren: !!filteredTpopsCount,
-        component: NodeWithList,
       },
       {
         id: 'Kontroll-Berichte',
@@ -223,7 +219,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
         fetcherName: 'usePopbersNavData',
         fetcherParams: { projId, apId, popId },
         hasChildren: !!filteredPopbersCount,
-        component: NodeWithList,
       },
       {
         id: 'Massnahmen-Berichte',
@@ -245,7 +240,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
         fetcherName: 'usePopmassnbersNavData',
         fetcherParams: { projId, apId, popId },
         hasChildren: !!filteredPopmassnbersCount,
-        component: NodeWithList,
       },
       {
         id: 'Auswertung',
@@ -265,7 +259,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
           'Auswertung',
         ],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Dateien',
@@ -285,7 +278,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
           'Dateien',
         ],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Historien',
@@ -305,7 +297,6 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
           'Historien',
         ],
         hasChildren: false,
-        component: Node,
       },
     ],
   }

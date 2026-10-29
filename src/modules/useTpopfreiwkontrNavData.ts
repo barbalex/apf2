@@ -12,8 +12,6 @@ import {
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 const getLabelRightElements = ({
   copyingId,
@@ -184,7 +182,6 @@ export const useTpopfreiwkontrNavData = (props?: { projId?: string | undefined; 
         ],
         fetcherName: 'useTpopfreiwkontrzaehlsNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-        component: NodeWithList,
         hasChildren: !!filteredTpopkontrzaehlCount,
         alwaysOpen: true,
       },
@@ -209,7 +206,6 @@ export const useTpopfreiwkontrNavData = (props?: { projId?: string | undefined; 
           tpopkontrId,
           'Dateien',
         ],
-        component: Node,
         hasChildren: false,
       },
     ],

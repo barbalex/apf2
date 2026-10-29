@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -67,7 +66,6 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
     treeParentTableId: apId,
     treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
     hasChildren: !!count,
-    component: NodeWithList,
     menus: data.apById?.erfkritsByApId.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

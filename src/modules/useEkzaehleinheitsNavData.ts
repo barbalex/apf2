@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -68,7 +67,6 @@ export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined;
     treeParentTableId: apId,
     treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
     hasChildren: !!count,
-    component: NodeWithList,
     menus: rows.map((p) => ({
       id: p?.id,
       label: p?.label,

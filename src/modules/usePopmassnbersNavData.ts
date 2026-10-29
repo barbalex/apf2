@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getPopmassnberGqlFilterForTree } from './getPopmassnberGqlFilterForTree.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const usePopmassnbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -77,7 +76,6 @@ export const usePopmassnbersNavData = (props?: { projId?: string | undefined; ap
       'Massnahmen-Berichte',
     ],
     hasChildren: count > 0,
-    component: NodeWithList,
     menus: data.popById?.popmassnbersByPopId.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

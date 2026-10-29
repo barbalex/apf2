@@ -3,7 +3,6 @@ import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useZielNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined; zielId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -46,7 +45,6 @@ export const useZielNavData = (props?: { projId?: string | undefined; apId?: str
     fetcherName: 'useZielNavData',
     fetcherParams: { projId, apId, jahr, zielId },
     hasChildren: false,
-    component: NodeWithList,
     menus: [
       {
         id: 'Ziel',

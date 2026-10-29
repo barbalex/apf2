@@ -5,7 +5,6 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { gql as dynamicGql } from '../apolloGql.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import {
   treeApGqlFilterForTreeAtom,
   treeApIdInActiveNodeArrayAtom,
@@ -95,7 +94,6 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
       hasChildren: true,
       fetcherName: 'useApNavData',
       fetcherParams: { projId, apId: p?.id },
-      component: NodeWithList,
     }))
   // add the active ap if it is not in the list due to filters
   if (activeAp?.id && !apMenus.some((m) => m.id === activeAp.id)) {
@@ -112,7 +110,6 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
       hasChildren: true,
       fetcherName: 'useApNavData',
       fetcherParams: { projId, apId: activeAp.id },
-      component: NodeWithList,
     })
     apMenus.sort((a, b) =>
       (a.label ?? '').localeCompare(b.label ?? ''),
@@ -136,7 +133,6 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
     hasChildren: !!count,
     fetcherName: 'useApsNavData',
     fetcherParams: { projId },
-    component: NodeWithList,
     menus: apMenus,
   }
 

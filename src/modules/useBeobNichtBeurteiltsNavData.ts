@@ -11,7 +11,6 @@ import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/Beo
 import { BeobnichtbeurteiltFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredAbsenzMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtbeurteiltAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltAbsenzMapIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobNichtBeurteiltsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -112,7 +111,6 @@ export const useBeobNichtBeurteiltsNavData = (props?: { projId?: string | undefi
       'nicht-beurteilte-Beobachtungen',
     ],
     hasChildren: !!filteredCount,
-    component: NodeWithList,
     menus: data.filteredBeobsNichtBeurteilt?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

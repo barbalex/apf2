@@ -6,7 +6,6 @@ import { useAtomValue } from 'jotai'
 import {
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -66,7 +65,6 @@ export const useEkAbrechnungstypWertesNavData = () => {
     hasChildren: !!count,
     fetcherName: 'useEkAbrechnungstypWertesNavData',
     fetcherParams: {},
-    component: NodeWithList,
     menus: data.allEkAbrechnungstypWertes?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

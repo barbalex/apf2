@@ -15,8 +15,6 @@ import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterF
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 const getLabelRightElements = ({
   copyingId,
@@ -171,7 +169,6 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
     childrenAreFolders: true,
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
-    component: NodeWithList,
     menus: [
       {
         id: 'Feld-Kontrolle',
@@ -203,7 +200,6 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
         ],
         fetcherName: 'useTpopfeldkontrzaehlsNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-        component: NodeWithList,
         hasChildren: !!filteredTpopkontrzaehlCount,
         alwaysOpen: true,
       },
@@ -228,7 +224,6 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
           tpopkontrId,
           'Biotop',
         ],
-        component: Node,
         hasChildren: false,
       },
       {
@@ -252,7 +247,6 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
           tpopkontrId,
           'Dateien',
         ],
-        component: Node,
         hasChildren: false,
       },
     ],

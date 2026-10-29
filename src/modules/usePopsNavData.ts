@@ -39,7 +39,6 @@ import {
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const popIcons = {
   normal: {
@@ -187,7 +186,6 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
     fetcherParams: { projId, apId },
     hasChildren: !!count,
     labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
-    component: NodeWithList,
     menus: data.apById?.popsByApId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p?.id

@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeAdresseGqlFilterForTreeAtom } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useAdressesNavData = () => {
   const apolloClient = useApolloClient()
@@ -54,7 +53,6 @@ export const useAdressesNavData = () => {
     hasChildren: !!count,
     fetcherName: 'useAdressesNavData',
     fetcherParams: {},
-    component: NodeWithList,
     menus: data.allAdresses?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

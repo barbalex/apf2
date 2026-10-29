@@ -20,8 +20,6 @@ import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 export const useApNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -324,7 +322,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherParams: { projId, apId },
         hasChildren: !!filteredPopsCount,
         labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
-        component: NodeWithList,
       },
       {
         id: 'AP-Ziele',
@@ -338,7 +335,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useZieljahrsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredApZielJahrsCount,
-        component: NodeWithList,
       },
       {
         id: 'AP-Erfolgskriterien',
@@ -352,7 +348,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useErfkritsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredErfkritsCount,
-        component: NodeWithList,
       },
       {
         id: 'AP-Berichte',
@@ -366,7 +361,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useApbersNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredApbersCount,
-        component: NodeWithList,
       },
       {
         id: 'Idealbiotop',
@@ -380,7 +374,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useIdealbiotopNavData',
         fetcherParams: { projId, apId },
         hasChildren: true,
-        component: Node,
       },
       {
         id: 'Taxa',
@@ -394,7 +387,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useApartsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredApartsCount,
-        component: NodeWithList,
       },
       {
         id: 'assoziierte-Arten',
@@ -408,7 +400,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useAssozartsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredAssozartsCount,
-        component: NodeWithList,
       },
       {
         id: 'EK-Frequenzen',
@@ -422,7 +413,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useEkfrequenzsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredEkfrequenzsCount,
-        component: NodeWithList,
       },
       {
         id: 'EK-Zähleinheiten',
@@ -436,7 +426,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         fetcherName: 'useEkzaehleinheitsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredEkzaehleinheitsCount,
-        component: NodeWithList,
       },
       {
         id: 'nicht-beurteilte-Beobachtungen',
@@ -458,7 +447,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         hasChildren: !!filteredBeobsNichtBeurteiltCount,
         labelLeftElements:
           showBeobnichtbeurteiltIcon ? [BeobnichtbeurteiltMapIcon] : undefined,
-        component: NodeWithList,
       },
       {
         id: 'nicht-zuzuordnende-Beobachtungen',
@@ -482,7 +470,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
           showBeobnichtzuzuordnenIcon ?
             [BeobnichtzuzuordnenMapIcon]
           : undefined,
-        component: NodeWithList,
       },
       {
         id: 'Qualitätskontrollen',
@@ -494,7 +481,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Qualitätskontrollen'],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Qualitätskontrollen-wählen',
@@ -512,7 +498,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
           'Qualitätskontrollen-wählen',
         ],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Auswertung',
@@ -524,7 +509,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Auswertung'],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Dateien',
@@ -536,7 +520,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Dateien'],
         hasChildren: false,
-        component: Node,
       },
       {
         id: 'Historien',
@@ -548,7 +531,6 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Historien'],
         hasChildren: false,
-        component: Node,
       },
     ],
   }
