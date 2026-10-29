@@ -2,7 +2,6 @@ import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()
@@ -44,7 +43,6 @@ export const useCurrentissuesNavData = () => {
     fetcherName: 'useCurrentissuesNavData',
     fetcherParams: {},
     hasChildren: !!count,
-    component: NodeWithList,
     menus: data.allCurrentissues?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

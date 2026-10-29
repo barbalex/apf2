@@ -2,7 +2,6 @@ import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useIdealbiotopNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -55,7 +54,6 @@ export const useIdealbiotopNavData = (props?: { projId?: string | undefined; apI
     hasChildren: true,
     fetcherName: 'useIdealbiotopNavData',
     fetcherParams: { projId, apId },
-    component: NodeWithList,
     menus: [
       {
         id: 'Idealbiotop',

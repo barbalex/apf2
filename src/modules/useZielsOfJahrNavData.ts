@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -80,7 +79,6 @@ export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apI
     hasChildren: !!filteredZiels.length,
     fetcherName: 'useZielsOfJahrNavData',
     fetcherParams: { projId, apId, jahr },
-    component: NodeWithList,
     menus: filteredZiels.map((p) => ({
       id: p?.id,
       label: p?.label,

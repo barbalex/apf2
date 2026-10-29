@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getEkfrequenzGqlFilterForTree } from './getEkfrequenzGqlFilterForTree.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkfrequenzsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -64,7 +63,6 @@ export const useEkfrequenzsNavData = (props?: { projId?: string | undefined; apI
     treeParentTableId: apId,
     treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
     hasChildren: !!rows.length,
-    component: NodeWithList,
     menus: rows.map((p) => ({
       id: p?.id,
       label: p?.label ?? '(kein Kürzel)',

@@ -11,7 +11,6 @@ import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/Be
 import { BeobnichtzuzuordnenFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredAbsenzMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
 import { BeobnichtzuzuordnenAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenAbsenzMapIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -112,7 +111,6 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
       'nicht-zuzuordnende-Beobachtungen',
     ],
     hasChildren: !!filteredCount,
-    component: NodeWithList,
     menus: (data.filteredBeobsNichtZuzuordnen?.nodes ?? []).map((p) => ({
       id: p?.id,
       label: p?.label,

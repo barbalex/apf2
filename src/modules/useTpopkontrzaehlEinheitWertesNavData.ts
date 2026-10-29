@@ -6,7 +6,6 @@ import { useAtomValue } from 'jotai'
 import {
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -66,7 +65,6 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     hasChildren: !!count,
     fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
     fetcherParams: {},
-    component: NodeWithList,
     menus: data.allTpopkontrzaehlEinheitWertes?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

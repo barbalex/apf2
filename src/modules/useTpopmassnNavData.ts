@@ -7,8 +7,6 @@ import { useAtomValue } from 'jotai'
 import { copyingAtom, movingAtom, store } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 const getLabelRightElements = ({
   copyingId,
@@ -138,7 +136,6 @@ export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?
     fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
-    component: NodeWithList,
     menus: [
       {
         id: 'Massnahme',
@@ -182,7 +179,6 @@ export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?
           'Dateien',
         ],
         hasChildren: false,
-        component: Node,
       },
     ],
   }

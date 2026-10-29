@@ -6,7 +6,6 @@ import { useAtomValue } from 'jotai'
 import {
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopApberrelevantGrundWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -67,7 +66,6 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     hasChildren: !!count,
     fetcherName: 'useTpopApberrelevantGrundWertesNavData',
     fetcherParams: {},
-    component: NodeWithList,
     menus: data.allTpopApberrelevantGrundWertes?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

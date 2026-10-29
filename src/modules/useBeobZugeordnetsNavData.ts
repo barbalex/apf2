@@ -9,7 +9,6 @@ import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/Beobzug
 import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetFilteredAbsenzMapIcon.tsx'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { BeobzugeordnetAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetAbsenzMapIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -89,7 +88,6 @@ export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined;
       'Beobachtungen',
     ],
     hasChildren: !!filteredCount,
-    component: NodeWithList,
     menus: data.filteredBeobsZugeordnet?.nodes.map((p) => ({
       id: p?.id,
       label: p?.label,

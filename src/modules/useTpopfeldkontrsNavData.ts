@@ -15,7 +15,6 @@ import {
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.tsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopfeldkontrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
@@ -122,7 +121,6 @@ export const useTpopfeldkontrsNavData = (props?: { projId?: string | undefined; 
     fetcherName: 'useTpopfeldkontrsNavData',
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
-    component: NodeWithList,
     menus: data.tpopById?.tpopkontrsByTpopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p?.id

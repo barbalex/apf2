@@ -9,7 +9,6 @@ import {
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
   treeAdresseGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -114,7 +113,6 @@ export const useWertesNavData = () => {
     hasChildren: true,
     fetcherName: 'useWertesNavData',
     fetcherParams: {},
-    component: NodeWithList,
     // leave totalCount undefined as the menus are folders
     menus: [
       {
@@ -128,7 +126,6 @@ export const useWertesNavData = () => {
         hasChildren: !!adressesFilteredCount,
         fetcherName: 'useAdressesNavData',
         fetcherParams: {},
-        component: NodeWithList,
       },
       {
         id: 'ApberrelevantGrundWerte',
@@ -141,7 +138,6 @@ export const useWertesNavData = () => {
         hasChildren: !!tpopApberrelevantGrundWerteFilteredCount,
         fetcherName: 'useTpopApberrelevantGrundWertesNavData',
         fetcherParams: {},
-        component: NodeWithList,
       },
       {
         id: 'EkAbrechnungstypWerte',
@@ -154,7 +150,6 @@ export const useWertesNavData = () => {
         hasChildren: !!ekAbrechnungstypWerteFilteredCount,
         fetcherName: 'useEkAbrechnungstypWertesNavData',
         fetcherParams: {},
-        component: NodeWithList,
       },
       {
         id: 'TpopkontrzaehlEinheitWerte',
@@ -167,7 +162,6 @@ export const useWertesNavData = () => {
         hasChildren: !!tpopkontrzaehlEinheitWerteFilteredCount,
         fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
         fetcherParams: {},
-        component: NodeWithList,
       },
     ],
   }
