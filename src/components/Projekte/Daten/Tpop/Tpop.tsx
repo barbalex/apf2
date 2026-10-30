@@ -1,3 +1,5 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
@@ -24,7 +26,6 @@ import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import { addNotificationAtom, userNameAtom } from '../../../../store/index.ts'
 
@@ -132,7 +133,7 @@ interface GemeindeQueryResult {
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type TpopUseQueryOptions = UseQueryOptions<
-  TpopQueryResult | undefined,
+  NonNullable<TpopQueryResult['tpopById']> | null,
   Error
 > & {
   suspense: boolean
@@ -156,20 +157,20 @@ export const Component = () => {
   const tpopQueryOptions: TpopUseQueryOptions = {
     queryKey: ['tpop', tpopId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopQueryResult>({
-        query,
-        variables: { id: tpopId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // v_tpop provides the computed columns (label, coordinates) and
+      // the jsonb relation columns (selects.ts builds the camelCase keys)
+      const rows = await apiFetch<NonNullable<TpopQueryResult['tpopById']>[]>(
+        `/v_tpop?id=eq.${tpopId}&select=${tpopSelect},popStatusWerteByStatus:pop_status_werte_by_status,tpopApberrelevantGrundWerteByApberRelevantGrund:tpop_apberrelevant_grund_werte_by_apber_relevant_grund,popByPopId:pop_by_pop_id`,
+      )
+      return rows?.[0] ?? null
     },
     suspense: true,
   }
   const { data, refetch: refetchTpop } = useQuery(tpopQueryOptions)
 
-  const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
+  const apJahr = data?.popByPopId?.apByApId?.startJahr ?? null
 
-  const row = (data?.tpopById ?? {}) as NonNullable<TpopQueryResult['tpopById']>
+  const row = (data ?? {}) as NonNullable<TpopQueryResult['tpopById']>
 
   const tpopListsQueryOptions: TpopListsUseQueryOptions = {
     queryKey: ['tpopLists'],

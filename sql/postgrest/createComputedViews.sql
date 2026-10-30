@@ -96,7 +96,12 @@ CREATE OR REPLACE VIEW apflora.v_pop WITH (security_invoker = true) AS
     public.lv95_x(t) AS lv95_x,
     public.lv95_y(t) AS lv95_y,
     public.wgs84_lat(t) AS wgs84_lat,
-    public.wgs84_long(t) AS wgs84_long
+    public.wgs84_long(t) AS wgs84_long,
+    -- jsonb relation columns: PostgREST cannot embed through views
+    -- (no foreign keys), so the relations the forms read are exposed
+    -- directly, in the camelCase shape the client types expect
+    (SELECT jsonb_build_object('id', a.id, 'startJahr', a.start_jahr)
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
   FROM apflora.pop t;
 GRANT SELECT ON apflora.v_pop TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -128,7 +133,22 @@ CREATE OR REPLACE VIEW apflora.v_tpop WITH (security_invoker = true) AS
     public.lv95_x(t) AS lv95_x,
     public.lv95_y(t) AS lv95_y,
     public.wgs84_lat(t) AS wgs84_lat,
-    public.wgs84_long(t) AS wgs84_long
+    public.wgs84_long(t) AS wgs84_long,
+    -- jsonb relation columns; camelCase keys match the client types
+    (SELECT jsonb_build_object('id', w.id, 'code', w.code, 'text', w.text,
+        'sort', w.sort, 'historic', w.historic)
+      FROM apflora.pop_status_werte w WHERE w.code = t.status)
+      AS pop_status_werte_by_status,
+    (SELECT jsonb_build_object('id', w.id, 'code', w.code, 'text', w.text,
+        'sort', w.sort, 'historic', w.historic)
+      FROM apflora.tpop_apberrelevant_grund_werte w
+      WHERE w.code = t.apber_relevant_grund)
+      AS tpop_apberrelevant_grund_werte_by_apber_relevant_grund,
+    (SELECT jsonb_build_object('id', p.id, 'apId', p.ap_id,
+        'apByApId', jsonb_build_object('id', a.id, 'startJahr', a.start_jahr))
+      FROM apflora.pop p JOIN apflora.ap a ON a.id = p.ap_id
+      WHERE p.id = t.pop_id)
+      AS pop_by_pop_id
   FROM apflora.tpop t;
 GRANT SELECT ON apflora.v_tpop TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 

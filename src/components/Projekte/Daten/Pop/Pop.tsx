@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { popSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -13,7 +14,6 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
@@ -37,24 +37,22 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useSuspenseQuery({
     queryKey: ['pop', popId],
     queryFn: async () => {
-      const result = await apolloClient.query<PopQueryResult>({
-        query,
-        variables: { id: popId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // v_pop provides the computed columns (label, coordinates) and
+      // the ap relation as a jsonb column (selects.ts builds the keys)
+      const rows = await apiFetch<NonNullable<PopQueryResult['popById']>[]>(
+        `/v_pop?id=eq.${popId}&select=${popSelect},apByApId:ap_by_ap_id`,
+      )
+      return rows?.[0] ?? null
     },
   })
 
-  const row: Partial<NonNullable<PopQueryResult['popById']>> =
-    data?.popById ?? {}
+  const row: Partial<NonNullable<PopQueryResult['popById']>> = data ?? {}
 
   const refetchForm = () => {
     void tsQueryClient.invalidateQueries({
