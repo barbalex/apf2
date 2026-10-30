@@ -73,7 +73,7 @@
     "notistack": "3.0.2",
     "proj4": "2.22.0",
     "proj4leaflet": "1.0.2",
-    "query-string": "9.5.1",
+    "query-string": "10.0.0",
     "react": "19.3.1",
     "react-aria-components": "1.22.1",
     "react-datepicker": "9.1.0",
