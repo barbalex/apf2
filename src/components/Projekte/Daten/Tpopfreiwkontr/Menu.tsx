@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -18,8 +18,6 @@ import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/inde
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
-import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
-
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
@@ -30,16 +28,6 @@ import {
   setMovingAtom,
   setIsPrintAtom,
 } from '../../../../store/index.ts'
-
-interface CreateTpopkontrData {
-  createTpopkontr: {
-    tpopkontr: {
-      id: TpopkontrId
-      tpopId: string
-      typ: string
-    }
-  }
-}
 
 interface MenuProps {
   // passed by FormTitle/List when rendering this component as MenuBarComponent
@@ -64,30 +52,15 @@ export const Menu = ({ row }: MenuProps) => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopkontrData | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopkontrData>({
-        mutation: graphql(`
-          mutation createTpopkontrForTpopfreiwkontrForm(
-            $tpopId: UUID!
-            $typ: String!
-          ) {
-            createTpopkontr(
-              input: { tpopkontr: { tpopId: $tpopId, typ: $typ } }
-            ) {
-              tpopkontr {
-                id
-                tpopId
-                typ
-              }
-            }
-          }
-        `),
-        variables: { tpopId, typ: 'Freiwilligen-Kontrolle' },
+      await apiInsert('tpopkontr', {
+        id: newId,
+        tpop_id: tpopId,
+        typ: 'Freiwilligen-Kontrolle',
       })
     } catch (error) {
       return addNotification({
@@ -103,7 +76,7 @@ export const Menu = ({ row }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopkontr?.tpopkontr?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${id}${search}`,
     )
@@ -222,22 +195,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpopfreiwkontr ?
-              `'${row?.labelEkf}' zu einer anderen Population verschieben`
-            : thisTpopfreiwkontrIsMoving ?
-              'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
-            : movingFromThisTpop ?
-              `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
-            : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            !isMovingTpopfreiwkontr
+              ? `'${row?.labelEkf}' zu einer anderen Population verschieben`
+              : thisTpopfreiwkontrIsMoving
+                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+                : movingFromThisTpop
+                  ? `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+                  : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving ?
-                    'rgb(255, 90, 0)'
-                  : 'white',
+                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
+                    ? 'rgb(255, 90, 0)'
+                    : 'white',
               }}
             />
           </IconButton>
@@ -251,16 +224,17 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopyingTpopfreiwkontr ?
-              `Kopiere '${copying.label}' in diese Teilpopulation`
-            : 'Kopieren'
+            isCopyingTpopfreiwkontr
+              ? `Kopiere '${copying.label}' in diese Teilpopulation`
+              : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>
             <MdContentCopy
               style={{
-                color:
-                  thisTpopfreiwkontrIsCopying ? 'rgb(255, 90, 0)' : 'white',
+                color: thisTpopfreiwkontrIsCopying
+                  ? 'rgb(255, 90, 0)'
+                  : 'white',
               }}
             />
           </IconButton>

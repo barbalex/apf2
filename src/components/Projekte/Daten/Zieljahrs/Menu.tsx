@@ -1,5 +1,5 @@
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -18,17 +18,6 @@ import {
   addNotificationAtom,
 } from '../../../../store/index.ts'
 
-import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
-
-interface CreateZielResult {
-  createZiel?: {
-    ziel?: {
-      id: ZielId
-      apId: ApId
-    }
-  }
-}
-
 interface MenuProps {
   toggleFilterInput?: () => void
 }
@@ -41,24 +30,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { projId, apId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateZielResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateZielResult>({
-        mutation: graphql(`
-          mutation createZielForZieljahrs($apId: UUID!) {
-            createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
-              ziel {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId },
+      await apiInsert('ziel', {
+        id: newId,
+        ap_id: apId,
       })
     } catch (error) {
       return addNotification({
@@ -83,7 +62,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    const id = result?.data?.createZiel?.ziel?.id
+    const id = newId
     void navigate(`./1/${id}${search}`)
   }
 

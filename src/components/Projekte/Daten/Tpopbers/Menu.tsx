@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -11,22 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopId } from '../../../../models/apflora/index.ts'
-import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
-
-import {
-  addNotificationAtom,
-} from '../../../../store/index.ts'
-
-
-interface CreateTpopberResult {
-  createTpopber: {
-    tpopber: {
-      id: TpopberId
-      tpopId: TpopId
-    }
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -40,24 +25,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { tpopId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopberResult | null | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopberResult>({
-        mutation: graphql(`
-          mutation createTpopberForTpopbersForm($tpopId: UUID!) {
-            createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
-              tpopber {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: { tpopId },
+      await apiInsert('tpopber', {
+        id: newId,
+        tpop_id: tpopId,
       })
     } catch (error) {
       return addNotification({
@@ -73,7 +48,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopber?.tpopber?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

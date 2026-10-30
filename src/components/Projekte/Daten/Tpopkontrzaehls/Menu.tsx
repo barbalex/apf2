@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -11,19 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
-import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
-
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreateTpopkontrzaehlResult {
-  createTpopkontrzaehl: {
-    tpopkontrzaehl: {
-      id: TpopkontrzaehlId
-      tpopkontrId: TpopkontrId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -35,31 +23,15 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const { tpopkontrId } = useParams()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopkontrzaehlResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-        mutation: graphql(`
-          mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
-            $tpopkontrId: UUID!
-          ) {
-            createTpopkontrzaehl(
-              input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId } }
-            ) {
-              tpopkontrzaehl {
-                id
-                tpopkontrId
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopkontrId,
-        },
+      await apiInsert('tpopkontrzaehl', {
+        id: newId,
+        tpopkontr_id: tpopkontrId,
       })
     } catch (error) {
       return addNotification({
@@ -78,7 +50,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

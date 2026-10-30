@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import {
@@ -21,7 +21,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { uniq } from 'es-toolkit'
 import { useSetAtom, useAtomValue } from 'jotai'
 
-import type { TpopId, PopId } from '../../../../models/apflora/index.ts'
+import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -50,15 +50,6 @@ import {
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
 
-interface CreateTpopResult {
-  createTpop: {
-    tpop: {
-      id: TpopId
-      popId: PopId
-    }
-  }
-}
-
 interface MenuProps {
   row: {
     id: TpopId
@@ -85,26 +76,14 @@ export const Menu = ({ row }: MenuProps) => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopResult | null | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopResult>({
-        mutation: graphql(`
-          mutation createTpopForTpopForm($popId: UUID!) {
-            createTpop(input: { tpop: { popId: $popId } }) {
-              tpop {
-                id
-                popId
-              }
-            }
-          }
-        `),
-        variables: {
-          popId,
-        },
+      await apiInsert('tpop', {
+        id: newId,
+        pop_id: popId,
       })
     } catch (error) {
       return addNotification({
@@ -123,7 +102,7 @@ export const Menu = ({ row }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    const id = result?.data?.createTpop?.tpop?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}/Teil-Population${search}`,
     )
@@ -335,21 +314,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpop ? `'${row.label}' hierhin verschieben`
-            : thisTpopIsMoving ?
-              'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-            : movingFromThisPop ?
-              `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
-            : `Verschiebe '${moving.label}' zu dieser Population`
+            !isMovingTpop
+              ? `'${row.label}' hierhin verschieben`
+              : thisTpopIsMoving
+                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+                : movingFromThisPop
+                  ? `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+                  : `Verschiebe '${moving.label}' zu dieser Population`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpop && thisTpopIsMoving ? 'rgb(255, 90, 0)' : (
-                    'white'
-                  ),
+                  isMovingTpop && thisTpopIsMoving
+                    ? 'rgb(255, 90, 0)'
+                    : 'white',
               }}
             />
           </IconButton>
@@ -363,9 +343,9 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopying ?
-              `Kopiere '${copying.label}' in diese Population`
-            : 'Kopieren'
+            isCopying
+              ? `Kopiere '${copying.label}' in diese Population`
+              : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>

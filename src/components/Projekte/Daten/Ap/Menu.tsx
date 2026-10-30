@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -30,8 +30,6 @@ import {
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import type { CreateApForApFormMutation } from '../../../../gql/graphql.ts'
-
 const iconStyle = { color: 'white' }
 
 export const Menu = ({
@@ -45,7 +43,6 @@ export const Menu = ({
   const navigate = useNavigate()
   const { projId, apId } = useParams<{ projId: string; apId: string }>()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const moving = useAtomValue(movingAtom)
@@ -55,22 +52,11 @@ export const Menu = ({
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   const onClickAdd = async () => {
-    let result:
-      | { data?: CreateApForApFormMutation | undefined }
-      | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApForApForm($projId: UUID!) {
-            createAp(input: { ap: { projId: $projId } }) {
-              ap {
-                id
-                projId
-              }
-            }
-          }
-        `),
-        variables: { projId: projId ?? '' },
+      await apiInsert('ap', {
+        id: newId,
+        proj_id: projId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -86,7 +72,7 @@ export const Menu = ({
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id = result?.data?.createAp?.ap?.id
+    const id = newId
     void navigate(`/Daten/Projekte/${projId}/Arten/${id}/Art${search}`)
   }
 

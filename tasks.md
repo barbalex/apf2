@@ -71,7 +71,8 @@ Spike results (30.10.2026) — **go**:
 - [x] moveTo: one `apiUpdate(dbTable, id, {[parentIdField]: newParentId})`; the 4 update mutation files are gone.
 - [x] HistoryForms (ap/pop/tpop): composite-key `PATCH/DELETE /<x>_history?id=eq.X&year=eq.Y`, create via `apiInsert` (id = parent id, no uuid). Field saves snake-cased via camelToSnake.
 - [x] verified against dev PostgREST: tpop copy (geom preserved, fresh created_at, new uuidv7), ap_history composite PATCH incl. changed_by trigger; 13 Playwright specs green.
-- [ ] remaining: Tpopfeldkontr/Biotop specials, EkPlan (deleteEkplanById etc.), Karte, Choose* copiers, coordinates modules, User.tsx password mutation, message/usermessage/EkPLAN creates — mechanical, per module.
+- [x] all ~45 `Menu.tsx` "Neu" create buttons (Daten incl. werte lists): codemodded to `const newId = uuidv7()` + `apiInsert('<table>', { id: newId, <parent> })`; the Menus navigate to `newId`. Specials by hand: `Tpopfeldkontr(s)` (double create: tpopkontr + tpopkontrzaehl with two ids), `User/Menu` (empty create + EKF tpopkontr create), `Werte/Menu` (dynamic table name via `camelToSnake(table)`). Verified live: pop-create 201 with ap_id set, cleanup 204; 13 Playwright specs green. Note: the werte tables all have uuid id PKs (not integer codes) — no special casing needed.
+- [ ] remaining (~20 files): EkPlan (setEkplans, CellFor* processChanges, deleteEkplan), Tpopfreiwkontr/EKF forms, Beobzuordnung saves, Karte creates, createNew*FromBeob + coordinate copiers, Messages, insertDataset, Choose* copiers, User.tsx password mutation.
 
 ## Phase 4 — Reads (191 static + nav data hooks)
 

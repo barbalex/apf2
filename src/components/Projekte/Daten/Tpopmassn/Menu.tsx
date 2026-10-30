@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -18,9 +18,6 @@ import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/inde
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
-import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
-import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
@@ -30,15 +27,6 @@ import {
   movingAtom,
   setMovingAtom,
 } from '../../../../store/index.ts'
-
-interface CreateTpopmassnResult {
-  createTpopmassn: {
-    tpopmassn: {
-      id: TpopmassnId
-      tpopId: TpopId
-    }
-  }
-}
 
 interface MenuProps {
   row: { id?: string | undefined; label?: string | undefined }
@@ -57,26 +45,14 @@ export const Menu = ({ row }: MenuProps) => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopmassnResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopmassnResult>({
-        mutation: graphql(`
-          mutation createTpopmassnForTpopmassnForm($tpopId: UUID!) {
-            createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
-              tpopmassn {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopId: tpopId ?? '',
-        },
+      await apiInsert('tpopmassn', {
+        id: newId,
+        tpop_id: tpopId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -92,7 +68,7 @@ export const Menu = ({ row }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopmassn?.tpopmassn?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${id}${search}`,
     )
@@ -187,21 +163,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpopmassn ?
-              `'${row.label}' zu einer anderen Teil-Population verschieben`
-            : thisTpopmassnIsMoving ?
-              'Zum Verschieben gemerkt, bereit um in einer anderen Teil-Population einzufügen'
-            : movingFromThisTpop ?
-              `'${moving.label}' zur selben Teil-Population zu vershieben, macht keinen Sinn`
-            : `Verschiebe '${moving.label}' zu dieser Teil-Population`
+            !isMovingTpopmassn
+              ? `'${row.label}' zu einer anderen Teil-Population verschieben`
+              : thisTpopmassnIsMoving
+                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teil-Population einzufügen'
+                : movingFromThisTpop
+                  ? `'${moving.label}' zur selben Teil-Population zu vershieben, macht keinen Sinn`
+                  : `Verschiebe '${moving.label}' zu dieser Teil-Population`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpopmassn && thisTpopmassnIsMoving ? 'rgb(255, 90, 0)'
-                  : 'white',
+                  isMovingTpopmassn && thisTpopmassnIsMoving
+                    ? 'rgb(255, 90, 0)'
+                    : 'white',
               }}
             />
           </IconButton>
@@ -215,9 +192,9 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopyingTpopmassn ?
-              `Kopiere '${copying.label}' in diese Teilpopulation`
-            : 'Kopieren'
+            isCopyingTpopmassn
+              ? `Kopiere '${copying.label}' in diese Teilpopulation`
+              : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>

@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -11,17 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopApberrelevantGrundWerteId } from '../../../../models/apflora/TpopApberrelevantGrundWerte.ts'
-
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreateTpopApberrelevantGrundWerteResult {
-  createTpopApberrelevantGrundWerte: {
-    tpopApberrelevantGrundWerte: {
-      id: TpopApberrelevantGrundWerteId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -34,28 +24,12 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result:
-      | { data?: CreateTpopApberrelevantGrundWerteResult | undefined }
-      | undefined
+    const newId = uuidv7()
     try {
-      result =
-        await apolloClient.mutate<CreateTpopApberrelevantGrundWerteResult>({
-          mutation: graphql(`
-            mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
-              createTpopApberrelevantGrundWerte(
-                input: { tpopApberrelevantGrundWerte: {} }
-              ) {
-                tpopApberrelevantGrundWerte {
-                  id
-                }
-              }
-            }
-          `),
-        })
+      await apiInsert('tpop_apberrelevant_grund_werte', { id: newId })
     } catch (error) {
       return addNotification({
         message: (error as Error).message,
@@ -70,9 +44,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id =
-      result?.data?.createTpopApberrelevantGrundWerte
-        ?.tpopApberrelevantGrundWerte?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

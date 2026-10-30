@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -11,18 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { PopberId, PopId } from '../../../../models/apflora/index.ts'
-
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreatePopberResult {
-  createPopber?: {
-    popber?: {
-      id: PopberId
-      popId: PopId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -36,24 +25,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { popId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreatePopberResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreatePopberResult>({
-        mutation: graphql(`
-          mutation createPopberForPopbersForm($popId: UUID!) {
-            createPopber(input: { popber: { popId: $popId } }) {
-              popber {
-                id
-                popId
-              }
-            }
-          }
-        `),
-        variables: { popId },
+      await apiInsert('popber', {
+        id: newId,
+        pop_id: popId,
       })
     } catch (error) {
       return addNotification({
@@ -72,7 +51,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    const id = result?.data?.createPopber?.popber?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

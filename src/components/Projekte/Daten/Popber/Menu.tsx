@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -14,20 +14,9 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { PopberId, PopId } from '../../../../models/apflora/index.ts'
-
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreatePopberResult {
-  createPopber?: {
-    popber?: {
-      id: PopberId
-      popId: PopId
-    }
-  }
-}
 
 const iconStyle = { color: 'white' }
 
@@ -37,24 +26,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, popId, popberId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreatePopberResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreatePopberResult>({
-        mutation: graphql(`
-          mutation createPopberForPopberForm($popId: UUID!) {
-            createPopber(input: { popber: { popId: $popId } }) {
-              popber {
-                id
-                popId
-              }
-            }
-          }
-        `),
-        variables: { popId },
+      await apiInsert('popber', {
+        id: newId,
+        pop_id: popId,
       })
     } catch (error) {
       return addNotification({
@@ -73,7 +52,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    const id = result?.data?.createPopber?.popber?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte/${id}${search}`,
     )

@@ -1,5 +1,5 @@
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -26,18 +26,7 @@ import {
   setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { PopId, ApId } from '../../../../models/apflora/index.ts'
-
 import styles from './Menu.module.css'
-
-interface CreatePopResult {
-  createPop?: {
-    pop?: {
-      id: PopId
-      apId: ApId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -56,24 +45,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreatePopResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreatePopResult>({
-        mutation: graphql(`
-          mutation createPopForPopsForm($apId: UUID!) {
-            createPop(input: { pop: { apId: $apId } }) {
-              pop {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId },
+      await apiInsert('pop', {
+        id: newId,
+        ap_id: apId,
       })
     } catch (error) {
       return addNotification({
@@ -92,7 +71,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    const id = result?.data?.createPop?.pop?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 
@@ -172,9 +151,9 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         {isMovingPop && (
           <Tooltip
             title={
-              popMovingFromThisAp ?
-                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-              : `Verschiebe '${moving.label}' zu dieser Art`
+              popMovingFromThisAp
+                ? `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+                : `Verschiebe '${moving.label}' zu dieser Art`
             }
           >
             <IconButton onClick={() => void onClickMovePopToHere()}>

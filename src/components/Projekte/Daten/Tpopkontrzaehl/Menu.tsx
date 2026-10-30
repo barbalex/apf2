@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -14,21 +14,9 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
-import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
-
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreateTpopkontrzaehlResult {
-  createTpopkontrzaehl: {
-    tpopkontrzaehl: {
-      id: TpopkontrzaehlId
-      tpopkontrId: TpopkontrId
-    }
-  }
-}
 
 const iconStyle = { color: 'white' }
 
@@ -39,28 +27,14 @@ export const Menu = () => {
   const { projId, apId, popId, tpopId, tpopkontrId, tpopkontrzaehlId } =
     useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopkontrzaehlResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-        mutation: graphql(`
-          mutation createTpopkontrzaehlForTpopkontrzaehlForm(
-            $tpopkontrId: UUID!
-          ) {
-            createTpopkontrzaehl(
-              input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId } }
-            ) {
-              tpopkontrzaehl {
-                id
-                tpopkontrId
-              }
-            }
-          }
-        `),
-        variables: { tpopkontrId },
+      await apiInsert('tpopkontrzaehl', {
+        id: newId,
+        tpopkontr_id: tpopkontrId,
       })
     } catch (error) {
       return addNotification({
@@ -79,7 +53,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen/${id}${search}`,
     )

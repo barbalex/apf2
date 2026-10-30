@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation, Link } from 'react-router'
@@ -15,20 +15,11 @@ import Tooltip from '@mui/material/Tooltip'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
-import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.ts'
 import { queryEkfTpops } from './queryEkfTpops.ts'
 
 import type { UserId } from '../../../../models/apflora/User.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-
-interface CreateUserResult {
-  createUser: {
-    user: {
-      id: UserId
-    }
-  }
-}
 
 interface EkfTpopsQueryResult {
   ekfTpops: {
@@ -91,19 +82,9 @@ export const Menu = ({ row }: MenuProps) => {
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
   const onClickAdd = async () => {
-    let result: { data?: CreateUserResult | null | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateUserResult>({
-        mutation: graphql(`
-          mutation createUserForUserForm {
-            createUser(input: { user: {} }) {
-              user {
-                id
-              }
-            }
-          }
-        `),
-      })
+      await apiInsert('user', { id: newId })
     } catch (error) {
       return addNotification({
         message: (error as Error).message,
@@ -118,7 +99,7 @@ export const Menu = ({ row }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id = result?.data?.createUser?.user?.id
+    const id = newId
     void navigate(`/Daten/Benutzer/${id}${search}`)
   }
 
@@ -145,37 +126,12 @@ export const Menu = ({ row }: MenuProps) => {
     const errors: Error[] = []
     for (const tpopId of ekfTpopsWithoutEkfThisYear) {
       try {
-        await apolloClient.mutate({
-          mutation: dynamicGql`
-            mutation createTpopkontrFromUser(
-              $typ: String
-              $tpopId: UUID
-              $bearbeiter: UUID
-              $jahr: Int
-            ) {
-              createTpopkontr(
-                input: {
-                  tpopkontr: {
-                    typ: $typ
-                    tpopId: $tpopId
-                    bearbeiter: $bearbeiter
-                    jahr: $jahr
-                  }
-                }
-              ) {
-                tpopkontr {
-                  ...TpopkontrFields
-                }
-              }
-            }
-            ${tpopkontrFragment}
-          `,
-          variables: {
-            tpopId,
-            typ: 'Freiwilligen-Kontrolle',
-            bearbeiter: row.adresseId,
-            jahr: thisYear,
-          },
+        await apiInsert('tpopkontr', {
+          id: uuidv7(),
+          tpop_id: tpopId,
+          typ: 'Freiwilligen-Kontrolle',
+          bearbeiter: row.adresseId,
+          jahr: thisYear,
         })
       } catch (error) {
         errors.push(error as Error)

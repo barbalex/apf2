@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -19,12 +19,6 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
-import type {
-  TpopkontrId,
-  TpopId,
-  TpopkontrzaehlId,
-} from '../../../../models/apflora/index.ts'
-
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
@@ -39,23 +33,6 @@ import {
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
-
-interface CreateTpopkontrResult {
-  createTpopkontr: {
-    tpopkontr: {
-      id: TpopkontrId
-      tpopId: TpopId
-    }
-  }
-}
-
-interface CreateTpopkontrzaehlResult {
-  createTpopkontrzaehl: {
-    tpopkontrzaehl: {
-      id: TpopkontrzaehlId
-    }
-  }
-}
 
 interface MenuProps {
   row?: {
@@ -83,27 +60,16 @@ export const Menu = ({ row }: MenuProps) => {
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
     // 1. add new tpopkontr
-    let result
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopkontrResult>({
-        mutation: graphql(`
-          mutation createTpopkontrForTpopfeldkontrForm($tpopId: UUID!) {
-            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Kontrolle" } }) {
-              tpopkontr {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopId,
-        },
+      await apiInsert('tpopkontr', {
+        id: newId,
+        tpop_id: tpopId,
+        typ: 'Kontrolle',
       })
     } catch (error) {
       return addNotification({
@@ -113,26 +79,16 @@ export const Menu = ({ row }: MenuProps) => {
         },
       })
     }
-    const id = result?.data?.createTpopkontr?.tpopkontr?.id
+    const id = newId
 
     // 2. add new tpopkontrzaehl
-    const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-      mutation: graphql(`
-        mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
-          createTpopkontrzaehl(
-            input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
-          ) {
-            tpopkontrzaehl {
-              id
-            }
-          }
-        }
-      `),
-      variables: { parentId: id },
+    const zaehlId = uuidv7()
+    await apiInsert('tpopkontrzaehl', {
+      id: zaehlId,
+      tpopkontr_id: id,
     })
 
     // 3. open the tpopkontrzaehl Folder
-    const zaehlId = resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
     const activeNodeArrayWithoutLastElement = activeNodeArray.slice(0, -1)
     const tpopkontrNode = [...activeNodeArrayWithoutLastElement, id]
     const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
@@ -274,22 +230,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingFeldkontr ?
-              `'${row?.labelEk ?? row?.label}' zu einer anderen Population verschieben`
-            : thisTpopfeldkontrIsMoving ?
-              'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
-            : movingFromThisTpop ?
-              `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
-            : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            !isMovingFeldkontr
+              ? `'${row?.labelEk ?? row?.label}' zu einer anderen Population verschieben`
+              : thisTpopfeldkontrIsMoving
+                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+                : movingFromThisTpop
+                  ? `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+                  : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingFeldkontr && thisTpopfeldkontrIsMoving ?
-                    'rgb(255, 90, 0)'
-                  : 'white',
+                  isMovingFeldkontr && thisTpopfeldkontrIsMoving
+                    ? 'rgb(255, 90, 0)'
+                    : 'white',
               }}
             />
           </IconButton>
@@ -301,19 +257,19 @@ export const Menu = ({ row }: MenuProps) => {
             </IconButton>
           </Tooltip>
         )}
-        {isCopyingTpopfeldkontr ?
+        {isCopyingTpopfeldkontr ? (
           <Tooltip title={`Kopiere '${copying.label}' in diese Teilpopulation`}>
             <IconButton onClick={() => void onClickCopyFeldkontrToHere()}>
               <MdContentCopy
                 style={{
-                  color: thisTpopfeldkontrIsCopying ?
-                      'rgb(255, 90, 0)'
+                  color: thisTpopfeldkontrIsCopying
+                    ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
             </IconButton>
           </Tooltip>
-        : isCopyingBiotop ?
+        ) : isCopyingBiotop ? (
           <Tooltip
             title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
           >
@@ -321,7 +277,8 @@ export const Menu = ({ row }: MenuProps) => {
               <MdContentCopy style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
-        : <Tooltip title="Kopieren">
+        ) : (
+          <Tooltip title="Kopieren">
             <IconButton
               onClick={(event) =>
                 setCopyBiotopMenuAnchorEl(event.currentTarget)
@@ -330,14 +287,14 @@ export const Menu = ({ row }: MenuProps) => {
             >
               <MdContentCopy
                 style={{
-                  color: thisTpopfeldkontrIsCopying ?
-                      'rgb(255, 90, 0)'
+                  color: thisTpopfeldkontrIsCopying
+                    ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
             </IconButton>
           </Tooltip>
-        }
+        )}
         {isCopying && (
           <Tooltip
             title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
