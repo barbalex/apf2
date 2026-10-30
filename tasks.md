@@ -19,10 +19,6 @@
 
 ---
 
-More virtual list candidates:
-
-- Mitteilungen lists
-
 ---
 
 ---
