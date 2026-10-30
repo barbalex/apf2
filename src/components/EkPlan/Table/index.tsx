@@ -1,4 +1,8 @@
-import { useState, Suspense } from 'react'
+// TanStack Virtual is incompatible with React Compiler memoization
+'use no memo'
+
+import { useState, Suspense, useRef } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -17,7 +21,7 @@ import { exportModule } from '../../../modules/export.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.tsx'
-import { TpopRow } from './Row/index.tsx'
+import { Visible } from './Row/Visible.tsx'
 import { EkplanTableHeader } from './Header.tsx'
 
 import type { TpopId } from '../../../models/apflora/Tpop.ts'
@@ -341,26 +345,83 @@ export const EkPlanTable = () => {
           exportieren
         </Button>
         <div className={styles.container}>
-          <div className={styles.scrollContainer}>
-            <EkplanTableHeader
-              tpopLength={tpops.length !== 0 ? tpops.length : '...'}
-              tpopFilter={tpopFilter}
-              refetch={() => void refetch()}
-              years={years}
-            />
-            {tpops.map((tpop, index) => (
-              <TpopRow
-                key={tpop.id}
-                tpopId={tpop.id}
-                index={index}
-                setProcessing={setProcessing}
+          <EkPlanTableBody
+            tpops={tpops}
+            setProcessing={setProcessing}
+            years={years}
+            header={
+              <EkplanTableHeader
+                tpopLength={tpops.length !== 0 ? tpops.length : '...'}
+                tpopFilter={tpopFilter}
+                refetch={() => void refetch()}
                 years={years}
               />
-            ))}
-          </div>
+            }
+          />
         </div>
       </Suspense>
       {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>
+  )
+}
+
+/**
+ * Owns the virtualized rows. Kept out of EkPlanTable because that
+ * component suspends on its query before first commit, which breaks
+ * the virtualizer's mount cycle. This component only mounts once the
+ * data has resolved.
+ */
+const EkPlanTableBody = ({
+  tpops,
+  setProcessing,
+  years,
+  header,
+}: {
+  tpops: { id: TpopId }[]
+  setProcessing: (processing: boolean) => void
+  years: number[]
+  header: React.ReactNode
+}) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const virtualizer = useVirtualizer({
+    count: tpops.length,
+    // rows have a fixed 60px height (Row css)
+    estimateSize: () => 60,
+    getItemKey: (index) => tpops[index]?.id ?? index,
+    getScrollElement: () => scrollContainerRef.current,
+    overscan: 10,
+  })
+
+  return (
+    <div
+      className={styles.scrollContainer}
+      ref={scrollContainerRef}
+    >
+      {header}
+      <div
+        className={styles.rows}
+        style={{ height: virtualizer.getTotalSize() }}
+      >
+        {virtualizer.getVirtualItems().map((virtualRow) => {
+          const tpop = tpops[virtualRow.index]
+          if (!tpop) return null
+
+          return (
+            <div
+              key={virtualRow.key}
+              className={styles.row}
+              style={{ transform: `translateY(${virtualRow.start}px)` }}
+            >
+              <Visible
+                tpopId={tpop.id}
+                index={virtualRow.index}
+                setProcessing={setProcessing}
+                years={years}
+              />
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

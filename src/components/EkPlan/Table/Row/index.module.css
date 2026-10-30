@@ -1,9 +1,0 @@
-.container {
-  display: flex;
-  height: 60px;
-  min-height: 60px;
-  /* WARNING: this prevented initially unshown columns from being rendered */
-  /* even after scrolling them into the visible area */
-  /* content-visibility: auto; */
-  contain-intrinsic-size: auto 60px;
-}

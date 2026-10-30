@@ -17,8 +17,6 @@
 
 ---
 
-tree building: as long as its fresh: lets implement this method into ps as well
-
 ---
 
 More virtual list candidates:
