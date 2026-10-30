@@ -122,14 +122,19 @@ CREATE TYPE auth.jwt_token AS (
 );
 
 -- Login function which takes an user name and password
--- and returns JWT if the credentials match a user in the internal table
+-- and returns a JWT signed in the database.
+-- PostGraphile used to sign the token itself (it converted this composite
+-- into a token via --jwt-token-identifier); PostgREST cannot, so login
+-- signs via pgjwt's auth.sign. The claim set matches what PostGraphile
+-- signed (24 h lifetime, aud/iss postgraphile) so tokens work on both
+-- APIs during the dual-stack migration. The signing secret is no longer
+-- exposed as a "token" claim — it used to be, which let any logged-in
+-- user forge tokens for arbitrary roles.
 CREATE OR REPLACE FUNCTION apflora.login (username text, pass text)
   RETURNS auth.jwt_token
   AS $$
 DECLARE
   _role name;
-  result auth.jwt_token;
-  token text;
 BEGIN
   -- check username and password
   SELECT
@@ -138,9 +143,22 @@ BEGIN
     RAISE invalid_password
     USING message = 'invalid user or password';
   END IF;
-    RETURN (_role,
-      $1,
-      current_setting('app.jwt_secret'))::auth.jwt_token;
+  RETURN (
+    _role,
+    $1,
+    auth.sign(
+      json_build_object(
+        'role', _role::text,
+        'username', $1,
+        'iat', (extract(epoch FROM now()))::bigint,
+        'exp', (extract(epoch FROM now() + interval '24 hours'))::bigint,
+        'aud', 'postgraphile',
+        'iss', 'postgraphile'
+      ),
+      current_setting('app.jwt_secret'),
+      'HS256'
+    )
+  )::auth.jwt_token;
 END;
 $$
 LANGUAGE plpgsql;

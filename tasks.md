@@ -38,10 +38,14 @@ Spike results (30.10.2026) — **go**:
 
 ## Phase 1 — Infra + auth (dual-stack in production)
 
-- `postgrest` container in `backend/docker-compose.yml`; Caddy: `api.apflora.ch/postgrest/*` → `postgrest:3000` (ae3 `handle_path` pattern); PostGraphile stays at `/graphql`.
-- port the rest of ae3's auth diary (`backend/db/migrations/2026-10-27-postgrest-auth.sql`): JWT secret ≥ 32 bytes (rotate — jose rejects shorter; dev secret is 36, check prod), claims aud/exp/username signed in (login already signs aud), `request.sql` helpers read the single `request.jwt.claims` JSON GUC (`current_user_name()` is done).
-- login via `POST /rpc/login`; verify existing tokens keep working for PostGraphile during transition.
-- tighten spike-era grants: `query_*` execute only for roles that may read the table; RLS still decides rows.
+- [x] `postgrest` container in `backend/docker-compose.yml` (v12.2.3, like backend-dev; expose only, no host port — Caddy fronts it)
+- [x] Caddy: `api.apflora.ch/postgrest/*` → `apf_postgrest:3000` (`handle_path`, PostgREST does its own CORS); everything else stays on PostGraphile
+- [x] `apflora.login` signs the JWT in the database (pgjwt `auth.sign`, 24 h lifetime, aud/iss `postgraphile` — the same claims PostGraphile minted). Previously the function returned the raw secret as "token" and **PostGraphile** signed; PostgREST has no such conversion. Verified end-to-end in dev: `POST /rpc/login` works, the token drives `query_tpop`, the same token works on PostGraphile, wrong password → clean 403 `invalid user or password`.
+- [x] security fix along the way: **every token issued so far contained the signing secret as its `token` claim** (login returned `current_setting('app.jwt_secret')`, PostGraphile embedded it), so any logged-in user could forge `apflora_manager` tokens. The new login no longer emits that claim → rotate the secret at deployment, it has been handed to every user for years.
+- [x] `current_user_name()` reads `request.jwt.claims` (PostgREST) with fallback to `jwt.claims.username` (PostGraphile) — both stacks work simultaneously.
+- [x] `request.*` helpers: grant-only, never referenced by policies/views/frontend — no port needed.
+- [ ] **deploy to the VPS** (manual): apply `sql/apflora/createTables.sql`'s `current_user_name` + the new `apflora.login` + `sql/postgrest/*` to the prod DB; rotate `JWT_SECRET`/`app.jwt_secret` together (new one ≥ 32 bytes); `docker compose up -d postgrest caddy` (Caddy reload picks up the route). Old tokens die naturally within 24 h.
+- [ ] tighten spike-era grants on the prod DB if desired (execute on `query_*`/helpers matches table-access roles; anon has nothing).
 
 ## Phase 2 — Client foundation
 

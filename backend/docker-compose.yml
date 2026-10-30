@@ -72,6 +72,32 @@ services:
         "--enable-query-batching",
         "--retry-on-init-fail",
       ]
+  # PostgREST migration dual-stack (tasks.md phase 1) — same db, same JWT
+  # secret as PostGraphile, so modules can migrate one by one.
+  # Version and settings match ae3 (v12.2.3; see its
+  # backend/db/migrations/2026-10-27-postgrest-auth.sql diary).
+  postgrest:
+    container_name: apf_postgrest
+    restart: always
+    image: postgrest/postgrest:v12.2.3
+    networks:
+      - network
+    expose:
+      - "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      # connects as the authenticator role (noinherit), switches to the
+      # JWT role claim per request — same model as PostGraphile
+      PGRST_DB_URI: ${DATABASE_URL}
+      PGRST_DB_SCHEMAS: apflora
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      # v12 otherwise tries to read its config from the db
+      PGRST_DB_CONFIG: "false"
+      PGRST_SERVER_CORS_ENABLED: "true"
   caddy:
     build:
       context: ./caddy
@@ -80,6 +106,7 @@ services:
       - network
     depends_on:
       - graphql
+      - postgrest
     restart: always
     # original image downgrades user but that seems not to work
     # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel
