@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { apartSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -11,7 +12,6 @@ import { useAtomValue } from 'jotai'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -51,7 +51,7 @@ interface ApartQueryResult {
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type ApartUseQueryOptions = UseQueryOptions<
-  ApartQueryResult | undefined,
+  { apartById: NonNullable<ApartQueryResult['apartById']> | null },
   Error
 > & {
   suspense: boolean
@@ -62,7 +62,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -70,12 +69,10 @@ export const Component = () => {
   const queryOptions: ApartUseQueryOptions = {
     queryKey: ['apart', id],
     queryFn: async () => {
-      const result = await apolloClient.query<ApartQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<NonNullable<ApartQueryResult['apartById']>[]>(
+        `/v_apart?id=eq.${id}&select=${apartSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id,apByApId:ap_by_ap_id`,
+      )
+      return { apartById: rows?.[0] ?? null }
     },
     suspense: true,
   }

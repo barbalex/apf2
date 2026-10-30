@@ -1,6 +1,8 @@
+import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from '../../../../modules/api.ts'
+import { ekfrequenzSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -9,7 +11,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -91,14 +92,12 @@ export const Component = () => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['ekfrequenz', id],
     queryFn: async () => {
-      const result = await apolloClient.query<EkfrequenzQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<EkfrequenzQueryResult['ekfrequenzById']>[]
+      >(
+        `/v_ekfrequenz?id=eq.${id}&select=${ekfrequenzSelect},apByApId:ap_by_ap_id`,
+      )
+      return { ekfrequenzById: rows?.[0] ?? null }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })

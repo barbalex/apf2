@@ -25,14 +25,28 @@ GRANT SELECT ON apflora.v_ap TO apflora_reader, apflora_ap_reader, apflora_ap_wr
 CREATE OR REPLACE VIEW apflora.v_apart WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.apart_label(t) AS label
+    apflora.apart_label(t) AS label,
+    (SELECT jsonb_build_object('id', x.id, 'taxArtName', x.tax_art_name)
+      FROM apflora.ae_taxonomies x WHERE x.id = t.art_id) AS ae_taxonomy_by_art_id,
+    (SELECT jsonb_build_object('id', a.id, 'apartsByApId', jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'id', c.id, 'apId', c.ap_id, 'artId', c.art_id,
+          'changedBy', c.changed_by,
+          'label', apflora.apart_label(c)) ORDER BY c.art_id), '[]'::jsonb)
+          FROM apflora.apart c WHERE c.ap_id = a.id)))
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
   FROM apflora.apart t;
 GRANT SELECT ON apflora.v_apart TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
 CREATE OR REPLACE VIEW apflora.v_apber WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.apber_label(t) AS label
+    apflora.apber_label(t) AS label,
+    (SELECT jsonb_build_object('id', a.id, 'apbersByApId', jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'jahr', c.jahr, 'beurteilung', c.beurteilung) ORDER BY c.jahr), '[]'::jsonb)
+          FROM apflora.apber c WHERE c.ap_id = a.id)))
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
   FROM apflora.apber t;
 GRANT SELECT ON apflora.v_apber TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -46,7 +60,16 @@ GRANT SELECT ON apflora.v_apberuebersicht TO apflora_reader, apflora_ap_reader, 
 CREATE OR REPLACE VIEW apflora.v_assozart WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.assozart_label(t) AS label
+    apflora.assozart_label(t) AS label,
+    (SELECT jsonb_build_object('id', x.id, 'taxArtName', x.tax_art_name)
+      FROM apflora.ae_taxonomies x WHERE x.id = t.ae_id) AS ae_taxonomy_by_ae_id,
+    (SELECT jsonb_build_object('artId', a.art_id, 'assozartsByApId', jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'id', c.id, 'apId', c.ap_id, 'aeId', c.ae_id,
+          'changedBy', c.changed_by,
+          'label', apflora.assozart_label(c)) ORDER BY c.ae_id), '[]'::jsonb)
+          FROM apflora.assozart c WHERE c.ap_id = a.id)))
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
   FROM apflora.assozart t;
 GRANT SELECT ON apflora.v_assozart TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -78,7 +101,22 @@ GRANT SELECT ON apflora.v_ek_abrechnungstyp_werte TO apflora_reader, apflora_ap_
 CREATE OR REPLACE VIEW apflora.v_ekzaehleinheit WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.ekzaehleinheit_label(t) AS label
+    apflora.ekzaehleinheit_label(t) AS label,
+    (SELECT jsonb_build_object('id', w.id, 'code', w.code, 'text', w.text,
+        'label', apflora.tpopkontrzaehl_einheit_werte_label(w),
+        'sort', w.sort, 'historic', w.historic)
+      FROM apflora.tpopkontrzaehl_einheit_werte w
+      WHERE w.id = t.zaehleinheit_id) AS tpopkontrzaehl_einheit_werte_by_zaehleinheit_id,
+    (SELECT jsonb_build_object('id', a.id, 'ekzaehleinheitsByApId', jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'id', c.id, 'apId', c.ap_id, 'zaehleinheitId', c.zaehleinheit_id,
+          'zielrelevant', c.zielrelevant,
+          'notMassnCountUnit', c.not_massn_count_unit,
+          'sort', c.sort, 'bemerkungen', c.bemerkungen,
+          'changedBy', c.changed_by,
+          'label', apflora.ekzaehleinheit_label(c)) ORDER BY c.sort), '[]'::jsonb)
+          FROM apflora.ekzaehleinheit c WHERE c.ap_id = a.id)))
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
   FROM apflora.ekzaehleinheit t;
 GRANT SELECT ON apflora.v_ekzaehleinheit TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -248,5 +286,21 @@ CREATE OR REPLACE VIEW apflora.v_tpopkontr WITH (security_invoker = true) AS
     apflora.tpopkontr_label_ekf(t) AS label_ekf
   FROM apflora.tpopkontr t;
 GRANT SELECT ON apflora.v_tpopkontr TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
+
+CREATE OR REPLACE VIEW apflora.v_ekfrequenz WITH (security_invoker = true) AS
+  SELECT
+    t.*,
+    (SELECT jsonb_build_object('id', a.id, 'ekfrequenzsByApId', jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'id', c.id, 'apId', c.ap_id, 'ektyp', c.ektyp,
+          'anwendungsfall', c.anwendungsfall, 'code', c.code,
+          'kontrolljahre', c.kontrolljahre, 'kontrolljahreAb', c.kontrolljahre_ab,
+          'bemerkungen', c.bemerkungen, 'sort', c.sort,
+          'ekAbrechnungstyp', c.ek_abrechnungstyp,
+          'changedBy', c.changed_by) ORDER BY c.sort), '[]'::jsonb)
+          FROM apflora.ekfrequenz c WHERE c.ap_id = a.id)))
+      FROM apflora.ap a WHERE a.id = t.ap_id) AS ap_by_ap_id
+  FROM apflora.ekfrequenz t;
+GRANT SELECT ON apflora.v_ekfrequenz TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
 COMMIT;

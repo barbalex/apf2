@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { assozartSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -12,7 +13,6 @@ import { useAtomValue } from 'jotai'
 import { TextField } from '../../../shared/TextField.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -53,7 +53,7 @@ interface AssozartQueryResult {
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type AssozartUseQueryOptions = UseQueryOptions<
-  AssozartQueryResult | undefined,
+  { assozartById: NonNullable<AssozartQueryResult['assozartById']> | null },
   Error
 > & {
   suspense: boolean
@@ -64,7 +64,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -72,14 +71,12 @@ export const Component = () => {
   const queryOptions: AssozartUseQueryOptions = {
     queryKey: ['assozart', id],
     queryFn: async () => {
-      const result = await apolloClient.query<AssozartQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<AssozartQueryResult['assozartById']>[]
+      >(
+        `/v_assozart?id=eq.${id}&select=${assozartSelect},aeTaxonomyByAeId:ae_taxonomy_by_ae_id,apByApId:ap_by_ap_id`,
+      )
+      return { assozartById: rows?.[0] ?? null }
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes

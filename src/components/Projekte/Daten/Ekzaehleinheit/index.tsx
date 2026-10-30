@@ -1,6 +1,8 @@
+import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from '../../../../modules/api.ts'
+import { ekzaehleinheitSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -9,7 +11,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { queryLists } from './queryLists.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -81,14 +82,12 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['ekzaehleinheit', id],
     queryFn: async () => {
-      const result = await apolloClient.query<EkzaehleinheitQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<EkzaehleinheitQueryResult['ekzaehleinheitById']>[]
+      >(
+        `/v_ekzaehleinheit?id=eq.${id}&select=${ekzaehleinheitSelect},tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id,apByApId:ap_by_ap_id`,
+      )
+      return { ekzaehleinheitById: rows?.[0] ?? null }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })

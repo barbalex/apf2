@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { apberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import {
   useQuery,
   type UseQueryOptions,
@@ -14,7 +15,6 @@ import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
@@ -76,7 +76,15 @@ interface ApberQueryResult {
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type ApberUseQueryOptions = UseQueryOptions<
-  ApberQueryResult | undefined,
+  {
+    apberById: NonNullable<ApberQueryResult['apberById']> | null
+    allAdresses: {
+      nodes: NonNullable<ApberQueryResult['allAdresses']>['nodes']
+    }
+    allApErfkritWertes: {
+      nodes: NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']
+    }
+  },
   Error
 > & {
   suspense: boolean
@@ -87,7 +95,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -95,14 +102,22 @@ export const Component = () => {
   const queryOptions: ApberUseQueryOptions = {
     queryKey: ['apber', apberId],
     queryFn: async () => {
-      const result = await apolloClient.query<ApberQueryResult>({
-        query,
-        variables: {
-          id: apberId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, adressesOpts, aperfkritwertesOpts] = await Promise.all([
+        apiFetch<NonNullable<ApberQueryResult['apberById']>[]>(
+          `/v_apber?id=eq.${apberId}&select=${apberSelect},apByApId:ap_by_ap_id`,
+        ),
+        apiFetch<NonNullable<ApberQueryResult['allAdresses']>['nodes']>(
+          `/adresse?order=name.asc&select=value:id,label:name`,
+        ),
+        apiFetch<NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']>(
+          `/_erfkrit_werte?order=sort.asc&select=value:code,label:text,sort`,
+        ),
+      ])
+      return {
+        apberById: rows?.[0] ?? null,
+        allAdresses: { nodes: adressesOpts ?? [] },
+        allApErfkritWertes: { nodes: aperfkritwertesOpts ?? [] },
+      }
     },
     suspense: true,
   }
