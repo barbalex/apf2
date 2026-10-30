@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -11,12 +10,12 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { Select } from '../../../shared/Select.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { user as userFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 import { Password } from './Password.tsx'
 
 import type { ComponentType } from 'react'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 import type { UserId } from '../../../../models/apflora/User.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
@@ -78,13 +77,6 @@ const roleWerte = [
   },
 ]
 
-const fieldTypes: Record<string, string> = {
-  name: 'String',
-  email: 'String',
-  role: 'String',
-  pass: 'String',
-  adresseId: 'UUID',
-}
 
 export const Component = () => {
   const { userId } = useParams()
@@ -118,31 +110,9 @@ export const Component = () => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateUserForUser(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-            ) {
-              updateUserById(
-                input: {
-                  id: $id
-                  userPatch: {
-                    ${field}: $${field}
-                  }
-                }
-              ) {
-                user {
-                  ...UserFields
-                }
-              }
-            }
-            ${userFragment}
-          `,
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
+      await apiUpdateByVariables('user', {
+        id: row.id,
+        [field]: value,
       })
     } catch (error) {
       return setErrors({ [field]: (error as Error).message })

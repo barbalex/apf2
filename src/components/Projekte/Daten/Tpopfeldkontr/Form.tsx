@@ -1,7 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -19,7 +17,6 @@ import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
 import { userNameAtom, userTokenAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type { ComponentType } from 'react'
@@ -32,6 +29,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 // shared RadioButtonGroup's props are inferred from an untyped signature
 // (dataSource infers as never, value as null);
@@ -153,7 +151,6 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
       tpopkontrTypWerte
     : tpopkontrTypWerte.filter((w) => w.value === 'Kontrolle')
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -177,35 +174,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
       variables.jahr = newJahr
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation updateTpopkontrForEk(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopkontr {
-                    ...TpopfeldkontrFields
-                  }
-                }
-              }
-              ${tpopfeldkontr}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontr', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

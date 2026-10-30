@@ -1,7 +1,6 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import Button from '@mui/material/Button'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
@@ -18,7 +17,6 @@ import { query } from './query.ts'
 import { userAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apberuebersicht } from '../../../shared/fragments.ts'
 import { Error } from '../../../shared/Error.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { historize } from '../../../../modules/historize.ts'
@@ -28,14 +26,8 @@ import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersic
 import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  projId: 'UUID',
-  jahr: 'Int',
-  historyDate: 'Date',
-  historyFixed: 'Boolean',
-  bemerkungen: 'String',
-}
 
 interface ApberuebersichtNode {
   id: ApberuebersichtId
@@ -99,31 +91,7 @@ export const Component = () => {
       changedBy: user.name,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApberuebersicht(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApberuebersichtById(
-                input: {
-                  id: $id
-                  apberuebersichtPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apberuebersicht {
-                  ...ApberuebersichtFields
-                }
-              }
-            }
-            ${apberuebersicht}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apberuebersicht', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

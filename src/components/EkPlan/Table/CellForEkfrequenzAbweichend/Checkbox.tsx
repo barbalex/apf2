@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { tpop } from '../../../shared/fragments.ts'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 import styles from './Checkbox.module.css'
 
@@ -25,7 +23,6 @@ export const Checkbox = ({
 }) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [checked, setChecked] = useState(value === null ? false : value)
@@ -39,35 +36,10 @@ export const Checkbox = ({
   const onClick = async () => {
     setChecked(!checked)
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopCheckbox(
-              $id: UUID!
-              $${field}: Boolean
-              $changedBy: String
-            ) {
-              updateTpopById(
-                input: {
-                  id: $id
-                  tpopPatch: {
-                    id: $id
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpop {
-                  ...TpopFields
-                }
-              }
-            }
-            ${tpop}
-          `,
-        variables: {
-          id: row.id,
-          [field]: !checked,
-          changedBy: userName,
-        },
+      await apiUpdateByVariables('tpop', {
+        id: row.id,
+        [field]: !checked,
+        changedBy: userName,
       })
     } catch (error) {
       setChecked(!checked)

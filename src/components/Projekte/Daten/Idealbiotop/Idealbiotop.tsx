@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -12,12 +11,12 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { idealbiotop } from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { IdealbiotopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Idealbiotop.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface IdealbiotopNode {
   id: IdealbiotopId
@@ -47,27 +46,6 @@ interface IdealbiotopQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  erstelldatum: 'Date',
-  hoehenlage: 'String',
-  region: 'String',
-  exposition: 'String',
-  besonnung: 'String',
-  hangneigung: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  wasserhaushalt: 'String',
-  konkurrenz: 'String',
-  moosschicht: 'String',
-  krautschicht: 'String',
-  strauchschicht: 'String',
-  baumschicht: 'String',
-  bemerkungen: 'String',
-}
 
 export const Component = () => {
   const { apId } = useParams()
@@ -104,31 +82,7 @@ export const Component = () => {
     }
 
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateIdealbiotop(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateIdealbiotopById(
-                input: {
-                  id: $id
-                  idealbiotopPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                idealbiotop {
-                  ...IdealbiotopFields
-                }
-              }
-            }
-            ${idealbiotop}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('idealbiotop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -16,6 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ProjektQueryResult {
   projektById?: {
@@ -25,7 +25,6 @@ interface ProjektQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = { name: 'String' }
 
 export const Component = () => {
   const { projId } = useParams()
@@ -63,32 +62,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateProjekt(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateProjektById(
-                input: {
-                  id: $id
-                  projektPatch: { 
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                projekt {
-                  id
-                  name
-                  changedBy
-                }
-              }
-            }
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('projekt', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

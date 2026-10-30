@@ -2,7 +2,6 @@ import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions, useQueryClient } from '@tanstack/react-query'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -16,7 +15,6 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ApberId } from '../../../../models/apflora/Apber.ts'
@@ -24,25 +22,8 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  jahr: 'Int',
-  situation: 'String',
-  vergleichVorjahrGesamtziel: 'String',
-  beurteilung: 'Int',
-  apberAnalyse: 'String',
-  konsequenzenUmsetzung: 'String',
-  konsequenzenErfolgskontrolle: 'String',
-  biotopeNeue: 'String',
-  biotopeOptimieren: 'String',
-  massnahmenOptimieren: 'String',
-  wirkungAufArt: 'String',
-  datum: 'Date',
-  massnahmenApBearb: 'String',
-  massnahmenPlanungVsAusfuehrung: 'String',
-  apId: 'UUID',
-  bearbeiter: 'UUID',
-}
 
 interface ApberQueryResult {
   apberById: {
@@ -150,31 +131,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApberById(
-                input: {
-                  id: $id
-                  apberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apber {
-                  ...ApberFields
-                }
-              }
-            }
-            ${apber}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

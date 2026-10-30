@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -13,11 +12,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  pop,
-  popmassnber,
-  tpopmassnErfbeurtWerte,
-} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -28,6 +22,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface PopmassnberQueryResult {
   popmassnberById?: {
@@ -54,12 +49,6 @@ interface PopmassnberQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  jahr: 'Int',
-  beurteilung: 'Int',
-  bemerkungen: 'String',
-}
 
 export const Component = () => {
   const { popmassnberId: id } = useParams()
@@ -97,39 +86,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updatePopmassnber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updatePopmassnberById(
-                input: {
-                  id: $id
-                  popmassnberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                popmassnber {
-                  ...PopmassnberFields
-                  tpopmassnErfbeurtWerteByBeurteilung {
-                    ...TpopmassnErfbeurtWerteFields
-                  }
-                  popByPopId {
-                    ...PopFields
-                  }
-                }
-              }
-            }
-            ${pop}
-            ${popmassnber}
-            ${tpopmassnErfbeurtWerte}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('popmassnber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

@@ -7,6 +7,8 @@
  */
 import { jwtDecode } from 'jwt-decode'
 
+import { camelToSnake } from './camelToSnake.ts'
+import { tables } from './tables.ts'
 import { store, userTokenAtom } from '../store/index.ts'
 
 export const postgrestUri = () => {
@@ -112,6 +114,29 @@ export const apiUpdate = (table: string, id: string, patch: object) =>
 
 export const apiDelete = (table: string, id: string) =>
   apiFetch(`/${table}?id=eq.${id}`, { method: 'DELETE' })
+
+/**
+ * PATCH a row by primary key, taking the legacy mutation-variables shape
+ * ({ id, changedBy, ...camelCaseFields }) that the forms build today.
+ * Transitional helper for the PostgREST migration — new code should call
+ * apiUpdate directly with snake_case keys.
+ */
+export const apiUpdateByVariables = (
+  appTable: string,
+  variables: { id?: string | undefined; changedBy?: string | null } & Record<
+    string,
+    unknown
+  >,
+) => {
+  const { id, changedBy, ...patch } = variables
+  if (!id) throw new Error(`apiUpdateByVariables: ${appTable} has no id`)
+  const dbTable = tables.find((t) => t.table === appTable)?.dbTable ?? appTable
+  const body = Object.fromEntries(
+    Object.entries(patch).map(([k, v]) => [camelToSnake(k), v]),
+  )
+  body.changed_by = changedBy
+  return apiUpdate(dbTable, id, body)
+}
 
 // call a db function, e.g. rpc('login', { username, pass })
 export const rpc = <T = unknown>(

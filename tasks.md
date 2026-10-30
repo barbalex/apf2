@@ -66,7 +66,8 @@ Spike results (30.10.2026) — **go**:
 - [x] `historize` (rpc + PATCH apberuebersicht.history_date), `historizeForAp` (rpc historize_for_ap), `uploadSignature` (rpc upload_signature) → `/rpc/`.
 - [x] verified: insert→select=*→delete→undelete round-trip via dev PostgREST (201/204/201); 13 Playwright specs green (auth, prefetch, forms).
 - test infrastructure fixed along the way (all pre-existing breakage): `playwright/.auth/user.json` contained only credentials, no auth state — protected tests always ran logged-out. `scripts/refresh-auth-state.mjs` now logs in via `rpc('login')` and writes fresh storage state (token lives 24 h — re-run when tests meet the Anmeldung dialog). Also updated stale expectations: uuidv1 ids in `forms/aktionsplan.spec.ts` (0061 rewrote them), route segment `Aktionspläne`→`Arten`, form title `Aktionsplan`→`Art`.
-- [ ] the remaining ~100 modules with static `apolloClient.mutate` calls (forms, copyTo/moveTo, Ekf, EkPlan) — mechanical, migrate per module.
+- [x] form field-save mutations (26 files: the `update<X>ById` + `${field}` + `changedBy` family): codemodded to `apiUpdateByVariables('<table>', variables)` (transitional adapter in api.ts: camel→snake keys, resolves dbTable via tables.ts, adds changed_by). Field-level saves verified against dev PostgREST (tpop: flurname/apber_relevant/changed_by; user table path works too). Removed ~1,100 lines of dynamicGql update boilerplate.
+- [ ] remaining: HistoryForm ×3 (composite id+year PATCH — needs `?id=eq.X&year=eq.Y`), copyTo/moveTo (~15 create/update modules), Tpopfeldkontr/Biotop & freiwkontr specials, EkPlan (deleteEkplanById etc.), Karte, Choose* copiers, coordinates modules, User.tsx password mutation — mechanical, per module.
 
 ## Phase 4 — Reads (191 static + nav data hooks)
 

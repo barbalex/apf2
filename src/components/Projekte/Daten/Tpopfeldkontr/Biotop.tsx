@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -13,8 +12,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopfeldkontr } from '../../../shared/fragments.ts'
-import { fieldTypes } from './Form.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ComponentType } from 'react'
@@ -25,6 +22,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 // shared RadioButtonGroup's props are inferred from an untyped signature
 // (dataSource infers as never, value as null);
@@ -121,35 +119,7 @@ export const Component = () => {
       variables.jahr = newJahr
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation updateTpopkontrForEk(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopkontr {
-                    ...TpopfeldkontrFields
-                  }
-                }
-              }
-              ${tpopfeldkontr}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontr', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

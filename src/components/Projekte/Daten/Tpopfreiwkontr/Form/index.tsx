@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { sortBy } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -30,13 +28,6 @@ import {
   isPrintAtom,
   userTokenAtom,
 } from '../../../../../store/index.ts'
-import {
-  adresse as adresseFragment,
-  pop as popFragment,
-  tpop as tpopFragment,
-  tpopfreiwkontr as tpopfreiwkontrFragment,
-  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../shared/fragments.ts'
 
 /** node of tpopkontrzaehl_einheit_werte, as used in the count selects */
 export interface ZaehleinheitWerteNode {
@@ -139,34 +130,14 @@ interface FormProps {
 }
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  typ: 'String',
-  datum: 'Date',
-  jahr: 'Int',
-  bemerkungen: 'String',
-  flaecheUeberprueft: 'Int',
-  deckungVegetation: 'Int',
-  deckungNackterBoden: 'Int',
-  deckungApArt: 'Int',
-  vegetationshoeheMaximum: 'Int',
-  vegetationshoeheMittel: 'Int',
-  gefaehrdung: 'String',
-  tpopId: 'UUID',
-  bearbeiter: 'UUID',
-  planVorhanden: 'Boolean',
-  jungpflanzenVorhanden: 'Boolean',
-  apberNichtRelevant: 'Boolean',
-  apberNichtRelevantGrund: 'String',
-  ekfBemerkungen: 'String',
-}
 
 export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
   const token = useAtomValue(userTokenAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -259,69 +230,7 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
     }
     if (field2) variables[field2] = value2
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopkontrForEkf(
-              $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-              $changedBy: String
-            ) {
-              updateTpopkontrById(
-                input: {
-                  id: $id
-                  tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopkontr {
-                  ...TpopfreiwkontrFields
-                  adresseByBearbeiter {
-                    ...AdresseFields
-                    usersByAdresseId {
-                      totalCount
-                    }
-                  }
-                  tpopByTpopId {
-                    ...TpopFields
-                    popByPopId {
-                      ...PopFields
-                      apByApId {
-                        id
-                        ekzaehleinheitsByApId {
-                          nodes {
-                            id
-                            tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                              ...TpopkontrzaehlEinheitWerteFields
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  tpopkontrzaehlsByTpopkontrId {
-                    nodes {
-                      id
-                      anzahl
-                      einheit
-                    }
-                  }
-                }
-              }
-            }
-            ${adresseFragment}
-            ${popFragment}
-            ${tpopFragment}
-            ${tpopfreiwkontrFragment}
-            ${tpopkontrzaehlEinheitWerteFragment}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontr', variables)
     } catch (error) {
       return setErrors({ [field]: (error as Error).message })
     }

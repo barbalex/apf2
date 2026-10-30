@@ -2,7 +2,6 @@ import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, type ReactNode } from 'react'
 import { useParams } from 'react-router'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 
@@ -13,7 +12,6 @@ import { SelectLoadingOptions } from '../../../../shared/SelectLoadingOptions.ts
 import { queryAeTaxonomies } from '../queryAeTaxonomies.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 import { userNameAtom } from '../../../../../store/index.ts'
-import { ap, aeTaxonomies } from '../../../../shared/fragments.ts'
 import { query } from '../query.ts'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
@@ -22,16 +20,8 @@ import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
 import type { ProjektId } from '../../../../../models/apflora/Projekt.ts'
 
 import styles from './Ap.module.css'
+import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  bearbeitung: 'Int',
-  startJahr: 'Int',
-  umsetzung: 'Int',
-  artId: 'UUID',
-  bearbeiter: 'UUID',
-  ekfBeobachtungszeitpunkt: 'String',
-  projId: 'UUID',
-}
 
 export interface ApQueryResult {
   apById: {
@@ -110,35 +100,7 @@ export const Ap = ({ children }: Props) => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateAp(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApById(
-                input: {
-                  id: $id
-                  apPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ap {
-                  ...ApFields
-                  aeTaxonomyByArtId {
-                    ...AeTaxonomiesFields
-                  }
-                }
-              }
-            }
-            ${ap}
-            ${aeTaxonomies}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ap', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

@@ -22,11 +22,7 @@ import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantI
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import {
-  popStatusWerte,
-  tpop,
-  tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.ts'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
@@ -149,42 +145,6 @@ type TpopListsUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  nr: 'Int',
-  gemeinde: 'String',
-  flurname: 'String',
-  radius: 'Int',
-  hoehe: 'Int',
-  exposition: 'String',
-  klima: 'String',
-  neigung: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  bodenAbtrag: 'String',
-  wasserhaushalt: 'String',
-  beschreibung: 'String',
-  katasterNr: 'String',
-  status: 'Int',
-  statusUnklarGrund: 'String',
-  apberRelevant: 'Boolean',
-  apberRelevantGrund: 'Int',
-  bekanntSeit: 'Int',
-  eigentuemer: 'String',
-  kontakt: 'String',
-  nutzungszone: 'String',
-  bewirtschafter: 'String',
-  bewirtschaftung: 'String',
-  ekfrequenz: 'UUID',
-  ekfrequenzAbweichend: 'Boolean',
-  ekfKontrolleur: 'UUID',
-  ekfrequenzStartjahr: 'Int',
-  bemerkungen: 'String',
-  statusUnklar: 'Boolean',
-}
 
 export const Component = () => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -259,44 +219,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpop${field}(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopById(
-                input: {
-                  id: $id
-                  tpopPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpop {
-                  ...TpopFields
-                  popStatusWerteByStatus {
-                    ...PopStatusWerteFields
-                  }
-                  tpopApberrelevantGrundWerteByApberRelevantGrund {
-                    ...TpopApberrelevantGrundWerteFields
-                  }
-                  popByPopId {
-                    id
-                    apId
-                  }
-                }
-              }
-            }
-            ${popStatusWerte}
-            ${tpop}
-            ${tpopApberrelevantGrundWerte}
-          `,
-        variables,
-        // no optimistic response as geomPoint
-      })
+      await apiUpdateByVariables('tpop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

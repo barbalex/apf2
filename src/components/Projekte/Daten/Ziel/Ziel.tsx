@@ -1,7 +1,6 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { isEqual } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -20,7 +19,6 @@ import {
 } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { ziel as zielFragment } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -63,15 +61,8 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './Ziel.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  typ: 'Int',
-  jahr: 'Int',
-  bezeichnung: 'String',
-  erreichung: 'String',
-  bemerkungen: 'String',
-}
 
 const erreichungOptions = [
   { value: 'erreicht', label: 'erreicht' },
@@ -118,31 +109,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateZiel(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateZielById(
-                input: {
-                  id: $id
-                  zielPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ziel {
-                  ...ZielFields
-                }
-              }
-            }
-            ${zielFragment}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ziel', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

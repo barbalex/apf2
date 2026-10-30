@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
@@ -18,7 +17,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { assozart } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
@@ -26,12 +24,8 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  bemerkungen: 'String',
-  aeId: 'UUID',
-  apId: 'UUID',
-}
 
 interface AssozartNode {
   id: AssozartId
@@ -119,43 +113,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-                mutation updateAssozart(
-                  $id: UUID!
-                  $${field}: ${fieldTypes[field]}
-                  $changedBy: String
-                ) {
-                  updateAssozartById(
-                    input: {
-                      id: $id
-                      assozartPatch: {
-                        ${field}: $${field}
-                        changedBy: $changedBy
-                      }
-                    }
-                  ) {
-                    assozart {
-                      ...AssozartFields
-                      aeTaxonomyByAeId {
-                        id
-                        artname
-                      }
-                      apByApId {
-                        artId
-                        assozartsByApId {
-                          nodes {
-                            ...AssozartFields
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                ${assozart}
-              `,
-        variables,
-      })
+      await apiUpdateByVariables('assozart', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

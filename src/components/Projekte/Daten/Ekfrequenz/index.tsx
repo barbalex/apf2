@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -14,7 +13,6 @@ import { query } from './query.ts'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { ekfrequenz } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 
@@ -26,6 +24,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface EkfrequenzNode {
   id: EkfrequenzId
@@ -75,17 +74,6 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   error?: string | undefined
 }>
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  ektyp: 'EkType',
-  anwendungsfall: 'String',
-  code: 'String',
-  kontrolljahre: '[Int]',
-  kontrolljahreAb: 'EkKontrolljahreAb',
-  bemerkungen: 'String',
-  sort: 'Int',
-  ekAbrechnungstyp: 'String',
-}
 
 const ektypeWertes = [
   { value: 'EK', label: 'EK' },
@@ -145,31 +133,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateEkfrequenz(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateEkfrequenzById(
-                input: {
-                  id: $id
-                  ekfrequenzPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ekfrequenz {
-                  ...EkfrequenzFields
-                }
-              }
-            }
-            ${ekfrequenz}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ekfrequenz', variables)
     } catch (error) {
       setFieldErrors((prev) => ({
         ...prev,

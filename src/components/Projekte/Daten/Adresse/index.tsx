@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -15,19 +14,12 @@ import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { adresse } from '../../../shared/fragments.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  name: 'String',
-  adresse: 'String',
-  telefon: 'String',
-  email: 'String',
-  freiwErfko: 'Boolean',
-}
 
 interface AdresseQueryResult {
   adresseById: {
@@ -74,31 +66,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateAdresse(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateAdresseById(
-                input: {
-                  id: $id
-                  adressePatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                adresse {
-                  ...AdresseFields
-                }
-              }
-            }
-            ${adresse}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('adresse', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { groupBy } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import {
   useQuery,
@@ -26,11 +25,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import {
-  popStatusWerte,
-  tpop as tpopFragment,
-  tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.ts'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -164,42 +159,6 @@ interface TpopEkListsQueryResult {
   } | null
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  nr: 'Int',
-  gemeinde: 'String',
-  flurname: 'String',
-  radius: 'Int',
-  hoehe: 'Int',
-  exposition: 'String',
-  klima: 'String',
-  neigung: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  bodenAbtrag: 'String',
-  wasserhaushalt: 'String',
-  beschreibung: 'String',
-  katasterNr: 'String',
-  status: 'Int',
-  statusUnklarGrund: 'String',
-  apberRelevant: 'Boolean',
-  apberRelevantGrund: 'Int',
-  bekanntSeit: 'Int',
-  eigentuemer: 'String',
-  kontakt: 'String',
-  nutzungszone: 'String',
-  bewirtschafter: 'String',
-  bewirtschaftung: 'String',
-  ekfrequenz: 'UUID',
-  ekfrequenzAbweichend: 'Boolean',
-  ekfKontrolleur: 'UUID',
-  ekfrequenzStartjahr: 'Int',
-  bemerkungen: 'String',
-  statusUnklar: 'Boolean',
-}
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
@@ -253,44 +212,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpop${field}(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopById(
-                input: {
-                  id: $id
-                  tpopPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpop {
-                  ...TpopFields
-                  popStatusWerteByStatus {
-                    ...PopStatusWerteFields
-                  }
-                  tpopApberrelevantGrundWerteByApberRelevantGrund {
-                    ...TpopApberrelevantGrundWerteFields
-                  }
-                  popByPopId {
-                    id
-                    apId
-                  }
-                }
-              }
-            }
-            ${popStatusWerte}
-            ${tpopFragment}
-            ${tpopApberrelevantGrundWerte}
-          `,
-        variables,
-        // no optimistic responce as geomPoint
-      })
+      await apiUpdateByVariables('tpop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

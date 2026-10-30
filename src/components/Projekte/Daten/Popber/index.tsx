@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -13,7 +12,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -23,6 +21,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface PopberQueryResult {
   popberById?: {
@@ -50,12 +49,6 @@ interface PopberQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  jahr: 'Int',
-  entwicklung: 'Int',
-  bemerkungen: 'String',
-}
 
 export const Component = () => {
   const { popberId: id } = useParams()
@@ -93,39 +86,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updatePopber(
-            $id: UUID!
-            $${field}: ${fieldTypes[field]}
-            $changedBy: String
-          ) {
-            updatePopberById(
-              input: {
-                id: $id
-                popberPatch: {
-                  ${field}: $${field}
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              popber {
-                ...PopberFields
-                tpopEntwicklungWerteByEntwicklung {
-                  ...TpopEntwicklungWerteFields
-                }
-                popByPopId {
-                  ...PopFields
-                }
-              }
-            }
-          }
-          ${pop}
-          ${popber}
-          ${tpopEntwicklungWerte}
-        `,
-        variables,
-      })
+      await apiUpdateByVariables('popber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

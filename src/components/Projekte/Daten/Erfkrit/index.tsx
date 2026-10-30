@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -13,7 +12,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { erfkrit } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -21,6 +19,7 @@ import type { ComponentType } from 'react'
 import type { Erfkrit } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ErfkritQueryResult {
   erfkritById?: Erfkrit
@@ -46,11 +45,6 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   error?: string | undefined
 }>
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  erfolg: 'Int',
-  kriterien: 'String',
-}
 
 export const Component = () => {
   const { erfkritId: id } = useParams()
@@ -86,31 +80,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateErfkrit(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateErfkritById(
-                input: {
-                  id: $id
-                  erfkritPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                erfkrit {
-                  ...ErfkritFields
-                }
-              }
-            }
-            ${erfkrit}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('erfkrit', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

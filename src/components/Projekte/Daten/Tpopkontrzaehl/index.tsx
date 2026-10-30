@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
@@ -18,7 +17,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopkontrzaehl } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -71,12 +69,8 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  anzahl: 'Float',
-  einheit: 'Int',
-  methode: 'Int',
-}
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
@@ -136,31 +130,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateAnzahlForEkZaehl(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopkontrzaehlById(
-                input: {
-                  id: $id
-                  tpopkontrzaehlPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopkontrzaehl {
-                  ...TpopkontrzaehlFields
-                }
-              }
-            }
-            ${tpopkontrzaehl}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontrzaehl', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

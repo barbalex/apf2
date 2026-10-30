@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -146,31 +145,8 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './Tpopmassn.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  typ: 'Int',
-  beschreibung: 'String',
-  jahr: 'Int',
-  datum: 'Date',
-  bemerkungen: 'String',
-  planBezeichnung: 'String',
-  flaeche: 'Float',
-  markierung: 'String',
-  anzTriebe: 'Int',
-  anzPflanzen: 'Int',
-  anzPflanzstellen: 'Int',
-  zieleinheitEinheit: 'Int',
-  zieleinheitAnzahl: 'Int',
-  wirtspflanze: 'String',
-  herkunftPop: 'String',
-  sammeldatum: 'String',
-  vonAnzahlIndividuen: 'Int',
-  form: 'String',
-  pflanzanordnung: 'String',
-  tpopId: 'UUID',
-  bearbeiter: 'UUID',
-  planVorhanden: 'Boolean',
-}
 
 export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
@@ -386,78 +362,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       }
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopmassn(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              ${field === 'jahr' ? '$datum: Date' : ''}
-              ${field === 'datum' ? '$jahr: Int' : ''}
-              ${field === 'typ' ? '$zieleinheitEinheit: Int' : ''}
-              ${
-                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
-                  '$zieleinheitAnzahl: Int'
-                : ''
-              }
-              $changedBy: String
-            ) {
-              updateTpopmassnById(
-                input: {
-                  id: $id
-                  tpopmassnPatch: {
-                    ${field}: $${field}
-                    ${field === 'jahr' ? 'datum: $datum' : ''}
-                    ${field === 'datum' ? 'jahr: $jahr' : ''}
-                    ${
-                      field === 'typ' ?
-                        'zieleinheitEinheit: $zieleinheitEinheit'
-                      : ''
-                    }
-                    ${
-                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
-                        'zieleinheitAnzahl: $zieleinheitAnzahl'
-                      : ''
-                    }
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopmassn {
-                  id
-                  label
-                  typ
-                  tpopmassnTypWerteByTyp {
-                    id
-                    anpflanzung
-                  }
-                  beschreibung
-                  jahr
-                  datum
-                  bemerkungen
-                  planBezeichnung
-                  flaeche
-                  markierung
-                  anzTriebe
-                  anzPflanzen
-                  anzPflanzstellen
-                  zieleinheitEinheit
-                  zieleinheitAnzahl
-                  wirtspflanze
-                  herkunftPop
-                  sammeldatum
-                  vonAnzahlIndividuen
-                  form
-                  pflanzanordnung
-                  tpopId
-                  bearbeiter
-                  planVorhanden
-                  changedBy
-                }
-              }
-            }
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopmassn', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

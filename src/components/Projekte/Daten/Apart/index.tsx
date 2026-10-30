@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
@@ -17,7 +16,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apart } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
@@ -25,11 +23,8 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  artId: 'UUID',
-}
 
 interface ApartNode {
   id: ApartId
@@ -120,31 +115,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApart(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApartById(
-                input: {
-                  id: $id
-                  apartPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apart {
-                  ...ApartFields
-                }
-              }
-            }
-            ${apart}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apart', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

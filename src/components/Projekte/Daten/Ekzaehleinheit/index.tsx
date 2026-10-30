@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
@@ -15,10 +14,6 @@ import { queryLists } from './queryLists.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  ekzaehleinheit,
-  tpopkontrzaehlEinheitWerte,
-} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -28,6 +23,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface EkzaehleinheitNode {
   id: EkzaehleinheitId
@@ -72,14 +68,6 @@ interface ListsQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  bemerkungen: 'String',
-  apId: 'UUID',
-  zaehleinheitId: 'UUID',
-  zielrelevant: 'Boolean',
-  notMassnCountUnit: 'Boolean',
-  sort: 'Int',
-}
 
 export const Component = () => {
   const { zaehleinheitId: id } = useParams()
@@ -140,35 +128,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateEkzaehleinheit(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateEkzaehleinheitById(
-                input: {
-                  id: $id
-                  ekzaehleinheitPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ekzaehleinheit {
-                  ...EkzaehleinheitFields
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    ...TpopkontrzaehlEinheitWerteFields
-                  }
-                }
-              }
-            }
-            ${ekzaehleinheit}
-            ${tpopkontrzaehlEinheitWerte}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ekzaehleinheit', variables)
     } catch (error) {
       if (
         field === 'zielrelevant' &&

@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -13,7 +12,6 @@ import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopmassnber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -65,13 +63,8 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  tpopId: 'UUID',
-  jahr: 'Int',
-  beurteilung: 'Int',
-  bemerkungen: 'String',
-}
 
 export const Component = () => {
   const { tpopmassnberId: id } = useParams()
@@ -112,38 +105,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopmassnber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopmassnberById(
-                input: {
-                  id: $id
-                  tpopmassnberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopmassnber {
-                  ...TpopmassnberFields
-                  tpopByTpopId {
-                    id
-                    popByPopId {
-                      id
-                      apId
-                    }
-                  }
-                }
-              }
-            }
-            ${tpopmassnber}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopmassnber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

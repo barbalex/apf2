@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
@@ -16,7 +15,6 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopber } from '../../../shared/fragments.ts'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
@@ -24,6 +22,7 @@ import type { TpopId, TpopEntwicklungWerteCode } from '../../../../models/apflor
 import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface TpopberQueryResult {
   tpopberById?: {
@@ -42,12 +41,6 @@ interface TpopberQueryResult {
   } | null
 }
 
-const fieldTypes: Record<string, string> = {
-  tpopId: 'UUID',
-  jahr: 'Int',
-  entwicklung: 'Int',
-  bemerkungen: 'String',
-}
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
@@ -95,29 +88,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation updateTpopber(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                $changedBy: String
-              ) {
-                updateTpopberById(
-                  input: {
-                    id: $id
-                    tpopberPatch: {
-                      ${field}: $${field}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopber { ...TpopberFields }
-                }
-              }
-              ${tpopber}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
