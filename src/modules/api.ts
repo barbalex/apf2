@@ -18,7 +18,9 @@ export const postgrestUri = () => {
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
 
-  return isLocalhost ? 'http://localhost:3000' : 'https://api.apflora.ch/postgrest'
+  return isLocalhost ?
+      'http://localhost:3000'
+    : 'https://api.apflora.ch/postgrest'
 }
 
 /** error with the PostgREST error body attached (code like "28P01") */
@@ -49,9 +51,11 @@ const authHeaders = () => {
 }
 
 const buildError = async (res: Response): Promise<ApiError> => {
-  const body = (await res.json().catch(() => null)) as
-    | { message?: string; code?: string; details?: unknown }
-    | null
+  const body = (await res.json().catch(() => null)) as {
+    message?: string
+    code?: string
+    details?: unknown
+  } | null
   const error = new ApiError(body?.message ?? res.statusText)
   error.code = body?.code
   error.status = res.status
@@ -83,9 +87,7 @@ export const apiFetch = async <T = unknown>(
   if (method !== 'GET' && !path.startsWith('/rpc/')) {
     headers.set('Prefer', 'return=minimal')
   }
-  Object.entries(options.headers ?? {}).forEach(([k, v]) =>
-    headers.set(k, v),
-  )
+  Object.entries(options.headers ?? {}).forEach(([k, v]) => headers.set(k, v))
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }

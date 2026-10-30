@@ -6,10 +6,7 @@ import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 import styles from './Checkbox.module.css'
 
-import {
-  addNotificationAtom,
-  userNameAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom, userNameAtom } from '../../../../store/index.ts'
 import type { RowTpopNode } from '../tableTypes.ts'
 
 export const Checkbox = ({

@@ -26,10 +26,7 @@ import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
-import {
-  addNotificationAtom,
-  userNameAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom, userNameAtom } from '../../../../store/index.ts'
 
 import type {
   TpopId,
@@ -134,7 +131,10 @@ interface GemeindeQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type TpopUseQueryOptions = UseQueryOptions<TpopQueryResult | undefined, Error> & {
+type TpopUseQueryOptions = UseQueryOptions<
+  TpopQueryResult | undefined,
+  Error
+> & {
   suspense: boolean
 }
 
@@ -144,7 +144,6 @@ type TpopListsUseQueryOptions = UseQueryOptions<
 > & {
   suspense: boolean
 }
-
 
 export const Component = () => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -170,9 +169,7 @@ export const Component = () => {
 
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
-  const row = (data?.tpopById ?? {}) as NonNullable<
-    TpopQueryResult['tpopById']
-  >
+  const row = (data?.tpopById ?? {}) as NonNullable<TpopQueryResult['tpopById']>
 
   const tpopListsQueryOptions: TpopListsUseQueryOptions = {
     queryKey: ['tpopLists'],

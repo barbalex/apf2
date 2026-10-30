@@ -47,9 +47,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: string; label: string }[]
   value?: string | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -76,7 +76,6 @@ const roleWerte = [
     label: 'manager (sieht und ändert fast alle Daten)',
   },
 ]
-
 
 export const Component = () => {
   const { userId } = useParams()
@@ -178,7 +177,10 @@ export const Component = () => {
             saveToDb={(event) => void saveToDb(event)}
             error={errors.adresseId ?? ''}
           />
-          <Password errors={errors} saveToDb={saveToDb} />
+          <Password
+            errors={errors}
+            saveToDb={saveToDb}
+          />
         </div>
       </div>
     </ErrorBoundary>

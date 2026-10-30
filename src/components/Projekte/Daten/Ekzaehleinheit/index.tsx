@@ -68,7 +68,6 @@ interface ListsQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { zaehleinheitId: id } = useParams()
 

@@ -314,22 +314,21 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpop
-              ? `'${row.label}' hierhin verschieben`
-              : thisTpopIsMoving
-                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-                : movingFromThisPop
-                  ? `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
-                  : `Verschiebe '${moving.label}' zu dieser Population`
+            !isMovingTpop ? `'${row.label}' hierhin verschieben`
+            : thisTpopIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+            : movingFromThisPop ?
+              `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+            : `Verschiebe '${moving.label}' zu dieser Population`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpop && thisTpopIsMoving
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  isMovingTpop && thisTpopIsMoving ? 'rgb(255, 90, 0)' : (
+                    'white'
+                  ),
               }}
             />
           </IconButton>
@@ -343,9 +342,9 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopying
-              ? `Kopiere '${copying.label}' in diese Population`
-              : 'Kopieren'
+            isCopying ?
+              `Kopiere '${copying.label}' in diese Population`
+            : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>

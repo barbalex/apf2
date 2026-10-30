@@ -49,7 +49,6 @@ interface PopberQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { popberId: id } = useParams()
 

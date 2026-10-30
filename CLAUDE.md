@@ -96,6 +96,7 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 ## Conventions
 
 - **Always include file extensions in imports** (`.ts`/`.tsx`) — enforced by `eslint-plugin-import` (`import/extensions`) and used everywhere. MUI/Emotion is a dependency only because `@mui/material` needs it.
+- **Prettier config lives in the repo** ([.prettierrc.json](.prettierrc.json), previously only in VS Code user settings): single quotes, no semicolons, `experimentalTernaries`, `singleAttributePerLine`. Generated dirs (`src/gql/`, `src/models/`) are ignored via [.prettierignore](.prettierignore). Beware: prettier reformats the GraphQL template literals, and codegen matches documents by exact source text — so after formatting files containing `graphql(...)` calls, **run `npm run codegen`** or the `graphql()` calls resolve to `unknown` in typecheck.
 - **React Compiler is on** (`babel-plugin-react-compiler` via `@rolldown/plugin-babel` in [vite.config.ts](vite.config.ts)); write compiler-friendly components (stable refs, no manual memoization hacks).
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.
 - **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `apollo`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.

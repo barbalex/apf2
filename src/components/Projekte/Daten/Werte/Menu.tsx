@@ -38,13 +38,10 @@ export const Menu = ({ row, table }: MenuProps) => {
 
   const typename = upperFirst(table)
   const pathName =
-    table === 'tpopApberrelevantGrundWerte'
-      ? 'ApberrelevantGrundWerte'
-      : table === 'ekAbrechnungstypWerte'
-        ? 'EkAbrechnungstypWerte'
-        : table === 'tpopkontrzaehlEinheitWerte'
-          ? 'TpopkontrzaehlEinheitWerte'
-          : 'uups'
+    table === 'tpopApberrelevantGrundWerte' ? 'ApberrelevantGrundWerte'
+    : table === 'ekAbrechnungstypWerte' ? 'EkAbrechnungstypWerte'
+    : table === 'tpopkontrzaehlEinheitWerte' ? 'TpopkontrzaehlEinheitWerte'
+    : 'uups'
 
   const onClickAdd = async () => {
     const newId = uuidv7()
@@ -79,13 +76,12 @@ export const Menu = ({ row, table }: MenuProps) => {
       search,
       toDelete: {
         table:
-          table === 'tpopApberrelevantGrundWerte'
-            ? 'tpop_apberrelevant_grund_werte'
-            : table === 'ekAbrechnungstypWerte'
-              ? 'ek_abrechnungstyp_werte'
-              : table === 'tpopkontrzaehlEinheitWerte'
-                ? 'tpopkontrzaehl_einheit_werte'
-                : table,
+          table === 'tpopApberrelevantGrundWerte' ?
+            'tpop_apberrelevant_grund_werte'
+          : table === 'ekAbrechnungstypWerte' ? 'ek_abrechnungstyp_werte'
+          : table === 'tpopkontrzaehlEinheitWerte' ?
+            'tpopkontrzaehl_einheit_werte'
+          : table,
         id: row.id,
         label: null,
         url: pathname.split('/').filter((p) => !!p),

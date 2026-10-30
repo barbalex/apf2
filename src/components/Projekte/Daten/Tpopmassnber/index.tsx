@@ -56,15 +56,14 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource?: { value: number; label: string }[] | undefined
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
-
 
 export const Component = () => {
   const { tpopmassnberId: id } = useParams()

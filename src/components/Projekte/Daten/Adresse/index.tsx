@@ -20,7 +20,6 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-
 interface AdresseQueryResult {
   adresseById: {
     id: AdresseId

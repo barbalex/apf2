@@ -49,7 +49,6 @@ interface PopmassnberQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { popmassnberId: id } = useParams()
 

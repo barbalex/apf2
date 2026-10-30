@@ -195,22 +195,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpopfreiwkontr
-              ? `'${row?.labelEkf}' zu einer anderen Population verschieben`
-              : thisTpopfreiwkontrIsMoving
-                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
-                : movingFromThisTpop
-                  ? `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
-                  : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            !isMovingTpopfreiwkontr ?
+              `'${row?.labelEkf}' zu einer anderen Population verschieben`
+            : thisTpopfreiwkontrIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+            : movingFromThisTpop ?
+              `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+            : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving ?
+                    'rgb(255, 90, 0)'
+                  : 'white',
               }}
             />
           </IconButton>
@@ -224,17 +224,16 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopyingTpopfreiwkontr
-              ? `Kopiere '${copying.label}' in diese Teilpopulation`
-              : 'Kopieren'
+            isCopyingTpopfreiwkontr ?
+              `Kopiere '${copying.label}' in diese Teilpopulation`
+            : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>
             <MdContentCopy
               style={{
-                color: thisTpopfreiwkontrIsCopying
-                  ? 'rgb(255, 90, 0)'
-                  : 'white',
+                color:
+                  thisTpopfreiwkontrIsCopying ? 'rgb(255, 90, 0)' : 'white',
               }}
             />
           </IconButton>

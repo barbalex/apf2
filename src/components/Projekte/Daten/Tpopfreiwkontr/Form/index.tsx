@@ -132,7 +132,6 @@ interface FormProps {
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 
-
 export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
@@ -166,8 +165,7 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const zaehlsSorted = sortBy(zaehls, [
     (z) => {
       const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        (e) =>
-          e.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code === z.einheit,
+        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code === z.einheit,
       )
       if (!ekzaehleinheitOriginal) return 999
       return ekzaehleinheitOriginal.sort || 999
@@ -226,7 +224,8 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
       // this broke 13.2.2019
       // value2 = !!value ? +format(new Date(value), 'yyyy') : null
       // value can be null so check if substring method exists
-      value2 = value && typeof value === 'string' ? +value.substring(0, 4) : value
+      value2 =
+        value && typeof value === 'string' ? +value.substring(0, 4) : value
     }
     if (field2) variables[field2] = value2
     try {

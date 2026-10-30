@@ -64,7 +64,8 @@ export const deleteModule = async ({
     })
   }
   // tableMetadata.table === toDelete.table is guaranteed by the find above
-  const table = tableMetadata.dbTable ? tableMetadata.dbTable : tableMetadata.table
+  const table =
+    tableMetadata.dbTable ? tableMetadata.dbTable : tableMetadata.table
 
   /**
    * fetch data for dataset (all columns, as later needed for undelete)
@@ -90,18 +91,15 @@ export const deleteModule = async ({
   // add to datasetsDeleted
   // cast: toDelete fields are nullable in the atom
   // but deletion is only possible with a dataset selected
-  store.set(
-    addDeletedDatasetAtom,
-    {
-      table,
-      id: toDelete.id,
-      label: toDelete.label,
-      url: toDelete.url,
-      data,
-      time: Date.now(),
-      afterDeletionHook: toDelete.afterDeletionHook,
-    } as unknown as DeletedDataset,
-  )
+  store.set(addDeletedDatasetAtom, {
+    table,
+    id: toDelete.id,
+    label: toDelete.label,
+    url: toDelete.url,
+    data,
+    time: Date.now(),
+    afterDeletionHook: toDelete.afterDeletionHook,
+  } as unknown as DeletedDataset)
 
   try {
     await apiDelete(table, toDelete.id)

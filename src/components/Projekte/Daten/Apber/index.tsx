@@ -1,7 +1,11 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, type UseQueryOptions, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  type UseQueryOptions,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -23,7 +27,6 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
-
 
 interface ApberQueryResult {
   apberById: {
@@ -72,7 +75,10 @@ interface ApberQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type ApberUseQueryOptions = UseQueryOptions<ApberQueryResult | undefined, Error> & {
+type ApberUseQueryOptions = UseQueryOptions<
+  ApberQueryResult | undefined,
+  Error
+> & {
   suspense: boolean
 }
 
@@ -110,11 +116,11 @@ export const Component = () => {
   )
   const jahr = row?.jahr
   const beurteilungVorjahr =
-    jahr == null
-      ? null
-      : ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
-          (apber) => apber.jahr === jahr - 1,
-        )?.beurteilung ?? null)
+    jahr == null ? null : (
+      ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
+        (apber) => apber.jahr === jahr - 1,
+      )?.beurteilung ?? null)
+    )
   const veraenderung = veraenderungZumVorjahr({
     beurteilung: row?.beurteilung,
     beurteilungVorjahr,

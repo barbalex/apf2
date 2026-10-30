@@ -163,22 +163,21 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingTpopmassn
-              ? `'${row.label}' zu einer anderen Teil-Population verschieben`
-              : thisTpopmassnIsMoving
-                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teil-Population einzufügen'
-                : movingFromThisTpop
-                  ? `'${moving.label}' zur selben Teil-Population zu vershieben, macht keinen Sinn`
-                  : `Verschiebe '${moving.label}' zu dieser Teil-Population`
+            !isMovingTpopmassn ?
+              `'${row.label}' zu einer anderen Teil-Population verschieben`
+            : thisTpopmassnIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Teil-Population einzufügen'
+            : movingFromThisTpop ?
+              `'${moving.label}' zur selben Teil-Population zu vershieben, macht keinen Sinn`
+            : `Verschiebe '${moving.label}' zu dieser Teil-Population`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpopmassn && thisTpopmassnIsMoving
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  isMovingTpopmassn && thisTpopmassnIsMoving ? 'rgb(255, 90, 0)'
+                  : 'white',
               }}
             />
           </IconButton>
@@ -192,9 +191,9 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopyingTpopmassn
-              ? `Kopiere '${copying.label}' in diese Teilpopulation`
-              : 'Kopieren'
+            isCopyingTpopmassn ?
+              `Kopiere '${copying.label}' in diese Teilpopulation`
+            : 'Kopieren'
           }
         >
           <IconButton onClick={() => void onClickCopy()}>

@@ -20,126 +20,131 @@ import type {
 import './index.css'
 import styles from './index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../store/index.ts'
-
+import { addNotificationAtom } from '../../../store/index.ts'
 
 export interface FilesRouterProps {
   parentId?: string | undefined
   parent: FileParent
 }
 
-export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999', parent }: FilesRouterProps) => {
+export const FilesRouter = ({
+  parentId = '99999999-9999-9999-9999-999999999999',
+  parent,
+}: FilesRouterProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-    const { search } = useLocation()
-    const navigate = useNavigate()
+  const { search } = useLocation()
+  const navigate = useNavigate()
 
-    const uploaderCtx = useContext(UploaderContext)
-    const api = uploaderCtx?.current?.getAPI?.()
-    const infoUuidsProcessed = useRef<string[]>([])
+  const uploaderCtx = useContext(UploaderContext)
+  const api = uploaderCtx?.current?.getAPI?.()
+  const infoUuidsProcessed = useRef<string[]>([])
 
-    const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-    // select aliases produce the camelCase FileNode shape the consumers expect
-    const select = 'id,fileId:file_id,fileMimeType:file_mime_type,name,beschreibung'
-    const { data, error, isLoading, refetch } = useQuery({
-      queryKey: ['FileQuery', parent, parentId],
-      queryFn: async () =>
-        (await apiFetch<FileNode[]>(
-          `/${parent}_file?${parent}_id=eq.${parentId}&select=${select}&order=name.asc`,
-        )) ?? [],
-    })
+  // select aliases produce the camelCase FileNode shape the consumers expect
+  const select =
+    'id,fileId:file_id,fileMimeType:file_mime_type,name,beschreibung'
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['FileQuery', parent, parentId],
+    queryFn: async () =>
+      (await apiFetch<FileNode[]>(
+        `/${parent}_file?${parent}_id=eq.${parentId}&select=${select}&order=name.asc`,
+      )) ?? [],
+  })
 
-    const files = data ?? []
+  const files = data ?? []
 
-    const onCommonUploadSuccess = (_info: CommonUploadSuccessEvent | null | undefined) => {
-      // reset infoUuidsProcessed
-      infoUuidsProcessed.current = []
-      // close the uploader or it will be open when navigating to the list
-      api?.doneFlow?.()
-      // clear the uploader or it will show the last uploaded file when opened next time
-      api?.removeAllFiles?.()
-      // somehow this needs to be delayed or sometimes not all files will be uploaded
-      setTimeout(() => void refetch(), 500)
-    }
+  const onCommonUploadSuccess = (
+    _info: CommonUploadSuccessEvent | null | undefined,
+  ) => {
+    // reset infoUuidsProcessed
+    infoUuidsProcessed.current = []
+    // close the uploader or it will be open when navigating to the list
+    api?.doneFlow?.()
+    // clear the uploader or it will show the last uploaded file when opened next time
+    api?.removeAllFiles?.()
+    // somehow this needs to be delayed or sometimes not all files will be uploaded
+    setTimeout(() => void refetch(), 500)
+  }
 
-    // ISSUE: sometimes this is called multiple times with the same info.uuid
-    const onFileUploadSuccess = async (
-      info: FileUploadSuccessEvent | null | undefined,
-    ) => {
-      if (info) {
-        if (infoUuidsProcessed.current.includes(info.uuid)) return
-        infoUuidsProcessed.current.push(info.uuid)
-        try {
-          await apiInsert(`${parent}_file`, {
-            [`${parent}_id`]: parentId,
-            file_id: info.uuid,
-            file_mime_type: info.mimeType,
-            name: info.name,
-            beschreibung: null,
-          })
-        } catch (error) {
-          console.log(error)
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        // navigate to the new file
-        void navigate(`${info.uuid}/Vorschau${search}`)
+  // ISSUE: sometimes this is called multiple times with the same info.uuid
+  const onFileUploadSuccess = async (
+    info: FileUploadSuccessEvent | null | undefined,
+  ) => {
+    if (info) {
+      if (infoUuidsProcessed.current.includes(info.uuid)) return
+      infoUuidsProcessed.current.push(info.uuid)
+      try {
+        await apiInsert(`${parent}_file`, {
+          [`${parent}_id`]: parentId,
+          file_id: info.uuid,
+          file_mime_type: info.mimeType,
+          name: info.name,
+          beschreibung: null,
+        })
+      } catch (error) {
+        console.log(error)
+        addNotification({
+          message: (error as Error).message,
+          options: {
+            variant: 'error',
+          },
+        })
       }
+      // navigate to the new file
+      void navigate(`${info.uuid}/Vorschau${search}`)
     }
+  }
 
-    const onFileUploadFailed = (
-      error: FileUploadFailedEvent | null | undefined,
-    ) => {
-      console.error('Upload failed:', error)
-      addNotification({
-        message:
+  const onFileUploadFailed = (
+    error: FileUploadFailedEvent | null | undefined,
+  ) => {
+    console.error('Upload failed:', error)
+    addNotification({
+      message:
         (error as { message?: string } | null | undefined)?.message ??
         'Upload fehlgeschlagen',
-        options: {
-          variant: 'error',
-        },
-      })
-      // close the uploader or it will be open when navigating to the list
-      api?.doneFlow?.()
-      // clear the uploader or it will show the last uploaded file when opened next time
-      api?.removeAllFiles?.()
-      // somehow this needs to be delayed or sometimes not all files will be uploaded
-      setTimeout(() => void refetch(), 500)
-    }
-
-    if (isLoading) return <Spinner />
-
-    if (error) return <Error error={error} />
-
-    return (
-      <ErrorBoundary>
-        <div
-          className={styles.container}
-          ref={containerRef}
-        >
-          <Uploader
-            onFileUploadSuccess={onFileUploadSuccess}
-            onFileUploadFailed={onFileUploadFailed}
-            onCommonUploadSuccess={onCommonUploadSuccess}
-          />
-          <Menu
-            parent={parent}
-            files={files}
-            refetch={() => void refetch()}
-            containerRef={containerRef}
-          />
-          <div className={styles.outletContainer}>
-            <Suspense fallback={<Spinner />}>
-              <Outlet context={{ files, parent, refetch: () => void refetch() }} />
-            </Suspense>
-          </div>
-        </div>
-      </ErrorBoundary>
-    )
+      options: {
+        variant: 'error',
+      },
+    })
+    // close the uploader or it will be open when navigating to the list
+    api?.doneFlow?.()
+    // clear the uploader or it will show the last uploaded file when opened next time
+    api?.removeAllFiles?.()
+    // somehow this needs to be delayed or sometimes not all files will be uploaded
+    setTimeout(() => void refetch(), 500)
   }
+
+  if (isLoading) return <Spinner />
+
+  if (error) return <Error error={error} />
+
+  return (
+    <ErrorBoundary>
+      <div
+        className={styles.container}
+        ref={containerRef}
+      >
+        <Uploader
+          onFileUploadSuccess={onFileUploadSuccess}
+          onFileUploadFailed={onFileUploadFailed}
+          onCommonUploadSuccess={onCommonUploadSuccess}
+        />
+        <Menu
+          parent={parent}
+          files={files}
+          refetch={() => void refetch()}
+          containerRef={containerRef}
+        />
+        <div className={styles.outletContainer}>
+          <Suspense fallback={<Spinner />}>
+            <Outlet
+              context={{ files, parent, refetch: () => void refetch() }}
+            />
+          </Suspense>
+        </div>
+      </div>
+    </ErrorBoundary>
+  )
+}

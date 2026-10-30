@@ -46,7 +46,6 @@ interface IdealbiotopQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { apId } = useParams()
 

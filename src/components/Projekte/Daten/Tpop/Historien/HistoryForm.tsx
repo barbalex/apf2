@@ -16,7 +16,6 @@ import { userNameAtom } from '../../../../../store/index.ts'
 
 import styles from './HistoryForm.module.css'
 
-
 interface Options {
   popStatusWertes: { value: number; label: string }[]
   apberRelevantGrundWertes: { value: number; label: string }[]
@@ -113,9 +112,10 @@ export const HistoryForm = ({
 
   useEffect(() => {
     if (isNew) {
-      const input = containerRef.current?.querySelector<HTMLInputElement>(
-        'input[name="year"]',
-      )
+      const input =
+        containerRef.current?.querySelector<HTMLInputElement>(
+          'input[name="year"]',
+        )
       input?.focus()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,13 +143,16 @@ export const HistoryForm = ({
     if (isNew) return
 
     try {
-      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          [camelToSnake(field)]: value,
-          changed_by: userName,
-        }),
-      })
+      await apiFetch(
+        `/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            [camelToSnake(field)]: value,
+            changed_by: userName,
+          }),
+        },
+      )
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -174,13 +177,16 @@ export const HistoryForm = ({
 
     const geomPoint = buildGeomPoint(newX, newY)
     try {
-      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          geom_point: geomPoint,
-          changed_by: userName,
-        }),
-      })
+      await apiFetch(
+        `/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            geom_point: geomPoint,
+            changed_by: userName,
+          }),
+        },
+      )
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -248,9 +254,12 @@ export const HistoryForm = ({
       return
     }
     try {
-      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
-        method: 'DELETE',
-      })
+      await apiFetch(
+        `/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`,
+        {
+          method: 'DELETE',
+        },
+      )
     } catch (error) {
       console.error('Failed to delete tpop_history:', error)
       return

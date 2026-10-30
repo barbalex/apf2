@@ -18,10 +18,7 @@ import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
 
-import type {
-  EkfrequenzId,
-  ApId,
-} from '../../../../models/apflora/index.ts'
+import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
@@ -68,12 +65,11 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource: { value: string; label: string | null }[]
   loading?: boolean
   value?: string | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
-
 
 const ektypeWertes = [
   { value: 'EK', label: 'EK' },

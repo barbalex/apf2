@@ -54,15 +54,14 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: number; label: string | null }[]
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './Ziel.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
-
 
 const erreichungOptions = [
   { value: 'erreicht', label: 'erreicht' },

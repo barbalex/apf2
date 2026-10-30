@@ -18,7 +18,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
-import type { TpopId, TpopEntwicklungWerteCode } from '../../../../models/apflora/index.ts'
+import type {
+  TpopId,
+  TpopEntwicklungWerteCode,
+} from '../../../../models/apflora/index.ts'
 import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import styles from './index.module.css'
@@ -40,7 +43,6 @@ interface TpopberQueryResult {
     }[]
   } | null
 }
-
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
@@ -130,7 +132,9 @@ export const Component = () => {
           <RadioButtonGroup
             name="entwicklung"
             label="Entwicklung"
-            dataSource={(data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]}
+            dataSource={
+              (data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]
+            }
             value={row.entwicklung as null}
             saveToDb={saveToDb}
             error={fieldErrors.entwicklung}

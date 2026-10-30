@@ -120,8 +120,7 @@ export const User = () => {
     name?: string
     password?: string
   }) => {
-    const nameToUse =
-      credentialsPassed?.name ?? nameInput.current?.value ?? ''
+    const nameToUse = credentialsPassed?.name ?? nameInput.current?.value ?? ''
     const passwordToUse =
       credentialsPassed?.password ?? passwordInput.current?.value ?? ''
     // a forced password change must not be bypassable by logging in
@@ -287,8 +286,8 @@ export const User = () => {
           <DialogTitle id="dialog-title">Passwort für {name}</DialogTitle>
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
-              Sie müssen ein neues Passwort setzen. Bestätigen Sie es
-              mit dem aktuellen (falls vorhanden).
+              Sie müssen ein neues Passwort setzen. Bestätigen Sie es mit dem
+              aktuellen (falls vorhanden).
             </p>
             {oldPasswordRequired && (
               <FormControl
@@ -387,7 +386,10 @@ export const User = () => {
           </FormControl>
         </div>
         <DialogActions>
-          <Button color="primary" onClick={() => void fetchLogin()}>
+          <Button
+            color="primary"
+            onClick={() => void fetchLogin()}
+          >
             anmelden
           </Button>
         </DialogActions>

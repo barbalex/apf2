@@ -39,9 +39,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: string; label: string }[]
   value?: string | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -147,9 +147,9 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
   const token = useAtomValue(userTokenAtom)
   const role = token ? jwtDecode<{ role?: string }>(token)?.role : null
   const filteredTpopkontrTypWerte =
-    role === 'apflora_manager' ?
-      tpopkontrTypWerte
-    : tpopkontrTypWerte.filter((w) => w.value === 'Kontrolle')
+    role === 'apflora_manager' ? tpopkontrTypWerte : (
+      tpopkontrTypWerte.filter((w) => w.value === 'Kontrolle')
+    )
 
   const tsQueryClient = useQueryClient()
 
@@ -182,7 +182,9 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
       }))
     }
     // invalidate tpopfeldkontr query
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpopfeldkontr', row.id] })
+    void tsQueryClient.invalidateQueries({
+      queryKey: ['tpopfeldkontr', row.id],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest

@@ -15,7 +15,6 @@ import { userNameAtom } from '../../../../../store/index.ts'
 
 import styles from './HistoryForm.module.css'
 
-
 interface Options {
   adresses: { value: string; label: string }[]
   apBearbstandWertes: { value: number; label: string }[]

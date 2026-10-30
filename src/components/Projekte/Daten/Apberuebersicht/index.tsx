@@ -28,7 +28,6 @@ import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-
 interface ApberuebersichtNode {
   id: ApberuebersichtId
   label: string | null

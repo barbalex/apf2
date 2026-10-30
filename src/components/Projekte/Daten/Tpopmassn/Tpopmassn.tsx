@@ -138,15 +138,14 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource: { value: number; label: string; historic?: boolean | null }[]
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './Tpopmassn.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
-
 
 export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
@@ -202,38 +201,40 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       // IF typ is anpflanzung
       // have to set zieleinheit_einheit to
       // ekzaehleinheit with zielrelevant = true
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let zieleinheitIdResult:
+        | {
+            data?: TpopmassnZieleinheitQueryResult | undefined
+          }
+        | undefined
       try {
         zieleinheitIdResult =
           await apolloClient.query<TpopmassnZieleinheitQueryResult>({
             query: graphql(`
-            query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
+              query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
                     id
-                    code
-                    correspondsToMassnAnzTriebe
-                    correspondsToMassnAnzPflanzen
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      code
+                      correspondsToMassnAnzTriebe
+                      correspondsToMassnAnzPflanzen
+                    }
                   }
                 }
               }
-            }
-          `),
+            `),
             variables: { apId: apId ?? '', typ: (value ?? 1) as number },
           })
       } catch (error) {
@@ -262,36 +263,38 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzTriebe') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzTriebe
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let zieleinheitIdResult:
+        | {
+            data?: TpopmassnZieleinheitQueryResult | undefined
+          }
+        | undefined
       try {
         zieleinheitIdResult =
           await apolloClient.query<TpopmassnZieleinheitQueryResult>({
             query: graphql(`
-            query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
+              query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
                     id
-                    correspondsToMassnAnzTriebe
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzTriebe
+                    }
                   }
                 }
               }
-            }
-          `),
+            `),
             variables: { apId: apId ?? '', typ: row.typ ?? 1 },
           })
       } catch (error) {
@@ -313,36 +316,38 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzPflanzen') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzPflanzen
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let zieleinheitIdResult:
+        | {
+            data?: TpopmassnZieleinheitQueryResult | undefined
+          }
+        | undefined
       try {
         zieleinheitIdResult =
           await apolloClient.query<TpopmassnZieleinheitQueryResult>({
             query: graphql(`
-            query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
+              query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
                     id
-                    correspondsToMassnAnzPflanzen
+                    anpflanzung
+                  }
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                      id
+                      correspondsToMassnAnzPflanzen
+                    }
                   }
                 }
               }
-            }
-          `),
+            `),
             variables: { apId: apId ?? '', typ: row.typ ?? 1 },
           })
       } catch (error) {
@@ -370,7 +375,9 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       }))
     }
     // invalidate tpopmassn query
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpopmassn', tpopmassnId] })
+    void tsQueryClient.invalidateQueries({
+      queryKey: ['tpopmassn', tpopmassnId],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -530,9 +537,9 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
               options={(data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
                 (node) => {
                   const { historic, ...nodeWithoutHistoric } = node
-                  return historic === null ?
-                      nodeWithoutHistoric
-                    : { ...nodeWithoutHistoric, historic }
+                  return historic === null ? nodeWithoutHistoric : (
+                      { ...nodeWithoutHistoric, historic }
+                    )
                 },
               )}
               loading={false}

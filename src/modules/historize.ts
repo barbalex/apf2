@@ -29,11 +29,9 @@ export const historize = async ({
   }
   // 2. if it worked: mutate historyDate
   try {
-    await apiUpdate(
-      'apberuebersicht',
-      row?.id,
-      { history_date: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd') },
-    )
+    await apiUpdate('apberuebersicht', row?.id, {
+      history_date: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
+    })
   } catch (error) {
     return addNotification({
       message: (error as Error).message,

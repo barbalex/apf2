@@ -25,7 +25,6 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-
 interface ApartNode {
   id: ApartId
   label: string | null
@@ -51,7 +50,10 @@ interface ApartQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type ApartUseQueryOptions = UseQueryOptions<ApartQueryResult | undefined, Error> & {
+type ApartUseQueryOptions = UseQueryOptions<
+  ApartQueryResult | undefined,
+  Error
+> & {
   suspense: boolean
 }
 

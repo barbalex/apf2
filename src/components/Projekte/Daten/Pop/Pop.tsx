@@ -31,7 +31,6 @@ interface PopQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { popId } = useParams()
 

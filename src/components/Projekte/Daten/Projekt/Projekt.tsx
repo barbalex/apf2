@@ -25,7 +25,6 @@ interface ProjektQueryResult {
   }
 }
 
-
 export const Component = () => {
   const { projId } = useParams()
 

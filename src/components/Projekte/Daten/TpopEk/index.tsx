@@ -159,7 +159,6 @@ interface TpopEkListsQueryResult {
   } | null
 }
 
-
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type TpopEkUseQueryOptions = UseQueryOptions<

@@ -151,9 +151,9 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         {isMovingPop && (
           <Tooltip
             title={
-              popMovingFromThisAp
-                ? `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                : `Verschiebe '${moving.label}' zu dieser Art`
+              popMovingFromThisAp ?
+                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Art`
             }
           >
             <IconButton onClick={() => void onClickMovePopToHere()}>

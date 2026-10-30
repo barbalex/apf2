@@ -230,22 +230,22 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         <Tooltip
           title={
-            !isMovingFeldkontr
-              ? `'${row?.labelEk ?? row?.label}' zu einer anderen Population verschieben`
-              : thisTpopfeldkontrIsMoving
-                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
-                : movingFromThisTpop
-                  ? `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
-                  : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
+            !isMovingFeldkontr ?
+              `'${row?.labelEk ?? row?.label}' zu einer anderen Population verschieben`
+            : thisTpopfeldkontrIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
+            : movingFromThisTpop ?
+              `'${moving.label}' zur selben Teilpopulation zu vershieben, macht keinen Sinn`
+            : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingFeldkontr && thisTpopfeldkontrIsMoving
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  isMovingFeldkontr && thisTpopfeldkontrIsMoving ?
+                    'rgb(255, 90, 0)'
+                  : 'white',
               }}
             />
           </IconButton>
@@ -257,19 +257,18 @@ export const Menu = ({ row }: MenuProps) => {
             </IconButton>
           </Tooltip>
         )}
-        {isCopyingTpopfeldkontr ? (
+        {isCopyingTpopfeldkontr ?
           <Tooltip title={`Kopiere '${copying.label}' in diese Teilpopulation`}>
             <IconButton onClick={() => void onClickCopyFeldkontrToHere()}>
               <MdContentCopy
                 style={{
-                  color: thisTpopfeldkontrIsCopying
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  color:
+                    thisTpopfeldkontrIsCopying ? 'rgb(255, 90, 0)' : 'white',
                 }}
               />
             </IconButton>
           </Tooltip>
-        ) : isCopyingBiotop ? (
+        : isCopyingBiotop ?
           <Tooltip
             title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
           >
@@ -277,8 +276,7 @@ export const Menu = ({ row }: MenuProps) => {
               <MdContentCopy style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
-        ) : (
-          <Tooltip title="Kopieren">
+        : <Tooltip title="Kopieren">
             <IconButton
               onClick={(event) =>
                 setCopyBiotopMenuAnchorEl(event.currentTarget)
@@ -287,14 +285,13 @@ export const Menu = ({ row }: MenuProps) => {
             >
               <MdContentCopy
                 style={{
-                  color: thisTpopfeldkontrIsCopying
-                    ? 'rgb(255, 90, 0)'
-                    : 'white',
+                  color:
+                    thisTpopfeldkontrIsCopying ? 'rgb(255, 90, 0)' : 'white',
                 }}
               />
             </IconButton>
           </Tooltip>
-        )}
+        }
         {isCopying && (
           <Tooltip
             title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}

@@ -26,7 +26,6 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-
 interface AssozartNode {
   id: AssozartId
   label: string | null
@@ -53,7 +52,10 @@ interface AssozartQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type AssozartUseQueryOptions = UseQueryOptions<AssozartQueryResult | undefined, Error> & {
+type AssozartUseQueryOptions = UseQueryOptions<
+  AssozartQueryResult | undefined,
+  Error
+> & {
   suspense: boolean
 }
 

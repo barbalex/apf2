@@ -16,10 +16,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ComponentType } from 'react'
 
-import type {
-  TpopkontrId,
-  TpopId,
-} from '../../../../models/apflora/index.ts'
+import type { TpopkontrId, TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
@@ -32,9 +29,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: number; label: string | null }[]
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 

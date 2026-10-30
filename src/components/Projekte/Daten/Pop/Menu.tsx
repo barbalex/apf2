@@ -233,15 +233,15 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            !isMoving && !isTpopMoving
-              ? `'${row?.label}' zu einer anderen Art verschieben`
-              : thisPopIsMoving
-                ? 'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
-                : popMovingFromThisAp
-                  ? `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                  : isTpopMoving
-                    ? `Verschiebe '${moving.label}' zu dieser Population`
-                    : `Verschiebe '${moving.label}' zu dieser Art`
+            !isMoving && !isTpopMoving ?
+              `'${row?.label}' zu einer anderen Art verschieben`
+            : thisPopIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
+            : popMovingFromThisAp ?
+              `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+            : isTpopMoving ?
+              `Verschiebe '${moving.label}' zu dieser Population`
+            : `Verschiebe '${moving.label}' zu dieser Art`
           }
         >
           <IconButton onClick={() => void onClickMoveInTree()}>
@@ -262,20 +262,17 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Tooltip
           title={
-            isCopyingPop
-              ? `Kopiere '${copying.label}' in diese Art`
-              : isCopyingTpop
-                ? `Kopiere '${copying.label}' in diese Population`
-                : 'Kopieren'
+            isCopyingPop ? `Kopiere '${copying.label}' in diese Art`
+            : isCopyingTpop ?
+              `Kopiere '${copying.label}' in diese Population`
+            : 'Kopieren'
           }
         >
           <IconButton
             onClick={(event) =>
-              void (isCopyingTpop
-                ? onClickCopyTpopToHere()
-                : isCopyingPop
-                  ? onClickCopyPop()
-                  : setCopyMenuAnchorEl(event.currentTarget))
+              void (isCopyingTpop ? onClickCopyTpopToHere()
+              : isCopyingPop ? onClickCopyPop()
+              : setCopyMenuAnchorEl(event.currentTarget))
             }
             aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >

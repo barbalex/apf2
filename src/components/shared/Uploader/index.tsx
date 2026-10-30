@@ -84,5 +84,10 @@ export const Uploader = ({
     localeName: 'de',
   } as unknown as TProps<'Regular'>
 
-  return <FileUploaderRegular {...props} className="uploadcare" />
+  return (
+    <FileUploaderRegular
+      {...props}
+      className="uploadcare"
+    />
+  )
 }

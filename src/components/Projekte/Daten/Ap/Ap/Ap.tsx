@@ -22,7 +22,6 @@ import type { ProjektId } from '../../../../../models/apflora/Projekt.ts'
 import styles from './Ap.module.css'
 import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 
-
 export interface ApQueryResult {
   apById: {
     id: ApId
