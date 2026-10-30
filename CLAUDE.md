@@ -44,7 +44,8 @@ Local backend stack (Postgres + PostGraphile + Caddy) lives in [backend/](backen
 cd backend
 # backend/.env must define: POSTGRES_USER, POSTGRES_PASSWORD, AUTHENTICATOR_PASSWORD,
 # JWT_SECRET, DATABASE_URL (it already exists in this checkout)
-docker compose up      # db on :5432, graphql (PostGraphile) on :5000
+docker compose up      # db on :5432, graphql (PostGraphile) on :5000,
+                       # postgrest on :3000 (PostgREST-migration dual-stack, see tasks.md)
 ```
 
 The dev frontend (`graphQlUri()`) points at `http://localhost:5000/graphql`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack.)
