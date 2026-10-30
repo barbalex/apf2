@@ -29,7 +29,8 @@
     "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i",
-    "models:generate": "node scripts/kanel-generate.mjs"
+    "models:generate": "node scripts/kanel-generate.mjs",
+    "selects:generate": "node scripts/generate-selects.mjs"
   },
   "dependencies": {
     "@apollo/client": "4.3.5",
