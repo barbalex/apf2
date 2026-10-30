@@ -1,10 +1,8 @@
-import { graphql } from '../gql/index.ts'
-
+import { rpc } from './api.ts'
 import {
   store,
   addNotificationAtom,
   type Notification,
-  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -17,22 +15,8 @@ export const historizeForAp = async ({
   year: number
   apId: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
-
   try {
-    await apolloClient.mutate({
-      mutation: graphql(`
-        mutation historizeForAp($year: Int!, $apId: UUID!) {
-          historizeForAp(input: { _year: $year, apId: $apId }) {
-            boolean
-          }
-        }
-      `),
-      variables: {
-        year,
-        apId,
-      },
-    })
+    await rpc('historize_for_ap', { _year: year, ap_id: apId })
   } catch (error) {
     console.log('Error from mutating historize:', error)
     return addNotification({

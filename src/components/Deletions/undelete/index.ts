@@ -1,31 +1,21 @@
-import { upperFirst } from 'es-toolkit'
-import { camelCase } from 'es-toolkit'
-
 import {
   store,
   addNotificationAtom,
   removeDeletedDatasetByIdAtom,
   deletedDatasetsAtom,
-  apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
   setShowDeletionsAtom,
   type Notification,
 } from '../../../store/index.ts'
 import { tables } from '../../../modules/tables.ts'
+import { apiInsert } from '../../../modules/api.ts'
 import { invalidateTreeQueries } from '../../../modules/invalidateTreeQueries.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const undelete = async ({ id }: { id: string }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  if (!apolloClient) {
-    return addNotification({
-      message: 'Der Apollo Client ist noch nicht initialisiert.',
-      options: { variant: 'error' },
-    })
-  }
   const deletedDatasets = store.get(deletedDatasetsAtom)
 
   const dataset = deletedDatasets.find((d) => d.id === id)
@@ -39,29 +29,20 @@ export const undelete = async ({ id }: { id: string }) => {
   }
 
   const { table, data } = dataset
-  const isWerte = table.toLowerCase().includes('werte')
-  // 1. create new dataset
-  // use one query for all werte tables
-  const queryName =
-    isWerte ? 'createWerte' : `create${upperFirst(camelCase(table))}`
-  let mutation: unknown
-  try {
-    mutation = await import(`./queries/${queryName}.ts`).then((m) => m.default)
-  } catch {
+  if (!data || typeof data !== 'object') {
     return addNotification({
-      message: `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
+      message: `Für den Datensatz mit der ID ${id} fehlen die Daten, um ihn wiederherzustellen.`,
       options: {
         variant: 'error',
       },
     })
   }
+
+  // create the dataset again, with the same id as before (tree urls
+  // reference it). data is the snake_case row snapshot (select=*) that
+  // deletion took, so it round-trips as the insert body
   try {
-    await apolloClient.mutate({
-      mutation: (isWerte ?
-        (mutation as (table: string) => unknown)(table)
-      : mutation) as import('@apollo/client').DocumentNode,
-      variables: (data ?? {}) as Record<string, never>,
-    })
+    await apiInsert(table, data)
   } catch (error) {
     return addNotification({
       message: (error as Error).message,

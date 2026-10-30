@@ -1,22 +1,12 @@
 import { useRef, useContext, Suspense } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql as dynamicGql } from '../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { upperFirst } from 'es-toolkit'
 import { useNavigate, Outlet, useLocation } from 'react-router'
 
 import { ErrorBoundary } from '../ErrorBoundary.tsx'
 import { Error } from '../Error.tsx'
 import { Spinner } from '../Spinner.tsx'
-import {
-  apFile as apFileFragment,
-  idealbiotopFile as idealbiotopFileFragment,
-  popFile as popFileFragment,
-  tpopFile as tpopFileFragment,
-  tpopkontrFile as tpopkontrFileFragment,
-  tpopmassnFile as tpopmassnFileFragment,
-} from '../fragments.ts'
+import { apiFetch, apiInsert } from '../../../modules/api.ts'
 import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.ts'
 import { Menu } from './Menu/index.tsx'
@@ -35,17 +25,6 @@ import {
 } from '../../../store/index.ts'
 
 
-type FilesQueryData = Record<string, { nodes: FileNode[] } | undefined>
-
-const fragmentObject = {
-  ap: apFileFragment,
-  idealbiotop: idealbiotopFileFragment,
-  pop: popFileFragment,
-  tpop: tpopFileFragment,
-  tpopkontr: tpopkontrFileFragment,
-  tpopmassn: tpopmassnFileFragment,
-}
-
 export interface FilesRouterProps {
   parentId?: string | undefined
   parent: FileParent
@@ -56,44 +35,23 @@ export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999',
     const { search } = useLocation()
     const navigate = useNavigate()
 
-    const apolloClient = useApolloClient()
-
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
     const infoUuidsProcessed = useRef<string[]>([])
 
     const containerRef = useRef<HTMLDivElement>(null)
 
-    const queryName = `all${upperFirst(parent)}Files`
-    const parentIdName = `${parent}Id`
-    const fields = `${upperFirst(parent)}FileFields`
-    const fragment = fragmentObject[parent]
-
-    const query = dynamicGql`
-        query FileQuery($parentId: UUID!) {
-          ${queryName}(
-            orderBy: NAME_ASC
-            filter: { ${parentIdName}: { equalTo: $parentId } }
-          ) {
-            nodes {
-              ...${fields}
-            }
-          }
-        }
-        ${fragment}
-      `
+    // select aliases produce the camelCase FileNode shape the consumers expect
+    const select = 'id,fileId:file_id,fileMimeType:file_mime_type,name,beschreibung'
     const { data, error, isLoading, refetch } = useQuery({
-      queryKey: ['FileQuery', parentId],
-      queryFn: async () => {
-        const result = await apolloClient.query({
-          query,
-          variables: { parentId },
-        })
-        return result.data as FilesQueryData
-      },
+      queryKey: ['FileQuery', parent, parentId],
+      queryFn: async () =>
+        (await apiFetch<FileNode[]>(
+          `/${parent}_file?${parent}_id=eq.${parentId}&select=${select}&order=name.asc`,
+        )) ?? [],
     })
 
-    const files = data?.[`all${upperFirst(parent)}Files`]?.nodes ?? []
+    const files = data ?? []
 
     const onCommonUploadSuccess = (_info: CommonUploadSuccessEvent | null | undefined) => {
       // reset infoUuidsProcessed
@@ -113,31 +71,14 @@ export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999',
       if (info) {
         if (infoUuidsProcessed.current.includes(info.uuid)) return
         infoUuidsProcessed.current.push(info.uuid)
-        let responce:
-          | { data?: Record<string, Record<string, FileNode> | undefined> }
-          | undefined
         try {
-          responce = (await apolloClient.mutate({
-            mutation: dynamicGql`
-              mutation insertFile {
-                create${upperFirst(parent)}File(
-                  input: {
-                    ${parent}File: {
-                      fileId: "${info.uuid}",
-                      fileMimeType: "${info.mimeType}",
-                      ${parent}Id: "${parentId}",
-                      name: "${info.name}"
-                    }
-                  }
-                ) {
-                  ${parent}File {
-                    ...${fields}
-                  }
-                }
-              }
-              ${fragment}
-            `,
-          })) as { data?: Record<string, Record<string, FileNode> | undefined> }
+          await apiInsert(`${parent}_file`, {
+            [`${parent}_id`]: parentId,
+            file_id: info.uuid,
+            file_mime_type: info.mimeType,
+            name: info.name,
+            beschreibung: null,
+          })
         } catch (error) {
           console.log(error)
           addNotification({
@@ -147,13 +88,8 @@ export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999',
             },
           })
         }
-        // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
         // navigate to the new file
-        const newFile =
-          responce?.data?.[`create${upperFirst(parent)}File`]?.[`${parent}File`]
-        if (newFile) {
-          void navigate(`${newFile.fileId}/Vorschau${search}`)
-        }
+        void navigate(`${info.uuid}/Vorschau${search}`)
       }
     }
 

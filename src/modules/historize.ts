@@ -1,13 +1,10 @@
-import { gql as dynamicGql } from '../apolloGql.ts'
-import { graphql } from '../gql/index.ts'
 import { DateTime } from 'luxon'
 
-import { apberuebersicht } from '../components/shared/fragments.ts'
+import { rpc, apiUpdate } from './api.ts'
 import {
   store,
   addNotificationAtom,
   type Notification,
-  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -18,21 +15,9 @@ export const historize = async ({
 }: {
   apberuebersicht: Record<string, unknown> & { id: string }
 }) => {
-  const apolloClient = getApolloClientFromStore()
   // 1. historize
   try {
-    await apolloClient.mutate({
-      mutation: graphql(`
-        mutation historize($year: Int!) {
-          historize(input: { _year: $year }) {
-            boolean
-          }
-        }
-      `),
-      variables: {
-        year: row?.jahr as number,
-      },
-    })
+    await rpc('historize', { _year: row?.jahr as number })
   } catch (error) {
     console.log('Error from mutating historize:', error)
     return addNotification({
@@ -44,31 +29,11 @@ export const historize = async ({
   }
   // 2. if it worked: mutate historyDate
   try {
-    const variables = {
-      id: row?.id,
-      historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
-    }
-    await apolloClient.mutate({
-      mutation: dynamicGql`
-        mutation updateApberuebersichtForHistoryDate(
-          $id: UUID!
-          $historyDate: Date
-        ) {
-          updateApberuebersichtById(
-            input: {
-              id: $id
-              apberuebersichtPatch: { historyDate: $historyDate }
-            }
-          ) {
-            apberuebersicht {
-              ...ApberuebersichtFields
-            }
-          }
-        }
-        ${apberuebersicht}
-      `,
-      variables,
-    })
+    await apiUpdate(
+      'apberuebersicht',
+      row?.id,
+      { history_date: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd') },
+    )
   } catch (error) {
     return addNotification({
       message: (error as Error).message,

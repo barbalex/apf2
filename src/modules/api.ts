@@ -84,6 +84,9 @@ export const apiFetch = async <T = unknown>(
   Object.entries(options.headers ?? {}).forEach(([k, v]) =>
     headers.set(k, v),
   )
+  if (options.body && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json')
+  }
   const res = await fetch(`${postgrestUri()}${path}`, {
     ...options,
     headers,
@@ -92,6 +95,23 @@ export const apiFetch = async <T = unknown>(
   const text = await res.text()
   return text ? (JSON.parse(text) as T) : null
 }
+
+// insert one row or many; a JSON array body is also PostgREST's bulk syntax
+export const apiInsert = <T>(table: string, rows: T | T[]) =>
+  apiFetch(`/${table}`, {
+    method: 'POST',
+    body: JSON.stringify(Array.isArray(rows) ? rows : [rows]),
+  })
+
+// update rows by primary key (RLS decides which rows are actually affected)
+export const apiUpdate = (table: string, id: string, patch: object) =>
+  apiFetch(`/${table}?id=eq.${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(patch),
+  })
+
+export const apiDelete = (table: string, id: string) =>
+  apiFetch(`/${table}?id=eq.${id}`, { method: 'DELETE' })
 
 // call a db function, e.g. rpc('login', { username, pass })
 export const rpc = <T = unknown>(

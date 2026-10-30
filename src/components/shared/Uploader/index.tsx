@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import type { TProps } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 
 import { UploaderContext } from '../../../UploaderContext.ts'
-import { graphql } from '../../../gql/index.ts'
+import { rpc } from '../../../modules/api.ts'
+import type UploadcareSignature from '../../../models/apflora/UploadcareSignature.ts'
 import { locale } from './locale.ts'
 
 defineLocale('de', locale as unknown as Parameters<typeof defineLocale>[1])
@@ -43,7 +43,6 @@ export const Uploader = ({
   onCommonUploadSuccess,
 }: UploaderProps) => {
   const uploaderCtx = useContext(UploaderContext)
-  const apolloClient = useApolloClient()
   const api = uploaderCtx?.current?.getAPI?.()
 
   // the signature is built server-side (apflora.upload_signature(), gated to
@@ -51,17 +50,9 @@ export const Uploader = ({
   // the resolver is called before each upload once the previous signature
   // has expired - no more stale expire from page load
   const secureUploadsSignatureResolver = async () => {
-    const result = await apolloClient.query({
-      query: graphql(`
-        query UploadSignature {
-          uploadSignature {
-            expire
-            signature
-          }
-        }
-      `),
-    })
-    const uploadSignature = result.data?.uploadSignature
+    const uploadSignature = await rpc<UploadcareSignature | null>(
+      'upload_signature',
+    )
     if (!uploadSignature?.signature) {
       return null
     }

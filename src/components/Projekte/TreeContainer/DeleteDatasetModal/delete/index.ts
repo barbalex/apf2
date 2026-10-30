@@ -1,15 +1,11 @@
 import { isEqual } from 'es-toolkit'
-import { upperFirst } from 'es-toolkit'
-import { camelCase } from 'es-toolkit'
-import { omit } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { tables } from '../../../../../modules/tables.ts'
+import { apiFetch, apiDelete } from '../../../../../modules/api.ts'
 import { invalidateTreeQueries } from '../../../../../modules/invalidateTreeQueries.ts'
 import {
   store,
   tsQueryClientAtom,
-  apolloClientAtom,
   addNotificationAtom,
   navigateAtom,
   emptyToDeleteAtom,
@@ -35,16 +31,7 @@ export const deleteModule = async ({
   search: string
   toDelete: ToDelete
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
   const tsQueryClient = store.get(tsQueryClientAtom)
-  if (!apolloClient) {
-    return addNotification({
-      message: 'no apollo client found in store',
-      options: {
-        variant: 'error',
-      },
-    })
-  }
   if (!tsQueryClient) {
     return addNotification({
       message: 'no query client found in store',
@@ -55,6 +42,15 @@ export const deleteModule = async ({
   }
   const navigate = store.get(navigateAtom)
   const toDelete = toDeletePassed
+  // deletion is only possible with a dataset selected
+  if (!toDelete.id) {
+    return addNotification({
+      message: 'Es wurde kein Datensatz gewählt.',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === toDelete.table)
@@ -69,43 +65,18 @@ export const deleteModule = async ({
   }
   // tableMetadata.table === toDelete.table is guaranteed by the find above
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tableMetadata.table
-  // console.log('deleteModule', { tableMetadata, table, parentTable })
 
   /**
-   * fetch data for dataset
+   * fetch data for dataset (all columns, as later needed for undelete)
    * then add it to deletedDatasets
    */
-  const isWerte = table.toLowerCase().includes('werte')
-  const tableName = camelCase(table)
-  const queryName = `${tableName}ById`
-  /**
-   * cannot use `./${camelCase(table)}ById`
-   * because webpack performs static analysis at build time
-   * see: https://github.com/webpack/webpack/issues/6680#issuecomment-370800037
-   */
-  let query
-  if (isWerte) {
-    query = dynamicGql`
-      query werteById($id: UUID!) {
-        ${queryName}(id: $id) {
-          id
-          code
-          text
-          sort
-          changedBy
-        }
-      }
-    `
-  } else {
-    const qrObject = await import(`./queries/${queryName}.ts`)
-    query = qrObject.default
-  }
-  let result: Record<string, unknown> | undefined
+  let data: Record<string, unknown> | undefined
   try {
-    result = await apolloClient.query({
-      query,
-      variables: { id: toDelete.id },
-    })
+    data = (
+      await apiFetch<Record<string, unknown>[]>(
+        `/${table}?id=eq.${toDelete.id}&select=*`,
+      )
+    )?.[0]
   } catch (error) {
     console.log(error)
     return addNotification({
@@ -115,11 +86,6 @@ export const deleteModule = async ({
       },
     })
   }
-  const resultData = (result?.data ?? {}) as Record<string, unknown>
-  let data = {
-    ...(resultData[`${tableName}ById`] as Record<string, unknown> | undefined),
-  }
-  data = omit(data, ['__typename'])
 
   // add to datasetsDeleted
   // cast: toDelete fields are nullable in the atom
@@ -138,18 +104,7 @@ export const deleteModule = async ({
   )
 
   try {
-    await apolloClient.mutate({
-      mutation: dynamicGql`
-        mutation deleteSomething($id: UUID!) {
-          delete${upperFirst(camelCase(table))}ById(input: { id: $id }) {
-            ${camelCase(table)} {
-              id
-            }
-          }
-        }
-      `,
-      variables: { id: toDelete.id },
-    })
+    await apiDelete(table, toDelete.id)
   } catch (error) {
     return addNotification({
       message: (error as Error).message,

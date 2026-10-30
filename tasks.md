@@ -58,9 +58,15 @@ Spike results (30.10.2026) — **go**:
 
 ## Phase 3 — Mutations (172, mechanical, lowest risk first)
 
-- imperative `apolloClient.mutate` → `apiFetch` POST/PATCH/DELETE; client-generated UUIDs for inserts (ae3 pattern: RLS may hide returned rows → return=minimal).
-- dynamic ones first (they get simpler): `Files/index.tsx` `create${Parent}File`, `DeleteDatasetModal`, `Deletions/undelete`.
-- `historize`, `historizeForAp`, `uploadSignature` → `/rpc/`; invalidateQueries stays as-is.
+- [x] mutation helpers in `src/modules/api.ts`: `apiInsert` (single row or bulk array), `apiUpdate` (PATCH by id), `apiDelete` (DELETE by id); Content-Type default for bodies; `Prefer: return=minimal` stays the default for mutations.
+- [x] dynamic ones first (they got much simpler):
+  - `Files/index.tsx`: read via `?select=` with camelCase aliases (FileNode unchanged for consumers), insert via `apiInsert` — the old code interpolated upload values directly into the GraphQL string (injection-prone), now a JSON body. Also: the returned row was only used for navigation; `info.uuid` is known anyway, so no return=representation needed.
+  - `DeleteDatasetModal/delete`: snapshot via `select=*` (snake_case, all columns — better undelete fidelity than the old fragments), delete via `apiDelete`; the 24 generated `queries/*ById.ts` files and the werte special case are gone.
+  - `Deletions/undelete`: one generic `apiInsert(table, data)` re-inserts the snapshot with the same id; the 22 `queries/create*.ts` files are gone. deletedDatasets is an in-memory atom, so the snake_case snapshot has no compatibility tail.
+- [x] `historize` (rpc + PATCH apberuebersicht.history_date), `historizeForAp` (rpc historize_for_ap), `uploadSignature` (rpc upload_signature) → `/rpc/`.
+- [x] verified: insert→select=*→delete→undelete round-trip via dev PostgREST (201/204/201); 13 Playwright specs green (auth, prefetch, forms).
+- test infrastructure fixed along the way (all pre-existing breakage): `playwright/.auth/user.json` contained only credentials, no auth state — protected tests always ran logged-out. `scripts/refresh-auth-state.mjs` now logs in via `rpc('login')` and writes fresh storage state (token lives 24 h — re-run when tests meet the Anmeldung dialog). Also updated stale expectations: uuidv1 ids in `forms/aktionsplan.spec.ts` (0061 rewrote them), route segment `Aktionspläne`→`Arten`, form title `Aktionsplan`→`Art`.
+- [ ] the remaining ~100 modules with static `apolloClient.mutate` calls (forms, copyTo/moveTo, Ekf, EkPlan) — mechanical, migrate per module.
 
 ## Phase 4 — Reads (191 static + nav data hooks)
 
