@@ -1,9 +1,6 @@
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
 import { MdCheck } from 'react-icons/md'
@@ -13,21 +10,12 @@ import { TextField } from '../../../../shared/TextField.tsx'
 import { Select } from '../../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
+import { apiFetch, apiInsert } from '../../../../../modules/api.ts'
+import { camelToSnake } from '../../../../../modules/camelToSnake.ts'
 import { userNameAtom } from '../../../../../store/index.ts'
-import { popHistory } from '../../../../shared/fragments.ts'
 
 import styles from './HistoryForm.module.css'
 
-const fieldTypes: Record<string, string> = {
-  year: 'Int',
-  nr: 'Int',
-  name: 'String',
-  status: 'Int',
-  statusUnklar: 'Boolean',
-  statusUnklarBegruendung: 'String',
-  bekanntSeit: 'Int',
-  geomPoint: 'GeoJSON',
-}
 
 interface Options {
   popStatusWertes: { value: number; label: string }[]
@@ -61,7 +49,6 @@ export const HistoryForm = ({
 }: Props) => {
   const { popId } = useParams<{ popId: string }>()
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
 
   const [fields, setFields] = useState<Record<string, unknown>>({
     year: isNew ? '' : (historyRow?.year ?? ''),
@@ -118,37 +105,12 @@ export const HistoryForm = ({
     setFields((prev) => ({ ...prev, [field]: value }))
     const geomPoint = buildGeomPoint(newX, newY)
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updatePopHistoryGeomForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $geomPoint: GeoJSON
-            $changedBy: String
-          ) {
-            updatePopHistoryByIdAndYear(
-              input: {
-                id: $id
-                year: $year
-                popHistoryPatch: {
-                  geomPoint: $geomPoint
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              popHistory {
-                ...PopHistoryFields
-              }
-            }
-          }
-          ${popHistory}
-        `,
-        variables: {
-          id: popId,
-          year: historyRow?.year,
-          geomPoint,
-          changedBy: userName,
-        },
+      await apiFetch(`/pop_history?id=eq.${popId}&year=eq.${historyRow?.year}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          geom_point: geomPoint,
+          changed_by: userName,
+        }),
       })
     } catch (error) {
       return setFieldErrors((prev) => ({
@@ -164,7 +126,7 @@ export const HistoryForm = ({
   }
 
   const saveToDb = async (event: SaveToDbEvent) => {
-    const field = event.target.name as keyof typeof fieldTypes
+    const field = event.target.name as string
     const rawValue = event.target.value
     const value =
       typeof rawValue === 'boolean' ? rawValue : ifIsNumericAsNumber(rawValue)
@@ -176,37 +138,12 @@ export const HistoryForm = ({
 
     // Existing row: mutate immediately
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updatePopHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $${field}: ${fieldTypes[field]}
-            $changedBy: String
-          ) {
-            updatePopHistoryByIdAndYear(
-              input: {
-                id: $id
-                year: $year
-                popHistoryPatch: {
-                  ${field}: $${field}
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              popHistory {
-                ...PopHistoryFields
-              }
-            }
-          }
-          ${popHistory}
-        `,
-        variables: {
-          id: popId,
-          year: historyRow?.year,
-          [field]: value,
-          changedBy: userName,
-        },
+      await apiFetch(`/pop_history?id=eq.${popId}&year=eq.${historyRow?.year}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          [camelToSnake(field)]: value,
+          changed_by: userName,
+        }),
       })
     } catch (error) {
       return setFieldErrors((prev) => ({
@@ -224,55 +161,17 @@ export const HistoryForm = ({
   const handleSaveNew = async () => {
     if (!fields.year) return
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation createPopHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $nr: Int
-            $name: String
-            $status: Int
-            $statusUnklar: Boolean
-            $statusUnklarBegruendung: String
-            $bekanntSeit: Int
-            $geomPoint: GeoJSON
-            $changedBy: String
-          ) {
-            createPopHistory(
-              input: {
-                popHistory: {
-                  id: $id
-                  year: $year
-                  nr: $nr
-                  name: $name
-                  status: $status
-                  statusUnklar: $statusUnklar
-                  statusUnklarBegruendung: $statusUnklarBegruendung
-                  bekanntSeit: $bekanntSeit
-                  geomPoint: $geomPoint
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              popHistory {
-                ...PopHistoryFields
-              }
-            }
-          }
-          ${popHistory}
-        `,
-        variables: {
-          id: popId,
-          year: Number(fields.year),
-          nr: fields.nr,
-          name: fields.name,
-          status: fields.status,
-          statusUnklar: fields.statusUnklar,
-          statusUnklarBegruendung: fields.statusUnklarBegruendung,
-          bekanntSeit: fields.bekanntSeit,
-          geomPoint: buildGeomPoint(fields.x, fields.y),
-          changedBy: userName,
-        },
+      await apiInsert('pop_history', {
+        id: popId,
+        year: Number(fields.year),
+        nr: fields.nr,
+        name: fields.name,
+        status: fields.status,
+        status_unklar: fields.statusUnklar,
+        status_unklar_begruendung: fields.statusUnklarBegruendung,
+        bekannt_seit: fields.bekanntSeit,
+        geom_point: buildGeomPoint(fields.x, fields.y),
+        changed_by: userName,
       })
     } catch (error) {
       console.error('Failed to create pop_history:', error)
@@ -293,21 +192,8 @@ export const HistoryForm = ({
       return
     }
     try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deletePopHistoryForHistorienForm($id: UUID!, $year: Int!) {
-            deletePopHistoryByIdAndYear(input: { id: $id, year: $year }) {
-              popHistory {
-                id
-                year
-              }
-            }
-          }
-        `),
-        variables: {
-          id: popId as string,
-          year: historyRow?.year as number,
-        },
+      await apiFetch(`/pop_history?id=eq.${popId}&year=eq.${historyRow?.year}`, {
+        method: 'DELETE',
       })
     } catch (error) {
       console.error('Failed to delete pop_history:', error)

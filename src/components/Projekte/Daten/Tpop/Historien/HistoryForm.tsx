@@ -1,9 +1,6 @@
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
 import { MdCheck } from 'react-icons/md'
@@ -13,41 +10,12 @@ import { TextField } from '../../../../shared/TextField.tsx'
 import { Select } from '../../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
+import { apiFetch, apiInsert } from '../../../../../modules/api.ts'
+import { camelToSnake } from '../../../../../modules/camelToSnake.ts'
 import { userNameAtom } from '../../../../../store/index.ts'
-import { tpopHistory } from '../../../../shared/fragments.ts'
 
 import styles from './HistoryForm.module.css'
 
-const fieldTypes: Record<string, string> = {
-  year: 'Int',
-  nr: 'Int',
-  flurname: 'String',
-  bekanntSeit: 'Int',
-  status: 'Int',
-  statusUnklar: 'Boolean',
-  statusUnklarGrund: 'String',
-  apberRelevant: 'Boolean',
-  apberRelevantGrund: 'Int',
-  gemeinde: 'String',
-  radius: 'Int',
-  hoehe: 'Int',
-  exposition: 'String',
-  klima: 'String',
-  neigung: 'String',
-  beschreibung: 'String',
-  katasterNr: 'String',
-  eigentuemer: 'String',
-  kontakt: 'String',
-  nutzungszone: 'String',
-  bewirtschafter: 'String',
-  bewirtschaftung: 'String',
-  bemerkungen: 'String',
-  ekfrequenz: 'UUID',
-  ekfrequenzAbweichend: 'Boolean',
-  ekfrequenzStartjahr: 'Int',
-  ekfKontrolleur: 'UUID',
-  geomPoint: 'GeoJSON',
-}
 
 interface Options {
   popStatusWertes: { value: number; label: string }[]
@@ -104,7 +72,6 @@ export const HistoryForm = ({
 }: Props) => {
   const { tpopId } = useParams<{ tpopId: string }>()
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
 
   const [fields, setFields] = useState<Record<string, unknown>>({
     year: isNew ? '' : (historyRow?.year ?? ''),
@@ -176,37 +143,12 @@ export const HistoryForm = ({
     if (isNew) return
 
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updateTpopHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $${field}: ${fieldTypes[field]}
-            $changedBy: String
-          ) {
-            updateTpopHistoryByIdAndYear(
-              input: {
-                id: $id
-                year: $year
-                tpopHistoryPatch: {
-                  ${field}: $${field}
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              tpopHistory {
-                ...TpopHistoryFields
-              }
-            }
-          }
-          ${tpopHistory}
-        `,
-        variables: {
-          id: tpopId,
-          year: historyRow?.year as number,
-          [field]: value,
-          changedBy: userName,
-        },
+      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          [camelToSnake(field)]: value,
+          changed_by: userName,
+        }),
       })
     } catch (error) {
       return setFieldErrors((prev) => ({
@@ -232,37 +174,12 @@ export const HistoryForm = ({
 
     const geomPoint = buildGeomPoint(newX, newY)
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updateTpopHistoryGeomForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $geomPoint: GeoJSON
-            $changedBy: String
-          ) {
-            updateTpopHistoryByIdAndYear(
-              input: {
-                id: $id
-                year: $year
-                tpopHistoryPatch: {
-                  geomPoint: $geomPoint
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              tpopHistory {
-                ...TpopHistoryFields
-              }
-            }
-          }
-          ${tpopHistory}
-        `,
-        variables: {
-          id: tpopId,
-          year: historyRow?.year as number,
-          geomPoint,
-          changedBy: userName,
-        },
+      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          geom_point: geomPoint,
+          changed_by: userName,
+        }),
       })
     } catch (error) {
       return setFieldErrors((prev) => ({
@@ -280,115 +197,37 @@ export const HistoryForm = ({
   const handleSaveNew = async () => {
     if (!fields.year) return
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation createTpopHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $nr: Int
-            $flurname: String
-            $bekanntSeit: Int
-            $status: Int
-            $statusUnklar: Boolean
-            $statusUnklarGrund: String
-            $apberRelevant: Boolean
-            $apberRelevantGrund: Int
-            $gemeinde: String
-            $radius: Int
-            $hoehe: Int
-            $exposition: String
-            $klima: String
-            $neigung: String
-            $beschreibung: String
-            $katasterNr: String
-            $eigentuemer: String
-            $kontakt: String
-            $nutzungszone: String
-            $bewirtschafter: String
-            $bewirtschaftung: String
-            $bemerkungen: String
-            $ekfrequenz: UUID
-            $ekfrequenzAbweichend: Boolean
-            $ekfrequenzStartjahr: Int
-            $ekfKontrolleur: UUID
-            $geomPoint: GeoJSON
-            $changedBy: String
-          ) {
-            createTpopHistory(
-              input: {
-                tpopHistory: {
-                  id: $id
-                  year: $year
-                  nr: $nr
-                  flurname: $flurname
-                  bekanntSeit: $bekanntSeit
-                  status: $status
-                  statusUnklar: $statusUnklar
-                  statusUnklarGrund: $statusUnklarGrund
-                  apberRelevant: $apberRelevant
-                  apberRelevantGrund: $apberRelevantGrund
-                  gemeinde: $gemeinde
-                  radius: $radius
-                  hoehe: $hoehe
-                  exposition: $exposition
-                  klima: $klima
-                  neigung: $neigung
-                  beschreibung: $beschreibung
-                  katasterNr: $katasterNr
-                  eigentuemer: $eigentuemer
-                  kontakt: $kontakt
-                  nutzungszone: $nutzungszone
-                  bewirtschafter: $bewirtschafter
-                  bewirtschaftung: $bewirtschaftung
-                  bemerkungen: $bemerkungen
-                  ekfrequenz: $ekfrequenz
-                  ekfrequenzAbweichend: $ekfrequenzAbweichend
-                  ekfrequenzStartjahr: $ekfrequenzStartjahr
-                  ekfKontrolleur: $ekfKontrolleur
-                  geomPoint: $geomPoint
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              tpopHistory {
-                ...TpopHistoryFields
-              }
-            }
-          }
-          ${tpopHistory}
-        `,
-        variables: {
-          id: tpopId,
-          year: Number(fields.year),
-          nr: fields.nr,
-          flurname: fields.flurname,
-          bekanntSeit: fields.bekanntSeit,
-          status: fields.status,
-          statusUnklar: fields.statusUnklar,
-          statusUnklarGrund: fields.statusUnklarGrund,
-          apberRelevant: fields.apberRelevant,
-          apberRelevantGrund: fields.apberRelevantGrund,
-          gemeinde: fields.gemeinde,
-          radius: fields.radius,
-          hoehe: fields.hoehe,
-          exposition: fields.exposition,
-          klima: fields.klima,
-          neigung: fields.neigung,
-          beschreibung: fields.beschreibung,
-          katasterNr: fields.katasterNr,
-          eigentuemer: fields.eigentuemer,
-          kontakt: fields.kontakt,
-          nutzungszone: fields.nutzungszone,
-          bewirtschafter: fields.bewirtschafter,
-          bewirtschaftung: fields.bewirtschaftung,
-          bemerkungen: fields.bemerkungen,
-          ekfrequenz: fields.ekfrequenz,
-          ekfrequenzAbweichend: fields.ekfrequenzAbweichend,
-          ekfrequenzStartjahr: fields.ekfrequenzStartjahr,
-          ekfKontrolleur: fields.ekfKontrolleur,
-          geomPoint: buildGeomPoint(fields.x, fields.y),
-          changedBy: userName,
-        },
+      await apiInsert('tpop_history', {
+        id: tpopId,
+        year: Number(fields.year),
+        nr: fields.nr,
+        flurname: fields.flurname,
+        bekannt_seit: fields.bekanntSeit,
+        status: fields.status,
+        status_unklar: fields.statusUnklar,
+        status_unklar_grund: fields.statusUnklarGrund,
+        apber_relevant: fields.apberRelevant,
+        apber_relevant_grund: fields.apberRelevantGrund,
+        gemeinde: fields.gemeinde,
+        radius: fields.radius,
+        hoehe: fields.hoehe,
+        exposition: fields.exposition,
+        klima: fields.klima,
+        neigung: fields.neigung,
+        beschreibung: fields.beschreibung,
+        kataster_nr: fields.katasterNr,
+        eigentuemer: fields.eigentuemer,
+        kontakt: fields.kontakt,
+        nutzungszone: fields.nutzungszone,
+        bewirtschafter: fields.bewirtschafter,
+        bewirtschaftung: fields.bewirtschaftung,
+        bemerkungen: fields.bemerkungen,
+        ekfrequenz: fields.ekfrequenz,
+        ekfrequenz_abweichend: fields.ekfrequenzAbweichend,
+        ekfrequenz_startjahr: fields.ekfrequenzStartjahr,
+        ekf_kontrolleur: fields.ekfKontrolleur,
+        geom_point: buildGeomPoint(fields.x, fields.y),
+        changed_by: userName,
       })
     } catch (error) {
       console.error('Failed to create tpop_history:', error)
@@ -409,18 +248,8 @@ export const HistoryForm = ({
       return
     }
     try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteTpopHistoryForHistorienForm($id: UUID!, $year: Int!) {
-            deleteTpopHistoryByIdAndYear(input: { id: $id, year: $year }) {
-              tpopHistory {
-                id
-                year
-              }
-            }
-          }
-        `),
-        variables: { id: tpopId ?? '', year: historyRow?.year as number },
+      await apiFetch(`/tpop_history?id=eq.${tpopId}&year=eq.${historyRow?.year}`, {
+        method: 'DELETE',
       })
     } catch (error) {
       console.error('Failed to delete tpop_history:', error)

@@ -3,17 +3,13 @@
  * used when moving for instance tpop to other pop in tree
  */
 import { tables } from '../tables.ts'
-import { updateTpopkontrById } from './updateTpopkontrById.ts'
-import { updateTpopmassnById } from './updateTpopmassnById.ts'
-import { updateTpopById } from './updateTpopById.ts'
-import { updatePopById } from './updatePopById.ts'
+import { apiUpdate } from '../api.ts'
 import {
   store,
   addNotificationAtom,
   movingAtom,
   setMovingAtom,
   type Notification,
-  getApolloClientFromStore,
   getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
@@ -25,7 +21,6 @@ export const moveTo = async ({
 }: {
   id?: string | undefined
 }) => {
-  const apolloClient = getApolloClientFromStore()
   const tsQueryClient = getTsQueryClientFromStore()
 
   const moving = store.get(movingAtom)
@@ -54,6 +49,14 @@ export const moveTo = async ({
   const tabelle = tables.find((t) => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   const dbTable = tabelle?.dbTable ?? table
+  if (!dbTable) {
+    return addNotification({
+      message: 'change was not saved: Reason: table was not found',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const idField = tabelle?.idField
   if (!idField) {
     return addNotification({
@@ -73,39 +76,16 @@ export const moveTo = async ({
     })
   }
 
-  // move
-  // console.log('moveTo', { table, id, newParentId })
-  switch (dbTable) {
-    case 'tpopkontr':
-      await apolloClient.mutate({
-        mutation: updateTpopkontrById,
-        variables: { id, tpopId: newParentId },
-      })
-      break
-    case 'tpopmassn':
-      await apolloClient.mutate({
-        mutation: updateTpopmassnById,
-        variables: { id, tpopId: newParentId },
-      })
-      break
-    case 'tpop':
-      // TODO: histories should also get the new popId
-      await apolloClient.mutate({
-        mutation: updateTpopById,
-        variables: { id, popId: newParentId },
-      })
-      break
-    case 'pop':
-      // TODO: histories should also get the new apId
-      await apolloClient.mutate({
-        mutation: updatePopById,
-        variables: { id, apId: newParentId },
-      })
-      break
-    case null:
-    default:
-      // do nothing
-      break
+  // TODO: histories should also get the new parent id
+  try {
+    await apiUpdate(dbTable, id, { [parentIdField]: newParentId })
+  } catch (error) {
+    return addNotification({
+      message: `Der Datensatz wurde nicht verschoben. Fehlermeldung: ${(error as Error).message}`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   // reset moving
   store.set(setMovingAtom, {

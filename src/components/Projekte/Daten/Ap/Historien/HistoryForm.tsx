@@ -1,9 +1,6 @@
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
 import { MdCheck } from 'react-icons/md'
@@ -12,19 +9,12 @@ import { FaMinus } from 'react-icons/fa'
 import { TextField } from '../../../../shared/TextField.tsx'
 import { Select } from '../../../../shared/Select.tsx'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
+import { apiFetch, apiInsert } from '../../../../../modules/api.ts'
+import { camelToSnake } from '../../../../../modules/camelToSnake.ts'
 import { userNameAtom } from '../../../../../store/index.ts'
-import { apHistory } from '../../../../shared/fragments.ts'
 
 import styles from './HistoryForm.module.css'
 
-const fieldTypes: Record<string, string> = {
-  year: 'Int',
-  bearbeitung: 'Int',
-  startJahr: 'Int',
-  umsetzung: 'Int',
-  bearbeiter: 'UUID',
-  ekfBeobachtungszeitpunkt: 'String',
-}
 
 interface Options {
   adresses: { value: string; label: string }[]
@@ -69,7 +59,6 @@ export const HistoryForm = ({
 }: Props) => {
   const { apId, projId } = useParams<{ apId: string; projId: string }>()
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
 
   const [fields, setFields] = useState<Fields>({
     year: isNew ? '' : (historyRow?.year ?? ''),
@@ -108,38 +97,16 @@ export const HistoryForm = ({
 
     // Existing row: mutate immediately
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updateApHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $${field}: ${fieldTypes[field]}
-            $changedBy: String
-          ) {
-            updateApHistoryByIdAndYear(
-              input: {
-                id: $id
-                year: $year
-                apHistoryPatch: {
-                  ${field}: $${field}
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              apHistory {
-                ...ApHistoryFields
-              }
-            }
-          }
-          ${apHistory}
-        `,
-        variables: {
-          id: apId,
-          year: historyRow?.year ?? 0,
-          [field]: value,
-          changedBy: userName,
+      await apiFetch(
+        `/ap_history?id=eq.${apId}&year=eq.${historyRow?.year ?? 0}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            [camelToSnake(field)]: value,
+            changed_by: userName,
+          }),
         },
-      })
+      )
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -156,55 +123,17 @@ export const HistoryForm = ({
   const handleSaveNew = async () => {
     if (!fields.year) return
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation createApHistoryForHistorienForm(
-            $id: UUID!
-            $year: Int!
-            $artId: UUID
-            $projId: UUID
-            $bearbeitung: Int
-            $startJahr: Int
-            $umsetzung: Int
-            $bearbeiter: UUID
-            $ekfBeobachtungszeitpunkt: String
-            $changedBy: String
-          ) {
-            createApHistory(
-              input: {
-                apHistory: {
-                  id: $id
-                  year: $year
-                  artId: $artId
-                  projId: $projId
-                  bearbeitung: $bearbeitung
-                  startJahr: $startJahr
-                  umsetzung: $umsetzung
-                  bearbeiter: $bearbeiter
-                  ekfBeobachtungszeitpunkt: $ekfBeobachtungszeitpunkt
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              apHistory {
-                ...ApHistoryFields
-              }
-            }
-          }
-          ${apHistory}
-        `,
-        variables: {
-          id: apId,
-          year: Number(fields.year),
-          artId,
-          projId,
-          bearbeitung: fields.bearbeitung,
-          startJahr: fields.startJahr,
-          umsetzung: fields.umsetzung,
-          bearbeiter: fields.bearbeiter,
-          ekfBeobachtungszeitpunkt: fields.ekfBeobachtungszeitpunkt,
-          changedBy: userName,
-        },
+      await apiInsert('ap_history', {
+        id: apId,
+        year: Number(fields.year),
+        art_id: artId,
+        proj_id: projId,
+        bearbeitung: fields.bearbeitung,
+        start_jahr: fields.startJahr,
+        umsetzung: fields.umsetzung,
+        bearbeiter: fields.bearbeiter,
+        ekf_beobachtungszeitpunkt: fields.ekfBeobachtungszeitpunkt,
+        changed_by: userName,
       })
     } catch (error) {
       console.error('Failed to create ap_history:', error)
@@ -227,19 +156,10 @@ export const HistoryForm = ({
       return
     }
     try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteApHistoryForHistorienForm($id: UUID!, $year: Int!) {
-            deleteApHistoryByIdAndYear(input: { id: $id, year: $year }) {
-              apHistory {
-                id
-                year
-              }
-            }
-          }
-        `),
-        variables: { id: apId ?? '', year: historyRow?.year ?? 0 },
-      })
+      await apiFetch(
+        `/ap_history?id=eq.${apId}&year=eq.${historyRow?.year ?? 0}`,
+        { method: 'DELETE' },
+      )
     } catch (error) {
       console.error('Failed to delete ap_history:', error)
       return
