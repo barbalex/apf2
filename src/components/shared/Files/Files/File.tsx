@@ -1,7 +1,6 @@
+import { apiDelete, apiUpdateByVariables } from '../../../../modules/api.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -9,28 +8,16 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import type { MenuProps } from '@mui/material'
-import { upperFirst } from 'es-toolkit'
 import type { MouseEvent } from 'react'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { TextField } from '../../TextField.tsx'
 import { SuspenseImage } from '../../SuspenseImage.tsx'
-import {
-  apFile as apFileFragment,
-  idealbiotopFile as idealbiotopFileFragment,
-  popFile as popFileFragment,
-  tpopFile as tpopFileFragment,
-  tpopkontrFile as tpopkontrFileFragment,
-  tpopmassnFile as tpopmassnFileFragment,
-} from '../../fragments.ts'
 import { isImageFile } from '../isImageFile.ts'
 import type { FileNode, FileParent } from '../types.ts'
 import type { SaveToDbEvent } from '../../types.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import {
-  userNameAtom,
-  addNotificationAtom,
-} from '../../../../store/index.ts'
+import { userNameAtom, addNotificationAtom } from '../../../../store/index.ts'
 
 import styles from './File.module.css'
 
@@ -41,15 +28,6 @@ const StyledMenu = styled((props: MenuProps) => <Menu {...props} />)(() => ({
   },
 }))
 
-const fragmentObject = {
-  ap: apFileFragment,
-  idealbiotop: idealbiotopFileFragment,
-  pop: popFileFragment,
-  tpop: tpopFileFragment,
-  tpopkontr: tpopkontrFileFragment,
-  tpopmassn: tpopmassnFileFragment,
-}
-
 export interface FileProps {
   file: FileNode
   parent: FileParent
@@ -59,34 +37,17 @@ export interface FileProps {
 export const File = ({ file, parent, refetch }: FileProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
 
-  const apolloClient = useApolloClient()
-
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
-
-  const tableName = `${parent}File`
 
   const onClickDelete = async () => {
     // 1. remove dataset
     try {
-      const mutationName = `delete${upperFirst(parent)}FileById`
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation deleteDataset {
-            ${mutationName}(
-              input: {
-                id: "${file.id}"
-              }
-            ) {
-              ${tableName} {
-                id
-              }
-            }
-          }
-        `,
-      })
+      await apiDelete(`${parent}_file`, file.id)
     } catch (error) {
       console.log(error)
       return addNotification({
@@ -116,42 +77,7 @@ export const File = ({ file, parent, refetch }: FileProps) => {
       changedBy: userName,
     }
     try {
-      const mutationName = `update${upperFirst(parent)}FileById`
-      const fields = `${upperFirst(parent)}FileFields`
-      const fragment = fragmentObject[parent]
-      const parentId = `${parent}Id`
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation UpdateFile(
-                $id: UUID!
-                $${parentId}: UUID
-                $fileId: UUID
-                $fileMimeType: String
-                $name: String
-                $beschreibung: String
-              ) {
-                ${mutationName}(
-                  input: {
-                    id: $id
-                    ${tableName}Patch: {
-                      id: $id
-                      ${parentId}: $${parentId}
-                      fileId: $fileId
-                      fileMimeType: $fileMimeType
-                      name: $name
-                      beschreibung: $beschreibung
-                    }
-                  }
-                ) {
-                  ${tableName} {
-                    ...${fields}
-                  }
-                }
-              }
-              ${fragment}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables(`${parent}_file`, variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

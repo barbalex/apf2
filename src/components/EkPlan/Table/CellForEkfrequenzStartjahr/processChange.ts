@@ -1,6 +1,5 @@
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { apiUpdate } from '../../../../modules/api.ts'
 
-import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.ts'
 import type { EkfrequenzId } from '../../../../models/apflora/Ekfrequenz.ts'
 import type { TpopRow } from '../tableTypes.ts'
@@ -29,35 +28,9 @@ export const processChange = async ({
   const tsQueryClient = store.get(tsQueryClientAtom)
   if (!apolloClient || !tsQueryClient) return
   try {
-    await apolloClient.mutate({
-      mutation: dynamicGql`
-        mutation updateTpopEkfrequenzStartjahr(
-          $id: UUID!
-          $ekfrequenzStartjahr: Int
-          $changedBy: String
-        ) {
-          updateTpopById(
-            input: {
-              id: $id
-              tpopPatch: {
-                id: $id
-                ekfrequenzStartjahr: $ekfrequenzStartjahr
-                changedBy: $changedBy
-              }
-            }
-          ) {
-            tpop {
-              ...TpopFields
-            }
-          }
-        }
-        ${tpop}
-      `,
-      variables: {
-        id: row.id,
-        ekfrequenzStartjahr: value,
-        changedBy: store.get(userNameAtom),
-      },
+    await apiUpdate('tpop', row.id, {
+      ekfrequenz_startjahr: value,
+      changed_by: store.get(userNameAtom),
     })
   } catch (error) {
     addNotification({

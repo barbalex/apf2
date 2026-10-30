@@ -1,3 +1,4 @@
+import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
@@ -11,7 +12,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { Marker } from './Marker.tsx'
 import { query } from './query.ts'
-import { updateTpopById } from './updateTpopById.ts'
 
 import type {
   TpopId,
@@ -160,12 +160,9 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
      * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
      */
     try {
-      await apolloClient.mutate({
-        mutation: updateTpopById,
-        variables: {
-          id: idOfTpopBeingLocalized,
-          geomPoint,
-        },
+      await apiUpdateByVariables('tpop', {
+        id: idOfTpopBeingLocalized,
+        geomPoint,
       })
       // refetch so it appears on map
       // need to also refetch pop in case it was new
@@ -198,10 +195,7 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
       // altering the maps css corrupted the map ui
       window.L.DomUtil.addClass(mapContainer, 'crosshair-cursor-enabled')
     } else {
-      window.L.DomUtil.removeClass(
-        mapContainer,
-        'crosshair-cursor-enabled',
-      )
+      window.L.DomUtil.removeClass(mapContainer, 'crosshair-cursor-enabled')
     }
   }, [idOfTpopBeingLocalized, mapContainer])
 

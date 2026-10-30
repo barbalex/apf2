@@ -1,3 +1,5 @@
+import { apiInsert } from '../../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState } from 'react'
 import { graphql } from '../../../../../gql/index.ts'
@@ -73,17 +75,10 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
   const saveToDb = async (event: SaveToDbEvent) => {
     const name = event.target.value as string | null
     try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApUserForApMutation($apId: UUID!, $name: String) {
-            createApUser(input: { apUser: { apId: $apId, userName: $name } }) {
-              apUser {
-                id
-              }
-            }
-          }
-        `),
-        variables: { apId, name },
+      await apiInsert('ap_user', {
+        id: uuidv7(),
+        ap_id: apId,
+        user_name: name,
       })
     } catch (error) {
       return setError((error as Error).message)

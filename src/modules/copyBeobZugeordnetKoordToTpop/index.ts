@@ -1,5 +1,5 @@
+import { apiUpdateByVariables } from '../api.ts'
 import { queryBeob } from './queryBeob.ts'
-import { updateTpopById } from './updateTpopById.ts'
 
 import {
   store,
@@ -52,12 +52,9 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
 
   // set tpop coordinates
   try {
-    await apolloClient.mutate({
-      mutation: updateTpopById,
-      variables: {
-        id: tpopId,
-        geomPoint,
-      },
+    await apiUpdateByVariables('tpop', {
+      id: tpopId,
+      geomPoint,
     })
   } catch (error) {
     return addNotification({

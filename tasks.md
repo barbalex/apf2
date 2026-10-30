@@ -58,6 +58,8 @@ Spike results (30.10.2026) — **go**:
 
 ## Phase 3 — Mutations (172, mechanical, lowest risk first)
 
+**COMPLETE: zero `apolloClient.mutate` calls remain in src/ (verified by grep).** All writes go through `apiInsert`/`apiUpdate`/`apiDelete`/`apiUpdateByVariables`/`rpc` from `src/modules/api.ts`.
+
 - [x] mutation helpers in `src/modules/api.ts`: `apiInsert` (single row or bulk array), `apiUpdate` (PATCH by id), `apiDelete` (DELETE by id); Content-Type default for bodies; `Prefer: return=minimal` stays the default for mutations.
 - [x] dynamic ones first (they got much simpler):
   - `Files/index.tsx`: read via `?select=` with camelCase aliases (FileNode unchanged for consumers), insert via `apiInsert` — the old code interpolated upload values directly into the GraphQL string (injection-prone), now a JSON body. Also: the returned row was only used for navigation; `info.uuid` is known anyway, so no return=representation needed.
@@ -72,7 +74,8 @@ Spike results (30.10.2026) — **go**:
 - [x] HistoryForms (ap/pop/tpop): composite-key `PATCH/DELETE /<x>_history?id=eq.X&year=eq.Y`, create via `apiInsert` (id = parent id, no uuid). Field saves snake-cased via camelToSnake.
 - [x] verified against dev PostgREST: tpop copy (geom preserved, fresh created_at, new uuidv7), ap_history composite PATCH incl. changed_by trigger; 13 Playwright specs green.
 - [x] all ~45 `Menu.tsx` "Neu" create buttons (Daten incl. werte lists): codemodded to `const newId = uuidv7()` + `apiInsert('<table>', { id: newId, <parent> })`; the Menus navigate to `newId`. Specials by hand: `Tpopfeldkontr(s)` (double create: tpopkontr + tpopkontrzaehl with two ids), `User/Menu` (empty create + EKF tpopkontr create), `Werte/Menu` (dynamic table name via `camelToSnake(table)`). Verified live: pop-create 201 with ap_id set, cleanup 204; 13 Playwright specs green. Note: the werte tables all have uuid id PKs (not integer codes) — no special casing needed.
-- [ ] remaining (~20 files): EkPlan (setEkplans, CellFor* processChanges, deleteEkplan), Tpopfreiwkontr/EKF forms, Beobzuordnung saves, Karte creates, createNew*FromBeob + coordinate copiers, Messages, insertDataset, Choose* copiers, User.tsx password mutation.
+- [x] the rest (30.10.2026): EkPlan (setEkplans became bulk DELETE + bulk INSERT; setStartjahr; CellFor* processChanges; CellForYearMenu), Tpopfreiwkontr/EKF forms (counts via apiUpdateByVariables, bulk zaehl-insert on new kontr), Beobzuordnung saves, Karte layers, coordinate copiers, createNewPop/TpopFromBeob (client uuids replace returned ids), Messages (usermessage inserts), Werte forms, insertDataset (all per-menuType create templates collapsed into one row object — the tree's generic "Neu"), Choose* copiers (bulk delete + bulk insert), Coordinates, Files delete/update, Qk apqk (composite key `?ap_id=eq.X&qk_name=eq.Y`), ApUsers, EkfBar user updates, User password via `rpc('set_password')`.
+- [x] **enum gotcha found and fixed (ae3 knew it): PostgREST returns/accepts enum LABELS, graphql returned uppercased VALUES.** `ek_type` labels are `ek`/`ekf`, `ek_kontrolljahre_ab` are `ek`/`ansiedlung`. Writes now send lowercase; reads comparing enum values must expect lowercase when migrated to PostgREST (phase 4!). `tpopkontr.typ` is a plain varchar (werte texts) — unaffected. Verified: bulk ekplan insert 201 with labels, 400 with the old uppercase values.
 
 ## Phase 4 — Reads (191 static + nav data hooks)
 

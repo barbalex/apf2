@@ -1,3 +1,5 @@
+import { apiInsert } from '../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
@@ -7,7 +9,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
-import { createUsermessage } from './createUsermessage.ts'
 import { userNameAtom } from '../../store/index.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -41,14 +42,16 @@ interface UsermessagesQueryResult {
   }
 }
 
-const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  '& .MuiPaper-root': {
-    maxWidth: `${window.innerWidth * 0.8}px !important`,
-    minWidth: '80% !important',
-  },
-}))
+const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(
+  () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiPaper-root': {
+      maxWidth: `${window.innerWidth * 0.8}px !important`,
+      minWidth: '80% !important',
+    },
+  }),
+)
 
 const getAYearAgo = () => {
   const now = new Date()
@@ -90,9 +93,10 @@ export const Messages = () => {
   const onClickReadAll = async () => {
     await Promise.all(
       unreadMessages.map(async (message) => {
-        await apolloClient.mutate({
-          mutation: createUsermessage,
-          variables: { userName, id: message.id },
+        await apiInsert('usermessage', {
+          id: uuidv7(),
+          user_name: userName,
+          message_id: message.id,
         })
       }),
     )

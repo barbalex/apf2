@@ -1,11 +1,9 @@
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { isEqual } from 'es-toolkit'
-import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 
-import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
-  apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -28,7 +26,6 @@ export const saveNichtZuordnenToDb = async ({
   search,
 }: SaveNichtZuordnenToDbParams) => {
   // both clients are set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -43,10 +40,7 @@ export const saveNichtZuordnenToDb = async ({
   }
   // if true, empty tpopId
   if (value) variables.tpopId = null
-  await apolloClient.mutate({
-    mutation: updateBeobById,
-    variables,
-  })
+  await apiUpdateByVariables('beob', variables)
   void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })

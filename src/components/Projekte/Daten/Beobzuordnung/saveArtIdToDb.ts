@@ -1,9 +1,9 @@
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { isEqual } from 'es-toolkit'
 import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 import { graphql } from '../../../../gql/index.ts'
 
-import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
   apolloClientAtom,
@@ -41,10 +41,7 @@ export const saveArtIdToDb = async ({
     id: row.id,
     artId: value,
   }
-  await apolloClient.mutate({
-    mutation: updateBeobById,
-    variables,
-  })
+  await apiUpdateByVariables('beob', variables)
 
   const result = await apolloClient.query({
     query: graphql(`

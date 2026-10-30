@@ -1,13 +1,11 @@
+import { apiUpdateByVariables } from '../../modules/api.ts'
 import { useState } from 'react'
 import type { ChangeEvent, FocusEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { gql as dynamicGql } from '../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import { upperFirst } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
 import { userNameAtom } from '../../store/index.ts'
@@ -59,12 +57,15 @@ export const Coordinates = ({ row, refetchForm, table }: CoordinatesProps) => {
   const wgs84Lat = row?.geomPoint?.x
   const wgs84Long = row?.geomPoint?.y
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const userName = useAtomValue(userNameAtom)
 
-  const [lv95XState, setLv95XState] = useState<string | number | null>(lv95X || '')
-  const [lv95YState, setLv95YState] = useState<string | number | null>(lv95Y || '')
+  const [lv95XState, setLv95XState] = useState<string | number | null>(
+    lv95X || '',
+  )
+  const [lv95YState, setLv95YState] = useState<string | number | null>(
+    lv95Y || '',
+  )
   const [xError, setXError] = useState('')
   const [yError, setYError] = useState('')
 
@@ -106,40 +107,10 @@ export const Coordinates = ({ row, refetchForm, table }: CoordinatesProps) => {
     // _somehow_ this managed to be called without id when deleting a tpop????
     if (!id) return
     try {
-      const mutationTitle = `update${upperFirst(table)}ByIdForCoordinates`
-      const mutationName = `update${upperFirst(table)}ById`
-      const patchName = `${table}Patch`
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation ${mutationTitle}(
-              $id: UUID!
-              $geomPoint: GeoJSON
-              $changedBy: String
-            ) {
-              ${mutationName}(
-                input: {
-                  id: $id
-                  ${patchName}: { geomPoint: $geomPoint, changedBy: $changedBy }
-                }
-              ) {
-                ${table} {
-                  id
-                  geomPoint {
-                    geojson
-                    #srid
-                    x
-                    y
-                  }
-                }
-              }
-            }
-          `,
-        // no optimistic response as geomPoint
-        variables: {
-          id,
-          geomPoint,
-          changedBy: userName,
-        },
+      await apiUpdateByVariables(table, {
+        id,
+        geomPoint,
+        changedBy: userName,
       })
     } catch (error) {
       return projection === 'lv95' ?

@@ -1,3 +1,4 @@
+import { rpc } from '../modules/api.ts'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -19,7 +20,6 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { Password } from './Projekte/Daten/User/Password.tsx'
-import { rpc } from '../modules/api.ts'
 import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
@@ -237,19 +237,10 @@ export const User = () => {
     const oldPass = oldPasswordInput.current?.value
 
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation setPassword($pUsername: String!, $pNewPass: String!, $pOldPass: String) {
-            setPassword(input: { pUsername: $pUsername, pNewPass: $pNewPass, pOldPass: $pOldPass }) {
-              uuid
-            }
-          }
-        `,
-        variables: {
-          pUsername: name,
-          pNewPass: value,
-          pOldPass: oldPasswordRequired ? oldPass : null,
-        },
+      await rpc('set_password', {
+        p_username: name,
+        p_new_pass: value,
+        p_old_pass: oldPasswordRequired ? oldPass : null,
       })
     } catch (error) {
       // Apollo Client 4 rejects with CombinedGraphQLErrors:

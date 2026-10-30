@@ -1,5 +1,5 @@
+import { apiUpdateByVariables } from '../api.ts'
 import { queryTpop } from './queryTpop.ts'
-import { updatePopById } from './updatePopById.ts'
 import {
   store,
   addNotificationAtom,
@@ -57,13 +57,9 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
         },
       }
     }
-    await apolloClient.mutate({
-      mutation: updatePopById,
-      variables: {
-        id: popId,
-        geomPoint,
-      },
-      // no optimistic response as geomPoint
+    await apiUpdateByVariables('pop', {
+      id: popId,
+      geomPoint,
     })
   } catch (error) {
     return addNotification({

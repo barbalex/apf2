@@ -1,3 +1,4 @@
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import Dialog from '@mui/material/Dialog'
@@ -19,7 +20,6 @@ import { useAtomValue } from 'jotai'
 import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { updateUserById as updateUserByIdGql } from './updateUserById.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
@@ -83,10 +83,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: updateUserByIdGql,
-        variables,
-      })
+      await apiUpdateByVariables('user', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -125,14 +122,11 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
       // edit password
       // then tell user if it worked
       try {
-        await apolloClient.mutate({
-          mutation: updateUserByIdGql,
-          variables: {
-            id: row?.id,
-            // value, not the state variable: on Enter the state
-            // still holds the previous value (#823)
-            pass: value,
-          },
+        await apiUpdateByVariables('user', {
+          id: row?.id,
+          // value, not the state variable: on Enter the state
+          // still holds the previous value (#823)
+          pass: value,
         })
       } catch (error) {
         return setPasswordMessage((error as Error).message)
@@ -227,9 +221,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                       spellCheck="false"
                       endAdornment={
                         <InputAdornment position="end">
-                          <Tooltip
-                            title={showPass ? 'verstecken' : 'anzeigen'}
-                          >
+                          <Tooltip title={showPass ? 'verstecken' : 'anzeigen'}>
                             <IconButton
                               onClick={() => setShowPass(!showPass)}
                               onMouseDown={(e) => e.preventDefault()}

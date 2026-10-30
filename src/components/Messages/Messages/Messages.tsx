@@ -1,11 +1,11 @@
+import { apiInsert } from '../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import Button from '@mui/material/Button'
 import MarkdownIt from 'markdown-it'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { useAtomValue } from 'jotai'
 
-import { createUsermessage } from '../createUsermessage.ts'
 import { userNameAtom } from '../../../store/index.ts'
 import type { MessageNode } from '../index.tsx'
 
@@ -28,13 +28,13 @@ export const Messages = ({
 }) => {
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickRead = async (message: MessageNode) => {
-    await apolloClient.mutate({
-      mutation: createUsermessage,
-      variables: { userName, id: message.id },
+    await apiInsert('usermessage', {
+      id: uuidv7(),
+      user_name: userName,
+      message_id: message.id,
     })
     void tsQueryClient.invalidateQueries({
       queryKey: ['UsermessagesQuery'],

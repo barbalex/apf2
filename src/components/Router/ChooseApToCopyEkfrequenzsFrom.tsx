@@ -1,3 +1,6 @@
+import { graphql } from '../../gql/index.ts'
+import { v7 as uuidv7 } from 'uuid'
+import { apiFetch, apiInsert } from '../../modules/api.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
@@ -7,15 +10,12 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
-import { graphql } from '../../gql/index.ts'
-import type { EkType, EkKontrolljahreAb } from '../../gql/graphql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import type { EkfrequenzId } from '../../models/apflora/Ekfrequenz.ts'
 import type { ApId } from '../../models/apflora/index.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
@@ -26,35 +26,6 @@ import {
   openChooseApToCopyEkfrequenzsFromAtom,
   setOpenChooseApToCopyEkfrequenzsFromAtom,
 } from '../../store/index.ts'
-
-interface ExistingEkfrequenzNode {
-  id: EkfrequenzId
-}
-
-interface ExistingEkfrequenzQueryResult {
-  allEkfrequenzs: {
-    nodes: ExistingEkfrequenzNode[]
-  }
-}
-
-interface NewEkfrequenzNode {
-  id: EkfrequenzId
-  anwendungsfall: string | null
-  apId: ApId
-  bemerkungen: string | null
-  code: string | null
-  ekAbrechnungstyp: string | null
-  ektyp: EkType | null
-  kontrolljahre: number[] | null
-  kontrolljahreAb: EkKontrolljahreAb | null
-  sort: number | null
-}
-
-interface NewEkfrequenzQueryResult {
-  allEkfrequenzs: {
-    nodes: NewEkfrequenzNode[]
-  }
-}
 
 interface ApOption {
   value: ApId
@@ -92,170 +63,75 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing ekfrequenz
     // 1.1: query existing ekfrequenz
-    let existingEkfrequenzResult
+    let existingEkfrequenzs: string[] = []
     try {
-      existingEkfrequenzResult =
-        await apolloClient.query<ExistingEkfrequenzQueryResult>({
-          query: graphql(`
-            query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
-              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
-                nodes {
-                  id
-                }
-              }
-            }
-          `),
-          variables: {
-            apId,
-          },
-          // got errors when not setting 'network-only' policy
-          // when copying repeatedly
-          // apollo seemed to use local cache which was not up to date any more
-          // so probably not the newly inserted were queried but the earlier deleted ones
-          // which created conflicts with uniqueness
-          fetchPolicy: 'network-only',
-        })
-    } catch (error) {
-      console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
-    }
-    const existingEkfrequenzs = (
-      existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
-    ).map((e) => e.id)
-
-    // 1.2: delete existing ekfrequenz
-    try {
-      await Promise.allSettled(
-        existingEkfrequenzs.map(
-          async (id) =>
-            await apolloClient.mutate({
-              mutation: graphql(`
-                mutation deleteExistingEkfrequenzForEkfrequenzFolder(
-                  $id: UUID!
-                ) {
-                  deleteEkfrequenzById(input: { id: $id }) {
-                    deletedEkfrequenzId
-                  }
-                }
-              `),
-              variables: {
-                id,
-              },
-              update(cache) {
-                cache.evict({ id })
-              },
-            }),
-        ),
-      )
+      existingEkfrequenzs = (
+        (await apiFetch<{ id: string }[]>(
+          `/ekfrequenz?ap_id=eq.${apId}&select=id`,
+        )) ?? []
+      ).map((e) => e.id)
     } catch (error) {
       console.log({ error })
       setApOptionsError(
-        `Fehler beim Löschen der existierenden EK-Frequenzen: ${(error as Error).message}`,
+        `Fehler beim Abfragen der Arten: ${(error as Error).message}`,
       )
+    }
+
+    // 1.2: delete existing ekfrequenz
+    if (existingEkfrequenzs.length) {
+      try {
+        await apiFetch(`/ekfrequenz?id=in.(${existingEkfrequenzs.join(',')})`, {
+          method: 'DELETE',
+        })
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Löschen der existierenden EK-Frequenzen: ${(error as Error).message}`,
+        )
+      }
     }
 
     // 2. add ekfrequenz from other ap
     // 2.1: query ekfrequenz
-    let newEkfrequenzResult
+    let newEkfrequenzs: {
+      anwendungsfall: string | null
+      bemerkungen: string | null
+      code: string | null
+      ek_abrechnungstyp: string | null
+      ektyp: string | null
+      kontrolljahre: number[] | null
+      kontrolljahre_ab: string | null
+      sort: number | null
+    }[]
     try {
-      newEkfrequenzResult = await apolloClient.query<NewEkfrequenzQueryResult>({
-        query: graphql(`
-          query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
-            allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
-              nodes {
-                id
-                anwendungsfall
-                apId
-                bemerkungen
-                code
-                ekAbrechnungstyp
-                ektyp
-                kontrolljahre
-                kontrolljahreAb
-                sort
-              }
-            }
-          }
-        `),
-        variables: {
-          apId: newApId,
-        },
-      })
+      newEkfrequenzs =
+        (await apiFetch(
+          `/ekfrequenz?ap_id=eq.${newApId}&select=anwendungsfall,bemerkungen,code,ek_abrechnungstyp,ektyp,kontrolljahre,kontrolljahre_ab:kontrolljahre_ab,sort`,
+        )) ?? []
     } catch (error) {
       console.log({ error })
       return setApOptionsError(
         `Fehler beim Abfragen der neuen EK-Frequenzen: ${(error as Error).message}`,
       )
     }
-    const newEkfrequenzs =
-      newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
 
     // 2.2: insert ekfrequenz
     try {
-      await Promise.allSettled(
-        newEkfrequenzs.map(async (ekf) =>
-          apolloClient.mutate({
-            mutation: graphql(`
-              mutation insertEkfrequenzForEkfrequenzFolder(
-                $apId: UUID!
-                $anwendungsfall: String
-                $bemerkungen: String
-                $changedBy: String
-                $code: String
-                $ekAbrechnungstyp: String
-                $ektyp: EkType
-                $kontrolljahre: [Int]
-                $kontrolljahreAb: EkKontrolljahreAb
-                $sort: Int
-              ) {
-                createEkfrequenz(
-                  input: {
-                    ekfrequenz: {
-                      apId: $apId
-                      anwendungsfall: $anwendungsfall
-                      bemerkungen: $bemerkungen
-                      code: $code
-                      ekAbrechnungstyp: $ekAbrechnungstyp
-                      ektyp: $ektyp
-                      kontrolljahre: $kontrolljahre
-                      kontrolljahreAb: $kontrolljahreAb
-                      sort: $sort
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  ekfrequenz {
-                    id
-                    apId
-                    anwendungsfall
-                    bemerkungen
-                    code
-                    ekAbrechnungstyp
-                    ektyp
-                    kontrolljahre
-                    kontrolljahreAb
-                    sort
-                    changedBy
-                  }
-                }
-              }
-            `),
-            // somehow in dev i got errors claiming the strings were not utf-8
-            // invalid byte sequence for encoding "UTF8"
-            variables: {
-              apId: apId,
-              anwendungsfall: ekf.anwendungsfall ?? null,
-              bemerkungen: ekf.bemerkungen ?? null,
-              code: ekf.code ?? null,
-              ekAbrechnungstyp: ekf.ekAbrechnungstyp ?? null,
-              ektyp: ekf.ektyp ?? null,
-              kontrolljahre: ekf.kontrolljahre ?? null,
-              kontrolljahreAb: ekf.kontrolljahreAb ?? null,
-              sort: ekf.sort ?? null,
-              changedBy: userName,
-            },
-          }),
-        ),
+      await apiInsert(
+        'ekfrequenz',
+        newEkfrequenzs.map((ekf) => ({
+          id: uuidv7(),
+          ap_id: apId,
+          anwendungsfall: ekf.anwendungsfall ?? null,
+          bemerkungen: ekf.bemerkungen ?? null,
+          code: ekf.code ?? null,
+          ek_abrechnungstyp: ekf.ek_abrechnungstyp ?? null,
+          ektyp: ekf.ektyp ?? null,
+          kontrolljahre: ekf.kontrolljahre ?? null,
+          kontrolljahre_ab: ekf.kontrolljahre_ab ?? null,
+          sort: ekf.sort ?? null,
+          changed_by: userName,
+        })),
       )
     } catch (error) {
       console.log('Error adding copied EK-Frequenzen:', error)
@@ -280,7 +156,9 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     })
   }
 
-  const [apOptionsError, setApOptionsError] = useState<string | undefined>(undefined)
+  const [apOptionsError, setApOptionsError] = useState<string | undefined>(
+    undefined,
+  )
   const apOptions = async (inputValue: string): Promise<ApOption[]> => {
     const filter =
       inputValue ?
@@ -313,7 +191,9 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
       })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
+      setApOptionsError(
+        `Fehler beim Abfragen der Arten: ${(error as Error).message}`,
+      )
     }
     const options = result?.data?.allAps?.nodes ?? []
     // only show options with ekfrequenzs

@@ -1,3 +1,5 @@
+import { apiUpdate } from '../../../../modules/api.ts'
+import { camelToSnake } from '../../../../modules/camelToSnake.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { upperFirst } from 'es-toolkit'
@@ -71,10 +73,8 @@ export const Component = () => {
 
   const row: Partial<WerteRow> = data?.[`${table}ById`] ?? {}
 
-  let codeGqlType = 'Int'
   let codeFieldType = 'number'
   if (['ekAbrechnungstypWerte'].includes(table)) {
-    codeGqlType = 'String'
     codeFieldType = 'text'
   }
 
@@ -82,47 +82,11 @@ export const Component = () => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
-    const variables = {
-      id: row.id,
-      [field]: value,
-      changedBy: userName,
-    }
-
-    const typename = upperFirst(table)
     try {
-      const mutation = dynamicGql`
-          mutation updateWert(
-            $id: UUID!
-            $code: ${codeGqlType}
-            $text: String
-            $sort: Int
-            $changedBy: String
-          ) {
-            update${typename}ById(
-              input: {
-                id: $id
-                ${table}Patch: {
-                  id: $id
-                  code: $code
-                  text: $text
-                  sort: $sort
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              ${table} {
-                id
-                code
-                text
-                sort
-                changedBy
-              }
-            }
-          }
-        `
-      await apolloClient.mutate({
-        mutation,
-        variables,
+      if (!row.id) return
+      await apiUpdate(camelToSnake(table), row.id, {
+        [camelToSnake(field)]: value,
+        changed_by: userName,
       })
     } catch (error) {
       return setFieldErrors((prev) => ({

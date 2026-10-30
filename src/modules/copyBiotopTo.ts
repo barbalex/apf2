@@ -1,3 +1,4 @@
+import { apiUpdateByVariables } from './api.ts'
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { gql as dynamicGql } from '../apolloGql.ts'
 import type { TpopfeldkontrFieldsFragment } from '../gql/graphql.ts'
@@ -29,61 +30,18 @@ export const copyBiotopTo = async ({ id }: { id: string }) => {
     variables: { id: previousId },
   })
   const from = dataFrom?.tpopkontrById
-  await apolloClient.mutate({
-    mutation: dynamicGql`
-      mutation updateTpopkontrForCopyBiotopTo(
-        $id: UUID!
-        $flaeche: Int
-        $lrDelarze: String
-        $lrUmgebungDelarze: String
-        $vegetationstyp: String
-        $konkurrenz: String
-        $moosschicht: String
-        $krautschicht: String
-        $strauchschicht: String
-        $baumschicht: String
-        $handlungsbedarf: String
-        $idealbiotopUebereinstimmung: Int
-      ) {
-        updateTpopkontrById(
-          input: {
-            id: $id
-            tpopkontrPatch: {
-              id: $id
-              flaeche: $flaeche
-              lrDelarze: $lrDelarze
-              lrUmgebungDelarze: $lrUmgebungDelarze
-              vegetationstyp: $vegetationstyp
-              konkurrenz: $konkurrenz
-              moosschicht: $moosschicht
-              krautschicht: $krautschicht
-              strauchschicht: $strauchschicht
-              baumschicht: $baumschicht
-              handlungsbedarf: $handlungsbedarf
-              idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
-            }
-          }
-        ) {
-          tpopkontr {
-            ...TpopfeldkontrFields
-          }
-        }
-      }
-      ${tpopfeldkontr}
-    `,
-    variables: {
-      id,
-      flaeche: from?.flaeche ?? null,
-      lrDelarze: from?.lrDelarze ?? null,
-      lrUmgebungDelarze: from?.lrUmgebungDelarze ?? null,
-      vegetationstyp: from?.vegetationstyp ?? null,
-      konkurrenz: from?.konkurrenz ?? null,
-      moosschicht: from?.moosschicht ?? null,
-      krautschicht: from?.krautschicht ?? null,
-      strauchschicht: from?.strauchschicht ?? null,
-      baumschicht: from?.baumschicht ?? null,
-      handlungsbedarf: from?.handlungsbedarf ?? null,
-      idealbiotopUebereinstimmung: from?.idealbiotopUebereinstimmung ?? null,
-    },
+  await apiUpdateByVariables('tpopkontr', {
+    id,
+    flaeche: from?.flaeche ?? null,
+    lrDelarze: from?.lrDelarze ?? null,
+    lrUmgebungDelarze: from?.lrUmgebungDelarze ?? null,
+    vegetationstyp: from?.vegetationstyp ?? null,
+    konkurrenz: from?.konkurrenz ?? null,
+    moosschicht: from?.moosschicht ?? null,
+    krautschicht: from?.krautschicht ?? null,
+    strauchschicht: from?.strauchschicht ?? null,
+    baumschicht: from?.baumschicht ?? null,
+    handlungsbedarf: from?.handlungsbedarf ?? null,
+    idealbiotopUebereinstimmung: from?.idealbiotopUebereinstimmung ?? null,
   })
 }

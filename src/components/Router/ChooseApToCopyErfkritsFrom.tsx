@@ -1,3 +1,5 @@
+import { apiFetch, apiInsert } from '../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
@@ -14,7 +16,6 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import type { ErfkritId } from '../../models/apflora/Erfkrit.ts'
 import type { ApId } from '../../models/apflora/index.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
@@ -25,30 +26,6 @@ import {
   openChooseApToCopyErfkritsFromAtom,
   setOpenChooseApToCopyErfkritsFromAtom,
 } from '../../store/index.ts'
-
-interface ExistingErfkritNode {
-  id: ErfkritId
-}
-
-interface ExistingErfkritQueryResult {
-  allErfkrits: {
-    nodes: ExistingErfkritNode[]
-  }
-}
-
-interface NewErfkritNode {
-  id: ErfkritId
-  apId: ApId
-  bemerkungen: string | null
-  erfolg: number | null
-  kriterien: string | null
-}
-
-interface NewErfkritQueryResult {
-  allErfkrits: {
-    nodes: NewErfkritNode[]
-  }
-}
 
 interface ApOption {
   value: ApId
@@ -85,131 +62,59 @@ export const ChooseApToCopyErfkritsFrom = () => {
     // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing erfkrit
     // 1.1: query existing erfkrit
-    let existingErfkritResult
+    let existingErfkrits: string[] = []
     try {
-      existingErfkritResult =
-        await apolloClient.query<ExistingErfkritQueryResult>({
-          query: graphql(`
-            query getExistingErfkritForErfkritFolder($apId: UUID) {
-              allErfkrits(filter: { apId: { equalTo: $apId } }) {
-                nodes {
-                  id
-                }
-              }
-            }
-          `),
-          variables: { apId },
-          // got errors when not setting 'network-only' policy
-          // when copying repeatedly
-          // apollo seemed to use local cache which was not up to date any more
-          // so probably not the newly inserted were queried but the earlier deleted ones
-          // which created conflicts with uniqueness
-          fetchPolicy: 'network-only',
-        })
-    } catch (error) {
-      console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
-    }
-    const existingErfkrits = (
-      existingErfkritResult?.data?.allErfkrits?.nodes ?? []
-    ).map((e) => e.id)
-
-    // 1.2: delete existing erfkrit
-    try {
-      await Promise.allSettled(
-        existingErfkrits.map(
-          async (id) =>
-            await apolloClient.mutate({
-              mutation: graphql(`
-                mutation deleteExistingErfkritForErfkritFolder($id: UUID!) {
-                  deleteErfkritById(input: { id: $id }) {
-                    deletedErfkritId
-                  }
-                }
-              `),
-              variables: { id },
-              update(cache) {
-                cache.evict({ id })
-              },
-            }),
-        ),
-      )
+      existingErfkrits = (
+        (await apiFetch<{ id: string }[]>(
+          `/erfkrit?ap_id=eq.${apId}&select=id`,
+        )) ?? []
+      ).map((e) => e.id)
     } catch (error) {
       console.log({ error })
       setApOptionsError(
-        `Fehler beim Löschen der existierenden Erfolgskriterien: ${(error as Error).message}`,
+        `Fehler beim Abfragen der Arten: ${(error as Error).message}`,
       )
     }
 
+    // 1.2: delete existing erfkrit
+    if (existingErfkrits.length) {
+      try {
+        await apiFetch(`/erfkrit?id=in.(${existingErfkrits.join(',')})`, {
+          method: 'DELETE',
+        })
+      } catch (error) {
+        console.log({ error })
+        setApOptionsError(
+          `Fehler beim Löschen der existierenden Erfolgskriterien: ${(error as Error).message}`,
+        )
+      }
+    }
+
     // 2. add erfkrit from other ap
-    // 2.1: query erfkrit
-    let newErfkritResult
+    let newErfkrits: { erfolg: number | null; kriterien: string | null }[]
     try {
-      newErfkritResult = await apolloClient.query<NewErfkritQueryResult>({
-        query: graphql(`
-          query getNewErfkritForErfkritFolder($apId: UUID) {
-            allErfkrits(filter: { apId: { equalTo: $apId } }) {
-              nodes {
-                id
-                apId
-                erfolg
-                kriterien
-              }
-            }
-          }
-        `),
-        variables: { apId: newApId },
-      })
+      newErfkrits =
+        (await apiFetch<{ erfolg: number | null; kriterien: string | null }[]>(
+          `/erfkrit?ap_id=eq.${newApId}&select=erfolg,kriterien`,
+        )) ?? []
     } catch (error) {
       console.log({ error })
       return setApOptionsError(
         `Fehler beim Abfragen der neuen Erfolgskriterien: ${(error as Error).message}`,
       )
     }
-    const newErfkrits = newErfkritResult?.data?.allErfkrits?.nodes ?? []
 
     // 2.2: insert erfkrit
     try {
-      await Promise.allSettled(
-        newErfkrits.map(async (ekf) =>
-          apolloClient.mutate({
-            mutation: graphql(`
-              mutation insertErfkritForErfkritFolder(
-                $apId: UUID!
-                $erfolg: Int
-                $kriterien: String
-                $changedBy: String
-              ) {
-                createErfkrit(
-                  input: {
-                    erfkrit: {
-                      apId: $apId
-                      erfolg: $erfolg
-                      kriterien: $kriterien
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  erfkrit {
-                    id
-                    apId
-                    erfolg
-                    kriterien
-                    changedBy
-                  }
-                }
-              }
-            `),
-            // somehow in dev i got errors claiming the strings were not utf-8
-            // invalid byte sequence for encoding "UTF8"
-            variables: {
-              apId: apId,
-              erfolg: ekf.erfolg,
-              kriterien: ekf.kriterien,
-              changedBy: userName,
-            },
-          }),
-        ),
+      await apiInsert(
+        'erfkrit',
+        newErfkrits.map((erfkrit) => ({
+          id: uuidv7(),
+          ap_id: apId,
+          erfolg: erfkrit.erfolg,
+          kriterien: erfkrit.kriterien,
+          changed_by: userName,
+        })),
       )
     } catch (error) {
       console.log('Error adding copied Erfolgskriterien:', error)
@@ -229,7 +134,9 @@ export const ChooseApToCopyErfkritsFrom = () => {
     void tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
   }
 
-  const [apOptionsError, setApOptionsError] = useState<string | undefined>(undefined)
+  const [apOptionsError, setApOptionsError] = useState<string | undefined>(
+    undefined,
+  )
   const apOptions = async (inputValue: string): Promise<ApOption[]> => {
     const filter =
       inputValue ?
@@ -260,7 +167,9 @@ export const ChooseApToCopyErfkritsFrom = () => {
       })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
+      setApOptionsError(
+        `Fehler beim Abfragen der Arten: ${(error as Error).message}`,
+      )
     }
     const options = result?.data?.allAps?.nodes ?? []
     // only show options with erfkrits

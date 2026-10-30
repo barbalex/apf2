@@ -1,9 +1,9 @@
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import { isEqual } from 'es-toolkit'
 import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 import { graphql } from '../../../../gql/index.ts'
 
-import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
   apolloClientAtom,
@@ -47,10 +47,7 @@ export const saveTpopIdToDb = async ({
   if (value) variables.nichtZuordnen = false
   // if value, set nichtZuordnen false
   if (value) variables.nichtZuordnen = false
-  await apolloClient.mutate({
-    mutation: updateBeobById,
-    variables,
-  })
+  await apiUpdateByVariables('beob', variables)
 
   // need to update activeNodeArray and openNodes
   let newANA: (string | number)[]

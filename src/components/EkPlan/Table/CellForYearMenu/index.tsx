@@ -1,3 +1,4 @@
+import { apiDelete, apiInsert } from '../../../../modules/api.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
@@ -20,8 +21,6 @@ import {
 } from '../../../../store/index.ts'
 import { queryTpop } from './queryTpop.ts'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
-import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
-import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 
 import { EksMenu } from './EksMenu/index.tsx'
 import { EkfsMenu } from './EkfsMenu/index.tsx'
@@ -60,12 +59,12 @@ export const CellForYearMenu = () => {
     // menu actions only fire after a cell click set tpopId
     if (!tpopId) return
     let qResult:
-    | {
-        data?:
-          | { allEkplans?: { nodes?: { id: string; typ: string }[] } }
-          | undefined
-      }
-    | undefined
+      | {
+          data?:
+            | { allEkplans?: { nodes?: { id: string; typ: string }[] } }
+            | undefined
+        }
+      | undefined
     try {
       qResult = (await apolloClient.query({
         query: queryEkplansOfTpop,
@@ -86,10 +85,7 @@ export const CellForYearMenu = () => {
     const id = qResult?.data?.allEkplans?.nodes?.find((o) => o?.typ === typ)?.id
     if (!id) return
     try {
-      await apolloClient.mutate({
-        mutation: mutationDeleteEkplan,
-        variables: { id },
-      })
+      await apiDelete('ekplan', id)
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -110,16 +106,14 @@ export const CellForYearMenu = () => {
   const userName = useAtomValue(userNameAtom)
 
   const addEkPlan = async (typ: string) => {
-    const variables = {
-      tpopId,
-      jahr: year,
-      typ,
-      changedBy: userName,
-    }
     try {
-      await apolloClient.mutate({
-        mutation: mutationCreateEkplan,
-        variables,
+      await apiInsert('ekplan', {
+        tpop_id: tpopId,
+        jahr: year,
+        // ek_type enum labels are lowercase; the callers pass the
+        // uppercased graphql values
+        typ: typ.toLowerCase(),
+        changed_by: userName,
       })
     } catch (error) {
       addNotification({
@@ -239,8 +233,7 @@ export const CellForYearMenu = () => {
             className={styles.menuItem}
             onClick={(e) => setEksAnchor(e.currentTarget)}
             style={{
-              backgroundColor:
-                eksAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+              backgroundColor: eksAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -257,8 +250,7 @@ export const CellForYearMenu = () => {
             className={styles.menuItem}
             onClick={(e) => setEkfsAnchor(e.currentTarget)}
             style={{
-              backgroundColor:
-                ekfsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+              backgroundColor: ekfsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -275,8 +267,7 @@ export const CellForYearMenu = () => {
             className={styles.menuItem}
             onClick={(e) => setMassnsAnchor(e.currentTarget)}
             style={{
-              backgroundColor:
-                massnsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+              backgroundColor: massnsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>

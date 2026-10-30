@@ -1,5 +1,5 @@
+import { apiFetch, apiInsert } from '../../../../../../modules/api.ts'
 import Checkbox from '@mui/material/Checkbox'
-import { graphql } from '../../../../../../gql/index.ts'
 
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -37,8 +37,8 @@ interface RowProps {
 }
 
 export const Row = ({ apId, qk }: RowProps) => {
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: ['apqkQueryForRow', apId, qk.name],
@@ -60,29 +60,15 @@ export const Row = ({ apId, qk }: RowProps) => {
     // 2. else create apqk
     const variables = { apId, qkName: qk.name }
     if (checked) {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteApqk($apId: UUID!, $qkName: String!) {
-            deleteApqkByApIdAndQkName(input: { apId: $apId, qkName: $qkName }) {
-              deletedApqkId
-            }
-          }
-        `),
-        variables,
-      })
+      // apqk has a composite primary key (ap_id, qk_name)
+      await apiFetch(
+        `/apqk?ap_id=eq.${variables.apId}&qk_name=eq.${variables.qkName}`,
+        { method: 'DELETE' },
+      )
     } else {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApqk($apId: UUID!, $qkName: String!) {
-            createApqk(input: { apqk: { apId: $apId, qkName: $qkName } }) {
-              apqk {
-                apId
-                qkName
-              }
-            }
-          }
-        `),
-        variables,
+      await apiInsert('apqk', {
+        ap_id: variables.apId,
+        qk_name: variables.qkName,
       })
     }
     // 3. refetch data

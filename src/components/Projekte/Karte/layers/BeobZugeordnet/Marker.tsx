@@ -1,8 +1,8 @@
+import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -18,7 +18,6 @@ import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
 import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.ts'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
-import { updateBeobById } from './updateBeobById.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
@@ -70,7 +69,6 @@ export const Marker = ({ beob }: MarkerProps) => {
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setTreeLastTouchedNode = useSetAtom(setTreeLastTouchedNodeAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const isHighlighted = beobId === beob.id
@@ -120,12 +118,9 @@ export const Marker = ({ beob }: MarkerProps) => {
       beob.id,
     ]
     void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-    await apolloClient.mutate({
-      mutation: updateBeobById,
-      variables: {
-        id: beob.id,
-        tpopId: nearestTpop.id,
-      },
+    await apiUpdateByVariables('beob', {
+      id: beob.id,
+      tpopId: nearestTpop.id,
     })
     void tsQueryClient.invalidateQueries({
       queryKey: [`BeobZugeordnetForMapQuery`],

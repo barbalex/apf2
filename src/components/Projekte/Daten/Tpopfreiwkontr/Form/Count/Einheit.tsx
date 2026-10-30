@@ -1,11 +1,10 @@
+import { apiUpdateByVariables } from '../../../../../../modules/api.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { userNameAtom } from '../../../../../../store/index.ts'
-import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
 import type { TpopkontrzaehlRow } from './index.tsx'
 
@@ -26,7 +25,6 @@ export const Einheit = ({
 }: EinheitProps) => {
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [error, setErrors] = useState<string | null>(null)
@@ -46,10 +44,7 @@ export const Einheit = ({
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: updateTpopkontrzaehlById,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontrzaehl', variables)
     } catch (error) {
       return setErrors((error as Error).message)
     }

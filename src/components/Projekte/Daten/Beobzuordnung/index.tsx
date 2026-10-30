@@ -1,8 +1,8 @@
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
@@ -23,12 +23,6 @@ import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  aeTaxonomies,
-  beob,
-  pop,
-  popStatusWerte,
-} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -88,21 +82,6 @@ interface BeobzuordnungAp {
 interface BeobzuordnungQueryResult {
   beobById: BeobzuordnungBeob | null
   apById: BeobzuordnungAp | null
-}
-
-const fieldTypes: Record<string, string> = {
-  idField: 'String',
-  datum: 'Date',
-  autor: 'String',
-  geomPoint: 'GeoJSON',
-  data: 'JSON',
-  artId: 'UUID',
-  artIdOriginal: 'UUID',
-  infofloraInformiertDatum: 'Date',
-  tpopId: 'UUID',
-  nichtZuordnen: 'Boolean',
-  bemerkungen: 'String',
-  quelle: 'String',
 }
 
 const nichtZuordnenPopover = (
@@ -170,13 +149,11 @@ export const Component = () => {
     apId: string
   }
   const { search, pathname } = useLocation()
-  const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
-    ? 'nichtZuzuordnen'
-    : pathname.includes('nicht-beurteilte-Beobachtungen')
-      ? 'nichtBeurteilt'
-      : pathname.includes('Beobachtungen')
-        ? 'zugeordnet'
-        : 'uups'
+  const type =
+    pathname.includes('nicht-zuzuordnende-Beobachtungen') ? 'nichtZuzuordnen'
+    : pathname.includes('nicht-beurteilte-Beobachtungen') ? 'nichtBeurteilt'
+    : pathname.includes('Beobachtungen') ? 'zugeordnet'
+    : 'uups'
 
   const apolloClient = useApolloClient()
 
@@ -200,12 +177,12 @@ export const Component = () => {
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = (inputValue: string) =>
-    inputValue
-      ? {
-          artname: { includesInsensitive: inputValue },
-          apartsByArtIdExist: true,
-        }
-      : { artname: { isNull: false }, apartsByArtIdExist: true }
+    inputValue ?
+      {
+        artname: { includesInsensitive: inputValue },
+        apartsByArtIdExist: true,
+      }
+    : { artname: { isNull: false }, apartsByArtIdExist: true }
 
   const onSaveArtIdToDb = (event: SaveToDbEvent) =>
     saveArtIdToDb({
@@ -234,66 +211,10 @@ export const Component = () => {
   const onUpdateField = (event: SaveToDbEvent) => {
     const changedField = event.target.name
     if (!changedField) return
-    void apolloClient.mutate({
-      mutation: dynamicGql`
-          mutation updateBeobForBeobzuordnung(
-            $id: UUID!
-            $${changedField}: ${fieldTypes[changedField]}
-            $changedBy: String
-          ) {
-            updateBeobById(
-              input: {
-                id: $id
-                beobPatch: {
-                  ${changedField}: $${changedField}
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              beob {
-                ...BeobFields
-                aeTaxonomyByArtId {
-                  ...AeTaxonomiesFields
-                  apByArtId {
-                    id
-                    popsByApId {
-                      nodes {
-                        id
-                        tpopsByPopId {
-                          nodes {
-                            id
-                            nr
-                            lv95X
-                            lv95Y
-                            popStatusWerteByStatus {
-                              ...PopStatusWerteFields
-                            }
-                            popByPopId {
-                              ...PopFields
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                aeTaxonomyByArtIdOriginal {
-                  id
-                  artname
-                }
-              }
-            }
-          }
-          ${aeTaxonomies}
-          ${beob}
-          ${pop}
-          ${popStatusWerte}
-        `,
-      variables: {
-        id,
-        [changedField]: event.target.value,
-        changedBy: userName,
-      },
+    void apiUpdateByVariables('beob', {
+      id,
+      [changedField]: event.target.value,
+      changedBy: userName,
     })
   }
 
@@ -305,7 +226,10 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <FormTitle title="Beobachtung" MenuBarComponent={Menu} />
+        <FormTitle
+          title="Beobachtung"
+          MenuBarComponent={Menu}
+        />
         <div className={styles.formContainer}>
           <div className={styles.fieldsContainer}>
             {row && row.artId !== row.artIdOriginal && (
@@ -389,9 +313,9 @@ export const Component = () => {
                     data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
                   })
                   const body = `${origArt}\r\n${neueArt}${
-                    bemerkungen
-                      ? `${bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''}`
-                      : ''
+                    bemerkungen ?
+                      `${bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''}`
+                    : ''
                   }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
                   sendMail({
                     to: 'info@infoflora.ch',

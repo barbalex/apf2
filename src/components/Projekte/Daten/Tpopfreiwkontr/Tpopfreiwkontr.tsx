@@ -1,3 +1,5 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
@@ -5,17 +7,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router'
 
 import { query } from './query.ts'
-import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Form } from './Form/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type {
-  TpopkontrQueryResult,
-  TpopkontrRow,
-} from './Form/index.tsx'
+import type { TpopkontrQueryResult, TpopkontrRow } from './Form/index.tsx'
 
 interface ComponentProps {
   id?: string | undefined
@@ -55,8 +53,7 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
     '99999999-9999-9999-9999-999999999999'
 
-  const zaehls =
-    data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+  const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
   const row: Partial<TpopkontrRow> = data?.tpopkontrById ?? {}
 
@@ -76,18 +73,15 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
           // remove ekzaehleinheits without zaehleinheit_id
           .filter((z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code)
 
-        Promise.all(
-          ekzaehleinheits.map((z) =>
-            apolloClient.mutate({
-              mutation: createTpopkontrzaehl,
-              variables: {
-                tpopkontrId: row.id,
-                einheit:
-                  z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
-                changedBy: userName,
-              },
-            }),
-          ),
+        apiInsert(
+          'tpopkontrzaehl',
+          ekzaehleinheits.map((z) => ({
+            id: uuidv7(),
+            tpopkontr_id: row.id,
+            einheit:
+              z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
+            changed_by: userName,
+          })),
         )
           .then(() => {
             if (!isActive) return

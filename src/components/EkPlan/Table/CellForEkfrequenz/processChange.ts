@@ -1,6 +1,4 @@
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-
-import { tpop } from '../../../shared/fragments.ts'
+import { apiUpdate } from '../../../../modules/api.ts'
 import { setStartjahr } from '../setStartjahr/index.ts'
 import { setEkplans } from '../setEkplans/index.ts'
 import type { TpopRow } from '../tableTypes.ts'
@@ -27,35 +25,9 @@ export const processChange = async ({
   const apolloClient = store.get(apolloClientAtom)
   if (!tsQueryClient || !apolloClient) return
   try {
-    await apolloClient.mutate({
-      mutation: dynamicGql`
-        mutation updateTpopEkfrequenz(
-          $id: UUID!
-          $ekfrequenz: UUID
-          $changedBy: String
-        ) {
-          updateTpopById(
-            input: {
-              id: $id
-              tpopPatch: {
-                id: $id
-                ekfrequenz: $ekfrequenz
-                changedBy: $changedBy
-              }
-            }
-          ) {
-            tpop {
-              ...TpopFields
-            }
-          }
-        }
-        ${tpop}
-      `,
-      variables: {
-        id: row.id,
-        ekfrequenz: value,
-        changedBy: store.get(userNameAtom),
-      },
+    await apiUpdate('tpop', row.id, {
+      ekfrequenz: value,
+      changed_by: store.get(userNameAtom),
     })
   } catch (error) {
     return addNotification({
@@ -68,10 +40,11 @@ export const processChange = async ({
   // set EK-Frequenz Startjahr
   let ekfrequenzStartjahr: number | null | undefined
   if (value) {
-    ekfrequenzStartjahr = (await setStartjahr({
-      row,
-      ekfrequenz: value,
-    })) ?? null
+    ekfrequenzStartjahr =
+      (await setStartjahr({
+        row,
+        ekfrequenz: value,
+      })) ?? null
   }
   // set ekplans if startjahr exists
   // TODO: or ekfrequenz has no kontrolljahre
