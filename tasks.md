@@ -21,7 +21,6 @@
 
 More virtual list candidates:
 
-- EkPlan's table
 - Mitteilungen lists
 
 ---
