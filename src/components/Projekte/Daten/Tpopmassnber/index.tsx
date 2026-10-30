@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopmassnberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -8,7 +9,6 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -70,7 +70,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -81,19 +80,28 @@ export const Component = () => {
   const tpopmassnberQueryOptions = {
     queryKey: ['tpopmassnber', id],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopmassnberQueryResult>({
-        query,
-        variables: { id: id ?? '' },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, werte] = await Promise.all([
+        apiFetch<NonNullable<TpopmassnberQueryResult['tpopmassnberById']>[]>(
+          `/v_tpopmassnber?id=eq.${id ?? ''}&select=${tpopmassnberSelect},tpopByTpopId:tpop_by_tpop_id`,
+        ),
+        apiFetch<
+          NonNullable<
+            TpopmassnberQueryResult['allTpopmassnErfbeurtWertes']
+          >['nodes']
+        >(
+          `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+      ])
+      return {
+        tpopmassnberById: rows?.[0] ?? null,
+        allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
+      }
     },
     suspense: true,
   }
   const { data } = useQuery(tpopmassnberQueryOptions)
 
   const row: Partial<TpopmassnberNode> = data?.tpopmassnberById ?? {}
-
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)

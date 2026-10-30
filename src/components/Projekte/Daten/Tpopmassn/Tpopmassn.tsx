@@ -1,3 +1,10 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import {
+  tpopmassnSelect,
+  tpopmassnTypWerteSelect,
+  adresseSelect,
+  tpopkontrzaehlEinheitWerteSelect,
+} from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { graphql } from '../../../../gql/index.ts'
@@ -19,7 +26,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
@@ -161,12 +167,28 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
   const tpopmassnQueryOptions = {
     queryKey: ['tpopmassn', tpopmassnId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopmassnQueryResult>({
-        query,
-        variables: { id: tpopmassnId ?? '' },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, massnTypWerte, adresses, einheitWerte] = await Promise.all([
+        apiFetch<NonNullable<TpopmassnQueryResult['tpopmassnById']>[]>(
+          `/v_tpopmassn?id=eq.${tpopmassnId ?? ''}&select=${tpopmassnSelect},tpopmassnTypWerteByTyp:tpopmassn_typ_werte_by_typ,tpopByTpopId:tpop_by_tpop_id`,
+        ),
+        apiFetch<TpopmassnQueryResult['allTpopmassnTypWertes']['nodes']>(
+          `/tpopmassn_typ_werte?order=sort.asc&select=${tpopmassnTypWerteSelect}`,
+        ),
+        apiFetch<TpopmassnQueryResult['allAdresses']['nodes']>(
+          `/adresse?order=name.asc&select=${adresseSelect}`,
+        ),
+        apiFetch<
+          TpopmassnQueryResult['allTpopkontrzaehlEinheitWertes']['nodes']
+        >(
+          `/tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
+        ),
+      ])
+      return {
+        tpopmassnById: rows?.[0] ?? null,
+        allTpopmassnTypWertes: { nodes: massnTypWerte ?? [] },
+        allAdresses: { nodes: adresses ?? [] },
+        allTpopkontrzaehlEinheitWertes: { nodes: einheitWerte ?? [] },
+      }
     },
     suspense: true,
   }

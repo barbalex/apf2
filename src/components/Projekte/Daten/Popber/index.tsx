@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { popberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -8,7 +9,6 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -54,7 +54,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -62,18 +61,23 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['popber', id],
     queryFn: async () => {
-      const result = await apolloClient.query<PopberQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, werte] = await Promise.all([
+        apiFetch<NonNullable<PopberQueryResult['popberById']>[]>(
+          `/v_popber?id=eq.${id}&select=${popberSelect},tpopEntwicklungWerteByEntwicklung:tpop_entwicklung_werte_by_entwicklung,popByPopId:pop_by_pop_id`,
+        ),
+        apiFetch(
+          `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+      ])
+      return {
+        popberById: rows?.[0] ?? null,
+        allTpopEntwicklungWertes: { nodes: werte ?? [] },
+      }
     },
   })
 
   const row: Partial<NonNullable<PopberQueryResult['popberById']>> =
     data?.popberById ?? {}
-
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
     if (!field) return

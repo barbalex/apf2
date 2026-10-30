@@ -108,14 +108,27 @@ GRANT SELECT ON apflora.v_pop TO apflora_reader, apflora_ap_reader, apflora_ap_w
 CREATE OR REPLACE VIEW apflora.v_popber WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.popber_label(t) AS label
+    apflora.popber_label(t) AS label,
+    (SELECT jsonb_build_object('id', w.id, 'code', w.code, 'text', w.text, 'sort', w.sort, 'historic', w.historic)
+      FROM apflora.tpop_entwicklung_werte w WHERE w.code = t.entwicklung)
+      AS tpop_entwicklung_werte_by_entwicklung,
+    (SELECT jsonb_build_object('id', p.id, 'apId', p.ap_id, 'nr', p.nr,
+        'name', p.name, 'status', p.status, 'bekanntSeit', p.bekannt_seit,
+        'label', apflora.pop_label(p), 'statusUnklar', p.status_unklar,
+        'statusUnklarBegruendung', p.status_unklar_begruendung)
+      FROM apflora.pop p WHERE p.id = t.pop_id) AS pop_by_pop_id
   FROM apflora.popber t;
 GRANT SELECT ON apflora.v_popber TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
 CREATE OR REPLACE VIEW apflora.v_popmassnber WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.popmassnber_label(t) AS label
+    apflora.popmassnber_label(t) AS label,
+    (SELECT jsonb_build_object('id', w.id, 'code', w.code, 'text', w.text, 'sort', w.sort, 'historic', w.historic)
+      FROM apflora.tpopmassn_erfbeurt_werte w WHERE w.code = t.beurteilung)
+      AS tpopmassn_erfbeurt_werte_by_beurteilung,
+    (SELECT jsonb_build_object('id', p.id, 'apId', p.ap_id)
+      FROM apflora.pop p WHERE p.id = t.pop_id) AS pop_by_pop_id
   FROM apflora.popmassnber t;
 GRANT SELECT ON apflora.v_popmassnber TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -183,14 +196,34 @@ GRANT SELECT ON apflora.v_tpopkontrzaehl_einheit_werte TO apflora_reader, apflor
 CREATE OR REPLACE VIEW apflora.v_tpopmassn WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.tpopmassn_label(t) AS label
+    apflora.tpopmassn_label(t) AS label,
+    (SELECT jsonb_build_object('id', w.id, 'anpflanzung', w.anpflanzung)
+      FROM apflora.tpopmassn_typ_werte w WHERE w.code = t.typ)
+      AS tpopmassn_typ_werte_by_typ,
+    (SELECT jsonb_build_object('id', c.id, 'popByPopId',
+        jsonb_build_object('id', p.id, 'apByApId',
+          jsonb_build_object('id', a.id, 'ekzaehleinheitsByApId', jsonb_build_object('nodes', (
+            SELECT coalesce(jsonb_agg(jsonb_build_object(
+              'id', e.id, 'zaehleinheitId', e.zaehleinheit_id,
+              'notMassnCountUnit', e.not_massn_count_unit)
+              ORDER BY e.sort), '[]'::jsonb)
+            FROM apflora.ekzaehleinheit e
+            WHERE e.ap_id = a.id AND e.zielrelevant)))))
+      FROM apflora.tpop c
+      JOIN apflora.pop p ON p.id = c.pop_id
+      JOIN apflora.ap a ON a.id = p.ap_id
+      WHERE c.id = t.tpop_id) AS tpop_by_tpop_id
   FROM apflora.tpopmassn t;
 GRANT SELECT ON apflora.v_tpopmassn TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.tpopmassnber_label(t) AS label
+    apflora.tpopmassnber_label(t) AS label,
+    (SELECT jsonb_build_object('id', c.id, 'popByPopId',
+        jsonb_build_object('id', p.id, 'apId', p.ap_id))
+      FROM apflora.tpop c JOIN apflora.pop p ON p.id = c.pop_id
+      WHERE c.id = t.tpop_id) AS tpop_by_tpop_id
   FROM apflora.tpopmassnber t;
 GRANT SELECT ON apflora.v_tpopmassnber TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
