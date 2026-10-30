@@ -25,6 +25,8 @@ npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser
 npm run test-report  # open the last html report
+npm run deploy       # deploy production: bump patch version + date, push master, update apflora branch (Vercel deploys apflora)
+npm run deploy minor # same with a minor bump (or: major)
 
 # single test file / pattern:
 npx playwright test tests/forms/population.spec.ts
@@ -97,4 +99,4 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.
 - **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `apollo`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.
 - **German UI**: keep labels, notifications, and route path segments in German unless explicitly asked to translate.
-- App version is bumped in [package.json](package.json) (`version` + `versionDate`) and shown in the document title.
+- App version: `npm run deploy [patch|minor|major]` bumps `version` + `versionDate` in [package.json](package.json) automatically (default: patch) — don't bump manually. Deploys go through the `apflora` branch: the script merges master into apflora and pushes, which triggers the Vercel production deploy. The version is shown in the hamburger menu.

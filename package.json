@@ -25,6 +25,8 @@
     "test:ui": "cross-env NODE_ENV=dev playwright test --ui",
     "test:headed": "cross-env NODE_ENV=dev playwright test --headed",
     "test-report": "playwright show-report",
+    "bump": "node scripts/bumpVersion.mjs",
+    "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i"
   },
