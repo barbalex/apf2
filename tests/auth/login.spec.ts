@@ -69,9 +69,10 @@ test.describe('User login', () => {
     await page.getByLabel('Name').fill(loginData.name)
     await page.getByLabel('Passwort').fill(loginData.password)
     await page.getByRole('button', { name: /anmelden/i }).click()
-    await page.waitForURL(
-      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13',
-    )
+    // after login the app reloads and stays in /Daten with the tree open;
+    // it no longer auto-navigates into the first projekt
+    await page.waitForURL('/Daten/')
     await expect(page.locator('#dialog-title')).not.toBeVisible()
+    await expect(page.getByText('Projekte')).toBeVisible()
   })
 })

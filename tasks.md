@@ -49,10 +49,12 @@ Spike results (30.10.2026) — **go**:
 
 ## Phase 2 — Client foundation
 
-- `src/modules/api.ts` (ae3 api.js pattern, typed): `postgrestUri()`, `apiFetch` with Bearer from `userTokenAtom` + exp check, `Prefer: return=minimal` default for mutations, `rpc()`, `apiCount()` (Prefer: count=exact + content-range).
-- kanel setup (config from vermehrung) + npm script; `src/models/` stays until parity.
-- select-string helpers replacing the 55 fragments in `src/components/shared/fragments.ts`.
-- Apollo stays wired until phase 6 — modules migrate one at a time.
+- [x] `src/modules/api.ts` (ae3 api.js pattern, typed): `postgrestUri()`, `apiFetch` with Bearer from `userTokenAtom` + exp check, `Prefer: return=minimal` default for mutations, `rpc()`, `apiCount()` (Prefer: count=exact + content-range), `ApiError` carrying the PostgREST error body.
+- [x] kanel setup restored: `src/models/` was already Kanel-generated but the config was never committed. `kanel.config.mjs` (connects to the dev db as postgres — restricted roles crash the view parser on views they cannot read) + `scripts/kanel-generate.mjs` (rewrites `.js` imports to `.ts`, fixes verbatimModuleSyntax enum defaults, generates per-schema `index.ts` barrels incl. the `*Code` type aliases from the former hand barrel) + `npm run models:generate`. Regeneration fixed the type baseline to 0 known errors (old models were stale: `Date` instead of `string`, missing post-0061 columns).
+- [x] proof of concept: login (User.tsx) migrated to `rpc('login')` — the first production path on PostgREST. `userByName` stays on Apollo until phase 4. All 9 auth login tests green (chromium); firefox browsers aren't installed locally (`npx playwright install firefox`).
+- [ ] select-string helpers replacing the 55 fragments in `src/components/shared/fragments.ts` — build per migrating module instead of upfront (typed `(keyof T)[]` arrays over the kanel models).
+- [ ] Apollo stays wired until phase 6 — modules migrate one at a time.
+- note: `playwright/.auth/user.json`'s password had drifted from the dev db backup — resynced gabriel's dev password to it. And `npm test` sets `NODE_ENV=dev` (localhost); bare `npx playwright test` runs against **production** (baseURL apflora.ch) — careful.
 
 ## Phase 3 — Mutations (172, mechanical, lowest risk first)
 

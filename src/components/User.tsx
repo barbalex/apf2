@@ -19,9 +19,17 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { Password } from './Projekte/Daten/User/Password.tsx'
+import { rpc } from '../modules/api.ts'
 import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
+
+// return type of the apflora.login function (auth.jwt_token)
+interface LoginResult {
+  role: string
+  username: string
+  token: string
+}
 
 interface TokenState {
   token: string | null
@@ -126,18 +134,12 @@ export const User = () => {
     }
     let result
     try {
-      result = await apolloClient.mutate({
-        mutation: graphql(`
-          mutation logIn($name: String, $password: String) {
-            login(input: { username: $name, pass: $password }) {
-              jwtToken
-            }
-          }
-        `),
-        variables: {
-          name: nameToUse,
-          password: passwordToUse,
-        },
+      // PostgREST rpc to apflora.login, which signs the JWT in the
+      // database. The returned token works on both apis during the
+      // PostgREST migration (dual-stack).
+      result = await rpc<LoginResult>('login', {
+        username: nameToUse,
+        pass: passwordToUse,
       })
     } catch (error) {
       const message = (error as Error).message
@@ -171,7 +173,7 @@ export const User = () => {
     }
     setUser({
       name: nameToUse,
-      token: result?.data?.login?.jwtToken ?? null,
+      token: result?.token ?? null,
       id: userResult?.data?.userByName?.id ?? null,
     })
     // this is easiest way to make sure everything is correct
