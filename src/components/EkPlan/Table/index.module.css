@@ -81,3 +81,22 @@
   line-height: unset !important;
   z-index: 5;
 }
+
+/* spacer element giving the virtualized rows their total height */
+.rows {
+  position: relative;
+  /* the scroll container is a flex column: without this the single
+     spacer child would be shrunk to the viewport height */
+  flex-shrink: 0;
+  width: max-content;
+  min-width: 100%;
+}
+
+.row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 60px;
+  width: max-content;
+}

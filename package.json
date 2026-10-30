@@ -2,7 +2,7 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.137.13",
+  "version": "1.137.14",
   "versionDate": "30.10.2026",
   "type": "module",
   "repository": {
@@ -25,6 +25,8 @@
     "test:ui": "cross-env NODE_ENV=dev playwright test --ui",
     "test:headed": "cross-env NODE_ENV=dev playwright test --headed",
     "test-report": "playwright show-report",
+    "bump": "node scripts/bumpVersion.mjs",
+    "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i"
   },
@@ -73,7 +75,7 @@
     "notistack": "3.0.2",
     "proj4": "2.22.0",
     "proj4leaflet": "1.0.2",
-    "query-string": "9.5.1",
+    "query-string": "10.0.0",
     "react": "19.3.1",
     "react-aria-components": "1.22.1",
     "react-datepicker": "9.1.0",
