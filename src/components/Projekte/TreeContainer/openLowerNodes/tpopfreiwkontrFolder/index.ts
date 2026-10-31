@@ -5,25 +5,9 @@
  * 4. update openNodes
  * 5. refresh tree
  */
-import type { ApolloClient } from '@apollo/client'
 
-import { query } from './query.ts'
-import {
-  store,
-  apolloClientAtom,
-  treeAddOpenNodesAtom,
-} from '../../../../../store/index.ts'
-
-interface EkfFolderOpenLowerNodesQueryResult {
-  tpopById?: {
-    tpopkontrsByTpopId?: {
-      nodes: {
-        id: string
-        tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
-      }[]
-    }
-  }
-}
+import { apiFetch } from '../../../../../modules/api.ts'
+import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
 
 interface TpopfreiwkontrFolderParams {
   id?: string | null | undefined
@@ -38,17 +22,18 @@ export const tpopfreiwkontrFolder = async ({
   popId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
 }: TpopfreiwkontrFolderParams) => {
-  // apolloClient is set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
-
   // 1. load all data
-  const { data } = await apolloClient.query<EkfFolderOpenLowerNodesQueryResult>(
-    {
-      query: query,
-      variables: { id },
-    },
-  )
-  const tpopkontrs = data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
+  const kontrs =
+    (await apiFetch<{ id: string }[]>(
+      `/q_tpopkontr?tpop_id=eq.${id}&typ=eq.Freiwilligen-Kontrolle&select=id`,
+    )) ?? []
+  const kontrIds = kontrs.map((k) => k.id)
+  const zaehls =
+    kontrIds.length ?
+      ((await apiFetch<{ id: string; tpopkontr_id: string }[]>(
+        `/q_tpopkontrzaehl?tpopkontr_id=in.(${kontrIds.join(',')})&select=id,tpopkontr_id`,
+      )) ?? [])
+    : []
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
     [
@@ -63,7 +48,7 @@ export const tpopfreiwkontrFolder = async ({
       'Freiwilligen-Kontrollen',
     ],
   ]
-  tpopkontrs.forEach((k) => {
+  kontrs.forEach((k) => {
     newOpenNodes = [
       ...newOpenNodes,
       [
@@ -92,8 +77,8 @@ export const tpopfreiwkontrFolder = async ({
         'Zaehlungen',
       ],
     ]
-    const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
-    zaehls.forEach((z) => {
+    const zaehlsOfKontr = zaehls.filter((z) => z.tpopkontr_id === k.id)
+    zaehlsOfKontr.forEach((z) => {
       newOpenNodes = [
         ...newOpenNodes,
         [

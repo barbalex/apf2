@@ -5,24 +5,9 @@
  * 4. refresh tree
  */
 import { groupBy } from 'es-toolkit'
-import type { ApolloClient } from '@apollo/client'
 
-import { query } from './query.ts'
-import {
-  store,
-  apolloClientAtom,
-  treeAddOpenNodesAtom,
-} from '../../../../../store/index.ts'
-
-import type { ZielFieldsFragment } from '../../../../../gql/graphql.ts'
-
-interface ZielFolderQueryResult {
-  apById?: {
-    zielsByApId?: {
-      nodes: ZielFieldsFragment[]
-    }
-  }
-}
+import { apiFetch } from '../../../../../modules/api.ts'
+import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
 
 interface ZielFolderParams {
   id?: string | null | undefined
@@ -33,18 +18,12 @@ export const zielFolder = async ({
   id,
   projId = '99999999-9999-9999-9999-999999999999',
 }: ZielFolderParams) => {
-  // apolloClient is set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
-
   // 1. load all data
-  const { data } = await apolloClient.query<ZielFolderQueryResult>({
-    query: query,
-    variables: { id },
-  })
-  const zielsGrouped = groupBy(
-    data?.apById?.zielsByApId?.nodes ?? [],
-    (e) => e.jahr,
-  )
+  const ziels =
+    (await apiFetch<{ id: string; jahr: number | null }[]>(
+      `/q_ziel?ap_id=eq.${id}&select=id,jahr`,
+    )) ?? []
+  const zielsGrouped = groupBy(ziels, (e) => e.jahr ?? 0)
 
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes: (string | number | null | undefined)[][] = [

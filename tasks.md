@@ -141,7 +141,8 @@ Opened (31.10.2026):
   - verified: all four Auswertung charts render ("Erfolg des Aktionsplans", "Populationen nach Status", '"Einheit" nach Populationen', kontrollierte), Biotop form renders, zero request errors; Playwright 26/26, typecheck 0, lint 0 errors.
 - [x] **filter components off Apollo (31.10.2026, eighth batch):** ApFilter, PopFilter, TpopFilter (+ Ek/Tpop sub-forms), TpopmassnFilter, TpopfeldkontrFilter, TpopfreiwkontrFilter (+ Headdata), TreeContainer/ApFilter. Pattern: the all/filtered counts are two rpcCount calls on the table's query_* RPC with the cascade atoms' jsonb; option lists are plain GETs (v_adresse, werte tables, ae_lr_delarze, ch_administrative_unit); aeTaxonomyById via /ae_taxonomies (FDW table is REST-exposed); TpopFilter's Gemeinde locate reuses the get_gemeinde RPC. The usersByAdresseIdExist reverse relation recurs (TpopFilter/Ek) — same adresse_id in-list pattern as TpopEk. ApFilter's queryAeTaxonomies stays (feeds SelectLoadingOptions, which is still Apollo and takes a document prop).
   - verified: filter page with a real AP-Art shows Pop 21/21, T-Pop 47/47; a non-AP-Art correctly shows 0/0 under the nur-AP filter (cross-checked the exact RPC bodies in the network log); zero request errors. Playwright 26/26, typecheck 0, lint 0 errors.
-- still on Apollo (~40 files): Qk (4), Beobzuordnung, openLowerNodes (9), exports (~40), Karte layers (~15), Ekf/EkPlan (~7), AppBar EkfBar, Print (2), Router ChooseAp, SelectLoadingOptions(Typable) + ApFilter's queryAeTaxonomies, App.tsx, User.tsx.
+- [x] **openLowerNodes off Apollo (31.10.2026, ninth batch):** all 8 tree-openers (pop, popFolder, tpop, tpopFolder, tpopfeldkontrFolder, tpopfreiwkontrFolder, zielFolder, zieljahrFolder) are id-list GETs on the q_ views. The nested one-shot GraphQL documents became: folder-level openers fetch parent ids first, then one bulk `?fk=in.(ids)` GET per child table (select includes the parent fk so children group client-side); tpopFolder splits kontrs into feld/freiw by `typ` client-side and pulls zaehls in one `tpopkontr_id=in.(...)` call. Note: tpopFolder's old document fetched popbersByPopId but never used it — dropped. Verified via context-menu 'alle öffnen' on the Populationen folder (children + Massnahmen rows open, zero request errors) and an API sweep of all 12 URL shapes; Playwright 26/26, typecheck 0, lint 0 errors.
+- still on Apollo (~30 files): Qk (4), Beobzuordnung, exports (~40), Karte layers (~15), Ekf/EkPlan (~7), AppBar EkfBar, Print (2), Router ChooseAp, SelectLoadingOptions(Typable) + ApFilter's queryAeTaxonomies, App.tsx, User.tsx.
 - `query_<table>` RPC family for the tree-filtered tables: reuse `compile_filter` (beob/tpopmassn/tpopkontr now covered; qk still open).
 - serialize `tree*GqlFilterAtom` outputs into queryFn bodies — the atoms themselves stay unchanged.
 - map polygon filters (coveredBy/contains/within/intersects, 29 uses) stay inside the RPC jsonb — no PostgREST URL syntax needed.
@@ -157,5 +158,9 @@ Opened (31.10.2026):
 ---
 
 One pre-existing gap surfaced honestly: ekfrequenz has no label function (its fragment never had one), so v_ekfrequenz simply doesn't expose a label — no invented behavior
+
+---
+
+nav tree: Arten (0/0)
 
 ---

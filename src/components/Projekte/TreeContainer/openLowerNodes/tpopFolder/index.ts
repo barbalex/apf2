@@ -4,40 +4,9 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import type { ApolloClient } from '@apollo/client'
 
-import { query } from './query.ts'
-import {
-  store,
-  apolloClientAtom,
-  treeAddOpenNodesAtom,
-} from '../../../../../store/index.ts'
-
-interface TpopFolderQueryResult {
-  popById?: {
-    tpopsByPopId?: {
-      nodes: {
-        id: string
-        tpopmassnsByTpopId?: { nodes: { id: string }[] }
-        tpopmassnbersByTpopId?: { nodes: { id: string }[] }
-        tpopfeldkontrs?: {
-          nodes: {
-            id: string
-            tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
-          }[]
-        }
-        tpopfreiwkontrs?: {
-          nodes: {
-            id: string
-            tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
-          }[]
-        }
-        tpopbersByTpopId?: { nodes: { id: string }[] }
-        beobsByTpopId?: { nodes: { id: string }[] }
-      }[]
-    }
-  }
-}
+import { apiFetch } from '../../../../../modules/api.ts'
+import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
 
 interface TpopFolderParams {
   popId?: string | null | undefined
@@ -51,14 +20,49 @@ export const tpopFolder = async ({
   projId = '99999999-9999-9999-9999-999999999999',
 }: TpopFolderParams) => {
   console.log('tpopFolder', { popId, apId, projId })
-  // apolloClient is set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   // 1. load all data
-  const { data } = await apolloClient.query<TpopFolderQueryResult>({
-    query: query,
-    variables: { id: popId },
-  })
-  const tpops = data?.popById?.tpopsByPopId?.nodes ?? []
+  const tpops =
+    (await apiFetch<{ id: string; pop_id: string }[]>(
+      `/q_tpop?pop_id=eq.${popId}&select=id,pop_id`,
+    )) ?? []
+  const tpopIds = tpops.map((t) => t.id)
+  const tpopFilter =
+    tpopIds.length ? `tpop_id=in.(${tpopIds.join(',')})` : 'id=eq.null'
+  const results = await Promise.all([
+    apiFetch<{ id: string; tpop_id: string }[]>(
+      `/q_tpopmassn?${tpopFilter}&select=id,tpop_id`,
+    ),
+    apiFetch<{ id: string; tpop_id: string }[]>(
+      `/q_tpopmassnber?${tpopFilter}&select=id,tpop_id`,
+    ),
+    apiFetch<{ id: string; tpop_id: string; typ: string }[]>(
+      `/q_tpopkontr?${tpopFilter}&select=id,tpop_id,typ`,
+    ),
+    apiFetch<{ id: string; tpop_id: string }[]>(
+      `/q_tpopber?${tpopFilter}&select=id,tpop_id`,
+    ),
+    apiFetch<{ id: string; tpop_id: string }[]>(
+      `/q_beob?${tpopFilter}&select=id,tpop_id`,
+    ),
+  ])
+  const tpopmassnsAll = results[0] ?? []
+  const tpopmassnbersAll = results[1] ?? []
+  const kontrsAll = results[2] ?? []
+  const tpopbersAll = results[3] ?? []
+  const beobsAll = results[4] ?? []
+  const feldkontrsAll = kontrsAll.filter(
+    (k) => k.typ !== 'Freiwilligen-Kontrolle',
+  )
+  const freiwkontrsAll = kontrsAll.filter(
+    (k) => k.typ === 'Freiwilligen-Kontrolle',
+  )
+  const kontrIds = kontrsAll.map((k) => k.id)
+  const zaehlsAll =
+    kontrIds.length ?
+      ((await apiFetch<{ id: string; tpopkontr_id: string }[]>(
+        `/q_tpopkontrzaehl?tpopkontr_id=in.(${kontrIds.join(',')})&select=id,tpopkontr_id`,
+      )) ?? [])
+    : []
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
     [
@@ -86,12 +90,12 @@ export const tpopFolder = async ({
       ],
     ]
 
-    const tpopmassns = tpop?.tpopmassnsByTpopId?.nodes ?? []
-    const tpopmassnbers = tpop?.tpopmassnbersByTpopId?.nodes ?? []
-    const tpopfeldkontrs = tpop?.tpopfeldkontrs?.nodes ?? []
-    const tpopfreiwkontrs = tpop?.tpopfreiwkontrs?.nodes ?? []
-    const tpopbers = tpop?.tpopbersByTpopId?.nodes ?? []
-    const tpopbeobs = tpop?.beobsByTpopId?.nodes ?? []
+    const tpopmassns = tpopmassnsAll.filter((t) => t.tpop_id === tpop.id)
+    const tpopmassnbers = tpopmassnbersAll.filter((t) => t.tpop_id === tpop.id)
+    const tpopfeldkontrs = feldkontrsAll.filter((t) => t.tpop_id === tpop.id)
+    const tpopfreiwkontrs = freiwkontrsAll.filter((t) => t.tpop_id === tpop.id)
+    const tpopbers = tpopbersAll.filter((t) => t.tpop_id === tpop.id)
+    const tpopbeobs = beobsAll.filter((t) => t.tpop_id === tpop.id)
 
     newOpenNodes = [
       ...newOpenNodes,
@@ -235,7 +239,7 @@ export const tpopFolder = async ({
           'Zaehlungen',
         ],
       ]
-      const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+      const zaehls = zaehlsAll.filter((z) => z.tpopkontr_id === k.id)
       zaehls.forEach((z) => {
         newOpenNodes = [
           ...newOpenNodes,
@@ -285,7 +289,7 @@ export const tpopFolder = async ({
           'Zaehlungen',
         ],
       ]
-      const zaehls = k?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+      const zaehls = zaehlsAll.filter((z) => z.tpopkontr_id === k.id)
       zaehls.forEach((z) => {
         newOpenNodes = [
           ...newOpenNodes,

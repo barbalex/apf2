@@ -4,22 +4,9 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import type { ApolloClient } from '@apollo/client'
 
-import { query } from './query.ts'
-import {
-  store,
-  apolloClientAtom,
-  treeAddOpenNodesAtom,
-} from '../../../../../store/index.ts'
-
-interface PopForLowerNodesQueryResult {
-  popById?: {
-    tpopsByPopId?: { nodes: { id: string }[] }
-    popbersByPopId?: { nodes: { id: string }[] }
-    popmassnbersByPopId?: { nodes: { id: string }[] }
-  }
-}
+import { apiFetch } from '../../../../../modules/api.ts'
+import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
 
 interface PopParams {
   id?: string | null | undefined
@@ -32,17 +19,15 @@ export const pop = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
 }: PopParams) => {
-  // apolloClient is set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
-
   // 1. load all data
-  const { data } = await apolloClient.query<PopForLowerNodesQueryResult>({
-    query: query,
-    variables: { id },
-  })
-  const tpops = data?.popById?.tpopsByPopId?.nodes ?? []
-  const popbers = data?.popById?.popbersByPopId?.nodes ?? []
-  const popmassnbers = data?.popById?.popmassnbersByPopId?.nodes ?? []
+  const results = await Promise.all([
+    apiFetch<{ id: string }[]>(`/q_tpop?pop_id=eq.${id}&select=id`),
+    apiFetch<{ id: string }[]>(`/q_popber?pop_id=eq.${id}&select=id`),
+    apiFetch<{ id: string }[]>(`/q_popmassnber?pop_id=eq.${id}&select=id`),
+  ])
+  const tpops = results[0] ?? []
+  const popbers = results[1] ?? []
+  const popmassnbers = results[2] ?? []
   // 2. add activeNodeArrays for all data to openNodes
   const newOpenNodes = [
     ['Projekte', projId, 'Arten', apId, 'Populationen', id],
