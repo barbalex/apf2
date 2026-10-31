@@ -1,13 +1,11 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -15,7 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ProjektQueryResult {
   projektById?: {
@@ -31,19 +29,16 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useSuspenseQuery({
     queryKey: ['projekt', projId],
     queryFn: async () => {
-      const result = await apolloClient.query<ProjektQueryResult>({
-        query,
-        variables: { id: projId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<ProjektQueryResult['projektById']>[]
+      >(`/v_projekt?id=eq.${projId}&select=id,name,changedBy:changed_by`)
+      return { projektById: rows?.[0] ?? null }
     },
   })
 

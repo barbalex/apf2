@@ -1,10 +1,8 @@
-import { apiUpdate } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdate } from '../../../../modules/api.ts'
 import { camelToSnake } from '../../../../modules/camelToSnake.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { upperFirst } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -25,8 +23,6 @@ interface WerteRow {
   sort: number | null
 }
 
-type WerteQueryResult = Record<string, WerteRow | undefined>
-
 import styles from './index.module.css'
 
 export const Component = () => {
@@ -42,32 +38,18 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const query = dynamicGql`
-    query werteByIdQuery($id: UUID!) {
-      ${table}ById(id: $id) {
-        id
-        code
-        text
-        sort
-      }
-    }
-  `
   const { data } = useSuspenseQuery({
     queryKey: ['werte', table, id],
     queryFn: async () => {
-      const result = await apolloClient.query<WerteQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the werte tables are plain base tables — no v_ view needed
+      const rows = await apiFetch<WerteRow[]>(
+        `/${camelToSnake(table)}?id=eq.${id}&select=id,code,text,sort`,
+      )
+      return { [`${table}ById`]: rows?.[0] } as Record<string, WerteRow>
     },
   })
 

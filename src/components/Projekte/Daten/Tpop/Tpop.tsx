@@ -1,11 +1,8 @@
-import { apiFetch } from '../../../../modules/api.ts'
+import { apiFetch, rpc } from '../../../../modules/api.ts'
 import { tpopSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import {
   useQuery,
   useQueryClient,
@@ -121,15 +118,6 @@ interface TpopListsQueryResult {
   }
 }
 
-interface GemeindeQueryResult {
-  allChAdministrativeUnits?: {
-    nodes?: {
-      id: string
-      text: string | null
-    }[]
-  }
-}
-
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type TpopUseQueryOptions = UseQueryOptions<
@@ -151,7 +139,6 @@ export const Component = () => {
   const { tpopId } = useParams()
 
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const tpopQueryOptions: TpopUseQueryOptions = {
@@ -175,32 +162,20 @@ export const Component = () => {
   const tpopListsQueryOptions: TpopListsUseQueryOptions = {
     queryKey: ['tpopLists'],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopListsQueryResult>({
-        query: graphql(`
-          query TpopListsQueryForTpop {
-            allTpopApberrelevantGrundWertes(
-              orderBy: SORT_ASC
-              filter: { code: { isNull: false } }
-            ) {
-              nodes {
-                value: code
-                label: text
-              }
-            }
-            allChAdministrativeUnits(
-              filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-              orderBy: TEXT_ASC
-            ) {
-              nodes {
-                value: text
-                label: text
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [grundWertes, gemeinden] = await Promise.all([
+        apiFetch<
+          { value: TpopApberrelevantGrundWerteCode; label: string | null }[]
+        >(
+          `/tpop_apberrelevant_grund_werte?select=value:code,label:text&code=not.is.null&order=sort.asc`,
+        ),
+        apiFetch<{ value: string; label: string }[]>(
+          `/ch_administrative_unit?select=value:text,label:text&localisedcharacterstring=eq.Gemeinde&order=text.asc`,
+        ),
+      ])
+      return {
+        allTpopApberrelevantGrundWertes: { nodes: grundWertes ?? [] },
+        allChAdministrativeUnits: { nodes: gemeinden ?? [] },
+      }
     },
     suspense: true,
   }
@@ -341,32 +316,15 @@ export const Component = () => {
                 gemeinde: 'Es fehlen Koordinaten',
               })
             }
-            const geojson = row?.geomPoint?.geojson
-            if (!geojson) return
-            const geojsonParsed = JSON.parse(geojson)
-            if (!geojsonParsed) return
-            let result: { data?: GemeindeQueryResult | undefined } | undefined
+            // geomPoint arrives as GeoJSON (former geomPoint.geojson string)
+            const geomPoint = row?.geomPoint
+            if (!geomPoint) return
+            let gemeinde: string
             try {
-              result = await apolloClient.query<GemeindeQueryResult>({
-                // this is a hack
-                // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-                query: dynamicGql`
-                        query tpopGemeindeQuery {
-                          allChAdministrativeUnits(
-                            filter: {
-                              geom: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} },
-                              localisedcharacterstring: {equalTo: "Gemeinde"}
-                            }
-                          ) {
-                            nodes {
-                              # apollo wants an id for its cache
-                              id
-                              text
-                            }
-                          }
-                        }
-                      `,
-              })
+              gemeinde =
+                (await rpc<string | null>('get_gemeinde', {
+                  p_geom: geomPoint,
+                })) ?? ''
             } catch (error) {
               return addNotification({
                 message: (error as Error).message,
@@ -375,8 +333,6 @@ export const Component = () => {
                 },
               })
             }
-            const gemeinde =
-              result?.data?.allChAdministrativeUnits?.nodes?.[0]?.text ?? ''
             // keep following method in case table ch_administrative_units is removed again
             /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,

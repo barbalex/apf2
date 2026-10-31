@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -13,7 +12,6 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -69,7 +67,7 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './index.module.css'
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
@@ -85,7 +83,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -93,15 +90,27 @@ export const Component = () => {
   const tpopkontrzaehlQueryOptions: TpopkontrzaehlUseQueryOptions = {
     queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
-        query,
-        variables: {
-          id: tpopkontrzaehlId,
-          tpopkontrId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, einheitWertes, methodeWertes, otherZaehl] =
+        await Promise.all([
+          apiFetch<TpopkontrzaehlNode[]>(
+            `/v_tpopkontrzaehl?id=eq.${tpopkontrzaehlId}&select=id,einheit,anzahl,methode`,
+          ),
+          apiFetch<{ id: string; value: number; label: string }[]>(
+            `/tpopkontrzaehl_einheit_werte?select=id,value:code,label:text&order=sort.asc`,
+          ),
+          apiFetch<{ id: string; value: number; label: string }[]>(
+            `/tpopkontrzaehl_methode_werte?select=id,value:code,label:text&order=sort.asc`,
+          ),
+          apiFetch<{ id: TpopkontrzaehlId; einheit: number | null }[]>(
+            `/q_tpopkontrzaehl?tpopkontr_id=eq.${tpopkontrId}&id=neq.${tpopkontrzaehlId}&select=id,einheit`,
+          ),
+        ])
+      return {
+        tpopkontrzaehlById: rows?.[0] ?? null,
+        allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
+        allTpopkontrzaehlMethodeWertes: { nodes: methodeWertes ?? [] },
+        otherZaehlOfEk: { nodes: otherZaehl ?? [] },
+      }
     },
     suspense: true,
   }

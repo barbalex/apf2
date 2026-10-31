@@ -1,10 +1,9 @@
-import { apiInsert, apiUpdateByVariables } from '../api.ts'
+import { apiFetch, apiInsert, apiUpdateByVariables } from '../api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
 
-import { queryBeob } from './queryBeob.ts'
 import {
   store,
   addNotificationAtom,
@@ -14,7 +13,6 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
-  getApolloClientFromStore,
   getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
@@ -32,18 +30,27 @@ export const createNewPopFromBeob = async ({
   projId?: string | undefined
   search: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
   const tsQueryClient = getTsQueryClientFromStore()
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let beobResult
+  let beob:
+    | {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }
+    | undefined
   try {
-    beobResult = await apolloClient.query({
-      query: queryBeob,
-      variables: { id },
-    })
+    const beobs = await apiFetch<
+      {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }[]
+    >(`/q_beob?id=eq.${id}&select=datum,data,geom_point`)
+    beob = beobs?.[0]
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -52,7 +59,6 @@ export const createNewPopFromBeob = async ({
       },
     })
   }
-  const beob = beobResult?.data?.beobById
   if (!beob) {
     return addNotification({
       message: 'Die Beobachtung wurde nicht gefunden',
@@ -61,7 +67,8 @@ export const createNewPopFromBeob = async ({
       },
     })
   }
-  const { geomPoint, datum, data } = beob
+
+  const { geom_point: geomPoint, datum, data } = beob
   // data is the raw InfoFlora/EVK JSON blob
   const beobData = (data ?? {}) as Record<string, string | null | undefined>
   // new Date(null) coerces to the epoch, like new Date(0)
@@ -69,8 +76,8 @@ export const createNewPopFromBeob = async ({
   const datumIsValid = isValid(datumDate)
   const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
 
-  const newGeomPoint =
-    geomPoint?.geojson ? JSON.parse(String(geomPoint.geojson)) : null
+  // geom_point arrives as GeoJSON (former geomPoint.geojson parse)
+  const newGeomPoint = geomPoint ?? null
 
   // create new pop for ap
   const newPopId = uuidv7()

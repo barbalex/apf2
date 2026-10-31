@@ -27,8 +27,8 @@ export const tableIsFiltered = ({ table }: { table: string }) => {
   if (!gqlFilterAtom) return false
 
   const gqlFilter =
-    (store.get(gqlFilterAtom as Atom<{ filtered?: { or?: object[] } }>)?.filtered
-      ?.or?.[0] as Record<string, unknown> | undefined) ?? {}
+    (store.get(gqlFilterAtom as Atom<{ filtered?: { or?: object[] } }>)
+      ?.filtered?.or?.[0] as Record<string, unknown> | undefined) ?? {}
   const isGqlFilter = Object.keys(gqlFilter).length > 0
   return isGqlFilter
 }

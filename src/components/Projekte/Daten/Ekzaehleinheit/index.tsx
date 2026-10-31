@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { apiFetch } from '../../../../modules/api.ts'
 import { ekzaehleinheitSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
@@ -11,7 +10,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { queryLists } from './queryLists.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -59,23 +57,12 @@ interface EkzaehleinheitQueryResult {
   ekzaehleinheitById: EkzaehleinheitNode | null
 }
 
-interface ListsQueryResult {
-  allTpopkontrzaehlEinheitWertes: {
-    nodes: {
-      id: TpopkontrzaehlEinheitWerteId
-      value: TpopkontrzaehlEinheitWerteId
-      label: string | null
-    }[]
-  }
-}
-
 export const Component = () => {
   const { zaehleinheitId: id } = useParams()
 
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
@@ -101,17 +88,22 @@ export const Component = () => {
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter =
     notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
+  // phase 5: the notIn/isNull filter maps to PostgREST's not.in / not.is.null
+  const zaehleinheitWerteParams =
+    notToShow.length ? `id=not.in.(${notToShow.join(',')})` : 'id=not.is.null'
   const { data: dataLists } = useSuspenseQuery({
     queryKey: ['ekzaehleinheitLists', zaehleinheitWerteFilter],
     queryFn: async () => {
-      const result = await apolloClient.query<ListsQueryResult>({
-        query: queryLists,
-        variables: {
-          filter: zaehleinheitWerteFilter,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<
+        {
+          id: TpopkontrzaehlEinheitWerteId
+          value: TpopkontrzaehlEinheitWerteId
+          label: string | null
+        }[]
+      >(
+        `/tpopkontrzaehl_einheit_werte?select=id,value:id,label:text&${zaehleinheitWerteParams}&order=sort.asc`,
+      )
+      return { allTpopkontrzaehlEinheitWertes: { nodes: nodes ?? [] } }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })

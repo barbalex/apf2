@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { apiFetch } from '../../../../modules/api.ts'
 import { ekfrequenzSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
@@ -11,7 +10,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -48,15 +46,6 @@ interface EkfrequenzQueryResult {
   ekfrequenzById: EkfrequenzNode | null
 }
 
-interface EkAbrechnungstypWertesQueryResult {
-  allEkAbrechnungstypWertes: {
-    nodes: {
-      value: string
-      label: string | null
-    }[]
-  }
-}
-
 // shared RadioButtonGroup's props are inferred from an untyped signature
 // (dataSource infers as never, value as null);
 // declare the shape this form passes
@@ -85,7 +74,6 @@ export const Component = () => {
   const { ekfrequenzId: id } = useParams()
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
@@ -105,12 +93,10 @@ export const Component = () => {
   const { data: dataEkAbrechnungstypWertes } = useSuspenseQuery({
     queryKey: ['ekAbrechnungstypWertes'],
     queryFn: async () => {
-      const result =
-        await apolloClient.query<EkAbrechnungstypWertesQueryResult>({
-          query: queryEkAbrechnungstypWertes,
-        })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<{ value: string; label: string | null }[]>(
+        `/ek_abrechnungstyp_werte?select=value:code,label:text&code=not.is.null&order=sort.asc`,
+      )
+      return { allEkAbrechnungstypWertes: { nodes: nodes ?? [] } }
     },
     staleTime: Infinity, // This data rarely changes
   })

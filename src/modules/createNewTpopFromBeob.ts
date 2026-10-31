@@ -1,11 +1,8 @@
-import { apiInsert, apiUpdateByVariables } from './api.ts'
+import { apiFetch, apiInsert, apiUpdateByVariables } from './api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
-import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
-import { gql as dynamicGql } from '../apolloGql.ts'
-import type { BeobFieldsFragment } from '../gql/graphql.ts'
 
 import {
   store,
@@ -16,10 +13,8 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
-  getApolloClientFromStore,
   getTsQueryClientFromStore,
 } from '../store/index.ts'
-import { beob as beobFragment } from '../components/shared/fragments.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
@@ -37,27 +32,26 @@ export const createNewTpopFromBeob = async ({
   apId?: string | undefined
   search: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
   const tsQueryClient = getTsQueryClientFromStore()
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
-  let beobResult
+  let beob:
+    | {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }
+    | undefined
   try {
-    beobResult = await apolloClient.query({
-      query: dynamicGql`
-        query creteNewTpopFromBeobQuery($beobId: UUID!) {
-          beobById(id: $beobId) {
-            ...BeobFields
-          }
-        }
-        ${beobFragment}
-      ` as unknown as TypedDocumentNode<
-        { beobById?: BeobFieldsFragment | null },
-        Record<string, unknown>
-      >,
-      variables: { beobId },
-    })
+    const beobs = await apiFetch<
+      {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }[]
+    >(`/q_beob?id=eq.${beobId}&select=datum,data,geom_point`)
+    beob = beobs?.[0]
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -66,16 +60,15 @@ export const createNewTpopFromBeob = async ({
       },
     })
   }
-  const beob = (beobResult?.data?.beobById ?? {}) as BeobFieldsFragment
-  const { datum, data } = beob
+  const { datum, data } = beob ?? {}
   // data is the raw InfoFlora/EVK JSON blob
   const beobData = (data ?? {}) as Record<string, string | null | undefined>
   // new Date(null) coerces to the epoch, like new Date(0)
   const datumDate = new Date(datum ?? 0)
   const datumIsValid = isValid(datumDate)
   const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
-  const geomPoint =
-    beob?.geomPoint?.geojson ? JSON.parse(String(beob.geomPoint.geojson)) : null
+  // geom_point arrives as GeoJSON (former geomPoint.geojson parse)
+  const geomPoint = beob?.geom_point ?? null
 
   // create new tpop for pop
   const newTpopId = uuidv7()

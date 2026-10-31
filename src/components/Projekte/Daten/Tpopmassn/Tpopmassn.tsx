@@ -1,4 +1,3 @@
-import { apiFetch } from '../../../../modules/api.ts'
 import {
   tpopmassnSelect,
   tpopmassnTypWerteSelect,
@@ -7,8 +6,6 @@ import {
 } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -111,23 +108,29 @@ interface TpopmassnQueryResult {
   }
 }
 
-interface TpopmassnZieleinheitQueryResult {
-  allTpopmassnTypWertes: {
-    nodes: {
-      id: string
-      anpflanzung: boolean | null
-    }[]
-  }
-  allEkzaehleinheits: {
-    nodes: {
-      id: string
-      tpopkontrzaehlEinheitWerteByZaehleinheitId: {
-        id: string
-        code: number | null
-        correspondsToMassnAnzTriebe: boolean | null
-        correspondsToMassnAnzPflanzen: boolean | null
-      } | null
-    }[]
+interface ZieleinheitWerte {
+  id: string
+  code: number | null
+  correspondsToMassnAnzTriebe: boolean | null
+  correspondsToMassnAnzPflanzen: boolean | null
+}
+
+/**
+ * anpflanzung flag of the massn type + the ap's zielrelevant
+ * zaehleinheit werte (former tpopmassnZieleinheitQuery)
+ */
+const fetchZieleinheit = async (apId: string | undefined, typ: number) => {
+  const [typWertes, ekzaehleinheits] = await Promise.all([
+    apiFetch<{ anpflanzung: boolean | null }[]>(
+      `/tpopmassn_typ_werte?code=eq.${typ}&select=anpflanzung`,
+    ),
+    apiFetch<{ werte: ZieleinheitWerte | null }[]>(
+      `/v_ekzaehleinheit?ap_id=eq.${apId ?? ''}&zielrelevant=eq.true&select=werte:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id&order=id.asc&limit=1`,
+    ),
+  ])
+  return {
+    isAnpflanzung: typWertes?.[0]?.anpflanzung,
+    zieleinheit: ekzaehleinheits?.[0]?.werte ?? null,
   }
 }
 
@@ -151,12 +154,11 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 }>
 
 import styles from './Tpopmassn.module.css'
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
 export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -175,12 +177,12 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           `/tpopmassn_typ_werte?order=sort.asc&select=${tpopmassnTypWerteSelect}`,
         ),
         apiFetch<TpopmassnQueryResult['allAdresses']['nodes']>(
-          `/adresse?order=name.asc&select=${adresseSelect}`,
+          `/v_adresse?order=name.asc&select=${adresseSelect}`,
         ),
         apiFetch<
           TpopmassnQueryResult['allTpopkontrzaehlEinheitWertes']['nodes']
         >(
-          `/tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
+          `/v_tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
         ),
       ])
       return {
@@ -223,54 +225,19 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       // IF typ is anpflanzung
       // have to set zieleinheit_einheit to
       // ekzaehleinheit with zielrelevant = true
-      let zieleinheitIdResult:
-        | {
-            data?: TpopmassnZieleinheitQueryResult | undefined
-          }
-        | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-              query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
-                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                  nodes {
-                    id
-                    anpflanzung
-                  }
-                }
-                allEkzaehleinheits(
-                  filter: {
-                    zielrelevant: { equalTo: true }
-                    apId: { equalTo: $apId }
-                  }
-                ) {
-                  nodes {
-                    id
-                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                      id
-                      code
-                      correspondsToMassnAnzTriebe
-                      correspondsToMassnAnzPflanzen
-                    }
-                  }
-                }
-              }
-            `),
-            variables: { apId: apId ?? '', typ: (value ?? 1) as number },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          (value ?? 1) as number,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       const zieleinheitCode = zieleinheit?.code
       if (isAnpflanzung && zieleinheitCode) {
         variables.zieleinheitEinheit = zieleinheitCode
@@ -285,52 +252,19 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzTriebe') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzTriebe
-      let zieleinheitIdResult:
-        | {
-            data?: TpopmassnZieleinheitQueryResult | undefined
-          }
-        | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-              query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
-                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                  nodes {
-                    id
-                    anpflanzung
-                  }
-                }
-                allEkzaehleinheits(
-                  filter: {
-                    zielrelevant: { equalTo: true }
-                    apId: { equalTo: $apId }
-                  }
-                ) {
-                  nodes {
-                    id
-                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                      id
-                      correspondsToMassnAnzTriebe
-                    }
-                  }
-                }
-              }
-            `),
-            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          row.typ ?? 1,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzTriebe) {
         variables.zieleinheitAnzahl = exists(value) ? value : null
       }
@@ -338,52 +272,19 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzPflanzen') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzPflanzen
-      let zieleinheitIdResult:
-        | {
-            data?: TpopmassnZieleinheitQueryResult | undefined
-          }
-        | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-              query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
-                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                  nodes {
-                    id
-                    anpflanzung
-                  }
-                }
-                allEkzaehleinheits(
-                  filter: {
-                    zielrelevant: { equalTo: true }
-                    apId: { equalTo: $apId }
-                  }
-                ) {
-                  nodes {
-                    id
-                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                      id
-                      correspondsToMassnAnzPflanzen
-                    }
-                  }
-                }
-              }
-            `),
-            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          row.typ ?? 1,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzPflanzen) {
         variables.zieleinheitAnzahl = exists(value) ? value : null
       }

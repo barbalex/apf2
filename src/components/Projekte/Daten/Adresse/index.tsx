@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -8,7 +7,6 @@ import { useAtomValue } from 'jotai'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -18,7 +16,8 @@ import { Error } from '../../../shared/Error.tsx'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
+import { adresseSelect } from '../../../../modules/selects.ts'
 
 interface AdresseQueryResult {
   adresseById: {
@@ -34,18 +33,15 @@ interface AdresseQueryResult {
 export const Component = () => {
   const { adrId } = useParams<{ adrId: string }>()
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { data, error } = useQuery({
     queryKey: ['Adresse', adrId],
     queryFn: async () => {
-      const result = await apolloClient.query<AdresseQueryResult>({
-        query,
-        variables: { id: adrId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<AdresseQueryResult['adresseById']>[]
+      >(`/v_adresse?id=eq.${adrId}&select=${adresseSelect}`)
+      return { adresseById: rows?.[0] ?? null }
     },
   })
 

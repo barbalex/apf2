@@ -1,9 +1,7 @@
-import { apiInsert } from '../../../../../modules/api.ts'
+import { apiFetch, apiInsert } from '../../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState } from 'react'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Select } from '../../../../shared/Select.tsx'
@@ -33,34 +31,15 @@ interface NewUserProps {
 }
 
 export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
-  const apolloClient = useApolloClient()
-
   const [error, setError] = useState<string | null>(null)
 
   const { data } = useSuspenseQuery({
     queryKey: ['benutzerForNewUser'],
     queryFn: async () => {
-      const result = await apolloClient.query<BenutzerQueryResult>({
-        query: graphql(`
-          query benutzerForNewUser {
-            allUsers(
-              orderBy: NAME_ASC
-              filter: {
-                role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
-              }
-            ) {
-              nodes {
-                id
-                name
-                role
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as BenutzerQueryResult
+      const nodes = await apiFetch<UserNode[]>(
+        `/user?select=id,name,role&role=in.(apflora_ap_writer,apflora_ap_reader)&order=name.asc`,
+      )
+      return { allUsers: { nodes: nodes ?? [] } } as BenutzerQueryResult
     },
   })
   const userData = data.allUsers.nodes ?? []

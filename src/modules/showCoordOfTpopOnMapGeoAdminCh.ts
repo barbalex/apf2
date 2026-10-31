@@ -1,6 +1,10 @@
 import { getAndValidateCoordinatesOfTpop } from './getAndValidateCoordinatesOfTpop.ts'
 
-export const showCoordOfTpopOnMapGeoAdminCh = async ({ id }: { id: string }) => {
+export const showCoordOfTpopOnMapGeoAdminCh = async ({
+  id,
+}: {
+  id: string
+}) => {
   const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({ id })
   if (lv95X && lv95Y) {
     window.open(

@@ -19,38 +19,33 @@ export const invalidateTreeQueries = ({
   }
 
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr'
-      ? 'treeTpopfeldkontr'
-      : parentTable === 'tpopfreiwkontr'
-        ? 'treeTpopfreiwkontr'
-        : table === 'tpop_apberrelevant_grund_werte'
-          ? 'treeTpopApberrelevantGrundWerte'
-          : table === 'ek_abrechnungstyp_werte'
-            ? 'treeEkAbrechnungstypWerte'
-            : table === 'tpopkontrzaehl_einheit_werte'
-              ? 'treeTpopkontrzaehlEinheitWerte'
-              : `tree${upperFirst(table)}`
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontr'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontr'
+    : table === 'tpop_apberrelevant_grund_werte' ?
+      'treeTpopApberrelevantGrundWerte'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
+    : table === 'tpopkontrzaehl_einheit_werte' ?
+      'treeTpopkontrzaehlEinheitWerte'
+    : `tree${upperFirst(table)}`
   void tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
 
   const queryKeyFolders =
-    ['apberuebersicht'].includes(table)
-      ? 'treeRoot'
-      : table === 'ziel'
-        ? 'treeZiel'
-        : parentTable === 'tpopfeldkontr'
-          ? 'treeTpopfeldkontrzaehlFolders'
-          : parentTable === 'tpopfreiwkontr'
-            ? 'treeTpopfreiwkontrzaehlFolders'
-            : [
-                  'adresse',
-                  'tpop_apberrelevant_grund_werte',
-                  'ek_abrechnungstyp_werte',
-                  'tpopkontrzaehl_einheit_werte',
-                ].includes(table)
-              ? 'treeWerteFolders'
-              : `tree${upperFirst(parentTable ?? '')}Folders`
+    ['apberuebersicht'].includes(table) ? 'treeRoot'
+    : table === 'ziel' ? 'treeZiel'
+    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
+    : (
+      [
+        'adresse',
+        'tpop_apberrelevant_grund_werte',
+        'ek_abrechnungstyp_werte',
+        'tpopkontrzaehl_einheit_werte',
+      ].includes(table)
+    ) ?
+      'treeWerteFolders'
+    : `tree${upperFirst(parentTable ?? '')}Folders`
   void tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolders],
   })

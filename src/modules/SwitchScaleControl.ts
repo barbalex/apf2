@@ -247,46 +247,52 @@ const SwitchScaleControl = L.Control.extend({
     )
     customScaleInput.type = 'text'
     customScaleInput.setAttribute('value', options.ratioCustomItemText)
-    customScaleInput.addEventListener('focus', function (this: HTMLInputElement, e) {
-      if (this.value === options.ratioCustomItemText) {
-        this.value = options.ratioPrefix
+    customScaleInput.addEventListener(
+      'focus',
+      function (this: HTMLInputElement, e) {
+        if (this.value === options.ratioCustomItemText) {
+          this.value = options.ratioPrefix
 
-        // IE fix.
-        const ieInput = this as HTMLInputElement & {
-          createTextRange?: () => {
-            moveStart: (unit: string, count: number) => void
-            select: () => void
+          // IE fix.
+          const ieInput = this as HTMLInputElement & {
+            createTextRange?: () => {
+              moveStart: (unit: string, count: number) => void
+              select: () => void
+            }
+          }
+          if (ieInput.createTextRange) {
+            const r = ieInput.createTextRange()
+            r.moveStart('character', this.value.length)
+            r.select()
           }
         }
-        if (ieInput.createTextRange) {
-          const r = ieInput.createTextRange()
-          r.moveStart('character', this.value.length)
-          r.select()
+
+        e.stopPropagation()
+      },
+    )
+
+    customScaleInput.addEventListener(
+      'keydown',
+      function (this: HTMLInputElement, e) {
+        if (e.which !== 13) return
+
+        const scaleRatioFound = this.value
+          .replace(' ', '')
+          .replace("'", '')
+          .match(/^(1:){0,1}([0-9]*)$/)
+        if (scaleRatioFound && scaleRatioFound[2]) {
+          const maxScale = Math.max(...scales)
+
+          if (self.options.adjustScales && +scaleRatioFound[2] > maxScale) {
+            self._setScale(scales[scales.length - 1] as number)
+          } else {
+            self._setScale(+scaleRatioFound[2])
+          }
         }
-      }
 
-      e.stopPropagation()
-    })
-
-    customScaleInput.addEventListener('keydown', function (this: HTMLInputElement, e) {
-      if (e.which !== 13) return
-
-      const scaleRatioFound = this.value
-        .replace(' ', '')
-        .replace("'", '')
-        .match(/^(1:){0,1}([0-9]*)$/)
-      if (scaleRatioFound && scaleRatioFound[2]) {
-        const maxScale = Math.max(...scales)
-
-        if (self.options.adjustScales && +scaleRatioFound[2] > maxScale) {
-          self._setScale(scales[scales.length - 1] as number)
-        } else {
-          self._setScale(+scaleRatioFound[2])
-        }
-      }
-
-      e.preventDefault()
-    })
+        e.preventDefault()
+      },
+    )
 
     customScaleInput.addEventListener('keypress', function (e) {
       if (e.charCode && (e.charCode < 48 || e.charCode > 57)) e.preventDefault()
@@ -338,7 +344,12 @@ const SwitchScaleControl = L.Control.extend({
         physicalScaleRatio < (scales[i + 1] as number) &&
         physicalScaleRatio >= (scales[i] as number)
       ) {
-        return (scales[i + 1] as number) + (scales[i] as number) - 2 * physicalScaleRatio >= 0 ?
+        return (
+            (scales[i + 1] as number) +
+              (scales[i] as number) -
+              2 * physicalScaleRatio >=
+              0
+          ) ?
             (scales[i] as number)
           : (scales[i + 1] as number)
       }
@@ -346,8 +357,7 @@ const SwitchScaleControl = L.Control.extend({
 
     return Math.round(physicalScaleRatio)
   },
-} as ThisType<SwitchScaleControlInstance> &
-  Record<string, unknown>)
+} as ThisType<SwitchScaleControlInstance> & Record<string, unknown>)
 
 ;(L.Control as unknown as Record<string, unknown>).SwitchScaleControl =
   SwitchScaleControl

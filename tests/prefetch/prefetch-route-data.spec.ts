@@ -38,17 +38,24 @@ test.describe('prefetchRouteData', () => {
   test.setTimeout(120000)
 
   test('strips the search string from prefetched paths', async ({ page }) => {
+    // transport-agnostic request capture: graphql bodies and PostgREST paths
     const graphqlBodies: string[] = []
+    const restPaths: string[] = []
     page.on('request', (req) => {
       if (req.url().includes('graphql')) {
         graphqlBodies.push(req.postData() ?? '')
+      }
+      if (req.url().includes('/postgrest/') || req.url().includes(':3000/')) {
+        restPaths.push(req.url())
       }
     })
 
     await login(page)
 
     // visit Daten with tabs in the url: ProtectedRoute mounts
-    // QueryClientSetter, which prefetchRouteData depends on
+    // QueryClientSetter, which prefetchRouteData depends on.
+    // The daten tab renders the Projekt form, which primes the
+    // ['projekt', id] cache — later prefetches dedupe against it
     await page.goto(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13?projekteTabs=tree&projekteTabs=daten&projekteTabs=karte',
     )
@@ -67,16 +74,25 @@ test.describe('prefetchRouteData', () => {
     await datenLink.hover({ force: true })
     await page.waitForTimeout(2000)
 
-    // the prefetch must send the clean uuid, never a polluted id
+    // no request may carry the search string glued to the id
     const polluted = graphqlBodies.filter((b) => b.includes('projekteTabs'))
     expect(polluted).toEqual([])
-
-    // and the projekt prefetch actually ran with the clean id
-    const projektPrefetch = graphqlBodies.some(
-      (b) =>
-        b.includes('projektById') &&
-        b.includes('"id":"e57f56f4-4376-11e8-ab21-4314b6749d13"'),
+    const pollutedPaths = restPaths.filter((p) =>
+      p.includes('projekteTabs=tree'),
     )
-    expect(projektPrefetch).toBe(true)
+    expect(pollutedPaths).toEqual([])
+
+    // and the projekt was loaded with the clean id — either by the form
+    // (REST) or the prefetch (graphql), whichever ran first
+    const projektLoaded =
+      restPaths.some(
+        (p) =>
+          p.includes('/v_projekt?id=eq.e57f56f4-4376-11e8-ab21-4314b6749d13'),
+      ) || graphqlBodies.some(
+        (b) =>
+          b.includes('projektById') &&
+          b.includes('"id":"e57f56f4-4376-11e8-ab21-4314b6749d13"'),
+      )
+    expect(projektLoaded).toBe(true)
   })
 })

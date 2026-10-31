@@ -1,7 +1,4 @@
-import {
-  store,
-  setTree2SrcByActiveNodeArrayAtom,
-} from '../store/index.ts'
+import { store, setTree2SrcByActiveNodeArrayAtom } from '../store/index.ts'
 
 export const openTree2WithActiveNodeArray = ({
   activeNodeArray,

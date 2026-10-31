@@ -17,7 +17,8 @@ export function useSearchParamsState<T extends string | string[]>(
       acquiredSearchParam.length > 0 ? (acquiredSearchParam as T) : defaultValue
   } else {
     acquiredSearchParam = searchParams.get(searchParamName)
-    searchParamsState = acquiredSearchParam ? (acquiredSearchParam as T) : defaultValue
+    searchParamsState =
+      acquiredSearchParam ? (acquiredSearchParam as T) : defaultValue
   }
 
   const setSearchParamsState = (newState: T) => {
@@ -25,19 +26,18 @@ export function useSearchParamsState<T extends string | string[]>(
     if (searchParamName === 'projekteTabs') {
       ;(newState as string[]).sort(projekteTabsSortFunction)
     }
-    const previous = [...searchParams.entries()].reduce<Record<string, unknown>>(
-      (o, [key, value]) => {
-        if (key in o) {
-          if (o[key] instanceof Array) {
-            return { ...o, [key]: [...(o[key] as unknown[]), value] }
-          }
-          return { ...o, [key]: [o[key], value] }
-        } else {
-          return { ...o, [key]: value }
+    const previous = [...searchParams.entries()].reduce<
+      Record<string, unknown>
+    >((o, [key, value]) => {
+      if (key in o) {
+        if (o[key] instanceof Array) {
+          return { ...o, [key]: [...(o[key] as unknown[]), value] }
         }
-      },
-      {},
-    )
+        return { ...o, [key]: [o[key], value] }
+      } else {
+        return { ...o, [key]: value }
+      }
+    }, {})
     const next = Object.assign({}, previous, { [searchParamName]: newState })
     setSearchParams(next)
   }

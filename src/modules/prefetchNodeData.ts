@@ -35,7 +35,10 @@ import {
 interface NodeQueryConfig {
   query: DocumentNode
   queryKey: (id: string | number, node?: TreeNodeData) => unknown[]
-  variables: (id: string | number, node?: TreeNodeData) => Record<string, unknown>
+  variables: (
+    id: string | number,
+    node?: TreeNodeData,
+  ) => Record<string, unknown>
 }
 
 // Map menu types to their queries and query keys

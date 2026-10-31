@@ -43,8 +43,10 @@ export const clearSiteData = async () => {
           localForage.clear()
         : new Promise<void>((resolve) => {
             const request = indexedDB.deleteDatabase(name)
-            request.onsuccess = request.onerror = request.onblocked = () =>
-              resolve()
+            request.onsuccess =
+              request.onerror =
+              request.onblocked =
+                () => resolve()
           }),
       )
     }

@@ -1,5 +1,9 @@
 import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.ts'
-export const showCoordOfBeobOnMapGeoAdminCh = async ({ id }: { id: string }) => {
+export const showCoordOfBeobOnMapGeoAdminCh = async ({
+  id,
+}: {
+  id: string
+}) => {
   const beob = await getAndValidateCoordinatesOfBeob({ id })
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y

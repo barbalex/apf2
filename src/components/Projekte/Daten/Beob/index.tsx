@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -9,7 +8,7 @@ import { arrayMoveImmutable } from 'array-move'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { exists } from '../../../../modules/exists.ts'
-import { query } from './query.ts'
+import { apiFetch } from '../../../../modules/api.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Field as BeobField } from './Field.tsx'
@@ -20,20 +19,12 @@ import {
 
 import styles from './index.module.css'
 
-interface BeobQueryResult {
-  beobById: {
-    data: string | null
-  } | null
-}
-
 export const Beob = () => {
   const { beobId: id } = useParams<{ beobId: string }>()
 
   const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
   const setSortedBeobFields = useSetAtom(setSortedBeobFieldsAtom)
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
-
-  const apolloClient = useApolloClient()
 
   const sortFn = (a: [string, ReactNode], b: [string, ReactNode]) => {
     const keyA = a[0]
@@ -57,20 +48,16 @@ export const Beob = () => {
   const { data, error } = useQuery({
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () => {
-      const result = await apolloClient.query<BeobQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // data is the raw InfoFlora/EVK jsonb blob — PostgREST delivers it
+      // as an object, the old GraphQL scalar needed JSON.parse
+      const rows = await apiFetch<{ data: Record<string, ReactNode> | null }[]>(
+        `/beob?id=eq.${id}&select=data`,
+      )
+      return { beobById: rows?.[0] ?? null }
     },
   })
 
-  const rowData: Record<string, ReactNode> = data?.beobById?.data
-    ? JSON.parse(data.beobById.data)
-    : {}
+  const rowData: Record<string, ReactNode> = data?.beobById?.data ?? {}
   const fields = Object.entries(rowData)
     .filter(([, value]) => exists(value))
     .sort(sortFn)
