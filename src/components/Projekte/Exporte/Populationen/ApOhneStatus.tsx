@@ -1,73 +1,39 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface PopVonApOhneStatusQueryResult {
-  allPops: {
-    nodes: {
-      id: PopId
-      vPopVonapohnestatusesById: {
-        nodes: {
-          apId: ApId
+export const ApOhneStatus = () => {
+  const addNotification = useSetAtom(addNotificationAtom)
+  const [queryState, setQueryState] = useState<string | undefined>()
+
+  const onClickApOhneStatus = async () => {
+    setQueryState('lade Daten...')
+    let nodes:
+      | {
+          ap_id: string | null
           artname: string | null
-          apBearbeitung: string | null
-          id: PopId
+          ap_bearbeitung: string | null
+          id: string
           nr: number | null
           name: string | null
           status: string | null
           x: number | null
           y: number | null
         }[]
-      }
-    }[]
-  }
-}
-
-export const ApOhneStatus = () => {
-  const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
-  const [queryState, setQueryState] = useState<string | undefined>()
-
-  const onClickApOhneStatus = async () => {
-    setQueryState('lade Daten...')
-    let result: { data?: PopVonApOhneStatusQueryResult | undefined } | undefined
+      | undefined
     try {
-      result = await apolloClient.query<PopVonApOhneStatusQueryResult>({
-        query: graphql(`
-              query popVonApOhneStatusQuery {
-                allPops(filter: { vPopVonapohnestatusesByIdExist: true }) {
-                  nodes {
-                    id
-                    vPopVonapohnestatusesById {
-                      nodes {
-                        apId
-                        artname
-                        apBearbeitung
-                        id
-                        nr
-                        name
-                        status
-                        x
-                        y
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_pop_vonapohnestatus?select=ap_id,artname,ap_bearbeitung,id,nr,name,status,x,y`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -77,17 +43,16 @@ export const ApOhneStatus = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-      ap_id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.apId ?? '',
-      artname: z?.vPopVonapohnestatusesById?.nodes?.[0]?.artname ?? '',
-      ap_bearbeitung:
-        z?.vPopVonapohnestatusesById?.nodes?.[0]?.apBearbeitung ?? '',
-      id: z?.vPopVonapohnestatusesById?.nodes?.[0]?.id ?? '',
-      nr: z?.vPopVonapohnestatusesById?.nodes?.[0]?.nr ?? '',
-      name: z?.vPopVonapohnestatusesById?.nodes?.[0]?.name ?? '',
-      status: z?.vPopVonapohnestatusesById?.nodes?.[0]?.status ?? '',
-      lv95X: z?.vPopVonapohnestatusesById?.nodes?.[0]?.x ?? '',
-      lv95Y: z?.vPopVonapohnestatusesById?.nodes?.[0]?.y ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      ap_id: z.ap_id ?? '',
+      artname: z.artname ?? '',
+      ap_bearbeitung: z.ap_bearbeitung ?? '',
+      id: z.id ?? '',
+      nr: z.nr ?? '',
+      name: z.name ?? '',
+      status: z.status ?? '',
+      lv95X: z.x ?? '',
+      lv95Y: z.y ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)

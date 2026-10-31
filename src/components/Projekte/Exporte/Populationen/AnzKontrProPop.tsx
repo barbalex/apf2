@@ -1,85 +1,45 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface PopAnzKontrsQueryResult {
-  allPops: {
-    nodes: {
-      id: PopId
-      vPopAnzkontrsById: {
-        nodes: {
-          apId: ApId
-          artname: string | null
-          apBearbeitung: string | null
-          apStartJahr: number | null
-          apUmsetzung: string | null
-          id: PopId
-          nr: number | null
-          name: string | null
-          status: string | null
-          bekanntSeit: number | null
-          statusUnklar: boolean | null
-          statusUnklarBegruendung: string | null
-          x: number | null
-          y: number | null
-          anzahlKontrollen: number | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const AnzKontrProPop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAnzKontrProPop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: PopAnzKontrsQueryResult | undefined } | undefined
+    let nodes:
+      | {
+          ap_id: string | null
+          artname: string | null
+          ap_bearbeitung: string | null
+          ap_start_jahr: number | null
+          ap_umsetzung: string | null
+          id: string
+          nr: number | null
+          name: string | null
+          status: string | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_begruendung: string | null
+          x: number | null
+          y: number | null
+          anzahl_kontrollen: number | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<PopAnzKontrsQueryResult>({
-        query: graphql(`
-              query popAnzKontrsQuery {
-                allPops {
-                  nodes {
-                    id
-                    vPopAnzkontrsById {
-                      nodes {
-                        apId
-                        artname
-                        apBearbeitung
-                        apStartJahr
-                        apUmsetzung
-                        id
-                        nr
-                        name
-                        status
-                        bekanntSeit
-                        statusUnklar
-                        statusUnklarBegruendung
-                        x
-                        y
-                        anzahlKontrollen
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_pop_anzkontr?select=ap_id,artname,ap_bearbeitung,ap_start_jahr,ap_umsetzung,id,nr,name,status,bekannt_seit,status_unklar,status_unklar_begruendung,x,y,anzahl_kontrollen`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -89,24 +49,22 @@ export const AnzKontrProPop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-      ap_id: z?.vPopAnzkontrsById?.nodes?.[0]?.apId ?? '',
-      artname: z?.vPopAnzkontrsById?.nodes?.[0]?.artname ?? '',
-      ap_bearbeitung: z?.vPopAnzkontrsById?.nodes?.[0]?.apBearbeitung ?? '',
-      ap_start_jahr: z?.vPopAnzkontrsById?.nodes?.[0]?.apStartJahr ?? '',
-      ap_umsetzung: z?.vPopAnzkontrsById?.nodes?.[0]?.apUmsetzung ?? '',
-      id: z?.vPopAnzkontrsById?.nodes?.[0]?.id ?? '',
-      nr: z?.vPopAnzkontrsById?.nodes?.[0]?.nr ?? '',
-      name: z?.vPopAnzkontrsById?.nodes?.[0]?.name ?? '',
-      status: z?.vPopAnzkontrsById?.nodes?.[0]?.status ?? '',
-      bekannt_seit: z?.vPopAnzkontrsById?.nodes?.[0]?.bekanntSeit ?? '',
-      status_unklar: z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklar ?? '',
-      status_unklar_begruendung:
-        z?.vPopAnzkontrsById?.nodes?.[0]?.statusUnklarBegruendung ?? '',
-      x: z?.vPopAnzkontrsById?.nodes?.[0]?.x ?? '',
-      y: z?.vPopAnzkontrsById?.nodes?.[0]?.y ?? '',
-      anzahl_kontrollen:
-        z?.vPopAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      ap_id: z.ap_id ?? '',
+      artname: z.artname ?? '',
+      ap_bearbeitung: z.ap_bearbeitung ?? '',
+      ap_start_jahr: z.ap_start_jahr ?? '',
+      ap_umsetzung: z.ap_umsetzung ?? '',
+      id: z.id ?? '',
+      nr: z.nr ?? '',
+      name: z.name ?? '',
+      status: z.status ?? '',
+      bekannt_seit: z.bekannt_seit ?? '',
+      status_unklar: z.status_unklar ?? '',
+      status_unklar_begruendung: z.status_unklar_begruendung ?? '',
+      x: z.x ?? '',
+      y: z.y ?? '',
+      anzahl_kontrollen: z.anzahl_kontrollen ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)

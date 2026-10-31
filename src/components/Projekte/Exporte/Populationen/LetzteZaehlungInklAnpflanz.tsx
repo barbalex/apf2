@@ -1,126 +1,27 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface PopLastCountWithMassnsQueryResult {
-  allPops: {
-    nodes: {
-      id: PopId
-      vPopLastCountWithMassnsByPopId: {
-        nodes: {
-          artname: string | null
-          apId: ApId
-          popId: PopId
-          popNr: number | null
-          popName: string | null
-          popStatus: string | null
-          jahre: string | null
-          deckungXFlache: number | null
-          pflanzenTotal: number | null
-          pflanzenOhneJungpflanzen: number | null
-          triebeTotal: number | null
-          triebeBeweidung: number | null
-          keimlinge: number | null
-          davonRosetten: number | null
-          jungpflanzen: number | null
-          blatter: number | null
-          davonBluhendePflanzen: number | null
-          davonBluhendeTriebe: number | null
-          bluten: number | null
-          fertilePflanzen: number | null
-          fruchtendeTriebe: number | null
-          blutenstande: number | null
-          fruchtstande: number | null
-          gruppen: number | null
-          deckung: number | null
-          pflanzen5M2: number | null
-          triebeIn30M2: number | null
-          triebe50M2: number | null
-          triebeMahflache: number | null
-          flacheM2: number | null
-          pflanzstellen: number | null
-          stellen: number | null
-          andereZaehleinheit: string | null
-          artIstVorhanden: boolean | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const LetzteZaehlungInklAnpflanz = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickLetzteZaehlungInklAnpflanz = async () => {
     setQueryState('lade Daten...')
-    let result: {
-      data?: PopLastCountWithMassnsQueryResult | undefined
-    } | undefined
+    let nodes: Record<string, unknown>[] = []
     try {
-      result = await apolloClient.query<PopLastCountWithMassnsQueryResult>({
-        query: graphql(`
-              query popLastCountsWithMassnQuery {
-                allPops(filter: { vPopLastCountWithMassnsByPopIdExist: true }) {
-                  nodes {
-                    id
-                    # view: v_pop_last_count_with_massn
-                    vPopLastCountWithMassnsByPopId {
-                      nodes {
-                        artname
-                        apId
-                        popId
-                        popNr
-                        popName
-                        popStatus
-                        jahre
-                        deckungXFlache
-                        pflanzenTotal
-                        pflanzenOhneJungpflanzen
-                        triebeTotal
-                        triebeBeweidung
-                        keimlinge
-                        davonRosetten
-                        jungpflanzen
-                        blatter
-                        davonBluhendePflanzen
-                        davonBluhendeTriebe
-                        bluten
-                        fertilePflanzen
-                        fruchtendeTriebe
-                        blutenstande
-                        fruchtstande
-                        gruppen
-                        deckung
-                        pflanzen5M2
-                        triebeIn30M2
-                        triebe50M2
-                        triebeMahflache
-                        flacheM2
-                        pflanzstellen
-                        stellen
-                        andereZaehleinheit
-                        artIstVorhanden
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes =
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_pop_last_count_with_massn?select=*`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -130,75 +31,41 @@ export const LetzteZaehlungInklAnpflanz = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-      artname: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.artname ?? '',
-      ap_id: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.apId ?? '',
-      pop_id: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popId ?? '',
-      pop_nr: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popNr ?? '',
-      pop_name:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popName ?? '',
-      pop_status:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.popStatus ?? '',
-      jahre: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.jahre ?? '',
-      deckungXFlache:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.deckungXFlache ?? '',
-      pflanzenTotal:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.pflanzenTotal ?? '',
-      pflanzen_ohne_jungpflanzen:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
-          ?.pflanzenOhneJungpflanzen ?? '',
-      triebeTotal:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeTotal ?? '',
-      triebe_beweidung:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeBeweidung ??
-        '',
-      keimlinge:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.keimlinge ?? '',
-      davonRosetten:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.davonRosetten ?? '',
-      jungpflanzen:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.jungpflanzen ?? '',
-      blaetter:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.blatter ?? '',
-      davonBluehende_pflanzen:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
-          ?.davonBluhendePflanzen ?? '',
-      davonBluehende_triebe:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]
-          ?.davonBluhendeTriebe ?? '',
-      blueten: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.bluten ?? '',
-      fertile_pflanzen:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.fertilePflanzen ??
-        '',
-      fruchtende_triebe:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.fruchtendeTriebe ??
-        '',
-      bluetenstaende:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.blutenstande ?? '',
-      fruchtstaende:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.fruchtstande ?? '',
-      gruppen: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.gruppen ?? '',
-      deckung: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.deckung ?? '',
-      pflanzen_5m2:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.pflanzen5M2 ?? '',
-      triebe_in_30m2:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeIn30M2 ?? '',
-      triebe_50m2:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebe50M2 ?? '',
-      triebe_maehflaeche:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.triebeMahflache ??
-        '',
-      flaeche_m2:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.flacheM2 ?? '',
-      pflanzstellen:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.pflanzstellen ?? '',
-      stellen: z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.stellen ?? '',
-      andere_zaehleinheit:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.andereZaehleinheit ??
-        '',
-      art_ist_vorhanden:
-        z?.vPopLastCountWithMassnsByPopId?.nodes?.[0]?.artIstVorhanden ??
-        '',
+    const rows = nodes.map((z) => ({
+      artname: z['artname'] ?? '',
+      ap_id: z['ap_id'] ?? '',
+      pop_id: z['pop_id'] ?? '',
+      pop_nr: z['pop_nr'] ?? '',
+      pop_name: z['pop_name'] ?? '',
+      pop_status: z['pop_status'] ?? '',
+      jahre: z['jahre'] ?? '',
+      deckung_x_flaeche: z['Deckung X Fläche'] ?? '',
+      pflanzenTotal: z['Pflanzen total'] ?? '',
+      pflanzen_ohne_jungpflanzen: z['Pflanzen (ohne Jungpflanzen)'] ?? '',
+      triebeTotal: z['Triebe total'] ?? '',
+      triebe_beweidung: z['Triebe Beweidung'] ?? '',
+      keimlinge: z['Keimlinge'] ?? '',
+      davonRosetten: z['davon Rosetten'] ?? '',
+      jungpflanzen: z['Jungpflanzen'] ?? '',
+      blaetter: z['Blätter'] ?? '',
+      davonBluehende_pflanzen: z['davon blühende Pflanzen'] ?? '',
+      davonBluehende_triebe: z['davon blühende Triebe'] ?? '',
+      blueten: z['Blüten'] ?? '',
+      fertile_pflanzen: z['Fertile Pflanzen'] ?? '',
+      fruchtende_triebe: z['fruchtende Triebe'] ?? '',
+      bluetenstaende: z['Blütenstände'] ?? '',
+      fruchtstaende: z['Fruchtstände'] ?? '',
+      gruppen: z['Gruppen'] ?? '',
+      deckung: z['Deckung (%)'] ?? '',
+      pflanzen_5m2: z['Pflanzen/5m2'] ?? '',
+      triebe_in_30m2: z['Triebe in 30 m2'] ?? '',
+      triebe_50m2: z['Triebe/50m2'] ?? '',
+      triebe_maehflaeche: z['Triebe Mähfläche'] ?? '',
+      flaeche_m2: z['Fläche (m2)'] ?? '',
+      pflanzstellen: z['Pflanzstellen'] ?? '',
+      stellen: z['Stellen'] ?? '',
+      andere_zaehleinheit: z['andere Zaehleinheit'] ?? '',
+      art_ist_vorhanden: z['Art ist vorhanden'] ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
