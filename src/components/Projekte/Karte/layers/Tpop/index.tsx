@@ -18,7 +18,7 @@ import type {
   ApId,
   AeTaxonomiesId,
 } from '../../../../../models/apflora/index.ts'
-import type { TpopFilter } from '../../../../../gql/graphql.ts'
+import type { TpopFilter } from '../../../../../modules/gqlFilterTypes.ts'
 
 import {
   addNotificationAtom,

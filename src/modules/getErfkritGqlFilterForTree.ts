@@ -1,4 +1,4 @@
-import type { ErfkritFilter } from '../gql/graphql.ts'
+import type { ErfkritFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getErfkritGqlFilterForTree = (_apId: string) => {

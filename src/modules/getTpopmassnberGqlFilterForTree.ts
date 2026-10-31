@@ -1,4 +1,4 @@
-import type { TpopmassnberFilter } from '../gql/graphql.ts'
+import type { TpopmassnberFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getTpopmassnberGqlFilterForTree = (_tpopId: string) => {

@@ -22,7 +22,7 @@ import { Tabs } from './Tabs.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
-import type { AeTaxonomyFilter } from '../../../../gql/graphql.ts'
+import type { AeTaxonomyFilter } from '../../../../modules/gqlFilterTypes.ts'
 
 import styles from './index.module.css'
 
