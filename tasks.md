@@ -87,7 +87,19 @@ Foundation laid (30.10.2026, second session):
 - remembered from phase 3: enum comparisons expect lowercase labels (`ek`, `ansiedlung`) once reads come from PostgREST.
 - `geomPoint` arrives as a GeoJSON object directly (no `.geojson` wrapper, no x/y) — client code accessing `row.geomPoint.geojson` or `.x/.y` must adapt (lv95X/wgs84Lat computed columns cover the x/y cases).
 
-Remaining: form main loads (~30 files), option/autocomplete loads, Print reports, then the tree/nav hooks move to phase 5 (they are cascade-filter-bound).
+**createComputedViews.sql applied to PRODUCTION on 31.10.2026** (user-confirmed) — dev and prod are in sync; phase 5 RPCs can build on it directly.
+
+Status (31.10.2026):
+
+- [x] form main loads — ALL of them: Pop, Tpop, Popber, Popmassnber, Tpopmassn, Tpopmassnber, Apart, Assozart, Apber, Ekfrequenz, Ekzaehleinheit, Ap, Erfkrit, Ziel, Tpopber, Apberuebersicht, User, Idealbiotop (keyed by apId), Tpopfeldkontr + Tpopfreiwkontr (deep jsonb chain on v_tpopkontr: tpop→pop→ap→FDW taxonomy→zielrelevante Ekzaehleinheiten, zaehlungen collection, bearbeiter user count), Dateien ×3, Historien indexes ×3 (new v_ap_history/v_pop_history/v_tpop_history views), Print simple lookups.
+- recipe per form: one `GET /v_<table>?id=eq.X&select=<x>Select,<relation aliases>` (+ parallel `value:/label:`-aliased option lists in the same queryFn, returning the old result shape so components don't change). Watch for: each form's id variable name differs (`apberId`, `userId`…); untyped `Promise.all` fetches degrade to `{}` — annotate from the form's result interface; `exactOptionalPropertyTypes` bites when passing whole result objects into components with narrower optional-prop interfaces.
+- v_ap now also carries ap_bearbstand_werte_by_bearbeitung, ap_umsetzung_werte_by_umsetzung, adresse_by_bearbeiter, projekt_by_proj_id, ae_taxonomy_by_art_id (full fields, FDW); v_tpop also ekfrequenz_by_ekfrequenz, adresse_by_ekf_kontrolleur.
+- intentionally deferred to phase 5 RPCs (parameterized by jahr / tree-shaped, awkward as jsonb): the print deep trees (`Print/ApberForYear/query.ts` ap_history→pop_history→tpop_history→massnahmen/kontrollen chains, `jberQuery.ts`), `ApberForApFromAp`'s `apByIdJahr`, Beobzuordnung and Qk query trees.
+- remaining phase-4 stragglers (small, or also fold into phase 5): ApAuswertung (5 files), Ekf/EkPlan read queries (~7), `SelectLoadingOptions`/`SelectLoadingOptionsTypable` autocomplete, modules (`getNearestTpop`, `getAndValidateCoordinatesOfBeob/Tpop`, `prefetchNodeData`/`prefetchRouteData`, `copyTpopsOfPop`, `copyZaehlOfTpopKontr`), Beob form, CurrentIssue/Messages reads.
+
+## Phase 5 opening move (when continuing)
+
+Build the `query_<table>(p_filter jsonb)` RPC family from the spike (`sql/postgrest/compileFilter.sql`) — returning rows from the v_ views so labels/coordinates come along. That unlocks: the 44 `use*NavData` tree hooks (filter-cascade atoms serialize their filter jsonb straight into the RPC body), the ~40 Exporte, the Karte layers, the filter components — plus the deferred print/Beob/Qk trees as fixed-shape parameterized RPCs. Remember: enum labels are lowercase through PostgREST; compile_filter resolves relations from the base tables' FKs (works because the RPC controls its own SQL even when selecting from views).
 
 ## Phase 5 — Filter cascade + PostGIS
 
