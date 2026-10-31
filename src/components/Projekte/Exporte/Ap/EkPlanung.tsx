@@ -1,64 +1,37 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface EkPlanungNachAbrechnungstypQueryResult {
-  allVEkPlanungNachAbrechnungstyps: {
-    nodes: {
-      apId?: ApId
-      artname?: string
-      artverantwortlich?: string
-      jahr?: number
-      a?: number
-      b?: number
-      d?: number
-      ekf?: number
-    }[]
-  }
-}
-
 export const EkPlanung = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickEkPlanung = async () => {
     setQueryState('lade Daten...')
-    let result:
-      | { data?: EkPlanungNachAbrechnungstypQueryResult | undefined }
+    let nodes:
+      | {
+          ap_id: string | null
+          artname: string | null
+          artverantwortlich: string | null
+          jahr: number | null
+          a: number | null
+          b: number | null
+          d: number | null
+          ekf: number | null
+        }[]
       | undefined
     try {
-      result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>(
-        {
-          query: graphql(`
-            query ekPlanungNachAbrechnungstyps {
-              allVEkPlanungNachAbrechnungstyps {
-                nodes {
-                  apId
-                  artname
-                  artverantwortlich
-                  jahr
-                  a
-                  b
-                  d
-                  ekf
-                }
-              }
-            }
-          `),
-        },
-      )
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_ek_planung_nach_abrechnungstyp?select=ap_id,artname,artverantwortlich,jahr,a,b,d,ekf`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -68,17 +41,15 @@ export const EkPlanung = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (
-      result?.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
-    ).map((z) => ({
-      ap_id: z?.apId,
-      artname: z?.artname ?? '',
-      artverantwortlich: z?.artverantwortlich ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      ap_id: z.ap_id,
+      artname: z.artname ?? '',
+      artverantwortlich: z.artverantwortlich ?? '',
       jahr: z.jahr ?? '',
-      a: z?.a ?? 0,
-      b: z?.b ?? 0,
-      d: z?.d ?? 0,
-      ekf: z?.ekf ?? 0,
+      a: z.a ?? 0,
+      b: z.b ?? 0,
+      d: z.d ?? 0,
+      ekf: z.ekf ?? 0,
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -89,7 +60,10 @@ export const EkPlanung = () => {
         },
       })
     }
-    void exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
+    void exportModule({
+      data: rows,
+      fileName: 'EkPlanungProJahrNachAbrechnungstyp',
+    })
     setQueryState(undefined)
   }
 

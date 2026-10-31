@@ -1,135 +1,69 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type {
-  ApId,
-  IdealbiotopId,
-  AdresseId,
-} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface IdealbiotopsQueryResult {
-  allIdealbiotops: {
-    nodes: {
-      id: IdealbiotopId
-      apId?: ApId
-      apByApId?: {
-        id: ApId
-        aeTaxonomyByArtId?: {
-          id: string
-          artname?: string
-        }
-        apBearbstandWerteByBearbeitung?: {
-          id: number
-          text?: string
-        }
-        startJahr?: number
-        apUmsetzungWerteByUmsetzung?: {
-          id: number
-          text?: string
-        }
-        adresseByBearbeiter?: {
-          id: AdresseId
-          name?: string
-        }
-      }
-      erstelldatum?: string
-      hoehenlage?: string
-      region?: string
-      exposition?: string
-      besonnung?: string
-      hangneigung?: string
-      bodenTyp?: string
-      bodenKalkgehalt?: string
-      bodenDurchlaessigkeit?: string
-      bodenHumus?: string
-      bodenNaehrstoffgehalt?: string
-      wasserhaushalt?: string
-      konkurrenz?: string
-      moosschicht?: string
-      krautschicht?: string
-      strauchschicht?: string
-      baumschicht?: string
-      bemerkungen?: string
-      createdAt?: string
-      updatedAt?: string
-      changedBy?: string
-    }[]
-  }
-}
-
 export const Idealbiotop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickIdealbiotop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: IdealbiotopsQueryResult | undefined } | undefined
+    let biotopes:
+      | {
+          id: string
+          ap_id: string | null
+          erstelldatum: string | null
+          hoehenlage: string | null
+          region: string | null
+          exposition: string | null
+          besonnung: string | null
+          hangneigung: string | null
+          boden_typ: string | null
+          boden_kalkgehalt: string | null
+          boden_durchlaessigkeit: string | null
+          boden_humus: string | null
+          boden_naehrstoffgehalt: string | null
+          wasserhaushalt: string | null
+          konkurrenz: string | null
+          moosschicht: string | null
+          krautschicht: string | null
+          strauchschicht: string | null
+          baumschicht: string | null
+          bemerkungen: string | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+        }[]
+      | undefined
+    let aps:
+      | {
+          id: string
+          start_jahr: number | null
+          ae_taxonomy_by_art_id: { artname: string | null } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+          adresse_by_bearbeiter: { name: string | null } | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<IdealbiotopsQueryResult>({
-        query: graphql(`
-          query idealbiotopsForExportQuery {
-            allIdealbiotops {
-              nodes {
-                id
-                apId
-                apByApId {
-                  id
-                  aeTaxonomyByArtId {
-                    id
-                    artname
-                  }
-                  apBearbstandWerteByBearbeitung {
-                    id
-                    text
-                  }
-                  startJahr
-                  apUmsetzungWerteByUmsetzung {
-                    id
-                    text
-                  }
-                  adresseByBearbeiter {
-                    id
-                    name
-                  }
-                }
-                erstelldatum
-                hoehenlage
-                region
-                exposition
-                besonnung
-                hangneigung
-                bodenTyp
-                bodenKalkgehalt
-                bodenDurchlaessigkeit
-                bodenHumus
-                bodenNaehrstoffgehalt
-                wasserhaushalt
-                konkurrenz
-                moosschicht
-                krautschicht
-                strauchschicht
-                baumschicht
-                bemerkungen
-                createdAt
-                updatedAt
-                changedBy
-              }
-            }
-          }
-        `),
-      })
+      const [biotopesR, apsR] = await Promise.all([
+        apiFetch<NonNullable<typeof biotopes>>(
+          `/idealbiotop?select=id,ap_id,erstelldatum,hoehenlage,region,exposition,besonnung,hangneigung,boden_typ,boden_kalkgehalt,boden_durchlaessigkeit,boden_humus,boden_naehrstoffgehalt,wasserhaushalt,konkurrenz,moosschicht,krautschicht,strauchschicht,baumschicht,bemerkungen,created_at,updated_at,changed_by`,
+        ),
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,start_jahr,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung,adresse_by_bearbeiter`,
+        ),
+      ])
+      biotopes = biotopesR ?? []
+      aps = apsR ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -139,36 +73,40 @@ export const Idealbiotop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
-      ap_id: z.apId,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z?.apByApId?.startJahr ?? '',
-      ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
-      id: z.id,
-      erstelldatum: z.erstelldatum,
-      hoehenlage: z.hoehenlage,
-      region: z.region,
-      exposition: z.exposition,
-      besonnung: z.besonnung,
-      hangneigung: z.hangneigung,
-      boden_typ: z.bodenTyp,
-      boden_kalkgehalt: z.bodenKalkgehalt,
-      boden_durchlaessigkeit: z.bodenDurchlaessigkeit,
-      boden_humus: z.bodenHumus,
-      boden_naehrstoffgehalt: z.bodenNaehrstoffgehalt,
-      wasserhaushalt: z.wasserhaushalt,
-      konkurrenz: z.konkurrenz,
-      moosschicht: z.moosschicht,
-      krautschicht: z.krautschicht,
-      strauchschicht: z.strauchschicht,
-      baumschicht: z.baumschicht,
-      bemerkungen: z.bemerkungen,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
+    const apById = new Map((aps ?? []).map((a) => [a.id, a]))
+    const rows = (biotopes ?? []).map((z) => {
+      const ap = apById.get(z.ap_id ?? '')
+      return {
+        ap_id: z.ap_id,
+        artname: ap?.ae_taxonomy_by_art_id?.artname ?? '',
+        ap_bearbeitung: ap?.ap_bearbstand_werte_by_bearbeitung?.text ?? '',
+        ap_start_jahr: ap?.start_jahr ?? '',
+        ap_umsetzung: ap?.ap_umsetzung_werte_by_umsetzung?.text ?? '',
+        ap_bearbeiter: ap?.adresse_by_bearbeiter?.name ?? '',
+        id: z.id,
+        erstelldatum: z.erstelldatum,
+        hoehenlage: z.hoehenlage,
+        region: z.region,
+        exposition: z.exposition,
+        besonnung: z.besonnung,
+        hangneigung: z.hangneigung,
+        boden_typ: z.boden_typ,
+        boden_kalkgehalt: z.boden_kalkgehalt,
+        boden_durchlaessigkeit: z.boden_durchlaessigkeit,
+        boden_humus: z.boden_humus,
+        boden_naehrstoffgehalt: z.boden_naehrstoffgehalt,
+        wasserhaushalt: z.wasserhaushalt,
+        konkurrenz: z.konkurrenz,
+        moosschicht: z.moosschicht,
+        krautschicht: z.krautschicht,
+        strauchschicht: z.strauchschicht,
+        baumschicht: z.baumschicht,
+        bemerkungen: z.bemerkungen,
+        created_at: z.created_at,
+        updated_at: z.updated_at,
+        changed_by: z.changed_by,
+      }
+    })
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

@@ -26,8 +26,7 @@ export const AnzKontr = () => {
           ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
         }[]
       | undefined
-    let anzkontrs: { id: string; anzahl_kontrollen: number | null }[] =
-      []
+    let anzkontrs: { id: string; anzahl_kontrollen: number | null }[] = []
     try {
       const [apsR, anzkontrsR] = await Promise.all([
         apiFetch<NonNullable<typeof aps>>(
