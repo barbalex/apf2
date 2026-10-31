@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
-
 import styles from '../index.module.css'
 import wollmilchsauStyles from './Wollmilchsau.module.css'
 
@@ -214,7 +213,7 @@ export const Wollmilchsau = () => {
       tpopber_updated_at: z['tpopber_updated_at'] ?? '',
       tpopber_changed_by: z['tpopber_changed_by'] ?? '',
     }))
-    if (rows.length === 0) {
+    if (nodes.length === 0) {
       setQueryState(undefined)
       return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',

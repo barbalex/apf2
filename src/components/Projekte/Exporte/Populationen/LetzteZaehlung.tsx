@@ -66,7 +66,7 @@ export const LetzteZaehlung = () => {
       andere_zaehleinheit: z['andere Zaehleinheit'] ?? '',
       art_ist_vorhanden: z['Art ist vorhanden'] ?? '',
     }))
-    if (rows.length === 0) {
+    if (nodes.length === 0) {
       setQueryState(undefined)
       return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',

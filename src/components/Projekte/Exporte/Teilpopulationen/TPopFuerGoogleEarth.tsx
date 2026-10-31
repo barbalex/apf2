@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
-
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
@@ -29,9 +28,10 @@ export const TPopFuerGoogleEarth = () => {
         }[]
       | undefined
     try {
-      nodes = (await apiFetch<NonNullable<typeof nodes>>(
-        `/v_tpop_kml?select=art,label,inhalte,id,wgs84_lat,wgs84_long,url`,
-      )) ?? []
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_tpop_kml?select=art,label,inhalte,id,wgs84_lat,wgs84_long,url`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,

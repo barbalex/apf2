@@ -1,152 +1,29 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
+import { useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { BeobId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-  treeMapFilterAtom,
-} from '../../../../store/index.ts'
-
-interface BeobArtChangedQueryResult {
-  allVBeobArtChangeds: {
-    nodes: {
-      id: BeobId
-      quelle?: string
-      id_field?: string
-      original_id?: string
-      art_id_original?: string
-      artname_original?: string
-      taxonomie_id_original?: string
-      art_id?: string
-      artname?: string
-      taxonomie_id?: string
-      pop_id?: string
-      pop_nr?: number
-      tpop_id?: string
-      tpop_nr?: number
-      tpop_status?: number
-      tpop_gemeinde?: string
-      tpop_flurname?: string
-      lv95X?: number
-      lv95Y?: number
-      distanz_zur_teilpopulation?: number
-      datum?: string
-      autor?: string
-      nicht_zuordnen?: boolean
-      bemerkungen?: string
-      created_at?: string
-      updated_at?: string
-      changed_by?: string
-    }[]
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 export const BeobArtChanged = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const mapFilter = useAtomValue(treeMapFilterAtom)
-
-  const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickButton = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: BeobArtChangedQueryResult | undefined } | undefined
+    let nodes: Record<string, unknown>[] = []
     try {
-      // view: v_beob_art_changed
-      result = mapFilter
-        ? await apolloClient.query<BeobArtChangedQueryResult>({
-            query: graphql(`
-              query allBeobsArtChangedFilteredByMap {
-                allVBeobArtChangeds {
-                  nodes {
-                    id
-                    quelle
-                    id_field: idField
-                    original_id: originalId
-                    art_id_original: artIdOriginal
-                    artname_original: artnameOriginal
-                    taxonomie_id_original: taxonomieIdOriginal
-                    art_id: artId
-                    artname
-                    taxonomie_id: taxonomieId
-                    pop_id: popId
-                    pop_nr: popNr
-                    tpop_id: tpopId
-                    tpop_nr: tpopNr
-                    tpop_status: tpopStatus
-                    tpop_gemeinde: tpopGemeinde
-                    tpop_flurname: tpopFlurname
-                    lv95X: x
-                    lv95Y: y
-                    distanz_zur_teilpopulation: distanzZurTeilpopulation
-                    datum
-                    autor
-                    nicht_zuordnen: nichtZuordnen
-                    bemerkungen
-                    created_at: createdAt
-                    updated_at: updatedAt
-                    changed_by: changedBy
-                  }
-                }
-              }
-            `),
-            variables: {
-              filter: {
-                geomPoint: {
-                  coveredBy: mapFilter,
-                },
-              },
-            },
-          })
-        : await apolloClient.query<BeobArtChangedQueryResult>({
-            query: graphql(`
-              query allBeobsArtChanged {
-                allVBeobArtChangeds {
-                  nodes {
-                    id
-                    quelle
-                    id_field: idField
-                    original_id: originalId
-                    art_id_original: artIdOriginal
-                    artname_original: artnameOriginal
-                    taxonomie_id_original: taxonomieIdOriginal
-                    art_id: artId
-                    artname
-                    taxonomie_id: taxonomieId
-                    pop_id: popId
-                    pop_nr: popNr
-                    tpop_id: tpopId
-                    tpop_nr: tpopNr
-                    tpop_status: tpopStatus
-                    tpop_gemeinde: tpopGemeinde
-                    tpop_flurname: tpopFlurname
-                    lv95X: x
-                    lv95Y: y
-                    distanz_zur_teilpopulation: distanzZurTeilpopulation
-                    datum
-                    autor
-                    nicht_zuordnen: nichtZuordnen
-                    bemerkungen
-                    created_at: createdAt
-                    updated_at: updatedAt
-                    changed_by: changedBy
-                  }
-                }
-              }
-            `),
-          })
+      nodes =
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_beob_art_changed?select=*`,
+        )) ?? []
     } catch (error) {
-      setQueryState(undefined)
-      return addNotification({
+      addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -154,8 +31,7 @@ export const BeobArtChanged = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = result?.data?.allVBeobArtChangeds?.nodes ?? []
-    if (rows.length === 0) {
+    if (nodes.length === 0) {
       setQueryState(undefined)
       return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
@@ -164,7 +40,7 @@ export const BeobArtChanged = () => {
         },
       })
     }
-    void exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
+    void exportModule({ data: nodes, fileName: 'BeobachtungenArtVeraendert' })
     setQueryState(undefined)
   }
 

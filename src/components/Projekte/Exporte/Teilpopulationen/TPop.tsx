@@ -96,21 +96,20 @@ export const TPop = ({ filtered = false }: TPopProps) => {
       const tpopSelect =
         'id,pop_id,nr,gemeinde,flurname,status,bekannt_seit,status_unklar,status_unklar_grund,lv95_x,lv95_y,radius,hoehe,exposition,klima,neigung,beschreibung,kataster_nr,apber_relevant,apber_relevant_grund,eigentuemer,kontakt,nutzungszone,bewirtschafter,bewirtschaftung,ekfrequenz,ekfrequenz_abweichend,ekf_kontrolleur,created_at,updated_at,changed_by'
       // filtered: the cascade filter runs through query_tpop first
-      const tpopsR =
-        filtered ?
-          await (async () => {
-            const ids =
-              (await apiFetch<{ id: string }[]>('/rpc/query_tpop?select=id', {
-                method: 'POST',
-                body: JSON.stringify({ p_filter: tpopGqlFilter.filtered }),
-              })) ?? []
-            return ids.length ?
-                ((await apiFetch(
-                  `/q_tpop?id=in.(${ids.map((r) => r.id).join(',')})&select=${tpopSelect}`,
-                )) ?? [])
-              : []
-          })()
-        : apiFetch(`/q_tpop?select=${tpopSelect}`)
+      const tpopsR = await (filtered ?
+        (async () => {
+          const ids =
+            (await apiFetch<{ id: string }[]>('/rpc/query_tpop?select=id', {
+              method: 'POST',
+              body: JSON.stringify({ p_filter: tpopGqlFilter.filtered }),
+            })) ?? []
+          return ids.length ?
+              ((await apiFetch(
+                `/q_tpop?id=in.(${ids.map((r) => r.id).join(',')})&select=${tpopSelect}`,
+              )) ?? [])
+            : []
+        })()
+      : apiFetch(`/q_tpop?select=${tpopSelect}`))
       const [popsR, apsR, statusWerteR, adressenR] = await Promise.all([
         apiFetch<NonNullable<typeof pops>>(
           `/q_pop?select=id,ap_id,nr,name,status,bekannt_seit,status_unklar,status_unklar_begruendung,lv95_x,lv95_y`,

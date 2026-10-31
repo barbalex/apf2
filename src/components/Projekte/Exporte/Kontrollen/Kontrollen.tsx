@@ -1,19 +1,9 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type {
-  ApId,
-  PopId,
-  TpopId,
-  TpopkontrId,
-  AdresseId,
-  TpopkontrzaehlId,
-} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -21,154 +11,6 @@ import {
   addNotificationAtom,
   treeTpopkontrGqlFilterAtom,
 } from '../../../../store/index.ts'
-
-interface TpopkontrQueryResult {
-  allTpopkontrs: {
-    nodes: {
-      tpopByTpopId?: {
-        popByPopId?: {
-          apByApId?: {
-            id: ApId
-            aeTaxonomyByArtId?: {
-              id: string
-              artname?: string
-              familie?: string
-            }
-            apBearbstandWerteByBearbeitung?: {
-              id: number
-              text?: string
-            }
-            startJahr?: number
-            apUmsetzungWerteByUmsetzung?: {
-              id: number
-              text?: string
-            }
-            adresseByBearbeiter?: {
-              name?: string
-              usersByAdresseId?: {
-                nodes: { email?: string }[]
-              }
-            }
-          }
-          id: PopId
-          nr?: number
-          name?: string
-          popStatusWerteByStatus?: {
-            id: number
-            text?: string
-          }
-          bekanntSeit?: number
-          statusUnklar?: boolean
-          statusUnklarBegruendung?: string
-          x?: number
-          y?: number
-        }
-        id: TpopId
-        nr?: number
-        gemeinde?: string
-        flurname?: string
-        status?: number
-        popStatusWerteByStatus?: {
-          id: number
-          text?: string
-        }
-        bekanntSeit?: number
-        statusUnklar?: boolean
-        statusUnklarGrund?: string
-        x?: number
-        y?: number
-        radius?: number
-        hoehe?: number
-        exposition?: string
-        klima?: string
-        neigung?: string
-        beschreibung?: string
-        katasterNr?: string
-        apberRelevant?: number
-        apberRelevantGrund?: number
-        eigentuemer?: string
-        kontakt?: string
-        nutzungszone?: string
-        bewirtschafter?: string
-        bewirtschaftung?: string
-        ekfrequenz?: string
-        ekfrequenzAbweichend?: boolean
-        adresseByEkfKontrolleur?: {
-          id: AdresseId
-          name?: string
-        }
-      }
-      optimizetpopByTpopId?: {
-        bekanntSeit?: number
-      }
-      id: TpopkontrId
-      jahr?: number
-      datum?: string
-      tpopkontrTypWerteByTyp?: {
-        id: number
-        text?: string
-      }
-      adresseByBearbeiter?: {
-        id: AdresseId
-        name?: string
-      }
-      ueberlebensrate?: number
-      vitalitaet?: string
-      tpopEntwicklungWerteByEntwicklung?: {
-        id: number
-        text?: string
-      }
-      ursachen?: string
-      erfolgsbeurteilung?: string
-      umsetzungAendern?: string
-      kontrolleAendern?: string
-      bemerkungen?: string
-      lrDelarze?: string
-      lrUmgebungDelarze?: string
-      vegetationstyp?: string
-      konkurrenz?: string
-      moosschicht?: string
-      krautschicht?: string
-      strauchschicht?: string
-      baumschicht?: string
-      tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung?: {
-        id: number
-        text?: string
-      }
-      handlungsbedarf?: string
-      flaecheUeberprueft?: number
-      flaeche?: number
-      planVorhanden?: boolean
-      deckungVegetation?: number
-      deckungNackterBoden?: number
-      deckungApArt?: number
-      jungpflanzenVorhanden?: boolean
-      vegetationshoeheMaximum?: number
-      vegetationshoeheMittel?: number
-      gefaehrdung?: string
-      createdAt?: string
-      updatedAt?: string
-      changedBy?: string
-      apberNichtRelevant?: boolean
-      apberNichtRelevantGrund?: string
-      ekfBemerkungen?: string
-      tpopkontrzaehlsByTpopkontrId?: {
-        nodes: {
-          id: TpopkontrzaehlId
-          anzahl?: number
-          tpopkontrzaehlEinheitWerteByEinheit?: {
-            id: number
-            text?: string
-          }
-          tpopkontrzaehlMethodeWerteByMethode?: {
-            id: number
-            text?: string
-          }
-        }[]
-      }
-    }[]
-  }
-}
 
 interface KontrollenProps {
   filtered?: boolean
@@ -178,299 +20,377 @@ export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const tpopkontrGqlFilter = useAtomValue(treeTpopkontrGqlFilterAtom)
 
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickKontrollen = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: TpopkontrQueryResult | undefined } | undefined
+    let kontrs:
+      | {
+          id: string
+          tpop_id: string | null
+          jahr: number | null
+          datum: string | null
+          typ: number | null
+          bearbeiter: string | null
+          ueberlebensrate: number | null
+          vitalitaet: string | null
+          entwicklung: number | null
+          ursachen: string | null
+          erfolgsbeurteilung: string | null
+          umsetzung_aendern: string | null
+          kontrolle_aendern: string | null
+          bemerkungen: string | null
+          lr_delarze: string | null
+          lr_umgebung_delarze: string | null
+          vegetationstyp: string | null
+          konkurrenz: string | null
+          moosschicht: string | null
+          krautschicht: string | null
+          strauchschicht: string | null
+          baumschicht: string | null
+          idealbiotop_uebereinstimmung: number | null
+          handlungsbedarf: string | null
+          flaeche_ueberprueft: number | null
+          flaeche: number | null
+          plan_vorhanden: boolean | null
+          deckung_vegetation: number | null
+          deckung_nackter_boden: number | null
+          deckung_ap_art: number | null
+          jungpflanzen_vorhanden: boolean | null
+          vegetationshoehe_maximum: number | null
+          vegetationshoehe_mittel: number | null
+          gefaehrdung: string | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+          apber_nicht_relevant: number | null
+          apber_nicht_relevant_grund: number | null
+          ekf_bemerkungen: string | null
+        }[]
+      | undefined
+    let tpops:
+      | {
+          id: string
+          pop_id: string | null
+          nr: number | null
+          gemeinde: string | null
+          flurname: string | null
+          status: number | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_grund: string | null
+          lv95_x: number | null
+          lv95_y: number | null
+          radius: number | null
+          hoehe: number | null
+          exposition: string | null
+          klima: string | null
+          neigung: string | null
+          beschreibung: string | null
+          kataster_nr: string | null
+          apber_relevant: number | null
+          apber_relevant_grund: number | null
+          eigentuemer: string | null
+          kontakt: string | null
+          nutzungszone: string | null
+          bewirtschafter: string | null
+          bewirtschaftung: string | null
+          ekfrequenz: string | null
+          ekfrequenz_abweichend: boolean | null
+          ekf_kontrolleur: string | null
+        }[]
+      | undefined
+    let pops:
+      | {
+          id: string
+          ap_id: string | null
+          nr: number | null
+          name: string | null
+          status: number | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_begruendung: string | null
+          lv95_x: number | null
+          lv95_y: number | null
+        }[]
+      | undefined
+    let aps:
+      | {
+          id: string
+          label: string | null
+          start_jahr: number | null
+          bearbeiter: string | null
+          ae_taxonomy_by_art_id: {
+            artname: string | null
+            familie: string | null
+          } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+          adresse_by_bearbeiter: { name: string | null } | null
+        }[]
+      | undefined
+    let statusWerte = new Map<number, string>()
+    let typWerte = new Map<number, string>()
+    let entwicklungWerte = new Map<number, string>()
+    let idbiotuebereinstWerte = new Map<number, string>()
+    let einheitWerte = new Map<number, string>()
+    let methodeWerte = new Map<number, string>()
+    let emailByAdresse = new Map<string, string>()
+    let adressNamen = new Map<string, string>()
+    const zaehlsByKontr = new Map<
+      string,
+      {
+        einheit: number | null
+        methode: number | null
+        anzahl: number | null
+      }[]
+    >()
     try {
-      result = await apolloClient.query<TpopkontrQueryResult>({
-        query: graphql(`
-              query tpopkontrForExportQuery($filter: TpopkontrFilter) {
-                allTpopkontrs(
-                  filter: $filter
-                  orderBy: [
-                    AP_NAME_ASC
-                    POP_NR_ASC
-                    TPOP_BY_TPOP_ID__NR_ASC
-                    DATUM_ASC
-                  ]
-                ) {
-                  nodes {
-                    tpopByTpopId {
-                      popByPopId {
-                        apByApId {
-                          id
-                          aeTaxonomyByArtId {
-                            id
-                            artname
-                            familie
-                          }
-                          apBearbstandWerteByBearbeitung {
-                            id
-                            text
-                          }
-                          startJahr
-                          apUmsetzungWerteByUmsetzung {
-                            id
-                            text
-                          }
-                          adresseByBearbeiter {
-                            name
-                            usersByAdresseId {
-                              nodes {
-                                email
-                              }
-                            }
-                          }
-                        }
-                        id
-                        nr
-                        name
-                        popStatusWerteByStatus {
-                          id
-                          text
-                        }
-                        bekanntSeit
-                        statusUnklar
-                        statusUnklarBegruendung
-                        x: lv95X
-                        y: lv95Y
-                      }
-                      id
-                      nr
-                      gemeinde
-                      flurname
-                      status
-                      popStatusWerteByStatus {
-                        id
-                        text
-                      }
-                      bekanntSeit
-                      statusUnklar
-                      statusUnklarGrund
-                      x: lv95X
-                      y: lv95Y
-                      radius
-                      hoehe
-                      exposition
-                      klima
-                      neigung
-                      beschreibung
-                      kataster_nr: katasterNr
-                      apber_relevant: apberRelevant
-                      apber_relevant_grund: apberRelevantGrund
-                      eigentuemer
-                      kontakt
-                      nutzungszone
-                      bewirtschafter
-                      bewirtschaftung
-                      ekfrequenz
-                      ekfrequenzAbweichend
-                      adresseByEkfKontrolleur {
-                        id
-                        name
-                      }
-                    }
-                    id
-                    jahr
-                    datum
-                    tpopkontrTypWerteByTyp {
-                      id
-                      text
-                    }
-                    adresseByBearbeiter {
-                      id
-                      name
-                    }
-                    ueberlebensrate
-                    vitalitaet
-                    tpopEntwicklungWerteByEntwicklung {
-                      id
-                      text
-                    }
-                    ursachen
-                    erfolgsbeurteilung
-                    umsetzungAendern
-                    kontrolleAendern
-                    bemerkungen
-                    lrDelarze
-                    lrUmgebungDelarze
-                    vegetationstyp
-                    konkurrenz
-                    moosschicht
-                    krautschicht
-                    strauchschicht
-                    baumschicht
-                    tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung {
-                      id
-                      text
-                    }
-                    handlungsbedarf
-                    flaecheUeberprueft
-                    flaeche
-                    planVorhanden
-                    deckungVegetation
-                    deckungNackterBoden
-                    deckungApArt
-                    jungpflanzenVorhanden
-                    vegetationshoeheMaximum
-                    vegetationshoeheMittel
-                    gefaehrdung
-                    createdAt
-                    updatedAt
-                    changedBy
-                    apberNichtRelevant
-                    apberNichtRelevantGrund
-                    ekfBemerkungen
-                    tpopkontrzaehlsByTpopkontrId {
-                      nodes {
-                        id
-                        anzahl
-                        tpopkontrzaehlEinheitWerteByEinheit {
-                          id
-                          text
-                        }
-                        tpopkontrzaehlMethodeWerteByMethode {
-                          id
-                          text
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-        variables: {
-          filter: filtered ? tpopkontrGqlFilter : { or: [] },
-        },
-      })
+      const kontrSelect =
+        'id,tpop_id,jahr,datum,typ,bearbeiter,ueberlebensrate,vitalitaet,entwicklung,ursachen,erfolgsbeurteilung,umsetzung_aendern,kontrolle_aendern,bemerkungen,lr_delarze,lr_umgebung_delarze,vegetationstyp,konkurrenz,moosschicht,krautschicht,strauchschicht,baumschicht,idealbiotop_uebereinstimmung,handlungsbedarf,flaeche_ueberprueft,flaeche,plan_vorhanden,deckung_vegetation,deckung_nackter_boden,deckung_ap_art,jungpflanzen_vorhanden,vegetationshoehe_maximum,vegetationshoehe_mittel,gefaehrdung,created_at,updated_at,changed_by,apber_nicht_relevant,apber_nicht_relevant_grund,ekf_bemerkungen'
+      // filtered: the cascade filter runs through query_tpopkontr first
+      const kontrsR = await (filtered ?
+        (async () => {
+          const ids =
+            (await apiFetch<{ id: string }[]>(
+              '/rpc/query_tpopkontr?select=id',
+              {
+                method: 'POST',
+                body: JSON.stringify({ p_filter: tpopkontrGqlFilter }),
+              },
+            )) ?? []
+          return ids.length ?
+              ((await apiFetch(
+                `/q_tpopkontr?id=in.(${ids.map((r) => r.id).join(',')})&select=${kontrSelect}`,
+              )) ?? [])
+            : []
+        })()
+      : apiFetch(`/q_tpopkontr?select=${kontrSelect}`))
+      const [
+        tpopsR,
+        popsR,
+        apsR,
+        statusWerteR,
+        typWerteR,
+        entwicklungWerteR,
+        idbiotuebereinstWerteR,
+        einheitWerteR,
+        methodeWerteR,
+        adressenR,
+        zaehlsR,
+      ] = await Promise.all([
+        apiFetch<NonNullable<typeof tpops>>(
+          `/q_tpop?select=id,pop_id,nr,gemeinde,flurname,status,bekannt_seit,status_unklar,status_unklar_grund,lv95_x,lv95_y,radius,hoehe,exposition,klima,neigung,beschreibung,kataster_nr,apber_relevant,apber_relevant_grund,eigentuemer,kontakt,nutzungszone,bewirtschafter,bewirtschaftung,ekfrequenz,ekfrequenz_abweichend,ekf_kontrolleur`,
+        ),
+        apiFetch<NonNullable<typeof pops>>(
+          `/q_pop?select=id,ap_id,nr,name,status,bekannt_seit,status_unklar,status_unklar_begruendung,lv95_x,lv95_y`,
+        ),
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,label,start_jahr,bearbeiter,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung,adresse_by_bearbeiter`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/pop_status_werte?select=code,text`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/tpopkontr_typ_werte?select=code,text`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/tpop_entwicklung_werte?select=code,text`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/tpopkontr_idbiotuebereinst_werte?select=code,text`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/v_tpopkontrzaehl_einheit_werte?select=code,text`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/tpopkontrzaehl_methode_werte?select=code,text`,
+        ),
+        apiFetch<{ id: string; name: string | null }[]>(
+          `/v_adresse?select=id,name`,
+        ),
+        apiFetch<
+          {
+            tpopkontr_id: string
+            einheit: number | null
+            methode: number | null
+            anzahl: number | null
+          }[]
+        >(`/q_tpopkontrzaehl?select=tpopkontr_id,einheit,methode,anzahl`),
+      ])
+      kontrs = (kontrsR as NonNullable<typeof kontrs>) ?? []
+      tpops = tpopsR ?? []
+      pops = popsR ?? []
+      aps = apsR ?? []
+      statusWerte = new Map(
+        (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      typWerte = new Map((typWerteR ?? []).map((w) => [w.code, w.text ?? '']))
+      entwicklungWerte = new Map(
+        (entwicklungWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      idbiotuebereinstWerte = new Map(
+        (idbiotuebereinstWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      einheitWerte = new Map(
+        (einheitWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      methodeWerte = new Map(
+        (methodeWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      adressNamen = new Map((adressenR ?? []).map((a) => [a.id, a.name ?? '']))
+      for (const z of zaehlsR ?? []) {
+        const list = zaehlsByKontr.get(z.tpopkontr_id) ?? []
+        list.push(z)
+        zaehlsByKontr.set(z.tpopkontr_id, list)
+      }
+      const bearbeiterIds = [
+        ...new Set((aps ?? []).map((a) => a.bearbeiter).filter(Boolean)),
+      ] as string[]
+      if (bearbeiterIds.length) {
+        const users =
+          (await apiFetch<
+            { adresse_id: string | null; email: string | null }[]
+          >(
+            `/user?adresse_id=in.(${bearbeiterIds.join(',')})&select=adresse_id,email`,
+          )) ?? []
+        emailByAdresse = new Map(
+          users.map((u) => [u.adresse_id ?? '', u.email ?? '']),
+        )
+      }
     } catch (error) {
       addNotification({
         message: (error as Error).message,
-        options: {
-          variant: 'error',
-        },
+        options: { variant: 'error' },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allTpopkontrs?.nodes ?? []).map((n) => ({
-      apId: n?.tpopByTpopId?.popByPopId?.apByApId?.id ?? null,
-      apFamilie:
-        n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ??
-        null,
-      apArtname:
-        n?.tpopByTpopId?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ??
-        null,
-      apBearbeitung:
-        n?.tpopByTpopId?.popByPopId?.apByApId
-          ?.apBearbstandWerteByBearbeitung?.text ?? null,
-      apStartJahr: n?.tpopByTpopId?.popByPopId?.apByApId?.startJahr ?? null,
-      apUmsetzung:
-        n?.tpopByTpopId?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung
-          ?.text ?? null,
-      avName:
-        n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter?.name ??
-        null,
-      avEmail:
-        n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter
-          ?.usersByAdresseId?.nodes?.[0]?.email ?? null,
-      popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
-      popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
-      popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
-      popStatus:
-        n?.tpopByTpopId?.popByPopId?.popStatusWerteByStatus?.text ?? null,
-      popBekanntSeit: n?.tpopByTpopId?.popByPopId?.bekanntSeit ?? null,
-      popStatusUnklar: n?.tpopByTpopId?.popByPopId?.statusUnklar ?? null,
-      popStatusUnklarBegruendung:
-        n?.tpopByTpopId?.popByPopId?.statusUnklarBegruendung ?? null,
-      popX: n?.tpopByTpopId?.popByPopId?.x ?? null,
-      popY: n?.tpopByTpopId?.popByPopId?.y ?? null,
-      tpopId: n?.tpopByTpopId?.id ?? null,
-      tpopNr: n?.tpopByTpopId?.nr ?? null,
-      tpopGemeinde: n?.tpopByTpopId?.gemeinde ?? null,
-      tpopFlurname: n?.tpopByTpopId?.flurname ?? null,
-      tpopStatus: n?.tpopByTpopId?.status ?? null,
-      statusDecodiert:
-        n?.tpopByTpopId?.popStatusWerteByStatus?.text ?? null,
-      tpopBekanntSeit: n?.optimizetpopByTpopId?.bekanntSeit ?? null,
-      tpopStatusUnklar: n?.tpopByTpopId?.statusUnklar ?? null,
-      tpopStatusUnklarGrund: n?.tpopByTpopId?.statusUnklarGrund ?? null,
-      tpopX: n?.tpopByTpopId?.x ?? null,
-      tpopY: n?.tpopByTpopId?.y ?? null,
-      tpopRadius: n?.tpopByTpopId?.radius ?? null,
-      tpopHoehe: n?.tpopByTpopId?.hoehe ?? null,
-      tpopExposition: n?.tpopByTpopId?.exposition ?? null,
-      tpopKlima: n?.tpopByTpopId?.klima ?? null,
-      tpopNeigung: n?.tpopByTpopId?.neigung ?? null,
-      tpopBeschreibung: n?.tpopByTpopId?.beschreibung ?? null,
-      tpopKatasterNr: n?.tpopByTpopId?.katasterNr ?? null,
-      tpopApberRelevant: n?.tpopByTpopId?.apberRelevant ?? null,
-      tpopApberRelevantGrund: n?.tpopByTpopId?.apberRelevantGrund ?? null,
-      tpopEigentuemer: n?.tpopByTpopId?.eigentuemer ?? null,
-      tpopKontakt: n?.tpopByTpopId?.kontakt ?? null,
-      tpopNutzungszone: n?.tpopByTpopId?.nutzungszone ?? null,
-      tpopBewirtschafter: n?.tpopByTpopId?.bewirtschafter ?? null,
-      tpopBewirtschaftung: n?.tpopByTpopId?.bewirtschaftung ?? null,
-      tpopEkfrequenz: n?.tpopByTpopId?.ekfrequenz ?? null,
-      tpopEkfrequenzAbweichend:
-        n?.tpopByTpopId?.ekfrequenzAbweichend ?? null,
-      tpopEkfKontrolleur:
-        n?.tpopByTpopId?.adresseByEkfKontrolleur?.name ?? null,
-      id: n.id,
-      jahr: n.jahr,
-      datum: n.datum,
-      typ: n?.tpopkontrTypWerteByTyp?.text ?? null,
-      bearbeiter: n?.adresseByBearbeiter?.name ?? null,
-      ueberlebensrate: n.ueberlebensrate,
-      vitalitaet: n.vitalitaet,
-      entwicklung: n?.tpopEntwicklungWerteByEntwicklung?.text ?? null,
-      ursachen: n.ursachen,
-      erfolgsbeurteilung: n.erfolgsbeurteilung,
-      umsetzungAendern: n.umsetzungAendern,
-      kontrolleAendern: n.kontrolleAendern,
-      bemerkungen: n.bemerkungen,
-      lrDelarze: n.lrDelarze,
-      lrUmgebungDelarze: n.lrUmgebungDelarze,
-      vegetationstyp: n.vegetationstyp,
-      konkurrenz: n.konkurrenz,
-      moosschicht: n.moosschicht,
-      krautschicht: n.krautschicht,
-      strauchschicht: n.strauchschicht,
-      baumschicht: n.baumschicht,
-      idealbiotopUebereinstimmung:
-        n?.tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung
-          ?.text ?? null,
-      handlungsbedarf: n.handlungsbedarf,
-      flaecheUeberprueft: n.flaecheUeberprueft,
-      flaeche: n.flaeche,
-      planVorhanden: n.planVorhanden,
-      deckungVegetation: n.deckungVegetation,
-      deckungNackterBoden: n.deckungNackterBoden,
-      deckungApArt: n.deckungApArt,
-      jungpflanzenVorhanden: n.jungpflanzenVorhanden,
-      vegetationshoeheMaximum: n.vegetationshoeheMaximum,
-      vegetationshoeheMittel: n.vegetationshoeheMittel,
-      gefaehrdung: n.gefaehrdung,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
-      apberNichtRelevant: n.apberNichtRelevant,
-      apberNichtRelevantGrund: n.apberNichtRelevantGrund,
-      ekfBemerkungen: n.ekfBemerkungen,
-      zaehlungen: (n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
-        .map(
-          (n) =>
-            `Einheit: ${
-              n?.tpopkontrzaehlEinheitWerteByEinheit?.text ?? '(keine)'
-            }, Methode: ${
-              n?.tpopkontrzaehlMethodeWerteByMethode?.text ?? '(keine)'
-            }, Anzahl: ${n.anzahl ?? '(keine)'}`,
-        )
-        .join(' / '),
-    }))
+    const tpopById = new Map((tpops ?? []).map((t) => [t.id, t]))
+    const popById = new Map((pops ?? []).map((p) => [p.id, p]))
+    const apById = new Map((aps ?? []).map((a) => [a.id, a]))
+    const rows = (kontrs ?? [])
+      .map((n) => {
+        const tpop = tpopById.get(n.tpop_id ?? '')
+        const pop = tpop ? popById.get(tpop.pop_id ?? '') : undefined
+        const apBy = pop?.ap_id ? apById.get(pop.ap_id) : undefined
+        return {
+          apId: apBy?.id ?? null,
+          apFamilie: apBy?.ae_taxonomy_by_art_id?.familie ?? null,
+          apArtname: apBy?.ae_taxonomy_by_art_id?.artname ?? null,
+          apBearbeitung: apBy?.ap_bearbstand_werte_by_bearbeitung?.text ?? null,
+          apStartJahr: apBy?.start_jahr ?? null,
+          apUmsetzung: apBy?.ap_umsetzung_werte_by_umsetzung?.text ?? null,
+          avName: apBy?.adresse_by_bearbeiter?.name ?? null,
+          avEmail: emailByAdresse.get(apBy?.bearbeiter ?? '') ?? null,
+          popId: pop?.id ?? null,
+          popNr: pop?.nr ?? null,
+          popName: pop?.name ?? null,
+          popStatus:
+            pop?.status == null ? null : (statusWerte.get(pop.status) ?? null),
+          popBekanntSeit: pop?.bekannt_seit ?? null,
+          popStatusUnklar: pop?.status_unklar ?? null,
+          popStatusUnklarBegruendung: pop?.status_unklar_begruendung ?? null,
+          popX: pop?.lv95_x ?? null,
+          popY: pop?.lv95_y ?? null,
+          tpopId: tpop?.id ?? null,
+          tpopNr: tpop?.nr ?? null,
+          tpopGemeinde: tpop?.gemeinde ?? null,
+          tpopFlurname: tpop?.flurname ?? null,
+          tpopStatus:
+            tpop?.status == null ?
+              null
+            : (statusWerte.get(tpop.status) ?? null),
+          statusDecodiert:
+            tpop?.status == null ?
+              null
+            : (statusWerte.get(tpop.status) ?? null),
+          tpopBekanntSeit: tpop?.bekannt_seit ?? null,
+          tpopStatusUnklar: tpop?.status_unklar ?? null,
+          tpopStatusUnklarGrund: tpop?.status_unklar_grund ?? null,
+          tpopX: tpop?.lv95_x ?? null,
+          tpopY: tpop?.lv95_y ?? null,
+          tpopRadius: tpop?.radius ?? null,
+          tpopHoehe: tpop?.hoehe ?? null,
+          tpopExposition: tpop?.exposition ?? null,
+          tpopKlima: tpop?.klima ?? null,
+          tpopNeigung: tpop?.neigung ?? null,
+          tpopBeschreibung: tpop?.beschreibung ?? null,
+          tpopKatasterNr: tpop?.kataster_nr ?? null,
+          tpopApberRelevant: tpop?.apber_relevant ?? null,
+          tpopApberRelevantGrund: tpop?.apber_relevant_grund ?? null,
+          tpopEigentuemer: tpop?.eigentuemer ?? null,
+          tpopKontakt: tpop?.kontakt ?? null,
+          tpopNutzungszone: tpop?.nutzungszone ?? null,
+          tpopBewirtschafter: tpop?.bewirtschafter ?? null,
+          tpopBewirtschaftung: tpop?.bewirtschaftung ?? null,
+          tpopEkfrequenz: tpop?.ekfrequenz ?? null,
+          tpopEkfrequenzAbweichend: tpop?.ekfrequenz_abweichend ?? null,
+          tpopEkfKontrolleur:
+            adressNamen.get(tpop?.ekf_kontrolleur ?? '') ?? null,
+          id: n.id,
+          jahr: n.jahr,
+          datum: n.datum,
+          typ: n.typ === null ? null : (typWerte.get(n.typ) ?? null),
+          bearbeiter: adressNamen.get(n.bearbeiter ?? '') ?? null,
+          ueberlebensrate: n.ueberlebensrate,
+          vitalitaet: n.vitalitaet,
+          entwicklung:
+            n.entwicklung === null ?
+              null
+            : (entwicklungWerte.get(n.entwicklung) ?? null),
+          ursachen: n.ursachen,
+          erfolgsbeurteilung: n.erfolgsbeurteilung,
+          umsetzungAendern: n.umsetzung_aendern,
+          kontrolleAendern: n.kontrolle_aendern,
+          bemerkungen: n.bemerkungen,
+          lrDelarze: n.lr_delarze,
+          lrUmgebungDelarze: n.lr_umgebung_delarze,
+          vegetationstyp: n.vegetationstyp,
+          konkurrenz: n.konkurrenz,
+          moosschicht: n.moosschicht,
+          krautschicht: n.krautschicht,
+          strauchschicht: n.strauchschicht,
+          baumschicht: n.baumschicht,
+          idealbiotopUebereinstimmung:
+            n.idealbiotop_uebereinstimmung === null ?
+              null
+            : (idbiotuebereinstWerte.get(n.idealbiotop_uebereinstimmung) ??
+              null),
+          handlungsbedarf: n.handlungsbedarf,
+          flaecheUeberprueft: n.flaeche_ueberprueft,
+          flaeche: n.flaeche,
+          planVorhanden: n.plan_vorhanden,
+          deckungVegetation: n.deckung_vegetation,
+          deckungNackterBoden: n.deckung_nackter_boden,
+          deckungApArt: n.deckung_ap_art,
+          jungpflanzenVorhanden: n.jungpflanzen_vorhanden,
+          vegetationshoeheMaximum: n.vegetationshoehe_maximum,
+          vegetationshoeheMittel: n.vegetationshoehe_mittel,
+          gefaehrdung: n.gefaehrdung,
+          createdAt: n.created_at,
+          updatedAt: n.updated_at,
+          changedBy: n.changed_by,
+          apberNichtRelevant: n.apber_nicht_relevant,
+          apberNichtRelevantGrund: n.apber_nicht_relevant_grund,
+          ekfBemerkungen: n.ekf_bemerkungen,
+          zaehlungen: (zaehlsByKontr.get(n.id) ?? [])
+            .map(
+              (z) =>
+                `Einheit: ${z.einheit === null ? '(keine)' : (einheitWerte.get(z.einheit) ?? '(keine)')}, Methode: ${z.methode === null ? '(keine)' : (methodeWerte.get(z.methode) ?? '(keine)')}, Anzahl: ${z.anzahl ?? '(keine)'}`,
+            )
+            .join(' / '),
+          _artname: apBy?.ae_taxonomy_by_art_id?.artname ?? '',
+        }
+      })
+      // former orderBy [AP_NAME_ASC, POP_NR_ASC, TPOP_BY_TPOP_ID__NR_ASC, DATUM_ASC]
+      .sort(
+        (a, b) =>
+          a._artname.localeCompare(b._artname) ||
+          (a.popNr ?? 0) - (b.popNr ?? 0) ||
+          (a.tpopNr ?? 0) - (b.tpopNr ?? 0) ||
+          (a.datum ?? '').localeCompare(b.datum ?? ''),
+      )
+      .map(({ _artname, ...rest }) => rest)
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

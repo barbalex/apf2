@@ -250,7 +250,7 @@ export const WollmilchsauSingle = () => {
           }))
 
           setEwmMessage('')
-          if (rows.length === 0) {
+          if (nodes.length === 0) {
             return addNotification({
               message: 'Die Abfrage retournierte 0 Datensätze',
               options: {
