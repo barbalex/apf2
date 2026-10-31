@@ -156,6 +156,7 @@ Opened (31.10.2026):
     - `sql/postgrest/createApberForApFromAp.sql` — `apber_for_ap_from_ap(ap_id, jahr)`: same tree scoped to one ap + its jber_abc node. Verified: Rhamnus 21 pops / 1 apber / jber 1.
     - both need **VPS apply + NOTIFY**.
   - ApFilterWarning via /q_ap.
+- [x] **filter types extracted from the generated gql (01.11.2026):** codegen had dropped the `*Filter` types (their last documents were gone) while ~10 files still import them — they are the jsonb contract between the tree*GqlFilterAtom atoms and compile_filter. Now in `src/modules/gqlFilterTypes.ts` (195 type defs, transitively collected, eslint-disabled as generated-style); all imports repointed; codegen round-trip green.
 - **remaining on Apollo (complete list): src/components/Projekte/Daten/Qk/Qk/index.tsx + query.ts ONLY** (besides the App.tsx bootstrap that stays until phase 6). The Qk query is 2421 lines with 108 @include-parameterized checks; only 2 use reverse-`some` filters, one db function (tpopOutsideZhForApFunction exists in the db). Plan: one parameterized SQL RPC `qk_query(ap_id, proj_id, berichtjahr, active_checks jsonb)` returning jsonb per active check, or client-side per-check REST calls; createMessageFunctions consumes data.<checkName>?.nodes verbatim.
 - `query_<table>` RPC family for the tree-filtered tables: reuse `compile_filter` (beob/tpopmassn/tpopkontr now covered; qk still open).
 - serialize `tree*GqlFilterAtom` outputs into queryFn bodies — the atoms themselves stay unchanged.
