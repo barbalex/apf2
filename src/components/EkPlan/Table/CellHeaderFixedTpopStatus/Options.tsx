@@ -1,10 +1,9 @@
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { apiFetch } from '../../../../modules/api.ts'
 
 import { Option } from './Option.tsx'
-import { query } from './query.ts'
 
 import styles from './Options.module.css'
 
@@ -21,16 +20,16 @@ interface PopStatusWerteQueryResult {
 }
 
 export const Options = ({ type }: { type: string }) => {
-  const apolloClient = useApolloClient()
-
   const { data } = useSuspenseQuery({
     queryKey: ['PopStatusWertes'],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query,
-      })
-      if (result.error) throw result.error
-      return result.data as PopStatusWerteQueryResult
+      const nodes =
+        (await apiFetch<{ id: number; code: number; text: string | null }[]>(
+          `/pop_status_werte?select=id,code,text&order=code.asc`,
+        )) ?? []
+      return {
+        allPopStatusWertes: { nodes },
+      } as unknown as PopStatusWerteQueryResult
     },
   })
   const options =

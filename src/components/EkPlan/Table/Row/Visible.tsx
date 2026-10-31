@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
+import { apiFetch } from '../../../../modules/api.ts'
 
 import { CellForYearTitle } from '../CellForYearTitle.tsx'
 import { CellForEkfrequenz } from '../CellForEkfrequenz/index.tsx'
@@ -10,9 +10,11 @@ import { CellForTpopLink } from '../CellForTpopLink.tsx'
 import { CellForValue } from '../CellForValue.tsx'
 import { CellForYear } from '../CellForYear/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { queryRow } from './queryRow.ts'
 import { tpopRowFromTpop } from './tpopRowFromTpop.ts'
-import type { RowQueryForEkPlanResult } from '../tableTypes.ts'
+import type {
+  RowEkfrequenzNode,
+  RowQueryForEkPlanResult,
+} from '../tableTypes.ts'
 import {
   ekPlanFieldsAtom,
   ekPlanApValuesAtom,
@@ -35,30 +37,194 @@ export const Visible = ({
   const apValues = useAtomValue(ekPlanApValuesAtom)
   const isOdd = isItOdd(index)
 
-  const apolloClient = useApolloClient()
-
-  const { data, error } = useQuery<RowQueryForEkPlanResult>({
+  const { data, error } = useQuery({
     queryKey: ['RowQueryForEkPlan', apValues, tpopId, years, fieldsShown],
-    queryFn: async () => {
-      const result = await apolloClient.query({
-        query: queryRow,
-        variables: {
-          apIds: apValues,
-          tpopId,
-          years,
-          showEkf: fieldsShown.includes('ekfKontrolleur'),
-          showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
-          showBekanntSeit: fieldsShown.includes('bekanntSeit'),
-          showStatus: fieldsShown.includes('status'),
-          showFlurname: fieldsShown.includes('flurname'),
-          showGemeinde: fieldsShown.includes('gemeinde'),
-          showPopStatus: fieldsShown.includes('popStatus'),
-          showPopName: fieldsShown.includes('popName'),
-          showLv95X: fieldsShown.includes('lv95X'),
-          showLv95Y: fieldsShown.includes('lv95Y'),
+    queryFn: async (): Promise<RowQueryForEkPlanResult> => {
+      // phase 5: the @include-driven row document became REST calls with
+      // client-side joins; years filter applies via compile_filter's in-list
+      const yearIn = { jahr: { in: years } }
+      const [
+        ekfrequenzsR,
+        tpopR,
+        ekplansR,
+        kontrsR,
+        massnsR,
+        ekAbrechnungstypWerteR,
+      ] = await Promise.all([
+        apiFetch(
+          `/q_ekfrequenz?${apValues.length ? `ap_id=in.(${apValues.join(',')})&` : ''}select=id,code,anwendungsfall,ek_abrechnungstyp&order=sort.asc`,
+        ),
+        apiFetch(
+          `/q_tpop?id=eq.${tpopId}&select=id,nr,gemeinde,flurname,lv95_x,lv95_y,ekfrequenz,ekfrequenz_startjahr,ekfrequenz_abweichend,status,bekannt_seit,ekf_kontrolleur,pop_id`,
+        ),
+        apiFetch(
+          `/ekplan?tpop_id=eq.${tpopId}&jahr=in.(${years.join(',')})&select=jahr,typ&order=jahr.asc`,
+        ),
+        apiFetch('/rpc/query_tpopkontr?select=id,jahr,typ', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              tpopByTpopId: { id: { equalTo: tpopId } },
+              ...yearIn,
+            },
+          }),
+        }),
+        apiFetch('/rpc/query_tpopmassn?select=id,jahr,zieleinheit_anzahl,typ', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              tpopByTpopId: { id: { equalTo: tpopId } },
+              ...yearIn,
+            },
+          }),
+        }),
+        apiFetch<{ code: string; text: string | null }[]>(
+          '/ek_abrechnungstyp_werte?select=code,text',
+        ),
+      ])
+      // ansiedlung-only massn types
+      const massnTypWerte =
+        (await apiFetch<
+          { code: number; text: string | null; ansiedlung: boolean | null }[]
+        >('/tpopmassn_typ_werte?select=code,text,ansiedlung')) ?? []
+      const ansiedlungTypes = new Set(
+        massnTypWerte.filter((w) => w.ansiedlung === true).map((w) => w.code),
+      )
+      const ekAbrechnungstypWerte = new Map(
+        (ekAbrechnungstypWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      const ekfrequenzNodes = (
+        (ekfrequenzsR ?? []) as {
+          id: string
+          code: string | null
+          anwendungsfall: string | null
+          ek_abrechnungstyp: string | null
+        }[]
+      ).map((e) => ({
+        id: e.id,
+        code: e.code,
+        anwendungsfall: e.anwendungsfall,
+        ekAbrechnungstyp: e.ek_abrechnungstyp,
+        ekAbrechnungstypWerteByEkAbrechnungstyp:
+          e.ek_abrechnungstyp ?
+            {
+              id: e.ek_abrechnungstyp,
+              text: ekAbrechnungstypWerte.get(e.ek_abrechnungstyp) ?? null,
+            }
+          : null,
+      })) as RowEkfrequenzNode[]
+      const tpop = ((tpopR ?? []) as Record<string, unknown>[])[0]
+      if (!tpop) {
+        return { allEkfrequenzs: { nodes: ekfrequenzNodes }, tpopById: null }
+      }
+      // kontrollen with their zaehlungen + zielrelevant flag
+      const kontrRows = (kontrsR ?? []) as {
+        id: string
+        jahr: number | null
+        typ: string | null
+      }[]
+      const kontrIds = kontrRows.map((k) => k.id)
+      const zaehls =
+        kontrIds.length ?
+          ((await apiFetch<
+            {
+              id: string
+              tpopkontr_id: string
+              einheit: number | null
+              anzahl: number | null
+            }[]
+          >(
+            `/q_tpopkontrzaehl?tpopkontr_id=in.(${kontrIds.join(',')})&select=id,tpopkontr_id,einheit,anzahl`,
+          )) ?? [])
+        : []
+      const zielrelevantEinheiten =
+        (await apiFetch<{ zaehleinheit_id: number }[]>(
+          '/ekzaehleinheit?zielrelevant=eq.true&select=zaehleinheit_id:zaehleinheit_id',
+        )) ?? []
+      const zielrelevantSet = new Set(
+        zielrelevantEinheiten.map((z) => z.zaehleinheit_id),
+      )
+      const zaehlsByKontr = new Map<string, typeof zaehls>()
+      for (const z of zaehls) {
+        const list = zaehlsByKontr.get(z.tpopkontr_id) ?? []
+        list.push(z)
+        zaehlsByKontr.set(z.tpopkontr_id, list)
+      }
+      const mapKontr = (k: (typeof kontrRows)[number]) => ({
+        id: k.id,
+        jahr: k.jahr,
+        tpopkontrzaehlsByTpopkontrId: {
+          nodes: (zaehlsByKontr.get(k.id) ?? []).map((z) => ({
+            id: z.id,
+            einheit: z.einheit,
+            anzahl: z.anzahl,
+            tpopkontrzaehlEinheitWerteByEinheit:
+              z.einheit == null ?
+                null
+              : {
+                  id: z.einheit,
+                  ekzaehleinheitsByZaehleinheitId: {
+                    totalCount: zielrelevantSet.has(z.einheit) ? 1 : 0,
+                  },
+                },
+          })),
         },
       })
-      return result.data as RowQueryForEkPlanResult
+      const ekplanRows = (ekplansR ?? []) as {
+        jahr: number | null
+        typ: string | null
+      }[]
+      return {
+        allEkfrequenzs: { nodes: ekfrequenzNodes },
+        tpopById: {
+          ...tpop,
+          lv95X: tpop.lv95_x,
+          lv95Y: tpop.lv95_y,
+          ekfrequenzStartjahr: tpop.ekfrequenz_startjahr,
+          ekfrequenzAbweichend: tpop.ekfrequenz_abweichend,
+          bekanntSeit: tpop.bekannt_seit,
+          popStatusWerteByStatus: null,
+          adresseByEkfKontrolleur: null,
+          ekfrequenzByEkfrequenz: null,
+          popByPopId: null,
+          ekPlans: {
+            nodes: ekplanRows
+              .filter((e) => e.typ === 'EK')
+              .map((e) => ({ jahr: e.jahr })),
+          },
+          ekfPlans: {
+            nodes: ekplanRows
+              .filter((e) => e.typ === 'EKF')
+              .map((e) => ({ jahr: e.jahr })),
+          },
+          eks: {
+            nodes: kontrRows
+              .filter((k) => k.typ !== 'Freiwilligen-Kontrolle')
+              .map(mapKontr),
+          },
+          ekfs: {
+            nodes: kontrRows
+              .filter((k) => k.typ === 'Freiwilligen-Kontrolle')
+              .map(mapKontr),
+          },
+          ansiedlungs: {
+            nodes: (
+              (massnsR ?? []) as {
+                id: string
+                jahr: number | null
+                zieleinheit_anzahl: number | null
+                typ: number | null
+              }[]
+            )
+              .filter((m) => m.typ != null && ansiedlungTypes.has(m.typ))
+              .map((m) => ({
+                id: m.id,
+                jahr: m.jahr,
+                zieleinheitAnzahl: m.zieleinheit_anzahl,
+              })),
+          },
+        },
+      } as unknown as RowQueryForEkPlanResult
     },
   })
 
