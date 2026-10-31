@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
 import type { ApId } from '../../../../models/apflora/index.ts'
@@ -12,73 +11,34 @@ import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface ApAnzkontrsQueryResult {
-  allAps: {
-    nodes: {
-      id: ApId
-      aeTaxonomyByArtId?: {
-        id: string
-        artname?: string
-      }
-      apBearbstandWerteByBearbeitung?: {
-        id: number
-        text?: string
-      }
-      startJahr?: number
-      apUmsetzungWerteByUmsetzung?: {
-        id: number
-        text?: string
-      }
-      vApAnzkontrsById?: {
-        nodes: {
-          id: ApId
-          anzahlKontrollen?: number
-        }[]
-      }
-    }[]
-  }
-}
-
 export const AnzKontr = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAnzKontrProAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApAnzkontrsQueryResult | undefined } | undefined
+    let aps:
+      | {
+          id: ApId
+          start_jahr: number | null
+          ae_taxonomy_by_art_id: { artname: string | null } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+        }[]
+      | undefined
+    let anzkontrs: { id: string; anzahl_kontrollen: number | null }[] =
+      []
     try {
-      result = await apolloClient.query<ApAnzkontrsQueryResult>({
-        query: graphql(`
-          query apAnzkontrsForExportQuery {
-            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
-                  id
-                  artname
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                vApAnzkontrsById {
-                  nodes {
-                    id
-                    anzahlKontrollen
-                  }
-                }
-              }
-            }
-          }
-        `),
-      })
+      const [apsR, anzkontrsR] = await Promise.all([
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,start_jahr,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung`,
+        ),
+        apiFetch<{ id: string; anzahl_kontrollen: number | null }[]>(
+          `/v_ap_anzkontr?select=id,anzahl_kontrollen`,
+        ),
+      ])
+      aps = apsR ?? []
+      anzkontrs = anzkontrsR ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -88,15 +48,18 @@ export const AnzKontr = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allAps.nodes ?? []).map((z) => ({
-      id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      start_jahr: z.startJahr,
-      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      anzahl_kontrollen:
-        z?.vApAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
-    }))
+    const anzkontrById = new Map((anzkontrs ?? []).map((a) => [a.id, a]))
+    const rows = (aps ?? [])
+      .map((z) => ({
+        id: z.id,
+        artname: z.ae_taxonomy_by_art_id?.artname ?? '',
+        bearbeitung: z.ap_bearbstand_werte_by_bearbeitung?.text ?? '',
+        start_jahr: z.start_jahr,
+        umsetzung: z.ap_umsetzung_werte_by_umsetzung?.text ?? '',
+        anzahl_kontrollen: anzkontrById.get(z.id)?.anzahl_kontrollen ?? '',
+      }))
+      // former orderBy AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+      .sort((a, b) => a.artname.localeCompare(b.artname))
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

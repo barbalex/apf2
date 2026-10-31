@@ -1,78 +1,49 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface ApOhnepopQueryResult {
-  allAps: {
-    nodes: {
-      id: ApId
-      aeTaxonomyByArtId?: {
-        id: string
-        artname?: string
-      }
-      apBearbstandWerteByBearbeitung?: {
-        id: number
-        text?: string
-      }
-      startJahr?: number
-      apUmsetzungWerteByUmsetzung?: {
-        id: number
-        text?: string
-      }
-      popsByApId?: {
-        totalCount: number
-      }
-    }[]
-  }
-}
-
 export const ApOhnePop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApOhnePop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApOhnepopQueryResult | undefined } | undefined
+    let aps:
+      | {
+          id: string
+          start_jahr: number | null
+          ae_taxonomy_by_art_id: { artname: string | null } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+        }[]
+      | undefined
+    let popCounts: { ap_id: string; count: number }[] = []
     try {
-      result = await apolloClient.query<ApOhnepopQueryResult>({
-        query: graphql(`
-          query apOhnepopForExportQuery {
-            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
-                  id
-                  artname
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                popsByApId {
-                  totalCount
-                }
-              }
-            }
-          }
-        `),
-      })
+      const [apsR, popsR] = await Promise.all([
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,start_jahr,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung`,
+        ),
+        // pop count per ap, via Prefer: count=exact per ap is not
+        // expressible in one GET — group client-side instead
+        apiFetch<{ ap_id: string }[]>(`/q_pop?select=ap_id`),
+      ])
+      aps = apsR ?? []
+      const counts = new Map<string, number>()
+      for (const p of popsR ?? []) {
+        counts.set(p.ap_id, (counts.get(p.ap_id) ?? 0) + 1)
+      }
+      popCounts = [...counts.entries()].map(([ap_id, count]) => ({
+        ap_id,
+        count,
+      }))
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -82,15 +53,18 @@ export const ApOhnePop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allAps?.nodes ?? [])
-      .filter((z) => z?.popsByApId?.totalCount === 0)
+    const popCountByAp = new Map(popCounts.map((p) => [p.ap_id, p.count]))
+    const rows = (aps ?? [])
+      .filter((z) => (popCountByAp.get(z.id) ?? 0) === 0)
       .map((z) => ({
         id: z.id,
-        artname: z?.aeTaxonomyByArtId?.artname ?? '',
-        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-        start_jahr: z.startJahr,
-        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+        artname: z.ae_taxonomy_by_art_id?.artname ?? '',
+        bearbeitung: z.ap_bearbstand_werte_by_bearbeitung?.text ?? '',
+        start_jahr: z.start_jahr,
+        umsetzung: z.ap_umsetzung_werte_by_umsetzung?.text ?? '',
       }))
+      // former orderBy AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+      .sort((a, b) => a.artname.localeCompare(b.artname))
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

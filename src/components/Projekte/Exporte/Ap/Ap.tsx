@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
@@ -16,36 +15,6 @@ import {
   treeApGqlFilterAtom,
 } from '../../../../store/index.ts'
 
-interface ApQueryResult {
-  allAps: {
-    nodes: {
-      id: ApId
-      aeTaxonomyByArtId?: {
-        id: string
-        artname?: string
-      }
-      apBearbstandWerteByBearbeitung?: {
-        id: number
-        text?: string
-      }
-      startJahr?: number
-      apUmsetzungWerteByUmsetzung?: {
-        id: number
-        text?: string
-      }
-      createdAt?: string
-      updatedAt?: string
-      changedBy?: string
-      adresseByBearbeiter?: {
-        name?: string
-        usersByAdresseId?: {
-          nodes: { email?: string }[]
-        }
-      }
-    }[]
-  }
-}
-
 interface ApProps {
   filtered?: boolean
 }
@@ -54,55 +23,44 @@ export const Ap = ({ filtered = false }: ApProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
 
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApQueryResult | undefined } | undefined
+    let nodes:
+      | {
+          id: ApId
+          start_jahr: number | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+          bearbeiter: string | null
+          ae_taxonomy_by_art_id: { artname: string | null } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+          adresse_by_bearbeiter: { name: string | null } | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<ApQueryResult>({
-        query: graphql(`
-          query apForExportQuery($filter: ApFilter) {
-            allAps(
-              filter: $filter
-              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
-            ) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
-                  id
-                  artname
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                createdAt
-                updatedAt
-                changedBy
-                adresseByBearbeiter {
-                  name
-                  usersByAdresseId {
-                    nodes {
-                      email
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `),
-        variables: {
-          filter: filtered ? apGqlFilter.filtered : { or: [] },
-        },
-      })
+      // v_ap carries the werte/artname/adresse jsonbs the export embeds.
+      // filtered: the cascade filter runs through query_ap first
+      const select =
+        'id,start_jahr,created_at,updated_at,changed_by,bearbeiter,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung,adresse_by_bearbeiter'
+      if (filtered) {
+        const ids =
+          (await apiFetch<{ id: ApId }[]>('/rpc/query_ap?select=id', {
+            method: 'POST',
+            body: JSON.stringify({ p_filter: apGqlFilter.filtered }),
+          })) ?? []
+        nodes =
+          ids.length ?
+            ((await apiFetch(
+              `/v_ap?id=in.(${ids.map((r) => r.id).join(',')})&select=${select}`,
+            )) ?? [])
+          : []
+      } else {
+        nodes = (await apiFetch(`/v_ap?select=${select}`)) ?? []
+      }
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -112,19 +70,34 @@ export const Ap = ({ filtered = false }: ApProps) => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allAps?.nodes ?? []).map((n) => ({
-      id: n.id,
-      artname: n?.aeTaxonomyByArtId?.artname ?? null,
-      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
-      startJahr: n.startJahr,
-      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      avName: n?.adresseByBearbeiter?.name ?? null,
-      avEmail:
-        n?.adresseByBearbeiter?.usersByAdresseId?.nodes?.[0]?.email ?? null,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
-    }))
+    // the av email lives on the user of the bearbeiter adresse
+    const bearbeiterIds = [
+      ...new Set((nodes ?? []).map((n) => n.bearbeiter).filter(Boolean)),
+    ]
+    const users =
+      bearbeiterIds.length ?
+        ((await apiFetch<{ adresse_id: string | null; email: string | null }[]>(
+          `/user?adresse_id=in.(${bearbeiterIds.join(',')})&select=adresse_id,email`,
+        )) ?? [])
+      : []
+    const emailByAdresse = new Map(
+      users.map((u) => [u.adresse_id, u.email ?? null]),
+    )
+    const rows = (nodes ?? [])
+      .map((n) => ({
+        id: n.id,
+        artname: n.ae_taxonomy_by_art_id?.artname ?? null,
+        bearbeitung: n.ap_bearbstand_werte_by_bearbeitung?.text ?? null,
+        startJahr: n.start_jahr,
+        umsetzung: n.ap_umsetzung_werte_by_umsetzung?.text ?? null,
+        avName: n.adresse_by_bearbeiter?.name ?? null,
+        avEmail: emailByAdresse.get(n.bearbeiter) ?? null,
+        createdAt: n.created_at,
+        updatedAt: n.updated_at,
+        changedBy: n.changed_by,
+      }))
+      // former orderBy AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+      .sort((a, b) => (a.artname ?? '').localeCompare(b.artname ?? ''))
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({
