@@ -1,9 +1,8 @@
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -15,7 +14,6 @@ import { Select } from '../../../shared/Select.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { Beob } from '../Beob/index.tsx'
-import { query } from './query.ts'
 import { saveNichtZuordnenToDb } from './saveNichtZuordnenToDb.ts'
 import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
@@ -154,19 +152,98 @@ export const Component = () => {
     : pathname.includes('Beobachtungen') ? 'zugeordnet'
     : 'uups'
 
-  const apolloClient = useApolloClient()
-
   const userName = useAtomValue(userNameAtom)
 
   const { data, refetch } = useQuery({
     queryKey: ['beobzuordnung', id, apId],
     queryFn: async () => {
-      const result = await apolloClient.query<BeobzuordnungQueryResult>({
-        query,
-        variables: { id, apId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: beob + its taxa; the ap's tpops with coordinates
+      const [beobs, taxaR, tpopsR, popsR, statusWerteR] = await Promise.all([
+        apiFetch<Record<string, unknown>[]>(
+          `/q_beob?id=eq.${id}&select=id,art_id:art_id,art_id_original:art_id_original,tpop_id:tpop_id,nicht_zuordnen:nicht_zuordnen,bemerkungen,quelle,data:data:json,lv95_x,lv95_y,infoflora_informiert_datum`,
+        ).then(async (rows: Record<string, unknown>[] | null) => {
+          // data arrives as jsonb object; the form expects the raw string
+          const fixed = (rows ?? []).map((r: Record<string, unknown>) => ({
+            ...r,
+            artId: r.art_id,
+            artIdOriginal: r.art_id_original,
+            tpopId: r.tpop_id,
+            nichtZuordnen: r.nicht_zuordnen,
+            lv95X: r.lv95_x,
+            lv95Y: r.lv95_y,
+            infofloraInformiertDatum: r.infoflora_informiert_datum,
+            data: r.data ? JSON.stringify(r.data) : null,
+          }))
+          return fixed as unknown as BeobzuordnungBeob[]
+        }),
+        apiFetch<
+          {
+            id: string
+            artname: string | null
+            taxid: number | null
+          }[]
+        >(`/ae_taxonomies?select=id,artname,taxid`),
+        apiFetch<
+          {
+            id: string
+            pop_id: string | null
+            nr: number | null
+            lv95_x: number | null
+            lv95_y: number | null
+            status: number | null
+          }[]
+        >(
+          `/q_tpop?pop_id.in.(select id from apflora.pop where ap_id eq.${apId})&select=id,pop_id,nr,lv95_x,lv95_y,status`,
+        ),
+        apiFetch<{ id: string; nr: number | null }[]>(
+          `/q_pop?ap_id=eq.${apId}&select=id,nr`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/pop_status_werte?select=code,text`,
+        ),
+      ])
+      const taxa = new Map((taxaR ?? []).map((t) => [t.id, t]))
+      const pops = new Map((popsR ?? []).map((p) => [p.id, p]))
+      const statusText = new Map(
+        (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      const beob = (beobs ?? [])[0] ?? null
+      if (beob) {
+        ;(beob as { aeTaxonomyByArtId?: unknown }).aeTaxonomyByArtId =
+          beob.artId ? taxa.get(beob.artId) : null
+        ;(
+          beob as { aeTaxonomyByArtIdOriginal?: unknown }
+        ).aeTaxonomyByArtIdOriginal =
+          beob.artIdOriginal ? taxa.get(beob.artIdOriginal) : null
+      }
+      const tpopNodes = (tpopsR ?? []).map((t) => ({
+        id: t.id,
+        nr: t.nr,
+        lv95X: t.lv95_x,
+        lv95Y: t.lv95_y,
+        popStatusWerteByStatus:
+          t.status == null ? null : { text: statusText.get(t.status) ?? null },
+        popByPopId: t.pop_id ? { nr: pops.get(t.pop_id)?.nr ?? null } : null,
+      }))
+      // group tpops by their pop for the popList shape
+      const byPop = new Map<string, typeof tpopNodes>()
+      for (const t of tpopNodes) {
+        const popId = (tpopsR ?? []).find((r) => r.id === t.id)?.pop_id ?? ''
+        const list = byPop.get(popId ?? '') ?? []
+        list.push(t)
+        byPop.set(popId ?? '', list)
+      }
+      return {
+        beobById: beob,
+        apById: {
+          popsByApId: {
+            nodes: [...byPop.entries()].map(([id, nodes]) => ({
+              id,
+              tpopsByPopId: { nodes },
+            })),
+          },
+        },
+      } as unknown as BeobzuordnungQueryResult
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })

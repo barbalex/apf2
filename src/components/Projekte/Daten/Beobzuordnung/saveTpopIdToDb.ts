@@ -1,12 +1,9 @@
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 import { isEqual } from 'es-toolkit'
-import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
-import { graphql } from '../../../../gql/index.ts'
 
 import {
   store,
-  apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -29,7 +26,6 @@ export const saveTpopIdToDb = async ({
   search,
 }: SaveTpopIdToDbParams) => {
   // both clients are set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -54,21 +50,13 @@ export const saveTpopIdToDb = async ({
   let newOpenNodes: (string | number)[][]
 
   if (value) {
-    const result = await apolloClient.query({
-      query: graphql(`
-        query saveTpopIdToDbQuery($id: UUID!) {
-          tpopById(id: $id) {
-            id
-            popId
-          }
-        }
-      `),
-      // value is a tpop id (a UUID string)
-      variables: { id: value as string },
-    })
+    const tpops =
+      (await apiFetch<{ id: string; pop_id: string }[]>(
+        `/q_tpop?id=eq.${value}&select=id,pop_id`,
+      )) ?? []
     // activeNodeArray is already loaded
-    const popId = result?.data?.tpopById?.popId
-    const tpopId = result?.data?.tpopById?.id
+    const popId = tpops[0]?.pop_id
+    const tpopId = tpops[0]?.id
     newANA = [
       activeNodeArray[0],
       activeNodeArray[1],
