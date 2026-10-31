@@ -150,7 +150,13 @@ Opened (31.10.2026):
   - **new SQL: `sql/postgrest/createKarteHelpers.sql`** — four click-helper RPCs the ClickListener needs (PostGIS contains/intersects/coveredby are not URL-expressible): get_gemeinde_at_point(lng,lat), get_betreuungsgebiet_at_point, get_detailplan_at_point, get_markierungen_in_polygon(polygon jsonb). Applied to dev + NOTIFY. **needs VPS apply + NOTIFY** (together with createGetGemeinde.sql from the earlier batch).
   - the static geometry layers (Gemeinden/Betreuungsgebiete/Detailplaene/Markierungen) GET their tables directly — PostgREST returns PostGIS columns as GeoJSON objects where the old GraphQL scalar was a geojson STRING; consumers parse with JSON.parse(String(...)), so the new code re-stringifies (`JSON.stringify(n.geom)`) to keep that working.
   - verified: Karte tab with pop/tpop/beob layers renders zero request errors; Playwright 26/26, typecheck 0, lint 0 errors.
-- still on Apollo: Qk (4), Beobzuordnung, Ekf/EkPlan (~7), AppBar EkfBar, Print (2), Router ChooseAp, SelectLoadingOptions(Typable) + ApFilter's queryAeTaxonomies + WollmilchsauSingle's art autocomplete, App.tsx, User.tsx.
+- [x] **EkfBar + Ekf + EkPlan + User/Messages/SelectLoadingOptions + Beobzuordnung + Print + ApFilterWarning off Apollo (31.10./01.11.2026, batches fifteen to twenty).** EkfBar/Menus: user → adresse → freiwkontr-of-year chain via query_tpopkontr (the old dataByUserId/dataWithDateByUserId pair became an acceptNullJahr flag); Ekf module the same with tpop/pop/ap/projekt context joined client-side; EkPlan fully off (ChooseAp via query_ap, CellForYearMenu + Row/Visible via conditional REST with zaehl/werte/adresse joins, Table/index main + export via query_tpop with client-side context, CellHeaderYear's three reverse-`some` counts became child queries with the tpop filter nested into tpopByTpopId — ekplan has no query_ RPC, so its count resolves tpop ids first); User.tsx login: precheck + userId via /user?name=eq.; Messages dialog: message + usermessage join client-side; SelectLoadingOptions(Typable) query /ae_taxonomies directly (filterToParams translates the three used filter shapes to URL params) — the query/queryNodesName props are GONE, all 8 call sites cleaned; Beobzuordnung: q_beob + taxa + ap's tpops (via `pop_id.in.(select ...)` subquery filter!), tpop distances client-side, saveArtIdToDb/saveTpopIdToDb via /ap?art_id= / /q_tpop; TpopFromBeobPopList: /q_pop.
+  - **Print (the deferred deep trees) became parameterized RPCs:**
+    - `sql/postgrest/createApberForYear.sql` — `apber_for_year_data(projekt_id, jahr, apberuebersicht_id)`: the whole ap_history→pop_history→tpop_history→massn tree + erfkrits/ziels/apbers as ONE jsonb in the document's exact shape. Verified: jahr 2026 → 92 aps with nested counts. jberQuery/AktPopList use the existing `jber_abc`/`jber_akt_pop` db functions with camelCase select aliases (their columns are snake: a_3_l_pop → a3LPop).
+    - `sql/postgrest/createApberForApFromAp.sql` — `apber_for_ap_from_ap(ap_id, jahr)`: same tree scoped to one ap + its jber_abc node. Verified: Rhamnus 21 pops / 1 apber / jber 1.
+    - both need **VPS apply + NOTIFY**.
+  - ApFilterWarning via /q_ap.
+- **remaining on Apollo (complete list): src/components/Projekte/Daten/Qk/Qk/index.tsx + query.ts ONLY** (besides the App.tsx bootstrap that stays until phase 6). The Qk query is 2421 lines with 108 @include-parameterized checks; only 2 use reverse-`some` filters, one db function (tpopOutsideZhForApFunction exists in the db). Plan: one parameterized SQL RPC `qk_query(ap_id, proj_id, berichtjahr, active_checks jsonb)` returning jsonb per active check, or client-side per-check REST calls; createMessageFunctions consumes data.<checkName>?.nodes verbatim.
 - `query_<table>` RPC family for the tree-filtered tables: reuse `compile_filter` (beob/tpopmassn/tpopkontr now covered; qk still open).
 - serialize `tree*GqlFilterAtom` outputs into queryFn bodies — the atoms themselves stay unchanged.
 - map polygon filters (coveredBy/contains/within/intersects, 29 uses) stay inside the RPC jsonb — no PostgREST URL syntax needed.
@@ -158,6 +164,9 @@ Opened (31.10.2026):
 
 ## Phase 6 — Cutover & cleanup
 
+**pending VPS SQL deploy (all applied to dev + NOTIFY'd):** `sql/postgrest/createGetGemeinde.sql`, `createKarteHelpers.sql`, `createApberForYear.sql`, `createApberForApFromAp.sql` — each: `docker compose exec -T db psql -U postgres -d apflora < sql/... ` then `NOTIFY pgrst, 'reload schema'`.
+
+- migrate Qk/Qk (the only remaining Apollo consumer) — then:
 - remove PostGraphile containers (`backend/`, `backend-dev/`), `graphql/` dir, `apollo.config.cjs`, `codegen.ts`, schema-dump script.
 - remove `@apollo/client`, `graphql`, `rxjs`, graphql-codegen deps; `src/apolloClient.ts`, `src/apolloGql.ts`, `src/gql/`, `fragments.ts`; the `dataIdFromObject` allowlist logic goes with it.
 - Caddy: `/graphql` gone; Playwright suite green against the PostgREST-only stack.
@@ -172,3 +181,5 @@ One pre-existing gap surfaced honestly: ekfrequenz has no label function (its fr
 nav tree: Arten (0/0)
 
 ---
+
+'AP Flora' app header title: text should be white. seems more like the nav tree background color?
