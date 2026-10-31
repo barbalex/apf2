@@ -2,15 +2,13 @@ import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import L from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
 import type { Response } from 'redaxios'
+import { apiFetch } from '../../../../modules/api.ts'
 
 import { Popup } from '../layers/Popup.js'
 import type { LayerData } from '../layers/Popup.js'
@@ -25,38 +23,11 @@ import {
   mapActiveOverlaysAtom,
 } from '../../../../store/index.ts'
 
-interface KarteAdministrativeUnitsQueryResult {
-  allChAdministrativeUnits?: {
-    nodes?: { id: number; text: string | null }[] | null
-  } | null
-}
-
-interface KarteBetreuungsgebietesQueryResult {
-  allNsBetreuungs?: {
-    nodes?: {
-      id: number
-      gebietNr: number
-      gebietName: string | null
-      firma: string | null
-      projektleiter: string | null
-      telefon: string | null
-    }[] | null
-  } | null
-}
-
-interface KarteDetailplaenesQueryResult {
-  allDetailplaenes?: {
-    nodes?: { id: string; data: string | null }[] | null
-  } | null
-}
-
 export const ClickListener = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
 
   const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
-
-  const apolloClient = useApolloClient()
 
   const map = useMap()
 
@@ -108,108 +79,71 @@ export const ClickListener = () => {
     const layersData: LayerData[] = []
 
     if (activeOverlays.includes('Gemeinden')) {
-      let gemeindenData:
-        | { data?: KarteAdministrativeUnitsQueryResult | undefined }
-        | undefined
+      let gemeinde: { id: number; text: string } | null = null
       try {
-        gemeindenData = await apolloClient.query<KarteAdministrativeUnitsQueryResult>({
-          query: dynamicGql`query karteAdministrativeUnitsQuery {
-          allChAdministrativeUnits(
-            filter: { 
-              localisedcharacterstring: { equalTo: "Gemeinde" }, 
-              geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
-            }
-          ) {
-            nodes {
-              id
-              text
-            }
-          }
-        }`,
-        })
+        gemeinde = await apiFetch<{ id: number; text: string } | null>(
+          '/rpc/get_gemeinde_at_point',
+          {
+            method: 'POST',
+            body: JSON.stringify({ p_lng: lng, p_lat: lat }),
+          },
+        )
       } catch (error) {
         console.log(error)
       }
 
-      const node = gemeindenData?.data?.allChAdministrativeUnits?.nodes?.[0]
-      if (node) {
-        const properties: Record<string, unknown> = { ...node }
-        delete properties.__typename
-        delete properties.id
-        properties.Gemeinde = properties.text
-        delete properties.text
+      if (gemeinde) {
         layersData.push({
           label: 'Gemeinden',
-          properties: Object.entries(properties),
+          properties: [['Gemeinde', gemeinde.text]],
         })
       }
     }
 
     if (activeOverlays.includes('Betreuungsgebiete')) {
-      let betreuungsgebieteData:
-        | { data?: KarteBetreuungsgebietesQueryResult | undefined }
-        | undefined
+      let betreuung: {
+        gebiet_nr: number | null
+        gebiet_name: string | null
+        firma: string | null
+        projektleiter: string | null
+        telefon: string | null
+      } | null = null
       try {
-        betreuungsgebieteData = await apolloClient.query<KarteBetreuungsgebietesQueryResult>({
-          query: dynamicGql`query karteBetreuungsgebietesQuery {
-              allNsBetreuungs(
-                filter: { 
-                  geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
-                }
-              ) {
-                nodes {
-                  id: gebietNr
-                  gebietNr
-                  gebietName
-                  firma
-                  projektleiter
-                  telefon
-                }
-              }
-            }`,
-        })
+        betreuung = await apiFetch<NonNullable<typeof betreuung>>(
+          '/rpc/get_betreuungsgebiet_at_point',
+          {
+            method: 'POST',
+            body: JSON.stringify({ p_lng: lng, p_lat: lat }),
+          },
+        )
       } catch (error) {
         console.log(error)
       }
 
-      const node = betreuungsgebieteData?.data?.allNsBetreuungs?.nodes?.[0]
-      if (node) {
-        const properties: Record<string, unknown> = { ...node }
-        delete properties.__typename
-        delete properties.id
+      if (betreuung) {
         layersData.push({
           label: 'Betreuungsgebiete',
-          properties: Object.entries(properties),
+          properties: Object.entries(betreuung),
         })
       }
     }
 
     if (activeOverlays.includes('Detailplaene')) {
-      let detailplaeneData:
-        | { data?: KarteDetailplaenesQueryResult | undefined }
-        | undefined
+      let detailplan: { id: string; data: string | null } | null = null
       try {
-        detailplaeneData = await apolloClient.query<KarteDetailplaenesQueryResult>({
-          query: dynamicGql`query karteDetailplaenesFilteredQuery {
-          allDetailplaenes(
-            filter: { 
-              geom: {intersects: {type: "Point", coordinates: [${lng}, ${lat}]}}
-            }
-          ) {
-            nodes {
-              id
-              data
-            }
-          }
-        }`,
-        })
+        detailplan = await apiFetch<{ id: string; data: string | null } | null>(
+          '/rpc/get_detailplan_at_point',
+          {
+            method: 'POST',
+            body: JSON.stringify({ p_lng: lng, p_lat: lat }),
+          },
+        )
       } catch (error) {
         console.log(error)
       }
 
-      const node = detailplaeneData?.data?.allDetailplaenes?.nodes?.[0]
-      if (node?.data) {
-        const properties = JSON.parse(node.data)
+      if (detailplan?.data) {
+        const properties = JSON.parse(detailplan.data)
         layersData.push({
           label: 'Detailpläne',
           properties: Object.entries(properties),
@@ -217,7 +151,6 @@ export const ClickListener = () => {
       }
     }
     if (activeOverlays.includes('Markierungen')) {
-      let markierungenData
       const radius =
         zoom > 19 ? 1
         : zoom === 19 ? 2
@@ -234,29 +167,18 @@ export const ClickListener = () => {
         const coordinates = [lng, lat]
         const options = { steps: 8, units: 'meters' as const }
         const circle = ellipse(coordinates, radius, radius, options)
-        markierungenData = await apolloClient.query({
-          query: graphql(`
-            query KarteClickListenerQuery($polygon: GeoJSON!) {
-              allMarkierungens(
-                filter: { wkbGeometry: { coveredBy: $polygon } }
-              ) {
-                nodes {
-                  id: ogcFid
-                  gebiet
-                  pfostennum
-                  markierung
-                }
-              }
-            }
-          `),
-          variables: { polygon: circle.geometry },
-        })
-      } catch (error) {
-        console.log(error)
-      }
-
-      const nodes = markierungenData?.data?.allMarkierungens?.nodes
-      if (nodes?.length) {
+        const nodes =
+          (await apiFetch<
+            {
+              id: number
+              gebiet: string | null
+              pfostennum: string | null
+              markierung: string | null
+            }[]
+          >('/rpc/get_markierungen_in_polygon', {
+            method: 'POST',
+            body: JSON.stringify({ p_polygon: circle.geometry }),
+          })) ?? []
         for (const node of nodes) {
           const properties = {
             Gebiet: node?.gebiet ?? '',
@@ -268,6 +190,8 @@ export const ClickListener = () => {
             properties: Object.entries(properties),
           })
         }
+      } catch (error) {
+        console.log(error)
       }
     }
     if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
@@ -300,7 +224,11 @@ export const ClickListener = () => {
         // redaxios rejections are response-like objects
         // augmented with optional request and response fields
         const axiosError = error as RedaxiosError
-        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        console.log({
+          error: axiosError,
+          errorToJSON: axiosError?.toJSON?.(),
+          res,
+        })
         if (axiosError.status == 406) {
           // user clicked where no massn exists
         } else if (axiosError.response) {
@@ -375,7 +303,11 @@ export const ClickListener = () => {
         // redaxios rejections are response-like objects
         // augmented with optional request and response fields
         const axiosError = error as RedaxiosError
-        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        console.log({
+          error: axiosError,
+          errorToJSON: axiosError?.toJSON?.(),
+          res,
+        })
         if (axiosError.status == 406) {
           // user clicked where no massn exists
         } else if (axiosError.response) {
@@ -450,7 +382,11 @@ export const ClickListener = () => {
         // redaxios rejections are response-like objects
         // augmented with optional request and response fields
         const axiosError = error as RedaxiosError
-        console.log({ error: axiosError, errorToJSON: axiosError?.toJSON?.(), res })
+        console.log({
+          error: axiosError,
+          errorToJSON: axiosError?.toJSON?.(),
+          res,
+        })
         if (axiosError.status == 406) {
           // user clicked where no massn exists
         } else if (axiosError.response) {

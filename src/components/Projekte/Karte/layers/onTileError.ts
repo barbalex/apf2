@@ -5,10 +5,7 @@ import type { Map, TileErrorEvent } from 'leaflet'
 import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
 import type { Notification } from '../../../../store/index.ts'
-import {
-  store,
-  addNotificationAtom,
-} from '../../../../store/index.ts'
+import { store, addNotificationAtom } from '../../../../store/index.ts'
 
 export interface WmsLayer {
   wms_queryable: number

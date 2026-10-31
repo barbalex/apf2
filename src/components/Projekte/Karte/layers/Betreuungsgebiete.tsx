@@ -1,8 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
 import { GeoJSON } from 'react-leaflet'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import type { Feature, FeatureCollection } from 'geojson'
 
@@ -31,27 +30,22 @@ const style = () => ({
 })
 
 export const Betreuungsgebiete = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['betreuungsgebiete'],
     queryFn: async () => {
-      const result = await apolloClient.query<BetreuungsgebieteQueryResult>({
-        query: graphql(`
-          query nsBetreuungsQuery {
-            allNsBetreuungs {
-              nodes {
-                id: gebietNr
-                geom {
-                  geojson
-                }
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the former geometry embed arrives as raw GeoJSON
+      const nodes =
+        (await apiFetch<{ gebiet_nr: number; geom: unknown }[]>(
+          `/ns_betreuung?select=gebiet_nr:gebiet_nr,geom`,
+        )) ?? []
+      return {
+        allNsBetreuungs: {
+          nodes: nodes.map((n) => ({
+            id: n.gebiet_nr,
+            geom: { geojson: JSON.stringify(n.geom) },
+          })),
+        },
+      } as BetreuungsgebieteQueryResult
     },
     // suspense: true provokes a weird error:
     // Map container is being reused by another instance

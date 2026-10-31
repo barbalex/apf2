@@ -9,13 +9,13 @@ import {
   MdFilterCenterFocus,
   MdRemove,
 } from 'react-icons/md'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router'
 
 import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
+import { apiFetch } from '../../../../../../modules/api.ts'
 import { getBounds } from '../../../../../../modules/getBounds.ts'
 import {
   assigningBeobAtom,
@@ -25,7 +25,6 @@ import {
   setMapActiveApfloraLayersAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../../store/index.ts'
-import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
 import { TpopIcon } from './TpopIcon.tsx'
 
@@ -137,16 +136,132 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
     showBeobZugeordnetAssignPolylines,
   }
 
-  const apolloClient = useApolloClient()
   const { data, error } = useQuery({
     queryKey: ['apfloraLayer', layer, variables],
     queryFn: async () => {
-      const result = await apolloClient.query<ApfloraLayersQueryResult>({
-        query,
-        variables,
+      // phase 5: the former @include-driven one-shot document became
+      // conditionally-fetched REST calls per active layer
+      const apFilter =
+        variables.ap.length ?
+          `ap_id=in.(${variables.ap.join(',')})`
+        : 'id=eq.null'
+      const popOrTpop = variables.pop || variables.tpop
+      const popsWithCoordsRR =
+        popOrTpop ?
+          apiFetch(
+            `/q_pop?${apFilter}${variables.pop ? '&wgs84_lat=not.is.null' : ''}&select=id,wgs84_lat,wgs84_long`,
+          )
+        : Promise.resolve(null)
+      // tpops of the ap's pops, grouped client-side (former tpopsByPopId)
+      const popIdsR =
+        popOrTpop ?
+          popsWithCoordsRR.then((rows) =>
+            ((rows ?? []) as { id: string }[]).map((r) => r.id),
+          )
+        : Promise.resolve([])
+      const tpopsR = popIdsR.then((ids) =>
+        ids.length ?
+          (apiFetch(
+            `/q_tpop?pop_id=in.(${ids.join(',')})&wgs84_lat=not.is.null&select=id,pop_id,wgs84_lat,wgs84_long`,
+          ) ?? [])
+        : [],
+      )
+      const [
+        popsWithCoordsR,
+        allPopsR,
+        tpopsOfPopsR,
+        beobNbR,
+        beobNzR,
+        beobZR,
+      ] = await Promise.all([
+        variables.pop ? popsWithCoordsRR : Promise.resolve(null),
+        variables.tpop ? popsWithCoordsRR : Promise.resolve(null),
+        tpopsR,
+        variables.showBeobNichtBeurteilt ?
+          apiFetch('/rpc/query_beob?select=id,wgs84_lat,wgs84_long', {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: variables.beobNichtBeurteiltFilter,
+            }),
+          })
+        : Promise.resolve(null),
+        variables.showBeobNichtZuzuordnen ?
+          apiFetch('/rpc/query_beob?select=id,wgs84_lat,wgs84_long', {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: variables.beobNichtZuzuordnenFilter,
+            }),
+          })
+        : Promise.resolve(null),
+        variables.showBeobZugeordnet ?
+          apiFetch('/rpc/query_beob?select=id,wgs84_lat,wgs84_long', {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: variables.beobZugeordnetFilter,
+            }),
+          })
+        : Promise.resolve(null),
+      ])
+      const tpopsByPopId = new Map<
+        string,
+        { id: string; wgs84_lat: number; wgs84_long: number }[]
+      >()
+      for (const t of (tpopsOfPopsR ?? []) as { pop_id: string }[]) {
+        const list = tpopsByPopId.get(t.pop_id) ?? []
+        list.push(t as never)
+        tpopsByPopId.set(t.pop_id, list)
+      }
+      const mapPop = (p: {
+        id: string
+        wgs84_lat: number
+        wgs84_long: number
+      }) => ({
+        id: p.id,
+        wgs84Lat: p.wgs84_lat,
+        wgs84Long: p.wgs84_long,
+        tpopsByPopId: {
+          nodes: (tpopsByPopId.get(p.id) ?? []).map((t) => ({
+            id: t.id,
+            wgs84Lat: t.wgs84_lat,
+            wgs84Long: t.wgs84_long,
+          })),
+        },
       })
-      if (result.error) throw result.error
-      return result.data
+      const popsWithCoords = ((popsWithCoordsR ?? []) as never[]).map(mapPop)
+      const allPops = ((allPopsR ?? []) as never[]).map(mapPop)
+      const mapBeobs = (rows: unknown) =>
+        (
+          (rows ?? []) as {
+            id: string
+            wgs84_lat: number
+            wgs84_long: number
+          }[]
+        ).map((b) => ({
+          id: b.id,
+          wgs84Lat: b.wgs84_lat,
+          wgs84Long: b.wgs84_long,
+        }))
+      return {
+        pop: variables.pop ? { nodes: popsWithCoords } : undefined,
+        tpop: undefined,
+        tpopByPop: variables.tpop ? { nodes: allPops } : undefined,
+        beobNichtBeurteilt:
+          variables.showBeobNichtBeurteilt ?
+            { nodes: mapBeobs(beobNbR) }
+          : undefined,
+        beobNichtZuzuordnen:
+          variables.showBeobNichtZuzuordnen ?
+            { nodes: mapBeobs(beobNzR) }
+          : undefined,
+        beobZugeordnet:
+          variables.showBeobZugeordnet ?
+            { nodes: mapBeobs(beobZR) }
+          : undefined,
+        beobZugeordnetAssignPolylines:
+          variables.showBeobZugeordnetAssignPolylines ?
+            { nodes: mapBeobs(beobZR) }
+          : undefined,
+      } as unknown as ApfloraLayersQueryResult
     },
   })
 
