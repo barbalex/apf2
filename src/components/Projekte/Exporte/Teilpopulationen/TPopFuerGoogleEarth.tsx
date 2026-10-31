@@ -1,84 +1,54 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface TPopKmlQueryResult {
-  allTpops: {
-    nodes: {
-      id: TpopId
-      vTpopKmlsById: {
-        nodes: {
-          art: string | null
-          label: string | null
-          inhalte: string | null
-          id: TpopId
-          wgs84Lat: number | null
-          wgs84Long: number | null
-          url: string | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const TPopFuerGoogleEarth = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPopKml = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: TPopKmlQueryResult | undefined } | undefined
+    let nodes:
+      | {
+          art: string | null
+          label: string | null
+          inhalte: string | null
+          id: string | null
+          wgs84_lat: number | null
+          wgs84_long: number | null
+          url: string | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<TPopKmlQueryResult>({
-        query: graphql(`
-              query tpopKmlQuery {
-                allTpops(filter: { vTpopKmlsByIdExist: true }) {
-                  nodes {
-                    id
-                    vTpopKmlsById {
-                      nodes {
-                        art
-                        label
-                        inhalte
-                        id
-                        wgs84Lat
-                        wgs84Long
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes = (await apiFetch<NonNullable<typeof nodes>>(
+        `/v_tpop_kml?select=art,label,inhalte,id,wgs84_lat,wgs84_long,url`,
+      )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
-        options: { variant: 'error' },
+        options: {
+          variant: 'error',
+        },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allTpops?.nodes ?? []).map((z) => ({
-      art: z?.vTpopKmlsById?.nodes?.[0]?.art ?? '',
-      label: z?.vTpopKmlsById?.nodes?.[0]?.label ?? '',
-      inhalte: z?.vTpopKmlsById?.nodes?.[0]?.inhalte ?? '',
-      id: z?.vTpopKmlsById?.nodes?.[0]?.id ?? '',
-      wgs84Lat: z?.vTpopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
-      wgs84Long: z?.vTpopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
-      url: z?.vTpopKmlsById?.nodes?.[0]?.url ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      art: z.art ?? '',
+      label: z.label ?? '',
+      inhalte: z.inhalte ?? '',
+      id: z.id ?? '',
+      wgs84Lat: z.wgs84_lat ?? '',
+      wgs84Long: z.wgs84_long ?? '',
+      url: z.url ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -105,9 +75,9 @@ export const TPopFuerGoogleEarth = () => {
       onClick={() => void onClickTPopKml()}
     >
       {`Teilpopulationen für Google Earth (beschriftet mit PopNr/TPopNr)`}
-      {queryState ? (
+      {queryState ?
         <span className={styles.progress}>{queryState}</span>
-      ) : null}
+      : null}
     </Button>
   )
 }

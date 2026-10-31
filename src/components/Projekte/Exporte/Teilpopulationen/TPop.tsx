@@ -1,18 +1,10 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
-
-import type {
-  ApId,
-  PopId,
-  TpopId,
-  AdresseId,
-} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -20,87 +12,6 @@ import {
   addNotificationAtom,
   treeTpopGqlFilterAtom,
 } from '../../../../store/index.ts'
-
-interface TPopQueryResult {
-  allTpops: {
-    nodes: {
-      popByPopId: {
-        id: PopId
-        apByApId: {
-          id: ApId
-          aeTaxonomyByArtId: {
-            id: string
-            artname: string | null
-            familie: string | null
-          } | null
-          apBearbstandWerteByBearbeitung: {
-            id: number
-            text: string | null
-          } | null
-          startJahr: number | null
-          apUmsetzungWerteByUmsetzung: {
-            id: number
-            text: string | null
-          } | null
-          adresseByBearbeiter: {
-            name: string | null
-            usersByAdresseId: {
-              nodes: { email: string | null }[]
-            }
-          } | null
-        } | null
-        nr: number | null
-        name: string | null
-        popStatusWerteByStatus: {
-          id: number
-          text: string | null
-        } | null
-        bekanntSeit: number | null
-        statusUnklar: boolean | null
-        statusUnklarBegruendung: string | null
-        x: number | null
-        y: number | null
-      } | null
-      id: TpopId
-      nr: number | null
-      gemeinde: string | null
-      flurname: string | null
-      status: number | null
-      popStatusWerteByStatus: {
-        id: number
-        text: string | null
-      } | null
-      bekanntSeit: number | null
-      statusUnklar: boolean | null
-      statusUnklarGrund: string | null
-      x: number | null
-      y: number | null
-      radius: number | null
-      hoehe: number | null
-      exposition: string | null
-      klima: string | null
-      neigung: string | null
-      beschreibung: string | null
-      katasterNr: string | null
-      apberRelevant: number | null
-      apberRelevantGrund: string | null
-      eigentuemer: string | null
-      kontakt: string | null
-      nutzungszone: string | null
-      bewirtschafter: string | null
-      bewirtschaftung: string | null
-      ekfrequenz: number | null
-      ekfrequenzAbweichend: boolean | null
-      adresseByEkfKontrolleur: {
-        id: AdresseId
-        name: string | null
-      } | null
-      createdAt: string | null
-      updatedAt: string | null
-      changedBy: string | null
-    }[]
-  }
-}
 
 interface TPopProps {
   filtered?: boolean
@@ -110,177 +21,215 @@ export const TPop = ({ filtered = false }: TPopProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPop = async () => {
     setQueryState('lade Daten...')
-    //console.time('querying')
-    let result: { data?: TPopQueryResult | undefined } | undefined
+    let tpops:
+      | {
+          id: string
+          pop_id: string | null
+          nr: number | null
+          gemeinde: string | null
+          flurname: string | null
+          status: number | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_grund: string | null
+          lv95_x: number | null
+          lv95_y: number | null
+          radius: number | null
+          hoehe: number | null
+          exposition: string | null
+          klima: string | null
+          neigung: string | null
+          beschreibung: string | null
+          kataster_nr: string | null
+          apber_relevant: number | null
+          apber_relevant_grund: number | null
+          eigentuemer: string | null
+          kontakt: string | null
+          nutzungszone: string | null
+          bewirtschafter: string | null
+          bewirtschaftung: string | null
+          ekfrequenz: string | null
+          ekfrequenz_abweichend: boolean | null
+          ekf_kontrolleur: string | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+        }[]
+      | undefined
+    let pops:
+      | {
+          id: string
+          ap_id: string | null
+          nr: number | null
+          name: string | null
+          status: number | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_begruendung: string | null
+          lv95_x: number | null
+          lv95_y: number | null
+        }[]
+      | undefined
+    let aps:
+      | {
+          id: string
+          label: string | null
+          start_jahr: number | null
+          bearbeiter: string | null
+          ae_taxonomy_by_art_id: {
+            artname: string | null
+            familie: string | null
+          } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+          adresse_by_bearbeiter: { name: string | null } | null
+        }[]
+      | undefined
+    let statusWerte = new Map<number, string>()
+    let emailByAdresse = new Map<string, string>()
+    let adressNamen = new Map<string, string>()
     try {
-      result = await apolloClient.query<TPopQueryResult>({
-        query: graphql(`
-          query tpopForExportQuery($filter: TpopFilter) {
-            allTpops(
-              filter: $filter
-              orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
-            ) {
-              nodes {
-                popByPopId {
-                  id
-                  apByApId {
-                    id
-                    aeTaxonomyByArtId {
-                      id
-                      artname
-                      familie
-                    }
-                    apBearbstandWerteByBearbeitung {
-                      id
-                      text
-                    }
-                    startJahr
-                    apUmsetzungWerteByUmsetzung {
-                      id
-                      text
-                    }
-                    adresseByBearbeiter {
-                      name
-                      usersByAdresseId {
-                        nodes {
-                          email
-                        }
-                      }
-                    }
-                  }
-                  id
-                  nr
-                  name
-                  popStatusWerteByStatus {
-                    id
-                    text
-                  }
-                  bekanntSeit
-                  statusUnklar
-                  statusUnklarBegruendung
-                  x: lv95X
-                  y: lv95Y
-                }
-                id
-                nr
-                gemeinde
-                flurname
-                status
-                popStatusWerteByStatus {
-                  id
-                  text
-                }
-                bekanntSeit
-                statusUnklar
-                statusUnklarGrund
-                x: lv95X
-                y: lv95Y
-                radius
-                hoehe
-                exposition
-                klima
-                neigung
-                beschreibung
-                katasterNr
-                apberRelevant
-                apberRelevantGrund
-                eigentuemer
-                kontakt
-                nutzungszone
-                bewirtschafter
-                bewirtschaftung
-                ekfrequenz
-                ekfrequenzAbweichend
-                adresseByEkfKontrolleur {
-                  id
-                  name
-                }
-                createdAt
-                updatedAt
-                changedBy
-              }
-            }
-          }
-        `),
-        variables: {
-          filter: filtered ? tpopGqlFilter.filtered : { or: [] },
-          // seems to have no or little influence on ram usage:
-        },
-      })
+      const tpopSelect =
+        'id,pop_id,nr,gemeinde,flurname,status,bekannt_seit,status_unklar,status_unklar_grund,lv95_x,lv95_y,radius,hoehe,exposition,klima,neigung,beschreibung,kataster_nr,apber_relevant,apber_relevant_grund,eigentuemer,kontakt,nutzungszone,bewirtschafter,bewirtschaftung,ekfrequenz,ekfrequenz_abweichend,ekf_kontrolleur,created_at,updated_at,changed_by'
+      // filtered: the cascade filter runs through query_tpop first
+      const tpopsR =
+        filtered ?
+          await (async () => {
+            const ids =
+              (await apiFetch<{ id: string }[]>('/rpc/query_tpop?select=id', {
+                method: 'POST',
+                body: JSON.stringify({ p_filter: tpopGqlFilter.filtered }),
+              })) ?? []
+            return ids.length ?
+                ((await apiFetch(
+                  `/q_tpop?id=in.(${ids.map((r) => r.id).join(',')})&select=${tpopSelect}`,
+                )) ?? [])
+              : []
+          })()
+        : apiFetch(`/q_tpop?select=${tpopSelect}`)
+      const [popsR, apsR, statusWerteR, adressenR] = await Promise.all([
+        apiFetch<NonNullable<typeof pops>>(
+          `/q_pop?select=id,ap_id,nr,name,status,bekannt_seit,status_unklar,status_unklar_begruendung,lv95_x,lv95_y`,
+        ),
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,label,start_jahr,bearbeiter,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung,adresse_by_bearbeiter`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/pop_status_werte?select=code,text`,
+        ),
+        apiFetch<{ id: string; name: string | null }[]>(
+          `/v_adresse?select=id,name`,
+        ),
+      ])
+      tpops = (tpopsR as NonNullable<typeof tpops>) ?? []
+      pops = popsR ?? []
+      aps = apsR ?? []
+      statusWerte = new Map(
+        (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      adressNamen = new Map((adressenR ?? []).map((a) => [a.id, a.name ?? '']))
+      const bearbeiterIds = [
+        ...new Set((aps ?? []).map((a) => a.bearbeiter).filter(Boolean)),
+      ] as string[]
+      if (bearbeiterIds.length) {
+        const users =
+          (await apiFetch<
+            { adresse_id: string | null; email: string | null }[]
+          >(
+            `/user?adresse_id=in.(${bearbeiterIds.join(',')})&select=adresse_id,email`,
+          )) ?? []
+        emailByAdresse = new Map(
+          users.map((u) => [u.adresse_id ?? '', u.email ?? '']),
+        )
+      }
     } catch (error) {
       addNotification({
         message: (error as Error).message,
         options: { variant: 'error' },
       })
     }
-    //console.timeEnd('querying')
     setQueryState('verarbeite...')
-    //console.time('processing')
-    const rows = (result?.data?.allTpops?.nodes ?? []).map((n) => ({
-      apId: n?.popByPopId?.apByApId?.id ?? null,
-      apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
-      apArtname: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? null,
-      apBearbeitung:
-        n?.popByPopId?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? null,
-      apStartJahr: n?.popByPopId?.apByApId?.startJahr ?? null,
-      apUmsetzung:
-        n?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      avName: n?.popByPopId?.apByApId?.adresseByBearbeiter?.name ?? null,
-      avEmail:
-        n?.popByPopId?.apByApId?.adresseByBearbeiter?.usersByAdresseId
-          ?.nodes?.[0]?.email ?? null,
-      popId: n?.popByPopId?.id ?? null,
-      popNr: n?.popByPopId?.nr ?? null,
-      popName: n?.popByPopId?.name ?? null,
-      popStatus: n?.popByPopId?.popStatusWerteByStatus?.text ?? null,
-      popBekanntSeit: n?.popByPopId?.bekanntSeit ?? null,
-      popStatusUnklar: n?.popByPopId?.statusUnklar ?? null,
-      popStatusUnklarBegruendung:
-        n?.popByPopId?.statusUnklarBegruendung ?? null,
-      popX: n?.popByPopId?.x ?? null,
-      popY: n?.popByPopId?.y ?? null,
-      id: n.id,
-      nr: n.nr,
-      gemeinde: n.gemeinde,
-      flurname: n.flurname,
-      status: n.status,
-      statusDecodiert: n?.popStatusWerteByStatus?.text ?? null,
-      bekanntSeit: n.bekanntSeit,
-      statusUnklar: n.statusUnklar,
-      statusUnklarGrund: n.statusUnklarGrund,
-      x: n.x,
-      y: n.y,
-      radius: n.radius,
-      hoehe: n.hoehe,
-      exposition: n.exposition,
-      klima: n.klima,
-      neigung: n.neigung,
-      beschreibung: n.beschreibung,
-      katasterNr: n.katasterNr,
-      apberRelevant: n.apberRelevant,
-      apberRelevantGrund: n.apberRelevantGrund,
-      eigentuemer: n.eigentuemer,
-      kontakt: n.kontakt,
-      nutzungszone: n.nutzungszone,
-      bewirtschafter: n.bewirtschafter,
-      bewirtschaftung: n.bewirtschaftung,
-      ekfrequenz: n.ekfrequenz,
-      ekfrequenzAbweichend: n.ekfrequenzAbweichend,
-      ekfKontrolleur: n?.adresseByEkfKontrolleur?.name ?? null,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
-    }))
+    const popById = new Map((pops ?? []).map((p) => [p.id, p]))
+    const apById = new Map((aps ?? []).map((a) => [a.id, a]))
+    const rows = (tpops ?? [])
+      .map((n) => {
+        const pop = popById.get(n.pop_id ?? '')
+        const apBy = pop?.ap_id ? apById.get(pop.ap_id) : undefined
+        return {
+          apId: apBy?.id ?? null,
+          apFamilie: apBy?.ae_taxonomy_by_art_id?.familie ?? null,
+          apArtname: apBy?.ae_taxonomy_by_art_id?.artname ?? null,
+          apBearbeitung: apBy?.ap_bearbstand_werte_by_bearbeitung?.text ?? null,
+          apStartJahr: apBy?.start_jahr ?? null,
+          apUmsetzung: apBy?.ap_umsetzung_werte_by_umsetzung?.text ?? null,
+          avName: apBy?.adresse_by_bearbeiter?.name ?? null,
+          avEmail: emailByAdresse.get(apBy?.bearbeiter ?? '') ?? null,
+          popId: pop?.id ?? null,
+          popNr: pop?.nr ?? null,
+          popName: pop?.name ?? null,
+          popStatus:
+            pop?.status == null ? null : (statusWerte.get(pop.status) ?? null),
+          popBekanntSeit: pop?.bekannt_seit ?? null,
+          popStatusUnklar: pop?.status_unklar ?? null,
+          popStatusUnklarBegruendung: pop?.status_unklar_begruendung ?? null,
+          popX: pop?.lv95_x ?? null,
+          popY: pop?.lv95_y ?? null,
+          id: n.id,
+          nr: n.nr,
+          gemeinde: n.gemeinde,
+          flurname: n.flurname,
+          status: n.status,
+          statusDecodiert:
+            n.status === null ? null : (statusWerte.get(n.status) ?? null),
+          bekanntSeit: n.bekannt_seit,
+          statusUnklar: n.status_unklar,
+          statusUnklarGrund: n.status_unklar_grund,
+          x: n.lv95_x,
+          y: n.lv95_y,
+          radius: n.radius,
+          hoehe: n.hoehe,
+          exposition: n.exposition,
+          klima: n.klima,
+          neigung: n.neigung,
+          beschreibung: n.beschreibung,
+          katasterNr: n.kataster_nr,
+          apberRelevant: n.apber_relevant,
+          apberRelevantGrund: n.apber_relevant_grund,
+          eigentuemer: n.eigentuemer,
+          kontakt: n.kontakt,
+          nutzungszone: n.nutzungszone,
+          bewirtschafter: n.bewirtschafter,
+          bewirtschaftung: n.bewirtschaftung,
+          ekfrequenz: n.ekfrequenz,
+          ekfrequenzAbweichend: n.ekfrequenz_abweichend,
+          ekfKontrolleur: adressNamen.get(n.ekf_kontrolleur ?? '') ?? null,
+          createdAt: n.created_at,
+          updatedAt: n.updated_at,
+          changedBy: n.changed_by,
+        }
+      })
+      .map((row) => ({
+        ...row,
+        _artname:
+          apById.get(row.apId ?? '')?.ae_taxonomy_by_art_id?.artname ?? '',
+      }))
+      // former orderBy [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
+      .sort(
+        (a, b) =>
+          a._artname.localeCompare(b._artname) ||
+          (a.popNr ?? 0) - (b.popNr ?? 0) ||
+          (a.nr ?? 0) - (b.nr ?? 0),
+      )
+      .map(({ _artname, ...rest }) => rest)
     const enrichedData = rows.map((oWithout) => {
-      const o: typeof oWithout & { angesiedeltNachBeginnAp?: boolean | null } = {
-        ...oWithout,
-      }
+      const o: typeof oWithout & { angesiedeltNachBeginnAp?: boolean | null } =
+        {
+          ...oWithout,
+        }
       let nachBeginnAp: boolean | null = null
       if (
         o.apStartJahr &&
