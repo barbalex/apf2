@@ -5,7 +5,6 @@ import { apiFetch } from '../../../modules/api.ts'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-import type { ApId } from '../../../models/apflora/Ap.ts'
 
 import styles from './AktPopList.module.css'
 
