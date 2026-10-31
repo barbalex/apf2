@@ -9,8 +9,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
-import { graphql } from '../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -35,16 +33,9 @@ interface ApOption {
   }
 }
 
-interface ApOptionsQueryResult {
-  allAps: {
-    nodes: ApOption[]
-  }
-}
-
 export const ChooseApToCopyErfkritsFrom = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const userName = useAtomValue(userNameAtom)
   const openChooseApToCopyErfkritsFrom = useAtomValue(
@@ -145,33 +136,42 @@ export const ChooseApToCopyErfkritsFrom = () => {
           id: { notEqualTo: apId },
         }
       : { label: { isNull: false }, id: { notEqualTo: apId } }
-    let result: { data?: ApOptionsQueryResult | undefined } | undefined
+    let rows: ApOption[] = []
     try {
-      result = await apolloClient.query<ApOptionsQueryResult>({
-        // would be elegant to query only ap with erfkrit
-        // solution: https://github.com/graphile/pg-aggregates
-        query: graphql(`
-          query apForErfkritfolder($filter: ApFilter) {
-            allAps(orderBy: [LABEL_ASC], filter: $filter) {
-              nodes {
-                value: id
-                label
-                erfkritsByApId {
-                  totalCount
-                }
-              }
-            }
-          }
-        `),
-        variables: { filter },
-      })
+      const aps =
+        (await apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_ap?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        )) ?? []
+      const apIds = aps.map((a) => a.id)
+      const children =
+        apIds.length ?
+          ((await apiFetch<{ ap_id: string }[]>(
+            `/q_erfkrit?ap_id=in.(${apIds.join(',')})&select=ap_id`,
+          )) ?? [])
+        : []
+      const countByAp = new Map<string, number>()
+      for (const c of children) {
+        countByAp.set(c.ap_id, (countByAp.get(c.ap_id) ?? 0) + 1)
+      }
+      rows = aps.map((a) => ({
+        value: a.id,
+        label: a.label,
+        erfkritsByApId: { totalCount: countByAp.get(a.id) ?? 0 },
+      })) as ApOption[]
     } catch (error) {
       console.log({ error })
       setApOptionsError(
         `Fehler beim Abfragen der Arten: ${(error as Error).message}`,
       )
     }
-    const options = result?.data?.allAps?.nodes ?? []
+    const options = rows
     // only show options with erfkrits
     const optionsWithErfkrits = options.filter(
       (e) => e.erfkritsByApId.totalCount > 0,
