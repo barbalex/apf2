@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { MdPrint, MdHourglassEmpty, MdRefresh } from 'react-icons/md'
 import Button from '@mui/material/Button'
@@ -19,8 +18,7 @@ import {
   userTokenAtom,
   userNameAtom,
 } from '../../../store/index.ts'
-import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
-import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
+import { apiFetch } from '../../../modules/api.ts'
 import { clearSiteData } from '../../../modules/clearSiteData.ts'
 
 import type { UserId } from '../../../models/apflora/User.ts'
@@ -46,7 +44,6 @@ interface EkfMenusQueryResult {
 export const Menus = () => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
-  const apolloClient = useApolloClient()
 
   const token = useAtomValue(userTokenAtom)
   const username = useAtomValue(userNameAtom)
@@ -61,21 +58,43 @@ export const Menus = () => {
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-  const query =
-    ekfRefYear === +(ekfYear ?? 0) ?
-      dataByUserIdQuery
-    : dataWithDateByUserIdQuery
-
   const { data } = useQuery({
     queryKey: ['ekfMenus', userId, ekfYear],
     queryFn: async (): Promise<EkfMenusQueryResult> => {
-      const result = await apolloClient.query({
-        query,
-        variables: { id: userId, jahr: +(ekfYear ?? 0) },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return (result.data ?? {}) as EkfMenusQueryResult
+      // phase 5: user → its adresse → this year's freiwilligen-kontrollen.
+      // accept empty jahr only when the reference year matches (former
+      // dataByUserId vs dataWithDateByUserId)
+      const jahr = +(ekfYear ?? 0)
+      const acceptNullJahr = ekfRefYear === jahr
+      const users =
+        (await apiFetch<{ adresse_id: string | null }[]>(
+          `/user?id=eq.${userId}&select=adresse_id:adresse_id`,
+        )) ?? []
+      const adresseId = users[0]?.adresse_id ?? null
+      if (!adresseId) return { userById: null }
+      const nodes =
+        (await apiFetch<TpopkontrNode[]>('/rpc/query_tpopkontr?select=id', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              bearbeiter: adresseId,
+              typ: { equalTo: 'Freiwilligen-Kontrolle' },
+              ...(acceptNullJahr ?
+                {
+                  or: [{ jahr: { equalTo: jahr } }, { jahr: { isNull: true } }],
+                }
+              : { jahr: { equalTo: jahr } }),
+            },
+          }),
+        })) ?? []
+      return {
+        userById: {
+          id: userId as UserId,
+          adresseByAdresseId: {
+            tpopkontrsByBearbeiter: { nodes },
+          },
+        },
+      }
     },
   })
 

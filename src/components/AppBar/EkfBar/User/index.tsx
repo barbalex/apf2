@@ -1,4 +1,4 @@
-import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import Dialog from '@mui/material/Dialog'
@@ -13,11 +13,9 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -46,19 +44,20 @@ interface UserProps {
 }
 
 export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { data, error } = useQuery({
     queryKey: ['userByNameForEkfBar', username],
-    queryFn: async () =>
-      apolloClient.query({
-        query,
-        variables: { name: username },
-      }),
+    queryFn: async () => {
+      const rows =
+        (await apiFetch<Row[]>(
+          `/user?name=eq.${encodeURIComponent(username)}&select=id,name,email,role,pass,adresseId:adresse_id`,
+        )) ?? []
+      return { userByName: rows[0] ?? null }
+    },
   })
 
-  const row = (data?.data?.userByName ?? {}) as Row
+  const row = (data?.userByName ?? {}) as Row
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const userName = useAtomValue(userNameAtom)
