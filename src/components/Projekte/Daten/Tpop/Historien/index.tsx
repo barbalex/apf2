@@ -1,6 +1,5 @@
+import { apiFetch } from '../../../../../modules/api.ts'
 import { useState, useRef, useEffect } from 'react'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Tooltip, IconButton } from '@mui/material'
@@ -107,168 +106,46 @@ interface TpopHistoryQueryResult {
 }
 
 type TpopHistoryUseQueryOptions = UseQueryOptions<
-  TpopHistoryQueryResult | undefined,
+  TpopHistoryQueryResult,
   Error
 > & {
   suspense: boolean
 }
 
-const query = graphql(`
-  query tpopHistoryQuery($tpopId: UUID!) {
-    tpopById(id: $tpopId) {
-      id
-      popId
-      popByPopId {
-        id
-        label
-        apId
-      }
-      nr
-      gemeinde
-      flurname
-      geomPoint {
-        geojson
-        x
-        y
-      }
-      radius
-      hoehe
-      exposition
-      klima
-      neigung
-      beschreibung
-      katasterNr
-      status
-      popStatusWerteByStatus {
-        id
-        text
-      }
-      statusUnklarGrund
-      tpopApberrelevantGrundWerteByApberRelevantGrund {
-        id
-        text
-      }
-      apberRelevant
-      apberRelevantGrund
-      bekanntSeit
-      eigentuemer
-      kontakt
-      nutzungszone
-      bewirtschafter
-      bewirtschaftung
-      ekfrequenz
-      ekfrequenzByEkfrequenz {
-        id
-        code
-      }
-      ekfrequenzAbweichend
-      ekfrequenzStartjahr
-      ekfKontrolleur
-      adresseByEkfKontrolleur {
-        id
-        name
-      }
-      bemerkungen
-      statusUnklar
-      changedBy
-    }
-    allTpopHistories(filter: { id: { equalTo: $tpopId } }, orderBy: YEAR_DESC) {
-      totalCount
-      nodes {
-        id
-        year
-        popId
-        popByPopId {
-          id
-          label
-        }
-        nr
-        gemeinde
-        flurname
-        geomPoint {
-          geojson
-          x
-          y
-        }
-        radius
-        hoehe
-        exposition
-        klima
-        neigung
-        beschreibung
-        katasterNr
-        status
-        popStatusWerteByStatus {
-          id
-          text
-        }
-        statusUnklarGrund
-        apberRelevant
-        apberRelevantGrund
-        tpopApberrelevantGrundWerteByApberRelevantGrund {
-          id
-          text
-        }
-        bekanntSeit
-        eigentuemer
-        kontakt
-        nutzungszone
-        bewirtschafter
-        bewirtschaftung
-        ekfrequenz
-        ekfrequenzByEkfrequenz {
-          id
-          code
-        }
-        ekfrequenzAbweichend
-        ekfrequenzStartjahr
-        ekfKontrolleur
-        adresseByEkfKontrolleur {
-          id
-          name
-        }
-        bemerkungen
-        statusUnklar
-        changedBy
-      }
-    }
-    allPopStatusWertes(orderBy: CODE_ASC) {
-      nodes {
-        value: code
-        label: text
-      }
-    }
-    allTpopApberrelevantGrundWertes(
-      orderBy: SORT_ASC
-      filter: { code: { isNull: false } }
-    ) {
-      nodes {
-        value: code
-        label: text
-      }
-    }
-    allAdresses(orderBy: NAME_ASC) {
-      nodes {
-        value: id
-        label: name
-      }
-    }
-  }
-`)
-
 export const Component = () => {
   const { tpopId } = useParams()
-  const apolloClient = useApolloClient()
 
   const tpopHistoryQueryOptions: TpopHistoryUseQueryOptions = {
     queryKey: ['tpopHistorien', tpopId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopHistoryQueryResult>({
-        query,
-        variables: { tpopId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const select =
+        'id,popId:pop_id,popByPopId:pop_by_pop_id,nr,gemeinde,flurname,geomPoint:geom_point,radius,hoehe,exposition,klima,neigung,beschreibung,katasterNr:kataster_nr,status,popStatusWerteByStatus:pop_status_werte_by_status,statusUnklarGrund:status_unklar_grund,tpopApberrelevantGrundWerteByApberRelevantGrund:tpop_apberrelevant_grund_werte_by_apber_relevant_grund,apberRelevant:apber_relevant,apberRelevantGrund:apber_relevant_grund,bekanntSeit:bekannt_seit,eigentuemer,kontakt,nutzungszone,bewirtschafter,bewirtschaftung,ekfrequenz,ekfrequenzByEkfrequenz:ekfrequenz_by_ekfrequenz,ekfrequenzAbweichend:ekfrequenz_abweichend,ekfrequenzStartjahr:ekfrequenz_startjahr,ekfKontrolleur:ekf_kontrolleur,adresseByEkfKontrolleur:adresse_by_ekf_kontrolleur,bemerkungen,statusUnklar:status_unklar,changedBy:changed_by'
+      const [tpopRows, historyRows, statusWerte, grundWerte, adresses] =
+        await Promise.all([
+          apiFetch<NonNullable<TpopHistoryQueryResult['tpopById']>[]>(
+            `/v_tpop?id=eq.${tpopId}&select=${select}`,
+          ),
+          apiFetch<NonNullable<TpopHistoryQueryResult['tpopById']>[]>(
+            `/v_tpop_history?id=eq.${tpopId}&select=${select},year&order=year.desc`,
+          ),
+          apiFetch(
+            `/pop_status_werte?order=code.asc&select=value:code,label:text`,
+          ),
+          apiFetch(
+            `/tpop_apberrelevant_grund_werte?order=sort.asc&code=not.is.null&select=value:code,label:text`,
+          ),
+          apiFetch(`/adresse?order=name.asc&select=value:id,label:name`),
+        ])
+      return {
+        tpopById: tpopRows?.[0] ?? null,
+        allTpopHistories: {
+          nodes: historyRows ?? [],
+          totalCount: historyRows?.length ?? 0,
+        },
+        allPopStatusWertes: { nodes: statusWerte ?? [] },
+        allTpopApberrelevantGrundWertes: { nodes: grundWerte ?? [] },
+        allAdresses: { nodes: adresses ?? [] },
+      } as TpopHistoryQueryResult
     },
     suspense: true,
   }
@@ -283,7 +160,8 @@ export const Component = () => {
 
   const options = {
     popStatusWertes: data?.allPopStatusWertes?.nodes ?? [],
-    apberRelevantGrundWertes: data?.allTpopApberrelevantGrundWertes?.nodes ?? [],
+    apberRelevantGrundWertes:
+      data?.allTpopApberrelevantGrundWertes?.nodes ?? [],
     adresses: data?.allAdresses?.nodes ?? [],
     ekfrequenzs: data?.allEkfrequenzs?.nodes ?? [],
   }
@@ -301,7 +179,11 @@ export const Component = () => {
   useEffect(() => {
     if (editingYear === 'new') {
       setTimeout(
-        () => newFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+        () =>
+          newFormRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          }),
         0,
       )
     }
@@ -335,7 +217,8 @@ export const Component = () => {
         </p>
         <p className={styles.docLine}>
           <span className={styles.aenderung}>Änderungen</span> zum{' '}
-          <span className={styles.aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind
+          hervorgehoben.
         </p>
         {rows.map((r) => {
           if (editingYear === r.year) {

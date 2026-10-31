@@ -24,7 +24,19 @@ CREATE OR REPLACE VIEW apflora.v_ap WITH (security_invoker = true) AS
         'id', x.id, 'taxid', x.taxid, 'familie', x.familie,
         'artname', x.artname, 'taxArtName', x.tax_art_name,
         'artwert', x.artwert)
-      FROM apflora.ae_taxonomies x WHERE x.id = t.art_id) AS ae_taxonomy_by_art_id
+      FROM apflora.ae_taxonomies x WHERE x.id = t.art_id) AS ae_taxonomy_by_art_id,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.ap_bearbstand_werte w WHERE w.code = t.bearbeitung)
+      AS ap_bearbstand_werte_by_bearbeitung,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.ap_umsetzung_werte w WHERE w.code = t.umsetzung)
+      AS ap_umsetzung_werte_by_umsetzung,
+    (SELECT jsonb_build_object('id', ad.id, 'name', ad.name)
+      FROM apflora.adresse ad WHERE ad.id = t.bearbeiter)
+      AS adresse_by_bearbeiter,
+    (SELECT jsonb_build_object('id', pr.id, 'name', pr.name)
+      FROM apflora.projekt pr WHERE pr.id = t.proj_id)
+      AS projekt_by_proj_id
   FROM apflora.ap t;
 GRANT SELECT ON apflora.v_ap TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
@@ -205,7 +217,13 @@ CREATE OR REPLACE VIEW apflora.v_tpop WITH (security_invoker = true) AS
         'apByApId', jsonb_build_object('id', a.id, 'startJahr', a.start_jahr))
       FROM apflora.pop p JOIN apflora.ap a ON a.id = p.ap_id
       WHERE p.id = t.pop_id)
-      AS pop_by_pop_id
+      AS pop_by_pop_id,
+    (SELECT jsonb_build_object('id', e.id, 'code', e.code)
+      FROM apflora.ekfrequenz e WHERE e.id = t.ekfrequenz)
+      AS ekfrequenz_by_ekfrequenz,
+    (SELECT jsonb_build_object('id', ad.id, 'name', ad.name)
+      FROM apflora.adresse ad WHERE ad.id = t.ekf_kontrolleur)
+      AS adresse_by_ekf_kontrolleur
   FROM apflora.tpop t;
 GRANT SELECT ON apflora.v_tpop TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
