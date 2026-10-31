@@ -1,19 +1,18 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopfreiwkontrSelect } from '../../../../modules/selects.ts'
+import type { TpopkontrRow } from './Form/index.tsx'
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Form } from './Form/index.tsx'
 import { Menu } from './Menu.tsx'
-
-import type { TpopkontrQueryResult, TpopkontrRow } from './Form/index.tsx'
 
 interface ComponentProps {
   id?: string | undefined
@@ -34,18 +33,15 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
 
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['TpopkontrQuery', id],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<TpopkontrRow[]>(
+        `/v_tpopkontr?id=eq.${id}&select=${tpopfreiwkontrSelect},tpopByTpopId:tpop_by_tpop_id,adresseByBearbeiter:adresse_by_bearbeiter,tpopkontrzaehlsByTpopkontrId:tpopkontrzaehls_by_tpopkontr_id`,
+      )
+      return { tpopkontrById: rows?.[0] ?? null }
     },
   })
   // DO NOT use apId from url because this form is also used for mass prints
@@ -105,7 +101,6 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
     }
   }, [
     addNotification,
-    apolloClient,
     data,
     isLoading,
     refetch,

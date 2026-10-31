@@ -289,7 +289,45 @@ CREATE OR REPLACE VIEW apflora.v_tpopkontr WITH (security_invoker = true) AS
   SELECT
     t.*,
     apflora.tpopkontr_label_ek(t) AS label_ek,
-    apflora.tpopkontr_label_ekf(t) AS label_ekf
+    apflora.tpopkontr_label_ekf(t) AS label_ekf,
+    -- freiwkontr form chain: exactly the fields its interfaces declare
+    (SELECT jsonb_build_object('usersByAdresseId',
+        jsonb_build_object('totalCount',
+          (SELECT count(*) FROM apflora.user u WHERE u.adresse_id = ad.id)))
+      FROM apflora.adresse ad WHERE ad.id = t.bearbeiter)
+      AS adresse_by_bearbeiter,
+    (SELECT jsonb_build_object(
+        'nr', c.nr, 'flurname', c.flurname,
+        'lv95X', public.lv95_x(c), 'lv95Y', public.lv95_y(c),
+        'status', c.status,
+        'popByPopId', jsonb_build_object(
+          'nr', p.nr, 'name', p.name, 'apId', p.ap_id,
+          'apByApId', jsonb_build_object(
+            'id', a.id, 'ekfBeobachtungszeitpunkt', a.ekf_beobachtungszeitpunkt,
+            'aeTaxonomyByArtId', jsonb_build_object(
+              'artname', x.artname),
+            'ekzaehleinheitsByApId', jsonb_build_object('nodes',
+              (SELECT coalesce(jsonb_agg(jsonb_build_object(
+                'id', e.id, 'sort', e.sort, 'zielrelevant', e.zielrelevant,
+                'tpopkontrzaehlEinheitWerteByZaehleinheitId', (
+                  SELECT jsonb_build_object('id', w.id, 'code', w.code,
+                    'text', w.text, 'sort', w.sort, 'historic', w.historic)
+                  FROM apflora.tpopkontrzaehl_einheit_werte w
+                  WHERE w.id = e.zaehleinheit_id))
+                ORDER BY e.sort), '[]'::jsonb)
+              FROM apflora.ekzaehleinheit e WHERE e.ap_id = a.id)))))
+      FROM apflora.tpop c
+      JOIN apflora.pop p ON p.id = c.pop_id
+      JOIN apflora.ap a ON a.id = p.ap_id
+      LEFT JOIN apflora.ae_taxonomies x ON x.id = a.art_id
+      WHERE c.id = t.tpop_id) AS tpop_by_tpop_id,
+    (SELECT jsonb_build_object('nodes',
+        (SELECT coalesce(jsonb_agg(jsonb_build_object(
+          'id', z.id, 'tpopkontrId', z.tpopkontr_id,
+          'einheit', z.einheit, 'anzahl', z.anzahl, 'methode', z.methode)
+          ORDER BY z.einheit), '[]'::jsonb)
+        FROM apflora.tpopkontrzaehl z WHERE z.tpopkontr_id = t.id)))
+      AS tpopkontrzaehls_by_tpopkontr_id
   FROM apflora.tpopkontr t;
 GRANT SELECT ON apflora.v_tpopkontr TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 

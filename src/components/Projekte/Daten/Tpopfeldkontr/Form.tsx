@@ -67,18 +67,24 @@ export interface TpopfeldkontrRow {
 }
 
 interface TpopfeldkontrFormData {
-  allTpopEntwicklungWertes?: {
-    nodes: {
-      value: TpopEntwicklungWerteCode
-      label: string | null
-    }[]
-  } | null
-  allAdresses?: {
-    nodes: {
-      value: AdresseId
-      label: string | null
-    }[]
-  } | null
+  allTpopEntwicklungWertes?:
+    | {
+        nodes: {
+          value: TpopEntwicklungWerteCode
+          label: string | null
+        }[]
+      }
+    | null
+    | undefined
+  allAdresses?:
+    | {
+        nodes: {
+          value: AdresseId
+          label: string | null
+        }[]
+      }
+    | null
+    | undefined
 }
 
 interface TpopfeldkontrFormProps {
