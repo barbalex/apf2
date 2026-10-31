@@ -1,10 +1,8 @@
 import { apiFetch, apiInsert } from '../../../../../../modules/api.ts'
 import Checkbox from '@mui/material/Checkbox'
 
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
-import { query } from './query.ts'
 import { Error } from '../../../../../shared/Error.tsx'
 
 import type {
@@ -38,17 +36,18 @@ interface RowProps {
 
 export const Row = ({ apId, qk }: RowProps) => {
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: ['apqkQueryForRow', apId, qk.name],
     queryFn: async () => {
-      const result = await apolloClient.query<ApqkQueryResult>({
-        query: query,
-        variables: { apId, qkName: qk.name },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = (await apiFetch<
+        { ap_id: string; qk_name: string }[]
+      >(
+        `/apqk?ap_id=eq.${apId}&qk_name=eq.${encodeURIComponent(qk.name)}&select=ap_id,qk_name`,
+      )) ?? []
+      return {
+        apqkByApIdAndQkName: rows[0] ?? null,
+      } as unknown as ApqkQueryResult
     },
   })
   const apqk = data?.apqkByApIdAndQkName
