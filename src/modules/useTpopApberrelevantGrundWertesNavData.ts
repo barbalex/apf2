@@ -1,13 +1,10 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useTpopApberrelevantGrundWertesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const tpopApberrelevantGrundWerteGqlFilterForTree = useAtomValue(
     treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
   )
@@ -18,33 +15,26 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
       tpopApberrelevantGrundWerteGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeTpopApberrelevantGrundWerteQuery(
-            $tpopApberrelevantGrundWertsFilter: TpopApberrelevantGrundWerteFilter!
-          ) {
-            allTpopApberrelevantGrundWertes(
-              filter: $tpopApberrelevantGrundWertsFilter
-              orderBy: [SORT_ASC, TEXT_ASC]
-            ) {
-              nodes {
-                id
-                label
-              }
-            }
-            totalCount: allTpopApberrelevantGrundWertes {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          tpopApberrelevantGrundWertsFilter:
-            tpopApberrelevantGrundWerteGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_tpop_apberrelevant_grund_werte?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: tpopApberrelevantGrundWerteGqlFilterForTree,
+              p_order: [
+                { field: 'sort', dir: 'asc' },
+                { field: 'text', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount('/q_tpop_apberrelevant_grund_werte'),
+      ])
+      return {
+        allTpopApberrelevantGrundWertes: { nodes: nodes ?? [] },
+        totalCount: { totalCount },
+      }
     },
   })
 

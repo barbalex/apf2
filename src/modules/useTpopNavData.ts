@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -60,7 +59,6 @@ export const useTpopNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -100,96 +98,93 @@ export const useTpopNavData = (
       const tpopmassnberGqlFilterForTree =
         getTpopmassnberGqlFilterForTree(tpopId)
       const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavTpopQuery(
-            $tpopId: UUID!
-            $tpopmassnFilter: TpopmassnFilter!
-            $tpopmassnberFilter: TpopmassnberFilter!
-            $tpopfeldkontrFilter: TpopkontrFilter!
-            $tpopfreiwkontrFilter: TpopkontrFilter!
-            $tpopberFilter: TpopberFilter!
-            $beobZugeordnetFilter: BeobFilter!
-          ) {
-            tpopById(id: $tpopId) {
-              id
-              label
-              status
-              tpopmassnsByTpopId {
-                totalCount
-              }
-              filteredTpopmassns: tpopmassnsByTpopId(filter: $tpopmassnFilter) {
-                totalCount
-              }
-              tpopmassnbersByTpopId {
-                totalCount
-              }
-              filteredTpopmassnbers: tpopmassnbersByTpopId(
-                filter: $tpopmassnberFilter
-              ) {
-                totalCount
-              }
-              tpopfeldkontrs: tpopkontrsByTpopId(
-                filter: { typ: { distinctFrom: "Freiwilligen-Kontrolle" } }
-              ) {
-                totalCount
-              }
-              filteredTpopfeldkontrs: tpopkontrsByTpopId(
-                filter: $tpopfeldkontrFilter
-              ) {
-                totalCount
-              }
-              tpopfreiwkontrs: tpopkontrsByTpopId(
-                filter: { typ: { equalTo: "Freiwilligen-Kontrolle" } }
-              ) {
-                totalCount
-              }
-              filteredTpopfreiwkontrs: tpopkontrsByTpopId(
-                filter: $tpopfreiwkontrFilter
-              ) {
-                totalCount
-              }
-              tpopbersByTpopId {
-                totalCount
-              }
-              filteredTpopbers: tpopbersByTpopId(filter: $tpopberFilter) {
-                totalCount
-              }
-              beobZugeordnet: beobsByTpopId(
-                filter: { tpopId: { equalTo: $tpopId } }
-              ) {
-                totalCount
-              }
-              filteredBeobZugeordnet: beobsByTpopId(
-                filter: $beobZugeordnetFilter
-              ) {
-                totalCount
-              }
-              tpopFilesByTpopId {
-                totalCount
-              }
-            }
-            allTpopHistories(filter: { id: { equalTo: $tpopId } }) {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          tpopId,
-          tpopmassnFilter: tpopmassnGqlFilterForTree,
-          tpopmassnberFilter: tpopmassnberGqlFilterForTree,
-          tpopfeldkontrFilter: ekGqlFilterForTree,
-          tpopfreiwkontrFilter: ekfGqlFilterForTree,
-          tpopberFilter: tpopberGqlFilterForTree,
-          beobZugeordnetFilter: {
-            ...beobZugeordnetGqlFilterForTree,
-            tpopId: { equalTo: tpopId },
-          },
+      // phase 5: the former XByTpopId relation constraints merge into the
+      // cascade filters; sibling keys are ANDed by compile_filter
+      const tpopOf = (filter: object) => ({
+        ...filter,
+        tpopByTpopId: {
+          ...((filter as { tpopByTpopId?: object }).tpopByTpopId ?? {}),
+          id: { equalTo: tpopId },
         },
       })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const beobZugeordnetFilter = {
+        ...beobZugeordnetGqlFilterForTree,
+        tpopId: { equalTo: tpopId },
+      }
+      const [
+        tpop,
+        massnFiltered,
+        massnAll,
+        massnberFiltered,
+        massnberAll,
+        feldkontrFiltered,
+        feldkontrAll,
+        freiwkontrFiltered,
+        freiwkontrAll,
+        tpopberFiltered,
+        tpopberAll,
+        beobZugeordnetFiltered,
+        beobZugeordnetAll,
+        filesCount,
+        historiesCount,
+      ] = await Promise.all([
+        apiFetch<{ id: string; label: string | null; status: number | null }[]>(
+          `/q_tpop?id=eq.${tpopId}&select=id,label,status`,
+        ),
+        rpcCount('query_tpopmassn', {
+          p_filter: tpopOf(tpopmassnGqlFilterForTree),
+        }),
+        apiCount(`/q_tpopmassn?tpop_id=eq.${tpopId}`),
+        rpcCount('query_tpopmassnber', {
+          p_filter: tpopOf(tpopmassnberGqlFilterForTree),
+        }),
+        apiCount(`/q_tpopmassnber?tpop_id=eq.${tpopId}`),
+        rpcCount('query_tpopkontr', { p_filter: tpopOf(ekGqlFilterForTree) }),
+        rpcCount('query_tpopkontr', {
+          p_filter: {
+            typ: { distinctFrom: 'Freiwilligen-Kontrolle' },
+            tpopByTpopId: { id: { equalTo: tpopId } },
+          },
+        }),
+        rpcCount('query_tpopkontr', {
+          p_filter: tpopOf(ekfGqlFilterForTree),
+        }),
+        rpcCount('query_tpopkontr', {
+          p_filter: {
+            typ: { equalTo: 'Freiwilligen-Kontrolle' },
+            tpopByTpopId: { id: { equalTo: tpopId } },
+          },
+        }),
+        rpcCount('query_tpopber', {
+          p_filter: tpopOf(tpopberGqlFilterForTree),
+        }),
+        apiCount(`/q_tpopber?tpop_id=eq.${tpopId}`),
+        rpcCount('query_beob', { p_filter: beobZugeordnetFilter }),
+        apiCount(`/q_beob?tpop_id=eq.${tpopId}`),
+        apiCount(`/tpop_file?tpop_id=eq.${tpopId}`),
+        apiCount(`/v_tpop_history?id=eq.${tpopId}`),
+      ])
+      return {
+        tpopById: {
+          id: tpopId,
+          label: tpop?.[0]?.label,
+          status: tpop?.[0]?.status,
+          tpopmassnsByTpopId: { totalCount: massnAll },
+          filteredTpopmassns: { totalCount: massnFiltered },
+          tpopmassnbersByTpopId: { totalCount: massnberAll },
+          filteredTpopmassnbers: { totalCount: massnberFiltered },
+          tpopfeldkontrs: { totalCount: feldkontrAll },
+          filteredTpopfeldkontrs: { totalCount: feldkontrFiltered },
+          tpopfreiwkontrs: { totalCount: freiwkontrAll },
+          filteredTpopfreiwkontrs: { totalCount: freiwkontrFiltered },
+          tpopbersByTpopId: { totalCount: tpopberAll },
+          filteredTpopbers: { totalCount: tpopberFiltered },
+          beobZugeordnet: { totalCount: beobZugeordnetAll },
+          filteredBeobZugeordnet: { totalCount: beobZugeordnetFiltered },
+          tpopFilesByTpopId: { totalCount: filesCount },
+        },
+        allTpopHistories: { totalCount: historiesCount },
+      }
     },
   })
   useEffect(() => {

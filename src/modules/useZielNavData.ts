@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -13,7 +12,6 @@ export const useZielNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -23,20 +21,10 @@ export const useZielNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeZiel', zielId],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavZielQuery($zielId: UUID!) {
-            zielById(id: $zielId) {
-              id
-              label
-            }
-          }
-        `),
-        variables: { zielId },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const ziels = await apiFetch<{ id: string; label: string | null }[]>(
+        `/q_ziel?id=eq.${zielId}&select=id,label`,
+      )
+      return { zielById: ziels?.[0] ?? null }
     },
   })
 

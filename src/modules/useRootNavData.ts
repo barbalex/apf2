@@ -1,44 +1,35 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useRootNavData = () => {
-  const apolloClient = useApolloClient()
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeRoot', userGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavRootQuery($usersFilter: UserFilter!) {
-            allProjekts {
-              totalCount
-            }
-            allUsers {
-              totalCount
-            }
-            filteredUsers: allUsers(filter: $usersFilter) {
-              totalCount
-            }
-            allMessages {
-              totalCount
-            }
-            allCurrentissues {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          usersFilter: userGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [
+        projectsCount,
+        usersCount,
+        usersFilteredCount,
+        messagesCount,
+        currentIssuesCount,
+      ] = await Promise.all([
+        apiCount('/projekt'),
+        apiCount('/q_user'),
+        rpcCount('query_user', { p_filter: userGqlFilterForTree }),
+        apiCount('/message'),
+        apiCount('/currentissue'),
+      ])
+      return {
+        allProjekts: { totalCount: projectsCount },
+        allUsers: { totalCount: usersCount },
+        filteredUsers: { totalCount: usersFilteredCount },
+        allMessages: { totalCount: messagesCount },
+        allCurrentissues: { totalCount: currentIssuesCount },
+      }
     },
   })
 

@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -50,7 +49,6 @@ export const usePopNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -74,57 +72,55 @@ export const usePopNavData = (
       popmassnberGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavPopQuery(
-            $popId: UUID!
-            $tpopFilter: TpopFilter!
-            $popberFilter: PopberFilter!
-            $popmassnberFilter: PopmassnberFilter!
-          ) {
-            popById(id: $popId) {
-              id
-              label
-              status
-              tpopsByPopId {
-                totalCount
-              }
-              filteredTpops: tpopsByPopId(filter: $tpopFilter) {
-                totalCount
-              }
-              popbersByPopId {
-                totalCount
-              }
-              filteredPopbers: popbersByPopId(filter: $popberFilter) {
-                totalCount
-              }
-              popmassnbersByPopId {
-                totalCount
-              }
-              filteredPopmassnbers: popmassnbersByPopId(
-                filter: $popmassnberFilter
-              ) {
-                totalCount
-              }
-              popFilesByPopId {
-                totalCount
-              }
-            }
-            allPopHistories(filter: { id: { equalTo: $popId } }) {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          popId,
-          tpopFilter: tpopGqlFilterForTree,
-          popberFilter: popberGqlFilterForTree,
-          popmassnberFilter: popmassnberGqlFilterForTree,
+      // phase 5: the former XByPopId relation constraints merge into the
+      // cascade filters; sibling keys are ANDed by compile_filter
+      const popOf = (filter: object) => ({
+        ...filter,
+        popByPopId: {
+          ...((filter as { popByPopId?: object }).popByPopId ?? {}),
+          id: { equalTo: popId },
         },
       })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [
+        pop,
+        tpopsFiltered,
+        tpopsAll,
+        popbersFiltered,
+        popbersAll,
+        popmassnbersFiltered,
+        popmassnbersAll,
+        filesCount,
+        historiesCount,
+      ] = await Promise.all([
+        apiFetch<{ id: string; label: string | null; status: number | null }[]>(
+          `/q_pop?id=eq.${popId}&select=id,label,status`,
+        ),
+        rpcCount('query_tpop', { p_filter: popOf(tpopGqlFilterForTree) }),
+        apiCount(`/q_tpop?pop_id=eq.${popId}`),
+        rpcCount('query_popber', { p_filter: popOf(popberGqlFilterForTree) }),
+        apiCount(`/q_popber?pop_id=eq.${popId}`),
+        rpcCount('query_popmassnber', {
+          p_filter: popOf(popmassnberGqlFilterForTree),
+        }),
+        apiCount(`/q_popmassnber?pop_id=eq.${popId}`),
+        apiCount(`/pop_file?pop_id=eq.${popId}`),
+        apiCount(`/v_pop_history?id=eq.${popId}`),
+      ])
+      return {
+        popById: {
+          id: popId,
+          label: pop?.[0]?.label,
+          status: pop?.[0]?.status,
+          tpopsByPopId: { totalCount: tpopsAll },
+          filteredTpops: { totalCount: tpopsFiltered },
+          popbersByPopId: { totalCount: popbersAll },
+          filteredPopbers: { totalCount: popbersFiltered },
+          popmassnbersByPopId: { totalCount: popmassnbersAll },
+          filteredPopmassnbers: { totalCount: popmassnbersFiltered },
+          popFilesByPopId: { totalCount: filesCount },
+        },
+        allPopHistories: { totalCount: historiesCount },
+      }
     },
   })
 

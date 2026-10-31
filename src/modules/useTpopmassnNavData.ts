@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -41,7 +40,6 @@ export const useTpopmassnNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -52,34 +50,32 @@ export const useTpopmassnNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavTpopmassnQuery($tpopmassnId: UUID!) {
-            tpopmassnById(id: $tpopmassnId) {
-              id
-              label
-              zieleinheitAnzahl
-              tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
-                text
-                # ekzaehleinheitsByZaehleinheitId {
-                #   nodes {
-                #     zielrelevant
-                #   }
-                # }
-              }
-              tpopmassnFilesByTpopmassnId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopmassnId,
+      const [massn, filesCount] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            label: string | null
+            zieleinheit_anzahl: number | null
+            tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit: {
+              text: string | null
+            } | null
+          }[]
+        >(
+          `/q_tpopmassn?id=eq.${tpopmassnId}&select=id,label,zieleinheitAnzahl:zieleinheit_anzahl,tpopkontrzaehlEinheitWerteByZieleinheitEinheit:tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit`,
+        ),
+        apiCount(`/tpopmassn_file?tpopmassn_id=eq.${tpopmassnId}`),
+      ])
+      const row = massn?.[0]
+      return {
+        tpopmassnById: {
+          id: row?.id,
+          label: row?.label,
+          zieleinheitAnzahl: row?.zieleinheit_anzahl,
+          tpopkontrzaehlEinheitWerteByZieleinheitEinheit:
+            row?.tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit ?? null,
+          tpopmassnFilesByTpopmassnId: { totalCount: filesCount },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
     },
   })
 

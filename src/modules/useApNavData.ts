@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
@@ -25,7 +24,6 @@ export const useApNavData = (
   props?:
     { projId?: string | undefined; apId?: string | undefined } | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const projId = props?.projId ?? ''
   const apId = props?.apId ?? ''
 
@@ -48,29 +46,11 @@ export const useApNavData = (
 
   const allBeobNichtZuzuordnenFilter = {
     nichtZuordnen: { equalTo: true },
-    aeTaxonomyByArtId: {
-      apartsByArtId: {
-        some: {
-          apByApId: {
-            id: { equalTo: apId },
-          },
-        },
-      },
-    },
   }
 
   const allBeobNichtBeurteiltFilter = {
     tpopId: { isNull: true },
     nichtZuordnen: { equalTo: false },
-    aeTaxonomyByArtId: {
-      apartsByArtId: {
-        some: {
-          apByApId: {
-            id: { equalTo: apId },
-          },
-        },
-      },
-    },
   }
 
   // Get filters before useQuery so changes trigger refetch
@@ -101,159 +81,135 @@ export const useApNavData = (
       beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavApQuery(
-            $apId: UUID!
-            $popFilter: PopFilter!
-            $zielFilter: ZielFilter!
-            $erfkritFilter: ErfkritFilter!
-            $apberFilter: ApberFilter!
-            $apartFilter: ApartFilter!
-            $assozartFilter: AssozartFilter!
-            $ekfrequenzFilter: EkfrequenzFilter!
-            $ekzaehleinheitFilter: EkzaehleinheitFilter!
-            $beobNichtBeurteiltFilter: BeobFilter!
-            $beobNichtZuzuordnenFilter: BeobFilter!
-            $allBeobNichtZuzuordnenFilter: BeobFilter!
-            $allBeobNichtBeurteiltFilter: BeobFilter!
-          ) {
-            apById(id: $apId) {
-              id
-              label
-              apqksByApId {
-                totalCount
-              }
-              popsByApId {
-                totalCount
-              }
-              filteredPops: popsByApId(filter: $popFilter) {
-                totalCount
-              }
-              zielsByApId {
-                totalCount
-                nodes {
-                  id
-                  jahr
-                }
-              }
-              filteredZiels: zielsByApId(filter: $zielFilter) {
-                totalCount
-                nodes {
-                  id
-                  jahr
-                }
-              }
-              erfkritsByApId {
-                totalCount
-              }
-              filteredErfkrits: erfkritsByApId(filter: $erfkritFilter) {
-                totalCount
-              }
-              apbersByApId {
-                totalCount
-              }
-              filteredApbers: apbersByApId(filter: $apberFilter) {
-                totalCount
-              }
-              apartsByApId {
-                totalCount
-              }
-              filteredAparts: apartsByApId(filter: $apartFilter) {
-                totalCount
-              }
-              assozartsByApId {
-                totalCount
-              }
-              filteredAssozarts: assozartsByApId(filter: $assozartFilter) {
-                totalCount
-              }
-              ekfrequenzsByApId {
-                totalCount
-              }
-              filteredEkfrequenzs: ekfrequenzsByApId(
-                filter: $ekfrequenzFilter
-              ) {
-                totalCount
-              }
-              ekzaehleinheitsByApId {
-                totalCount
-              }
-              filteredEkzaehleinheits: ekzaehleinheitsByApId(
-                filter: $ekzaehleinheitFilter
-              ) {
-                totalCount
-              }
-              apFilesByApId {
-                totalCount
-              }
-            }
-            allApHistories(filter: { id: { equalTo: $apId } }) {
-              totalCount
-            }
-            beobsNichtBeurteilt: allBeobs(
-              filter: $allBeobNichtBeurteiltFilter
-            ) {
-              totalCount
-            }
-            filteredBeobsNichtBeurteilt: allBeobs(
-              filter: $beobNichtBeurteiltFilter
-            ) {
-              totalCount
-            }
-            beobsNichtZuzuordnen: allBeobs(
-              filter: $allBeobNichtZuzuordnenFilter
-            ) {
-              totalCount
-            }
-            filteredBeobsNichtZuzuordnen: allBeobs(
-              filter: $beobNichtZuzuordnenFilter
-            ) {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          apId,
-          popFilter: popGqlFilterForTree,
-          zielFilter: zielGqlFilterForTree,
-          erfkritFilter: erfkritGqlFilterForTree,
-          apberFilter: apberGqlFilterForTree,
-          apartFilter: apartGqlFilterForTree,
-          assozartFilter: assozartGqlFilterForTree,
-          ekfrequenzFilter: ekfrequenzGqlFilterForTree,
-          ekzaehleinheitFilter: ekzaehleinheitGqlFilterForTree,
-          beobNichtBeurteiltFilter: {
-            ...beobNichtBeurteiltGqlFilterForTree,
-            aeTaxonomyByArtId: {
-              apartsByArtId: {
-                some: {
-                  apByApId: {
-                    id: { equalTo: apId },
-                  },
-                },
-              },
-            },
-          },
-          beobNichtZuzuordnenFilter: {
-            ...beobNichtZuzuordnenGqlFilterForTree,
-            aeTaxonomyByArtId: {
-              apartsByArtId: {
-                some: {
-                  apByApId: {
-                    id: { equalTo: apId },
-                  },
-                },
-              },
-            },
-          },
-          allBeobNichtZuzuordnenFilter,
-          allBeobNichtBeurteiltFilter,
+      // phase 5: the former XByApId relation constraints merge into the
+      // cascade filters; sibling keys are ANDed by compile_filter.
+      // beob scoping by the ap's taxa: the old aeTaxonomyByArtId reverse
+      // relation becomes an artId in-list of the ap's apart rows
+      const apOf = (filter: object) => ({
+        ...filter,
+        apByApId: {
+          ...((filter as { apByApId?: object }).apByApId ?? {}),
+          id: { equalTo: apId },
         },
       })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const aparts = await apiFetch<{ art_id: string | null }[]>(
+        `/apart?ap_id=eq.${apId}&select=art_id&art_id=not.is.null`,
+      )
+      const artIds = (aparts ?? []).map((r) => r.art_id) as string[]
+      const beobOfArt = (filter: object) => ({
+        ...filter,
+        artId: { in: artIds },
+      })
+      const [
+        ap,
+        qkCount,
+        popsFiltered,
+        popsAll,
+        ziels,
+        filteredZiels,
+        erfkritsFiltered,
+        erfkritsAll,
+        apbersFiltered,
+        apbersAll,
+        apartsFiltered,
+        apartsAll,
+        assozartsFiltered,
+        assozartsAll,
+        ekfrequenzsFiltered,
+        ekfrequenzsAll,
+        ekzaehleinheitsFiltered,
+        ekzaehleinheitsAll,
+        filesCount,
+        historiesCount,
+        beobsNichtBeurteiltAll,
+        beobsNichtBeurteiltFiltered,
+        beobsNichtZuzuordnenAll,
+        beobsNichtZuzuordnenFiltered,
+      ] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/q_ap?id=eq.${apId}&select=id,label`,
+        ),
+        apiCount(`/apqk?ap_id=eq.${apId}`),
+        rpcCount('query_pop', { p_filter: apOf(popGqlFilterForTree) }),
+        apiCount(`/q_pop?ap_id=eq.${apId}`),
+        apiFetch<{ id: string; jahr: number | null }[]>(
+          `/q_ziel?ap_id=eq.${apId}&select=id,jahr`,
+        ),
+        apiFetch<{ id: string; jahr: number | null }[]>(
+          '/rpc/query_ziel?select=id,jahr',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: apOf(zielGqlFilterForTree),
+            }),
+          },
+        ),
+        rpcCount('query_erfkrit', { p_filter: apOf(erfkritGqlFilterForTree) }),
+        apiCount(`/q_erfkrit?ap_id=eq.${apId}`),
+        rpcCount('query_apber', { p_filter: apOf(apberGqlFilterForTree) }),
+        apiCount(`/q_apber?ap_id=eq.${apId}`),
+        rpcCount('query_apart', { p_filter: apOf(apartGqlFilterForTree) }),
+        apiCount(`/q_apart?ap_id=eq.${apId}`),
+        rpcCount('query_assozart', {
+          p_filter: apOf(assozartGqlFilterForTree),
+        }),
+        apiCount(`/q_assozart?ap_id=eq.${apId}`),
+        rpcCount('query_ekfrequenz', {
+          p_filter: apOf(ekfrequenzGqlFilterForTree),
+        }),
+        apiCount(`/q_ekfrequenz?ap_id=eq.${apId}`),
+        rpcCount('query_ekzaehleinheit', {
+          p_filter: apOf(ekzaehleinheitGqlFilterForTree),
+        }),
+        apiCount(`/q_ekzaehleinheit?ap_id=eq.${apId}`),
+        apiCount(`/ap_file?ap_id=eq.${apId}`),
+        apiCount(`/v_ap_history?id=eq.${apId}`),
+        rpcCount('query_beob', {
+          p_filter: beobOfArt(allBeobNichtBeurteiltFilter),
+        }),
+        rpcCount('query_beob', {
+          p_filter: beobOfArt(beobNichtBeurteiltGqlFilterForTree),
+        }),
+        rpcCount('query_beob', {
+          p_filter: beobOfArt(allBeobNichtZuzuordnenFilter),
+        }),
+        rpcCount('query_beob', {
+          p_filter: beobOfArt(beobNichtZuzuordnenGqlFilterForTree),
+        }),
+      ])
+      return {
+        apById: {
+          id: apId,
+          label: ap?.[0]?.label,
+          apqksByApId: { totalCount: qkCount },
+          popsByApId: { totalCount: popsAll },
+          filteredPops: { totalCount: popsFiltered },
+          zielsByApId: { nodes: ziels ?? [] },
+          filteredZiels: { nodes: filteredZiels ?? [] },
+          erfkritsByApId: { totalCount: erfkritsAll },
+          filteredErfkrits: { totalCount: erfkritsFiltered },
+          apbersByApId: { totalCount: apbersAll },
+          filteredApbers: { totalCount: apbersFiltered },
+          apartsByApId: { totalCount: apartsAll },
+          filteredAparts: { totalCount: apartsFiltered },
+          assozartsByApId: { totalCount: assozartsAll },
+          filteredAssozarts: { totalCount: assozartsFiltered },
+          ekfrequenzsByApId: { totalCount: ekfrequenzsAll },
+          filteredEkfrequenzs: { totalCount: ekfrequenzsFiltered },
+          ekzaehleinheitsByApId: { totalCount: ekzaehleinheitsAll },
+          filteredEkzaehleinheits: { totalCount: ekzaehleinheitsFiltered },
+          apFilesByApId: { totalCount: filesCount },
+        },
+        allApHistories: { totalCount: historiesCount },
+        beobsNichtBeurteilt: { totalCount: beobsNichtBeurteiltAll },
+        filteredBeobsNichtBeurteilt: {
+          totalCount: beobsNichtBeurteiltFiltered,
+        },
+        beobsNichtZuzuordnen: { totalCount: beobsNichtZuzuordnenAll },
+        filteredBeobsNichtZuzuordnen: {
+          totalCount: beobsNichtZuzuordnenFiltered,
+        },
+      }
     },
   })
 

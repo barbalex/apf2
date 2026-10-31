@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -21,9 +20,8 @@ export const useBeobZugeordnetsNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
-
   const params = useParams()
+
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
   const popId = props?.popId ?? params.popId ?? ''
@@ -37,38 +35,30 @@ export const useBeobZugeordnetsNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavBeobZugeordnetsQuery(
-            $beobZugeordnetFilter: BeobFilter!
-            $allBeobZugeordnetFilter: BeobFilter!
-          ) {
-            beobsZugeordnet: allBeobs(filter: $allBeobZugeordnetFilter) {
-              totalCount
-            }
-            filteredBeobsZugeordnet: allBeobs(
-              filter: $beobZugeordnetFilter
-              orderBy: [DATUM_DESC, AUTOR_ASC]
-            ) {
-              nodes {
-                id
-                label
-                absenz
-              }
-            }
-          }
-        `),
-        variables: {
-          beobZugeordnetFilter: {
-            ...beobZugeordnetGqlFilterForTree,
-            tpopId: { equalTo: tpopId },
-          },
-          allBeobZugeordnetFilter: { tpopId: { equalTo: tpopId } },
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, count] = await Promise.all([
+        apiFetch<
+          { id: string; label: string | null; absenz: boolean | null }[]
+        >('/rpc/query_beob?select=id,label,absenz', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              ...beobZugeordnetGqlFilterForTree,
+              tpopId: { equalTo: tpopId },
+            },
+            p_order: [
+              { field: 'datum', dir: 'desc' },
+              { field: 'autor', dir: 'asc' },
+            ],
+          }),
+        }),
+        rpcCount('query_beob', {
+          p_filter: { tpopId: { equalTo: tpopId } },
+        }),
+      ])
+      return {
+        beobsZugeordnet: { totalCount: count },
+        filteredBeobsZugeordnet: { nodes: nodes ?? [] },
+      }
     },
   })
 

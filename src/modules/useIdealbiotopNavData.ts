@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -7,7 +6,6 @@ export const useIdealbiotopNavData = (
   props?:
     { projId?: string | undefined; apId?: string | undefined } | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -15,28 +13,33 @@ export const useIdealbiotopNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeIdealbiotop', apId],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavIdealbiotopQuery($apId: UUID!) {
-            apById(id: $apId) {
-              id
-              label
-              idealbiotopsByApId {
-                nodes {
-                  id
-                  idealbiotopFilesByIdealbiotopId {
-                    totalCount
-                  }
-                }
-              }
-            }
-          }
-        `),
-        variables: { apId },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [aps, idealbiotops] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/q_ap?id=eq.${apId}&select=id,label`,
+        ),
+        apiFetch<{ id: string }[]>(
+          `/idealbiotop?ap_id=eq.${apId}&select=id&order=id`,
+        ),
+      ])
+      const idealbiotopId = idealbiotops?.[0]?.id
+      const filesCount =
+        idealbiotopId ?
+          await apiCount(`/idealbiotop_file?idealbiotop_id=eq.${idealbiotopId}`)
+        : 0
+      return {
+        apById: {
+          id: apId,
+          label: aps?.[0]?.label,
+          idealbiotopsByApId: {
+            nodes: [
+              {
+                id: idealbiotopId,
+                idealbiotopFilesByIdealbiotopId: { totalCount: filesCount },
+              },
+            ],
+          },
+        },
+      }
     },
   })
 

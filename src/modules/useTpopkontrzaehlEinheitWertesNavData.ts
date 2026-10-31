@@ -1,13 +1,10 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
     treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   )
@@ -18,32 +15,26 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
       tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeTpopkontrzaehlEinheitWertesQuery(
-            $filter: TpopkontrzaehlEinheitWerteFilter!
-          ) {
-            allTpopkontrzaehlEinheitWertes(
-              filter: $filter
-              orderBy: [SORT_ASC, TEXT_ASC]
-            ) {
-              nodes {
-                id
-                label
-              }
-            }
-            totalCount: allTpopkontrzaehlEinheitWertes {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          filter: tpopkontrzaehlEinheitWerteGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_tpopkontrzaehl_einheit_werte?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: tpopkontrzaehlEinheitWerteGqlFilterForTree,
+              p_order: [
+                { field: 'sort', dir: 'asc' },
+                { field: 'text', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount('/q_tpopkontrzaehl_einheit_werte'),
+      ])
+      return {
+        allTpopkontrzaehlEinheitWertes: { nodes: nodes ?? [] },
+        totalCount: { totalCount },
+      }
     },
   })
 

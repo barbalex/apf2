@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -12,7 +11,6 @@ import {
 export const useProjektNavData = (
   props?: { projId?: string | undefined } | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId =
     props?.projId ?? params?.projId ?? '017d3474-6b07-7c56-86ef-84b0af1de903'
@@ -30,42 +28,42 @@ export const useProjektNavData = (
       apberuebersichtGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavProjectQuery(
-            $projId: UUID!
-            $apFilter: ApFilter!
-            $apberuebersichtFilter: ApberuebersichtFilter!
-          ) {
-            projektById(id: $projId) {
-              id
-              label
-              filteredApberuebersichts: apberuebersichtsByProjId(
-                filter: $apberuebersichtFilter
-              ) {
-                totalCount
-              }
-              allApberuebersichts: apberuebersichtsByProjId {
-                totalCount
-              }
-              filteredAps: apsByProjId(filter: $apFilter) {
-                totalCount
-              }
-              allAps: apsByProjId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          projId,
-          apFilter: apGqlFilterForTree,
-          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
+      // phase 5: the former XByProjId relation constraints merge into the
+      // cascade filters; sibling keys are ANDed by compile_filter
+      const projOf = (filter: object) => ({
+        ...filter,
+        projektByProjId: {
+          ...((filter as { projektByProjId?: object }).projektByProjId ?? {}),
+          id: { equalTo: projId },
         },
       })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [
+        projekt,
+        apberuebersichtsFiltered,
+        apberuebersichtsAll,
+        apsFiltered,
+        apsAll,
+      ] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/v_projekt?id=eq.${projId}&select=id,label`,
+        ),
+        rpcCount('query_apberuebersicht', {
+          p_filter: projOf(apberuebersichtGqlFilterForTree),
+        }),
+        apiCount(`/q_apberuebersicht?proj_id=eq.${projId}`),
+        rpcCount('query_ap', { p_filter: projOf(apGqlFilterForTree) }),
+        apiCount(`/q_ap?proj_id=eq.${projId}`),
+      ])
+      return {
+        projektById: {
+          id: projId,
+          label: projekt?.[0]?.label,
+          filteredApberuebersichts: { totalCount: apberuebersichtsFiltered },
+          allApberuebersichts: { totalCount: apberuebersichtsAll },
+          filteredAps: { totalCount: apsFiltered },
+          allAps: { totalCount: apsAll },
+        },
+      }
     },
   })
 

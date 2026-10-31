@@ -1,28 +1,14 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const useCurrentissuesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useSuspenseQuery({
     queryKey: ['treeCurrentissues'],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeCurrentissuesQuery {
-            allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
-              nodes {
-                id
-                label
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const nodes = await apiFetch<{ id: string; label: string | null }[]>(
+        `/v_currentissue?select=id,label&order=sort.asc,title.asc`,
+      )
+      return { allCurrentissues: { nodes: nodes ?? [] } }
     },
   })
 

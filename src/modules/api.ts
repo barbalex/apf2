@@ -169,3 +169,26 @@ export const apiCount = async (path: string): Promise<number> => {
   const range = res.headers.get('content-range') ?? '*/0'
   return parseInt(range.split('/')[1] ?? '0', 10) || 0
 }
+
+/**
+ * total row count of a query_<table> RPC with a cascade filter — the filter
+ * jsonb cannot be expressed as URL params, so the count comes from the
+ * content-range header of the RPC call itself (p_limit stays unset: an
+ * internal limit would cap the count too)
+ */
+export const rpcCount = async (
+  fn: string,
+  body: Record<string, unknown>,
+): Promise<number> => {
+  const headers = authHeaders()
+  headers.set('Prefer', 'count=exact')
+  headers.set('Content-Type', 'application/json')
+  const res = await fetch(`${postgrestUri()}/rpc/${fn}?select=id`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) throw await buildError(res)
+  const range = res.headers.get('content-range') ?? '*/0'
+  return parseInt(range.split('/')[1] ?? '0', 10) || 0
+}

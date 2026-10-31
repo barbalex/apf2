@@ -108,6 +108,7 @@ DECLARE
   v_item jsonb;
   v_rel record;
   v_label_fn text;
+  v_expr text;
 BEGIN
   IF p_filter IS NULL OR p_filter IN ('{}', 'null') THEN
     RETURN 'true';
@@ -215,8 +216,31 @@ BEGIN
            AND a.attnum > 0
            AND NOT a.attisdropped;
         IF v_col_type IS NULL THEN
-          RAISE EXCEPTION 'compile_filter: % has no column % (key: %)',
-            p_table, v_col, v_key;
+          -- computed column? PostGraphile exposes 1-arg row functions as
+          -- fields, snake-cased (labelEk -> tpopkontr_label_ek) or with the
+          -- bare lowercased key (wgs84Lat -> beob_wgs84lat)
+          SELECT p2.proname, format_type(p2.prorettype, NULL)
+            INTO v_label_fn, v_col_type
+            FROM pg_proc p2
+            JOIN pg_namespace n2 ON n2.oid = p2.pronamespace
+           WHERE n2.nspname = 'apflora'
+             AND p2.proname IN (
+               split_part(p_table, '.', 2) || '_' ||
+                 apflora.camel_to_snake(v_key),
+               split_part(p_table, '.', 2) || '_' || lower(v_key)
+             )
+             AND p2.pronargs = 1
+             AND p2.proargtypes[0] = (
+               SELECT c.reltype FROM pg_class c WHERE c.oid = p_table::regclass
+             );
+          IF v_label_fn IS NULL THEN
+            RAISE EXCEPTION 'compile_filter: % has no column % (key: %)',
+              p_table, v_col, v_key;
+          END IF;
+          v_expr := format('apflora.%s(%s)', v_label_fn, p_alias);
+          v_is_geometry := false;
+        ELSE
+          v_expr := format('%I.%I', p_alias, v_col);
         END IF;
 
         FOR v_op, v_op_value IN SELECT * FROM jsonb_each(v_value) LOOP
@@ -224,19 +248,19 @@ BEGIN
           CASE v_op
             WHEN 'equalTo' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I = %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s = %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'notEqualTo' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I <> %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s <> %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'greaterThanOrEqualTo' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I >= %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s >= %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'lessThanOrEqualTo' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I <= %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s <= %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'in' THEN
               IF jsonb_typeof(v_op_value) <> 'array' THEN
@@ -247,34 +271,34 @@ BEGIN
                 FROM jsonb_array_elements_text(v_op_value) AS x
               );
               v_parts := v_parts || ARRAY[format(
-                '%I.%I = ANY (array[%s]::%s[])',
-                p_alias, v_col, array_to_string(v_lits, ', '), v_col_type
+                '%s = ANY (array[%s]::%s[])',
+                v_expr, array_to_string(v_lits, ', '), v_col_type
               )];
             WHEN 'isNull' THEN
               IF v_lit = 'true' THEN
                 v_parts := v_parts || ARRAY[
-                  format('%I.%I IS NULL', p_alias, v_col)
+                  format('%s IS NULL', v_expr)
                 ];
               ELSE
                 v_parts := v_parts || ARRAY[
-                  format('%I.%I IS NOT NULL', p_alias, v_col)
+                  format('%s IS NOT NULL', v_expr)
                 ];
               END IF;
             WHEN 'distinctFrom' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I IS DISTINCT FROM %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s IS DISTINCT FROM %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'notDistinctFrom' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I IS NOT DISTINCT FROM %L::%s', p_alias, v_col, v_lit, v_col_type
+                '%s IS NOT DISTINCT FROM %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'includes' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I LIKE %L', p_alias, v_col, '%' || v_lit || '%'
+                '%s LIKE %L', v_expr, '%' || v_lit || '%'
               )];
             WHEN 'includesInsensitive' THEN
               v_parts := v_parts || ARRAY[format(
-                '%I.%I ILIKE %L', p_alias, v_col, '%' || v_lit || '%'
+                '%s ILIKE %L', v_expr, '%' || v_lit || '%'
               )];
             WHEN 'coveredBy' THEN
               IF NOT v_is_geometry THEN
@@ -283,8 +307,8 @@ BEGIN
                   p_table, v_col, v_col_type;
               END IF;
               v_parts := v_parts || ARRAY[format(
-                'public.st_coveredby(%I.%I, public.st_geomfromgeojson(%L::jsonb))',
-                p_alias, v_col, v_op_value::text
+                'public.st_coveredby(%s, public.st_geomfromgeojson(%L::jsonb))',
+                v_expr, v_op_value::text
               )];
             ELSE
               RAISE EXCEPTION

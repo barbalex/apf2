@@ -1,13 +1,10 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeEkAbrechnungstypWerteGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useEkAbrechnungstypWertesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const ekAbrechnungstypWerteGqlFilterForTree = useAtomValue(
     treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   )
@@ -18,32 +15,26 @@ export const useEkAbrechnungstypWertesNavData = () => {
       ekAbrechnungstypWerteGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeEkAbrechnungstypWertesQuery(
-            $filter: EkAbrechnungstypWerteFilter!
-          ) {
-            allEkAbrechnungstypWertes(
-              filter: $filter
-              orderBy: [SORT_ASC, TEXT_ASC]
-            ) {
-              nodes {
-                id
-                label
-              }
-            }
-            totalCount: allEkAbrechnungstypWertes {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          filter: ekAbrechnungstypWerteGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_ek_abrechnungstyp_werte?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: ekAbrechnungstypWerteGqlFilterForTree,
+              p_order: [
+                { field: 'sort', dir: 'asc' },
+                { field: 'text', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount('/q_ek_abrechnungstyp_werte'),
+      ])
+      return {
+        allEkAbrechnungstypWertes: { nodes: nodes ?? [] },
+        totalCount: { totalCount },
+      }
     },
   })
 

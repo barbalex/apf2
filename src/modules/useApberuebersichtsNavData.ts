@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -9,8 +8,6 @@ import { treeApberuebersichtGqlFilterForTreeAtom } from '../store/index.ts'
 export const useApberuebersichtsNavData = (
   props?: { projId?: string | undefined } | undefined,
 ) => {
-  const apolloClient = useApolloClient()
-
   const params = useParams()
   const projId = props?.projId ?? params?.projId
 
@@ -21,33 +18,23 @@ export const useApberuebersichtsNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeApberuebersicht', apberuebersichtGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavApberuebersichtsQuery(
-            $apberuebersichtFilter: ApberuebersichtFilter!
-          ) {
-            filtered: allApberuebersichts(
-              filter: $apberuebersichtFilter
-              orderBy: LABEL_ASC
-            ) {
-              totalCount
-              nodes {
-                id
-                label
-              }
-            }
-            unfiltered: allApberuebersichts {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_apberuebersicht?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: apberuebersichtGqlFilterForTree,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount('/q_apberuebersicht'),
+      ])
+      return {
+        filtered: { nodes: nodes ?? [] },
+        unfiltered: { totalCount },
+      }
     },
   })
 

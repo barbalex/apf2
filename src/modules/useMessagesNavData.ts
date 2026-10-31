@@ -1,25 +1,12 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const useMessagesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useSuspenseQuery({
     queryKey: ['treeMessages'],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeMessagesQuery {
-            allMessages(orderBy: TIME_DESC) {
-              totalCount
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const totalCount = await apiCount('/message')
+      return { allMessages: { totalCount } }
     },
   })
 
