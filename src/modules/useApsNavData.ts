@@ -1,25 +1,18 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { gql as dynamicGql } from '../apolloGql.ts'
 import {
   treeApGqlFilterForTreeAtom,
   treeApIdInActiveNodeArrayAtom,
 } from '../store/index.ts'
 
-interface TreeActiveApQueryResult {
-  allAps?: {
-    nodes?: { id: string | null; label: string | null }[] | null
-  } | null
-}
-
-export const useApsNavData = (props?: { projId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useApsNavData = (
+  props?: { projId?: string | undefined } | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
 
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
   const apIdInActiveNodeArray = useAtomValue(treeApIdInActiveNodeArrayAtom)
@@ -27,27 +20,24 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
   const { data } = useSuspenseQuery({
     queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeApsQuery($apsFilter: ApFilter!) {
-            allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
-              nodes {
-                id
-                label
-              }
-            }
-            totalCount: allAps {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          apsFilter: apGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      // phase 5: the cascade filter jsonb goes straight into the RPC
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_ap?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: apGqlFilterForTree,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount('/q_ap'),
+      ])
+      return {
+        allAps: { nodes: nodes ?? [] },
+        totalCount: { totalCount },
+      }
     },
   })
 
@@ -61,20 +51,10 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
     enabled: !!apIdInActiveNodeArray,
     queryFn: async () => {
       if (!apIdInActiveNodeArray) return null
-      const result = (await apolloClient.query({
-        query: dynamicGql`
-          query TreeActiveApQuery($id: UUID!) {
-            allAps(filter: { id: { equalTo: $id } }) {
-              nodes {
-                id
-                label
-              }
-            }
-          }
-        `,
-        variables: { id: apIdInActiveNodeArray },
-      })) as { data?: TreeActiveApQueryResult | undefined }
-      return result.data ?? null
+      const nodes = await apiFetch<{ id: string; label: string | null }[]>(
+        `/q_ap?id=eq.${apIdInActiveNodeArray}&select=id,label`,
+      )
+      return { allAps: { nodes: nodes ?? [] } }
     },
   })
   const activeAp = activeApData?.allAps?.nodes?.[0] ?? null
@@ -111,9 +91,7 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
       fetcherName: 'useApNavData',
       fetcherParams: { projId, apId: activeAp.id },
     })
-    apMenus.sort((a, b) =>
-      (a.label ?? '').localeCompare(b.label ?? ''),
-    )
+    apMenus.sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
   }
 
   const count = apMenus.length
