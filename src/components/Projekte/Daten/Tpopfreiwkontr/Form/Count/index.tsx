@@ -1,16 +1,14 @@
-import { apiInsert } from '../../../../../../modules/api.ts'
+import { apiFetch, apiInsert } from '../../../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
-import { query } from './query.ts'
 import {
   setToDeleteAtom,
   treeActiveNodeArrayAtom,
@@ -108,20 +106,27 @@ export const Count = ({
   const setToDelete = useSetAtom(setToDeleteAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { data, refetch: refetchMe } = useQuery({
     queryKey: ['tpopkontrzaehl', id],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
-        query,
-        variables: {
-          id: id || '99999999-9999-9999-9999-999999999999',
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, einheitWertes] = await Promise.all([
+        apiFetch<
+          NonNullable<TpopkontrzaehlQueryResult['tpopkontrzaehlById']>[]
+        >(
+          `/v_tpopkontrzaehl?id=eq.${id || '99999999-9999-9999-9999-999999999999'}&select=id,einheit,anzahl,methode`,
+        ),
+        apiFetch<
+          NonNullable<
+            TpopkontrzaehlQueryResult['allTpopkontrzaehlEinheitWertes']
+          >['nodes']
+        >(`/v_tpopkontrzaehl_einheit_werte?select=id,code,text&order=sort.asc`),
+      ])
+      return {
+        tpopkontrzaehlById: rows?.[0] ?? null,
+        allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
+      }
     },
   })
 

@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   LineChart,
@@ -12,8 +11,8 @@ import {
 } from 'recharts'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
@@ -51,20 +50,27 @@ export const TpopKontrolliert = ({
   isSubReport,
   jahr,
 }: TpopKontrolliertProps) => {
-  const apolloClient = useApolloClient()
-
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
   const { data } = useSuspenseQuery({
     queryKey: ['tpopKontrolliert', id, jahr ?? new Date().getFullYear()],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopKontrolliertQueryResult>({
-        query,
-        variables: { id, year: jahr ?? new Date().getFullYear() },
-      })
-      if (result.error) throw result.error
-      return result.data as TpopKontrolliertQueryResult
+      // the db function behind the old tpopKontrolliertForJber field;
+      // the old connection-filter (year <= jahr) applies client-side
+      const year = jahr ?? new Date().getFullYear()
+      const rows = await apiFetch<TpopKontrolliertNode[]>(
+        `/rpc/tpop_kontrolliert_for_jber?select=year,anzTpop:anz_tpop,anzTpopber:anz_tpopber`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ apid: id }),
+        },
+      )
+      return {
+        tpopKontrolliertForJber: {
+          nodes: (rows ?? []).filter((r) => (r.year ?? 0) <= year),
+        },
+      } as TpopKontrolliertQueryResult
     },
   })
   const erfolgData = data.tpopKontrolliertForJber.nodes.map((d) => ({

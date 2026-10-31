@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   AreaChart,
@@ -12,8 +11,8 @@ import {
 } from 'recharts'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
@@ -61,8 +60,6 @@ export const PopStatus = ({
   isSubReport,
   year: yearPassed,
 }: PopStatusProps) => {
-  const apolloClient = useApolloClient()
-
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
@@ -70,12 +67,17 @@ export const PopStatus = ({
   const { data: dataPopStati } = useSuspenseQuery({
     queryKey: ['popStatus', id, year],
     queryFn: async () => {
-      const result = await apolloClient.query<PopStatusQueryResult>({
-        query,
-        variables: { apId: id, year },
-      })
-      if (result.error) throw result.error
-      return result.data as PopStatusQueryResult
+      // the db function behind the old popNachStatusForJber field
+      const nodes = await apiFetch<PopStatusNode[]>(
+        `/rpc/pop_nach_status_for_jber?select=year,a3Lpop:a3lpop,a4Lpop:a4lpop,a5Lpop:a5lpop,a7Lpop:a7lpop,a8Lpop:a8lpop,a9Lpop:a9lpop`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ apid: id, year }),
+        },
+      )
+      return {
+        popNachStatusForJber: { nodes: nodes ?? [] },
+      } as PopStatusQueryResult
     },
   })
   const rows = dataPopStati.popNachStatusForJber.nodes ?? []

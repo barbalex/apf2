@@ -1,13 +1,14 @@
-import { apiUpdateByVariables } from '../../../../../../modules/api.ts'
+import {
+  apiFetch,
+  apiUpdateByVariables,
+} from '../../../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { userNameAtom, isPrintAtom } from '../../../../../../store/index.ts'
-import { query } from './query.ts'
 
 import type { AdresseId } from '../../../../../../models/apflora/Adresse.ts'
 import type {
@@ -37,7 +38,6 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<string | null>(null)
@@ -45,12 +45,10 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
   const { data } = useQuery({
     queryKey: ['tpopfreiwkontrAdresses'],
     queryFn: async () => {
-      const result =
-        await apolloClient.query<TpopfreiwkontrAdressesQueryResult>({
-          query,
-        })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<
+        NonNullable<TpopfreiwkontrAdressesQueryResult['allAdresses']>['nodes']
+      >(`/v_adresse?select=value:id,label:name&order=name.asc`)
+      return { allAdresses: { nodes: nodes ?? [] } }
     },
   })
 

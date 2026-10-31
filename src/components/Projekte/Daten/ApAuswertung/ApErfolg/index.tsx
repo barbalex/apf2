@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { range } from 'es-toolkit'
 import {
@@ -11,8 +10,8 @@ import {
 } from 'recharts'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { CustomTick } from './CustomTick.tsx'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import type { ApberId } from '../../../../../models/apflora/Apber.ts'
 
@@ -68,19 +67,17 @@ const addMissingErfolgData = (
 }
 
 export const ApErfolg = () => {
-  const apolloClient = useApolloClient()
-
   const { apId: id } = useParams<{ apId: string }>()
 
   const { data: dataErfolg } = useSuspenseQuery({
     queryKey: ['apErfolg', id],
     queryFn: async () => {
-      const result = await apolloClient.query<ApErfolgQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data as ApErfolgQueryResult
+      const nodes = await apiFetch<ApberNode[]>(
+        `/q_apber?ap_id=eq.${id}&beurteilung=in.(1,3,4,5,6)&select=id,jahr,beurteilung&order=jahr.asc`,
+      )
+      return {
+        allApbers: { nodes: nodes ?? [] },
+      } as ApErfolgQueryResult
     },
   })
   const erfolgRawData = dataErfolg.allApbers.nodes.map((e) => ({
