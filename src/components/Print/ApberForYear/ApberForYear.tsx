@@ -1,3 +1,4 @@
+import { apiFetch } from '../../../modules/api.ts'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -6,7 +7,6 @@ import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { jberQuery } from './jberQuery.ts'
-import { query as queryForApberuebersicht } from '../../Projekte/Daten/Apberuebersicht/query.ts'
 import fnslogo from './fnslogo.png'
 import { AvList } from './AvList.tsx'
 import { AktPopList } from './AktPopList.tsx'
@@ -15,11 +15,7 @@ import { ApberForAps } from './ApberForAps.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 
-import type {
-  ApberForYearQueryResult,
-  ApberuebersichtQueryResult,
-  JberQueryResult,
-} from './types.ts'
+import type { ApberForYearQueryResult, JberQueryResult } from './types.ts'
 
 import styles from './ApberForYear.module.css'
 
@@ -39,13 +35,11 @@ export const ApberForYear = (_props: ApberForYearProps) => {
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
-      const { data: data1 } = await apolloClient.query<ApberuebersichtQueryResult>({
-        query: queryForApberuebersicht,
-        variables: {
-          id: apberuebersichtId,
-        },
-      })
-      const jahr = data1?.apberuebersichtById?.jahr
+      const rows = await apiFetch<{ jahr: number | null }[]>(
+        `/apberuebersicht?id=eq.${apberuebersichtId}&select=jahr`,
+      )
+      const data1 = { apberuebersichtById: rows?.[0] ?? { jahr: undefined } }
+      const jahr = data1?.apberuebersichtById?.jahr ?? undefined
       // then get data
       const { data } = await apolloClient.query<ApberForYearQueryResult>({
         query: query,
