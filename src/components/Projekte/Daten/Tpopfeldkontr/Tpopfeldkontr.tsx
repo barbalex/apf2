@@ -75,53 +75,55 @@ interface TpopfeldkontrQueryResult {
   } | null
 }
 
+export const tpopfeldkontrQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopfeldkontr', id],
+  queryFn: async () => {
+    const [
+      rows,
+      idbiotuebereinstWerte,
+      entwicklungWerte,
+      lrDelarzes,
+      adresses,
+    ] = await Promise.all([
+      apiFetch<NonNullable<TpopfeldkontrQueryResult['tpopkontrById']>[]>(
+        `/v_tpopkontr?id=eq.${id}&select=${tpopfeldkontrSelect}`,
+      ),
+      apiFetch(
+        `/tpopkontr_idbiotuebereinst_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+      apiFetch<
+        NonNullable<
+          TpopfeldkontrQueryResult['allTpopEntwicklungWertes']
+        >['nodes']
+      >(`/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`),
+      apiFetch(`/ae_lr_delarze?order=label.asc&select=id,label,einheit`),
+      apiFetch<NonNullable<TpopfeldkontrQueryResult['allAdresses']>['nodes']>(
+        `/adresse?order=name.asc&select=value:id,label:name`,
+      ),
+    ])
+    return {
+      tpopkontrById: rows?.[0] ?? null,
+      allTpopkontrIdbiotuebereinstWertes: {
+        nodes: idbiotuebereinstWerte ?? [],
+      },
+      allTpopEntwicklungWertes: { nodes: entwicklungWerte ?? [] },
+      allAeLrDelarzes: { nodes: lrDelarzes ?? [] },
+      allAdresses: { nodes: adresses ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { tpopkontrId } = useParams()
 
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
-  const tpopfeldkontrQueryOptions = {
-    queryKey: ['tpopfeldkontr', tpopkontrId],
-    queryFn: async () => {
-      const [
-        rows,
-        idbiotuebereinstWerte,
-        entwicklungWerte,
-        lrDelarzes,
-        adresses,
-      ] = await Promise.all([
-        apiFetch<NonNullable<TpopfeldkontrQueryResult['tpopkontrById']>[]>(
-          `/v_tpopkontr?id=eq.${tpopkontrId}&select=${tpopfeldkontrSelect}`,
-        ),
-        apiFetch(
-          `/tpopkontr_idbiotuebereinst_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-        apiFetch<
-          NonNullable<
-            TpopfeldkontrQueryResult['allTpopEntwicklungWertes']
-          >['nodes']
-        >(
-          `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-        apiFetch(`/ae_lr_delarze?order=label.asc&select=id,label,einheit`),
-        apiFetch<NonNullable<TpopfeldkontrQueryResult['allAdresses']>['nodes']>(
-          `/adresse?order=name.asc&select=value:id,label:name`,
-        ),
-      ])
-      return {
-        tpopkontrById: rows?.[0] ?? null,
-        allTpopkontrIdbiotuebereinstWertes: {
-          nodes: idbiotuebereinstWerte ?? [],
-        },
-        allTpopEntwicklungWertes: { nodes: entwicklungWerte ?? [] },
-        allAeLrDelarzes: { nodes: lrDelarzes ?? [] },
-        allAdresses: { nodes: adresses ?? [] },
-      }
-    },
+  const tpopfeldkontrOptions = {
+    ...tpopfeldkontrQueryOptions(tpopkontrId),
     suspense: true,
   }
-  const { data } = useQuery(tpopfeldkontrQueryOptions)
+  const { data } = useQuery(tpopfeldkontrOptions)
 
   const row = (data?.tpopkontrById ?? {}) as TpopfeldkontrRow
 

@@ -59,6 +59,18 @@ type AssozartUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const assozartQueryOptions = (id: string | undefined) => ({
+  queryKey: ['assozart', id],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<AssozartQueryResult['assozartById']>[]
+    >(
+      `/v_assozart?id=eq.${id}&select=${assozartSelect},aeTaxonomyByAeId:ae_taxonomy_by_ae_id,apByApId:ap_by_ap_id`,
+    )
+    return { assozartById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { assozartId: id } = useParams<{ assozartId: string }>()
 
@@ -69,15 +81,7 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: AssozartUseQueryOptions = {
-    queryKey: ['assozart', id],
-    queryFn: async () => {
-      const rows = await apiFetch<
-        NonNullable<AssozartQueryResult['assozartById']>[]
-      >(
-        `/v_assozart?id=eq.${id}&select=${assozartSelect},aeTaxonomyByAeId:ae_taxonomy_by_ae_id,apByApId:ap_by_ap_id`,
-      )
-      return { assozartById: rows?.[0] ?? null }
-    },
+    ...assozartQueryOptions(id),
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   }

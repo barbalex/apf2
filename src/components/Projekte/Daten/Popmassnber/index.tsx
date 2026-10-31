@@ -49,6 +49,24 @@ interface PopmassnberQueryResult {
   }
 }
 
+export const popmassnberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['popmassnber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<PopmassnberQueryResult['popmassnberById']>[]>(
+        `/v_popmassnber?id=eq.${id}&select=${popmassnberSelect},tpopmassnErfbeurtWerteByBeurteilung:tpopmassn_erfbeurt_werte_by_beurteilung,popByPopId:pop_by_pop_id`,
+      ),
+      apiFetch(
+        `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      popmassnberById: rows?.[0] ?? null,
+      allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { popmassnberId: id } = useParams()
 
@@ -58,23 +76,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['popmassnber', id],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<PopmassnberQueryResult['popmassnberById']>[]>(
-          `/v_popmassnber?id=eq.${id}&select=${popmassnberSelect},tpopmassnErfbeurtWerteByBeurteilung:tpopmassn_erfbeurt_werte_by_beurteilung,popByPopId:pop_by_pop_id`,
-        ),
-        apiFetch(
-          `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-      ])
-      return {
-        popmassnberById: rows?.[0] ?? null,
-        allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
-      }
-    },
-  })
+  const { data } = useSuspenseQuery(popmassnberQueryOptions(id))
 
   const row: Partial<NonNullable<PopmassnberQueryResult['popmassnberById']>> =
     data?.popmassnberById ?? {}

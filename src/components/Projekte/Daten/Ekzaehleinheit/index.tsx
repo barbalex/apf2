@@ -57,6 +57,18 @@ interface EkzaehleinheitQueryResult {
   ekzaehleinheitById: EkzaehleinheitNode | null
 }
 
+export const ekzaehleinheitQueryOptions = (id: string | undefined) => ({
+  queryKey: ['ekzaehleinheit', id],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<EkzaehleinheitQueryResult['ekzaehleinheitById']>[]
+    >(
+      `/v_ekzaehleinheit?id=eq.${id}&select=${ekzaehleinheitSelect},tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id,apByApId:ap_by_ap_id`,
+    )
+    return { ekzaehleinheitById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { zaehleinheitId: id } = useParams()
 
@@ -67,15 +79,7 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useSuspenseQuery({
-    queryKey: ['ekzaehleinheit', id],
-    queryFn: async () => {
-      const rows = await apiFetch<
-        NonNullable<EkzaehleinheitQueryResult['ekzaehleinheitById']>[]
-      >(
-        `/v_ekzaehleinheit?id=eq.${id}&select=${ekzaehleinheitSelect},tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id,apByApId:ap_by_ap_id`,
-      )
-      return { ekzaehleinheitById: rows?.[0] ?? null }
-    },
+    ...ekzaehleinheitQueryOptions(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 

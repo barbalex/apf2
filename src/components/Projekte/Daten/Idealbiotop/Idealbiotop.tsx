@@ -46,6 +46,16 @@ interface IdealbiotopQueryResult {
   }
 }
 
+export const idealbiotopQueryOptions = (apId: string | undefined) => ({
+  queryKey: ['idealbiotop', apId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<IdealbiotopQueryResult['allIdealbiotops']>['nodes']
+    >(`/idealbiotop?ap_id=eq.${apId}&select=${idealbiotopSelect}`)
+    return { allIdealbiotops: { nodes: rows ?? [] } }
+  },
+})
+
 export const Component = () => {
   const { apId } = useParams()
 
@@ -55,15 +65,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['idealbiotop', apId],
-    queryFn: async () => {
-      const rows = await apiFetch<
-        NonNullable<IdealbiotopQueryResult['allIdealbiotops']>['nodes']
-      >(`/idealbiotop?ap_id=eq.${apId}&select=${idealbiotopSelect}`)
-      return { allIdealbiotops: { nodes: rows ?? [] } }
-    },
-  })
+  const { data } = useSuspenseQuery(idealbiotopQueryOptions(apId))
 
   const row: Partial<IdealbiotopNode> = data?.allIdealbiotops?.nodes?.[0] ?? {}
 

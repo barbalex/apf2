@@ -47,6 +47,16 @@ const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
   return (currentMonth < 3 && previousYear === jahr) || currentYear === jahr
 }
 
+export const apberuebersichtQueryOptions = (id: string | undefined) => ({
+  queryKey: ['Apberuebersicht', id],
+  queryFn: async () => {
+    const rows = await apiFetch<ApberuebersichtNode[]>(
+      `/v_apberuebersicht?id=eq.${id}&select=${apberuebersichtSelect}`,
+    )
+    return { apberuebersichtById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { apberuebersichtId } = useParams<{ apberuebersichtId: string }>()
 
@@ -60,15 +70,9 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [historizing, setHistorizing] = useState(false)
 
-  const { data, error } = useQuery({
-    queryKey: [`Apberuebersicht`, apberuebersichtId],
-    queryFn: async () => {
-      const rows = await apiFetch<ApberuebersichtNode[]>(
-        `/v_apberuebersicht?id=eq.${apberuebersichtId}&select=${apberuebersichtSelect}`,
-      )
-      return { apberuebersichtById: rows?.[0] ?? null }
-    },
-  })
+  const { data, error } = useQuery(
+    apberuebersichtQueryOptions(apberuebersichtId),
+  )
 
   const row = data?.apberuebersichtById
 

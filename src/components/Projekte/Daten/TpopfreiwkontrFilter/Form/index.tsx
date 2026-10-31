@@ -50,24 +50,47 @@ export const Form = ({ row, activeTab }: FormProps) => {
   return (
     <div className={styles.formContainer}>
       <div className={styles.gridContainer}>
-        <Headdata row={row} activeTab={activeTab} />
-        <Date saveToDb={saveToDb} row={formRow} errors={{}} />
+        <Headdata
+          row={row}
+          activeTab={activeTab}
+        />
+        <Date
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
         <Map
           key={`map${row?.planVorhanden}`}
           saveToDb={saveToDb}
           row={formRow}
           errors={{}}
         />
-        <Cover saveToDb={saveToDb} row={formRow} errors={{}} />
+        <Cover
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
         <More
           key={`more${row?.jungpflanzenVorhanden}`}
           saveToDb={saveToDb}
           row={formRow}
           errors={{}}
         />
-        <Danger saveToDb={saveToDb} row={formRow} errors={{}} />
-        <Remarks saveToDb={saveToDb} row={formRow} errors={{}} />
-        <EkfRemarks saveToDb={saveToDb} row={formRow} errors={{}} />
+        <Danger
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
+        <Remarks
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
+        <EkfRemarks
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
         <Verification
           key={`verification${row?.apberNichtRelevant}`}
           saveToDb={saveToDb}

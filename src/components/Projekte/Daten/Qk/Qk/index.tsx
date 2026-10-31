@@ -48,10 +48,18 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
 
   const apolloClient = useApolloClient()
   const now = new Date()
-  const minDatum = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate())
+  const minDatum = new Date(
+    now.getFullYear() - 100,
+    now.getMonth(),
+    now.getDate(),
+  )
     .toISOString()
     .split('T')[0]
-  const maxDatum = new Date(now.getFullYear() + 100, now.getMonth(), now.getDate())
+  const maxDatum = new Date(
+    now.getFullYear() + 100,
+    now.getMonth(),
+    now.getDate(),
+  )
     .toISOString()
     .split('T')[0]
   const { data, refetch, isFetching } = useQuery({

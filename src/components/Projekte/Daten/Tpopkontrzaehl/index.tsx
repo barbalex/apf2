@@ -78,6 +78,35 @@ type TpopkontrzaehlUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const tpopkontrzaehlQueryOptions = (
+  tpopkontrzaehlId: string | undefined,
+  tpopkontrId: string | undefined,
+) => ({
+  queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
+  queryFn: async () => {
+    const [rows, einheitWertes, methodeWertes, otherZaehl] = await Promise.all([
+      apiFetch<TpopkontrzaehlNode[]>(
+        `/v_tpopkontrzaehl?id=eq.${tpopkontrzaehlId}&select=id,einheit,anzahl,methode`,
+      ),
+      apiFetch<{ id: string; value: number; label: string }[]>(
+        `/tpopkontrzaehl_einheit_werte?select=id,value:code,label:text&order=sort.asc`,
+      ),
+      apiFetch<{ id: string; value: number; label: string }[]>(
+        `/tpopkontrzaehl_methode_werte?select=id,value:code,label:text&order=sort.asc`,
+      ),
+      apiFetch<{ id: TpopkontrzaehlId; einheit: number | null }[]>(
+        `/q_tpopkontrzaehl?tpopkontr_id=eq.${tpopkontrId}&id=neq.${tpopkontrzaehlId}&select=id,einheit`,
+      ),
+    ])
+    return {
+      tpopkontrzaehlById: rows?.[0] ?? null,
+      allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
+      allTpopkontrzaehlMethodeWertes: { nodes: methodeWertes ?? [] },
+      otherZaehlOfEk: { nodes: otherZaehl ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { tpopkontrzaehlId, tpopkontrId } = useParams()
 
@@ -87,34 +116,11 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const tpopkontrzaehlQueryOptions: TpopkontrzaehlUseQueryOptions = {
-    queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
-    queryFn: async () => {
-      const [rows, einheitWertes, methodeWertes, otherZaehl] =
-        await Promise.all([
-          apiFetch<TpopkontrzaehlNode[]>(
-            `/v_tpopkontrzaehl?id=eq.${tpopkontrzaehlId}&select=id,einheit,anzahl,methode`,
-          ),
-          apiFetch<{ id: string; value: number; label: string }[]>(
-            `/tpopkontrzaehl_einheit_werte?select=id,value:code,label:text&order=sort.asc`,
-          ),
-          apiFetch<{ id: string; value: number; label: string }[]>(
-            `/tpopkontrzaehl_methode_werte?select=id,value:code,label:text&order=sort.asc`,
-          ),
-          apiFetch<{ id: TpopkontrzaehlId; einheit: number | null }[]>(
-            `/q_tpopkontrzaehl?tpopkontr_id=eq.${tpopkontrId}&id=neq.${tpopkontrzaehlId}&select=id,einheit`,
-          ),
-        ])
-      return {
-        tpopkontrzaehlById: rows?.[0] ?? null,
-        allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
-        allTpopkontrzaehlMethodeWertes: { nodes: methodeWertes ?? [] },
-        otherZaehlOfEk: { nodes: otherZaehl ?? [] },
-      }
-    },
+  const tpopkontrzaehlOptions: TpopkontrzaehlUseQueryOptions = {
+    ...tpopkontrzaehlQueryOptions(tpopkontrzaehlId, tpopkontrId),
     suspense: true,
   }
-  const { data } = useQuery(tpopkontrzaehlQueryOptions)
+  const { data } = useQuery(tpopkontrzaehlOptions)
 
   const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
     .map((n) => n.einheit)

@@ -26,6 +26,16 @@ import {
   isPrintAtom,
 } from '../../../../store/index.ts'
 
+export const tpopfreiwkontrQueryOptions = (id: string | undefined) => ({
+  queryKey: ['TpopkontrQuery', id],
+  queryFn: async () => {
+    const rows = await apiFetch<TpopkontrRow[]>(
+      `/v_tpopkontr?id=eq.${id}&select=${tpopfreiwkontrSelect},tpopByTpopId:tpop_by_tpop_id,adresseByBearbeiter:adresse_by_bearbeiter,tpopkontrzaehlsByTpopkontrId:tpopkontrzaehls_by_tpopkontr_id`,
+    )
+    return { tpopkontrById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = ({ id: idPassed }: ComponentProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
@@ -35,15 +45,9 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
   const userName = useAtomValue(userNameAtom)
 
   const id = idPassed ?? params.tpopkontrId
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['TpopkontrQuery', id],
-    queryFn: async () => {
-      const rows = await apiFetch<TpopkontrRow[]>(
-        `/v_tpopkontr?id=eq.${id}&select=${tpopfreiwkontrSelect},tpopByTpopId:tpop_by_tpop_id,adresseByBearbeiter:adresse_by_bearbeiter,tpopkontrzaehlsByTpopkontrId:tpopkontrzaehls_by_tpopkontr_id`,
-      )
-      return { tpopkontrById: rows?.[0] ?? null }
-    },
-  })
+  const { data, isLoading, error, refetch } = useQuery(
+    tpopfreiwkontrQueryOptions(id),
+  )
   // DO NOT use apId from url because this form is also used for mass prints
   const apId =
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??

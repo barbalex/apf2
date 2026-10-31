@@ -19,6 +19,18 @@ import {
 
 import styles from './index.module.css'
 
+export const beobQueryOptions = (id: string | undefined) => ({
+  queryKey: ['beobByIdQueryForBeob', id],
+  queryFn: async () => {
+    // data is the raw InfoFlora/EVK jsonb blob — PostgREST delivers it
+    // as an object, the old GraphQL scalar needed JSON.parse
+    const rows = await apiFetch<{ data: Record<string, ReactNode> | null }[]>(
+      `/beob?id=eq.${id}&select=data`,
+    )
+    return { beobById: rows?.[0] ?? null }
+  },
+})
+
 export const Beob = () => {
   const { beobId: id } = useParams<{ beobId: string }>()
 
@@ -45,17 +57,7 @@ export const Beob = () => {
     return 0
   }
 
-  const { data, error } = useQuery({
-    queryKey: ['beobByIdQueryForBeob', id],
-    queryFn: async () => {
-      // data is the raw InfoFlora/EVK jsonb blob — PostgREST delivers it
-      // as an object, the old GraphQL scalar needed JSON.parse
-      const rows = await apiFetch<{ data: Record<string, ReactNode> | null }[]>(
-        `/beob?id=eq.${id}&select=data`,
-      )
-      return { beobById: rows?.[0] ?? null }
-    },
-  })
+  const { data, error } = useQuery(beobQueryOptions(id))
 
   const rowData: Record<string, ReactNode> = data?.beobById?.data ?? {}
   const fields = Object.entries(rowData)

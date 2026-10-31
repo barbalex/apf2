@@ -57,6 +57,16 @@ type ApartUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const apartQueryOptions = (id: string | undefined) => ({
+  queryKey: ['apart', id],
+  queryFn: async () => {
+    const rows = await apiFetch<NonNullable<ApartQueryResult['apartById']>[]>(
+      `/v_apart?id=eq.${id}&select=${apartSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id,apByApId:ap_by_ap_id`,
+    )
+    return { apartById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { taxonId: id } = useParams<{ taxonId: string }>()
 
@@ -67,13 +77,7 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: ApartUseQueryOptions = {
-    queryKey: ['apart', id],
-    queryFn: async () => {
-      const rows = await apiFetch<NonNullable<ApartQueryResult['apartById']>[]>(
-        `/v_apart?id=eq.${id}&select=${apartSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id,apByApId:ap_by_ap_id`,
-      )
-      return { apartById: rows?.[0] ?? null }
-    },
+    ...apartQueryOptions(id),
     suspense: true,
   }
 

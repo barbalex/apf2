@@ -30,20 +30,22 @@ interface AdresseQueryResult {
   } | null
 }
 
+export const adresseQueryOptions = (adrId: string | undefined) => ({
+  queryKey: ['Adresse', adrId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<AdresseQueryResult['adresseById']>[]
+    >(`/v_adresse?id=eq.${adrId}&select=${adresseSelect}`)
+    return { adresseById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { adrId } = useParams<{ adrId: string }>()
   const userName = useAtomValue(userNameAtom)
   const tsQueryClient = useQueryClient()
 
-  const { data, error } = useQuery({
-    queryKey: ['Adresse', adrId],
-    queryFn: async () => {
-      const rows = await apiFetch<
-        NonNullable<AdresseQueryResult['adresseById']>[]
-      >(`/v_adresse?id=eq.${adrId}&select=${adresseSelect}`)
-      return { adresseById: rows?.[0] ?? null }
-    },
-  })
+  const { data, error } = useQuery(adresseQueryOptions(adrId))
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 

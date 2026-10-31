@@ -1,4 +1,3 @@
-
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { useZielNavData } from '../../../../modules/useZielNavData.ts'

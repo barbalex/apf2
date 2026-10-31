@@ -51,9 +51,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: string | number; label: string | null }[]
   value?: string | number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -149,9 +149,8 @@ export const TpopfeldkontrFilter = () => {
     }
   }, [activeTab, dataFilter.tpopfeldkontr.length])
 
-  const row = dataFilter.tpopfeldkontr[
-    activeTab
-  ] as TpopfeldkontrFilterRow | undefined
+  const row = dataFilter.tpopfeldkontr[activeTab] as
+    TpopfeldkontrFilterRow | undefined
 
   const apolloClient = useApolloClient()
 
@@ -190,8 +189,7 @@ export const TpopfeldkontrFilter = () => {
     'feldkontrTab',
     'entwicklung',
   )
-  const onChangeTab = (_event: SyntheticEvent, value: string) =>
-    setTab(value)
+  const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
 
   const saveToDb = async (event: SaveToDbEvent) =>
     setDataFilterValue({
@@ -207,30 +205,36 @@ export const TpopfeldkontrFilter = () => {
     )
     .map((o) => ({ value: o, label: o }))
 
-  const navApFilterComment = apFilter
-    ? `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment =
+    apFilter ?
+      `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
     // : popId
     // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.' :
-    apId
-      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
-      : undefined
-  const navLabelComment = nodeLabelFilter.tpopfeldkontr
-    ? `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+    apId ?
+      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
     : undefined
-  const artHierarchyComment = artIsFiltered
-    ? 'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const navLabelComment =
+    nodeLabelFilter.tpopfeldkontr ?
+      `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined
-  const popHierarchyComment = popIsFiltered
-    ? 'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const artHierarchyComment =
+    artIsFiltered ?
+      'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const tpopHierarchyComment = tpopIsFiltered
-    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment =
+    popIsFiltered ?
+      'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const mapFilterComment = mapFilter
-    ? 'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+  const tpopHierarchyComment =
+    tpopIsFiltered ?
+      'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
+    : undefined
+  const mapFilterComment =
+    mapFilter ?
+      'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
     : undefined
 
   const showFilterComments =

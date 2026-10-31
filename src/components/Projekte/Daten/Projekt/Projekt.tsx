@@ -23,6 +23,16 @@ interface ProjektQueryResult {
   }
 }
 
+export const projektQueryOptions = (projId: string | undefined) => ({
+  queryKey: ['projekt', projId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<ProjektQueryResult['projektById']>[]
+    >(`/v_projekt?id=eq.${projId}&select=id,name,changedBy:changed_by`)
+    return { projektById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { projId } = useParams()
 
@@ -32,15 +42,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['projekt', projId],
-    queryFn: async () => {
-      const rows = await apiFetch<
-        NonNullable<ProjektQueryResult['projektById']>[]
-      >(`/v_projekt?id=eq.${projId}&select=id,name,changedBy:changed_by`)
-      return { projektById: rows?.[0] ?? null }
-    },
-  })
+  const { data } = useSuspenseQuery(projektQueryOptions(projId))
 
   const row: Partial<NonNullable<ProjektQueryResult['projektById']>> =
     data?.projektById ?? {}

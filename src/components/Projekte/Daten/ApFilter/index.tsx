@@ -65,9 +65,11 @@ interface ListsQueryResult {
 }
 
 interface AeTaxonomiesByIdQueryResult {
-  aeTaxonomyById?: {
-    artname: string | null
-  } | undefined
+  aeTaxonomyById?:
+    | {
+        artname: string | null
+      }
+    | undefined
 }
 
 interface ApFilterRow {

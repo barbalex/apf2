@@ -134,6 +134,18 @@ type TpopListsUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const tpopQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpop', id],
+  queryFn: async () => {
+    // v_tpop provides the computed columns (label, coordinates) and
+    // the jsonb relation columns (selects.ts builds the camelCase keys)
+    const rows = await apiFetch<NonNullable<TpopQueryResult['tpopById']>[]>(
+      `/v_tpop?id=eq.${id}&select=${tpopSelect},popStatusWerteByStatus:pop_status_werte_by_status,tpopApberrelevantGrundWerteByApberRelevantGrund:tpop_apberrelevant_grund_werte_by_apber_relevant_grund,popByPopId:pop_by_pop_id`,
+    )
+    return rows?.[0] ?? null
+  },
+})
+
 export const Component = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { tpopId } = useParams()
@@ -141,19 +153,11 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
   const tsQueryClient = useQueryClient()
 
-  const tpopQueryOptions: TpopUseQueryOptions = {
-    queryKey: ['tpop', tpopId],
-    queryFn: async () => {
-      // v_tpop provides the computed columns (label, coordinates) and
-      // the jsonb relation columns (selects.ts builds the camelCase keys)
-      const rows = await apiFetch<NonNullable<TpopQueryResult['tpopById']>[]>(
-        `/v_tpop?id=eq.${tpopId}&select=${tpopSelect},popStatusWerteByStatus:pop_status_werte_by_status,tpopApberrelevantGrundWerteByApberRelevantGrund:tpop_apberrelevant_grund_werte_by_apber_relevant_grund,popByPopId:pop_by_pop_id`,
-      )
-      return rows?.[0] ?? null
-    },
+  const tpopOptions: TpopUseQueryOptions = {
+    ...tpopQueryOptions(tpopId),
     suspense: true,
   }
-  const { data, refetch: refetchTpop } = useQuery(tpopQueryOptions)
+  const { data, refetch: refetchTpop } = useQuery(tpopOptions)
 
   const apJahr = data?.popByPopId?.apByApId?.startJahr ?? null
 

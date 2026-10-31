@@ -69,6 +69,24 @@ const erreichungOptions = [
   { value: 'unsicher', label: 'unsicher' },
 ]
 
+export const zielQueryOptions = (id: string | undefined) => ({
+  queryKey: ['ziel', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<ZielQueryResult['zielById']>[]>(
+        `/v_ziel?id=eq.${id}&select=${zielSelect}`,
+      ),
+      apiFetch<NonNullable<ZielQueryResult['allZielTypWertes']>['nodes']>(
+        `/ziel_typ_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      zielById: rows?.[0] ?? null,
+      allZielTypWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { zielId: id } = useParams()
   const { search } = useLocation()
@@ -83,23 +101,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['ziel', id],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<ZielQueryResult['zielById']>[]>(
-          `/v_ziel?id=eq.${id}&select=${zielSelect}`,
-        ),
-        apiFetch<NonNullable<ZielQueryResult['allZielTypWertes']>['nodes']>(
-          `/ziel_typ_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-      ])
-      return {
-        zielById: rows?.[0] ?? null,
-        allZielTypWertes: { nodes: werte ?? [] },
-      }
-    },
-  })
+  const { data } = useSuspenseQuery(zielQueryOptions(id))
 
   const row: Partial<ZielNode> = data?.zielById ?? {}
 

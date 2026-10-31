@@ -45,6 +45,24 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   error?: string | undefined
 }>
 
+export const erfkritQueryOptions = (id: string | undefined) => ({
+  queryKey: ['erfkrit', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<ErfkritQueryResult['erfkritById']>[]>(
+        `/v_erfkrit?id=eq.${id}&select=${erfkritSelect}`,
+      ),
+      apiFetch<NonNullable<ErfkritQueryResult['allApErfkritWertes']>['nodes']>(
+        `/ap_erfkrit_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      erfkritById: rows?.[0] ?? null,
+      allApErfkritWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { erfkritId: id } = useParams()
 
@@ -54,23 +72,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['erfkrit', id],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<ErfkritQueryResult['erfkritById']>[]>(
-          `/v_erfkrit?id=eq.${id}&select=${erfkritSelect}`,
-        ),
-        apiFetch<
-          NonNullable<ErfkritQueryResult['allApErfkritWertes']>['nodes']
-        >(`/ap_erfkrit_werte?order=sort.asc&select=value:code,label:text`),
-      ])
-      return {
-        erfkritById: rows?.[0] ?? null,
-        allApErfkritWertes: { nodes: werte ?? [] },
-      }
-    },
-  })
+  const { data } = useSuspenseQuery(erfkritQueryOptions(id))
 
   const row: Partial<Erfkrit> = data?.erfkritById ?? {}
 

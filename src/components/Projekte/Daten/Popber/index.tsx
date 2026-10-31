@@ -49,6 +49,24 @@ interface PopberQueryResult {
   }
 }
 
+export const popberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['popber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<PopberQueryResult['popberById']>[]>(
+        `/v_popber?id=eq.${id}&select=${popberSelect},tpopEntwicklungWerteByEntwicklung:tpop_entwicklung_werte_by_entwicklung,popByPopId:pop_by_pop_id`,
+      ),
+      apiFetch(
+        `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      popberById: rows?.[0] ?? null,
+      allTpopEntwicklungWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { popberId: id } = useParams()
 
@@ -58,23 +76,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['popber', id],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<PopberQueryResult['popberById']>[]>(
-          `/v_popber?id=eq.${id}&select=${popberSelect},tpopEntwicklungWerteByEntwicklung:tpop_entwicklung_werte_by_entwicklung,popByPopId:pop_by_pop_id`,
-        ),
-        apiFetch(
-          `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-      ])
-      return {
-        popberById: rows?.[0] ?? null,
-        allTpopEntwicklungWertes: { nodes: werte ?? [] },
-      }
-    },
-  })
+  const { data } = useSuspenseQuery(popberQueryOptions(id))
 
   const row: Partial<NonNullable<PopberQueryResult['popberById']>> =
     data?.popberById ?? {}

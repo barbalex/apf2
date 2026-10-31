@@ -99,9 +99,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource: { value: number; label: string; historic?: boolean | null }[]
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 

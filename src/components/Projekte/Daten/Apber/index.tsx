@@ -90,6 +90,28 @@ type ApberUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const apberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['apber', id],
+  queryFn: async () => {
+    const [rows, adressesOpts, aperfkritwertesOpts] = await Promise.all([
+      apiFetch<NonNullable<ApberQueryResult['apberById']>[]>(
+        `/v_apber?id=eq.${id}&select=${apberSelect},apByApId:ap_by_ap_id`,
+      ),
+      apiFetch<NonNullable<ApberQueryResult['allAdresses']>['nodes']>(
+        `/adresse?order=name.asc&select=value:id,label:name`,
+      ),
+      apiFetch<NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']>(
+        `/ap_erfkrit_werte?order=sort.asc&select=value:code,label:text,sort`,
+      ),
+    ])
+    return {
+      apberById: rows?.[0] ?? null,
+      allAdresses: { nodes: adressesOpts ?? [] },
+      allApErfkritWertes: { nodes: aperfkritwertesOpts ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { apberId } = useParams<{ apberId: string }>()
 
@@ -100,25 +122,7 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: ApberUseQueryOptions = {
-    queryKey: ['apber', apberId],
-    queryFn: async () => {
-      const [rows, adressesOpts, aperfkritwertesOpts] = await Promise.all([
-        apiFetch<NonNullable<ApberQueryResult['apberById']>[]>(
-          `/v_apber?id=eq.${apberId}&select=${apberSelect},apByApId:ap_by_ap_id`,
-        ),
-        apiFetch<NonNullable<ApberQueryResult['allAdresses']>['nodes']>(
-          `/adresse?order=name.asc&select=value:id,label:name`,
-        ),
-        apiFetch<NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']>(
-          `/_erfkrit_werte?order=sort.asc&select=value:code,label:text,sort`,
-        ),
-      ])
-      return {
-        apberById: rows?.[0] ?? null,
-        allAdresses: { nodes: adressesOpts ?? [] },
-        allApErfkritWertes: { nodes: aperfkritwertesOpts ?? [] },
-      }
-    },
+    ...apberQueryOptions(apberId),
     suspense: true,
   }
 

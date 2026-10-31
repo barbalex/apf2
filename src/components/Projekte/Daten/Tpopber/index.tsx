@@ -53,6 +53,24 @@ type TpopberUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const tpopberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<TpopberQueryResult['tpopberById']>[]>(
+        `/v_tpopber?id=eq.${id}&select=${tpopberSelect}`,
+      ),
+      apiFetch<
+        NonNullable<TpopberQueryResult['allTpopEntwicklungWertes']>['nodes']
+      >(`/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`),
+    ])
+    return {
+      tpopberById: rows?.[0] ?? null,
+      allTpopEntwicklungWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { tpopberId } = useParams()
 
@@ -60,27 +78,11 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const tpopberQueryOptions: TpopberUseQueryOptions = {
-    queryKey: ['tpopber', tpopberId],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<TpopberQueryResult['tpopberById']>[]>(
-          `/v_tpopber?id=eq.${tpopberId}&select=${tpopberSelect}`,
-        ),
-        apiFetch<
-          NonNullable<TpopberQueryResult['allTpopEntwicklungWertes']>['nodes']
-        >(
-          `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-      ])
-      return {
-        tpopberById: rows?.[0] ?? null,
-        allTpopEntwicklungWertes: { nodes: werte ?? [] },
-      }
-    },
+  const tpopberOptions: TpopberUseQueryOptions = {
+    ...tpopberQueryOptions(tpopberId),
     suspense: true,
   }
-  const { data } = useQuery(tpopberQueryOptions)
+  const { data } = useQuery(tpopberOptions)
 
   const row = (data?.tpopberById ?? {}) as NonNullable<
     TpopberQueryResult['tpopberById']

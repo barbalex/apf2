@@ -65,6 +65,28 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
+export const tpopmassnberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopmassnber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<TpopmassnberQueryResult['tpopmassnberById']>[]>(
+        `/v_tpopmassnber?id=eq.${id ?? ''}&select=${tpopmassnberSelect},tpopByTpopId:tpop_by_tpop_id`,
+      ),
+      apiFetch<
+        NonNullable<
+          TpopmassnberQueryResult['allTpopmassnErfbeurtWertes']
+        >['nodes']
+      >(
+        `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      tpopmassnberById: rows?.[0] ?? null,
+      allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { tpopmassnberId: id } = useParams()
 
@@ -77,29 +99,11 @@ export const Component = () => {
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
-  const tpopmassnberQueryOptions = {
-    queryKey: ['tpopmassnber', id],
-    queryFn: async () => {
-      const [rows, werte] = await Promise.all([
-        apiFetch<NonNullable<TpopmassnberQueryResult['tpopmassnberById']>[]>(
-          `/v_tpopmassnber?id=eq.${id ?? ''}&select=${tpopmassnberSelect},tpopByTpopId:tpop_by_tpop_id`,
-        ),
-        apiFetch<
-          NonNullable<
-            TpopmassnberQueryResult['allTpopmassnErfbeurtWertes']
-          >['nodes']
-        >(
-          `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
-        ),
-      ])
-      return {
-        tpopmassnberById: rows?.[0] ?? null,
-        allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
-      }
-    },
+  const tpopmassnberOptions = {
+    ...tpopmassnberQueryOptions(id),
     suspense: true,
   }
-  const { data } = useQuery(tpopmassnberQueryOptions)
+  const { data } = useQuery(tpopmassnberOptions)
 
   const row: Partial<TpopmassnberNode> = data?.tpopmassnberById ?? {}
   const saveToDb = async (event: SaveToDbEvent) => {

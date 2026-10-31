@@ -156,6 +156,32 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 import styles from './Tpopmassn.module.css'
 import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
+export const tpopmassnQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopmassn', id],
+  queryFn: async () => {
+    const [rows, massnTypWerte, adresses, einheitWerte] = await Promise.all([
+      apiFetch<NonNullable<TpopmassnQueryResult['tpopmassnById']>[]>(
+        `/v_tpopmassn?id=eq.${id ?? ''}&select=${tpopmassnSelect},tpopmassnTypWerteByTyp:tpopmassn_typ_werte_by_typ,tpopByTpopId:tpop_by_tpop_id`,
+      ),
+      apiFetch<TpopmassnQueryResult['allTpopmassnTypWertes']['nodes']>(
+        `/tpopmassn_typ_werte?order=sort.asc&select=${tpopmassnTypWerteSelect}`,
+      ),
+      apiFetch<TpopmassnQueryResult['allAdresses']['nodes']>(
+        `/v_adresse?order=name.asc&select=${adresseSelect}`,
+      ),
+      apiFetch<TpopmassnQueryResult['allTpopkontrzaehlEinheitWertes']['nodes']>(
+        `/v_tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
+      ),
+    ])
+    return {
+      tpopmassnById: rows?.[0] ?? null,
+      allTpopmassnTypWertes: { nodes: massnTypWerte ?? [] },
+      allAdresses: { nodes: adresses ?? [] },
+      allTpopkontrzaehlEinheitWertes: { nodes: einheitWerte ?? [] },
+    }
+  },
+})
+
 export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
 
@@ -166,35 +192,11 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
-  const tpopmassnQueryOptions = {
-    queryKey: ['tpopmassn', tpopmassnId],
-    queryFn: async () => {
-      const [rows, massnTypWerte, adresses, einheitWerte] = await Promise.all([
-        apiFetch<NonNullable<TpopmassnQueryResult['tpopmassnById']>[]>(
-          `/v_tpopmassn?id=eq.${tpopmassnId ?? ''}&select=${tpopmassnSelect},tpopmassnTypWerteByTyp:tpopmassn_typ_werte_by_typ,tpopByTpopId:tpop_by_tpop_id`,
-        ),
-        apiFetch<TpopmassnQueryResult['allTpopmassnTypWertes']['nodes']>(
-          `/tpopmassn_typ_werte?order=sort.asc&select=${tpopmassnTypWerteSelect}`,
-        ),
-        apiFetch<TpopmassnQueryResult['allAdresses']['nodes']>(
-          `/v_adresse?order=name.asc&select=${adresseSelect}`,
-        ),
-        apiFetch<
-          TpopmassnQueryResult['allTpopkontrzaehlEinheitWertes']['nodes']
-        >(
-          `/v_tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
-        ),
-      ])
-      return {
-        tpopmassnById: rows?.[0] ?? null,
-        allTpopmassnTypWertes: { nodes: massnTypWerte ?? [] },
-        allAdresses: { nodes: adresses ?? [] },
-        allTpopkontrzaehlEinheitWertes: { nodes: einheitWerte ?? [] },
-      }
-    },
+  const tpopmassnOptions = {
+    ...tpopmassnQueryOptions(tpopmassnId),
     suspense: true,
   }
-  const { data } = useQuery(tpopmassnQueryOptions)
+  const { data } = useQuery(tpopmassnOptions)
 
   const notMassnCountUnit =
     data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId

@@ -65,9 +65,9 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem: number) => {
   const value =
-    exists(tickItem) && tickItem?.toLocaleString
-      ? tickItem.toLocaleString('de-ch')
-      : null
+    exists(tickItem) && tickItem?.toLocaleString ?
+      tickItem.toLocaleString('de-ch')
+    : null
   return value
 }
 
@@ -133,7 +133,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
   return (
     <>
       <FormTitle title={`${popLabel}: Auswertung`} />
-      {tpopMengeData.length ? (
+      {tpopMengeData.length ?
         <>
           <div className={styles.titleRow}>
             <h4
@@ -178,9 +178,8 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                   color = 'grey'
                 } else {
                   const isUrspruenglich = (tpop?.status ?? 0) < 200
-                  color = isUrspruenglich
-                    ? colorUrspruenglich
-                    : colorAngesiedelt
+                  color =
+                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                 }
 
                 return (
@@ -197,12 +196,14 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                 )
               })}
               <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <div className={styles.titleRow}>
             <h4
               className={styles.title}
@@ -219,7 +220,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
           </div>
           <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
-      )}
+      }
     </>
   )
 }

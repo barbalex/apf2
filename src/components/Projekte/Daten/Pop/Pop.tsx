@@ -31,6 +31,18 @@ interface PopQueryResult {
   }
 }
 
+export const popQueryOptions = (id: string | undefined) => ({
+  queryKey: ['pop', id],
+  queryFn: async () => {
+    // v_pop provides the computed columns (label, coordinates) and
+    // the ap relation as a jsonb column (selects.ts builds the keys)
+    const rows = await apiFetch<NonNullable<PopQueryResult['popById']>[]>(
+      `/v_pop?id=eq.${id}&select=${popSelect},apByApId:ap_by_ap_id`,
+    )
+    return rows?.[0] ?? null
+  },
+})
+
 export const Component = () => {
   const { popId } = useParams()
 
@@ -40,17 +52,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['pop', popId],
-    queryFn: async () => {
-      // v_pop provides the computed columns (label, coordinates) and
-      // the ap relation as a jsonb column (selects.ts builds the keys)
-      const rows = await apiFetch<NonNullable<PopQueryResult['popById']>[]>(
-        `/v_pop?id=eq.${popId}&select=${popSelect},apByApId:ap_by_ap_id`,
-      )
-      return rows?.[0] ?? null
-    },
-  })
+  const { data } = useSuspenseQuery(popQueryOptions(popId))
 
   const row: Partial<NonNullable<PopQueryResult['popById']>> = data ?? {}
 

@@ -77,6 +77,24 @@ const roleWerte = [
   },
 ]
 
+export const userQueryOptions = (userId: string | undefined) => ({
+  queryKey: ['user', userId],
+  queryFn: async () => {
+    const [rows, adresses] = await Promise.all([
+      apiFetch<NonNullable<UserQueryResult['userById']>[]>(
+        `/v_user?id=eq.${userId}&select=${userSelect}`,
+      ),
+      apiFetch<NonNullable<UserQueryResult['allAdresses']>['nodes']>(
+        `/adresse?order=name.asc&select=value:id,label:name`,
+      ),
+    ])
+    return {
+      userById: rows?.[0] ?? null,
+      allAdresses: { nodes: adresses ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { userId } = useParams()
 
@@ -84,23 +102,7 @@ export const Component = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['user', userId],
-    queryFn: async () => {
-      const [rows, adresses] = await Promise.all([
-        apiFetch<NonNullable<UserQueryResult['userById']>[]>(
-          `/v_user?id=eq.${userId}&select=${userSelect}`,
-        ),
-        apiFetch<NonNullable<UserQueryResult['allAdresses']>['nodes']>(
-          `/adresse?order=name.asc&select=value:id,label:name`,
-        ),
-      ])
-      return {
-        userById: rows?.[0] ?? null,
-        allAdresses: { nodes: adresses ?? [] },
-      }
-    },
-  })
+  const { data } = useSuspenseQuery(userQueryOptions(userId))
 
   const row: Partial<NonNullable<UserQueryResult['userById']>> =
     data?.userById ?? {}

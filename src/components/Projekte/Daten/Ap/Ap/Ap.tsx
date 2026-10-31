@@ -64,6 +64,34 @@ interface Props {
   children?: ReactNode
 }
 
+export const apQueryOptions = (apId: string | undefined) => ({
+  queryKey: ['ap', apId],
+  queryFn: async () => {
+    const [rows, adresses, bearbstandWerte, umsetzungWerte] = await Promise.all(
+      [
+        apiFetch<NonNullable<ApQueryResult['apById']>[]>(
+          `/v_ap?id=eq.${apId}&select=${apSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id`,
+        ),
+        apiFetch<NonNullable<ApQueryResult['allAdresses']>['nodes']>(
+          `/adresse?order=name.asc&select=value:id,label:name`,
+        ),
+        apiFetch<NonNullable<ApQueryResult['allApBearbstandWertes']>['nodes']>(
+          `/ap_bearbstand_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+        apiFetch<NonNullable<ApQueryResult['allApUmsetzungWertes']>['nodes']>(
+          `/ap_umsetzung_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+      ],
+    )
+    return {
+      apById: rows?.[0] ?? null,
+      allAdresses: { nodes: adresses ?? [] },
+      allApBearbstandWertes: { nodes: bearbstandWerte ?? [] },
+      allApUmsetzungWertes: { nodes: umsetzungWerte ?? [] },
+    }
+  },
+})
+
 export const Ap = ({ children }: Props) => {
   const { apId } = useParams<{ apId: string }>()
 
@@ -73,32 +101,7 @@ export const Ap = ({ children }: Props) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['ap', apId],
-    queryFn: async () => {
-      const [rows, adresses, bearbstandWerte, umsetzungWerte] =
-        await Promise.all([
-          apiFetch<NonNullable<ApQueryResult['apById']>[]>(
-            `/v_ap?id=eq.${apId}&select=${apSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id`,
-          ),
-          apiFetch<NonNullable<ApQueryResult['allAdresses']>['nodes']>(
-            `/adresse?order=name.asc&select=value:id,label:name`,
-          ),
-          apiFetch<
-            NonNullable<ApQueryResult['allApBearbstandWertes']>['nodes']
-          >(`/ap_bearbstand_werte?order=sort.asc&select=value:code,label:text`),
-          apiFetch<NonNullable<ApQueryResult['allApUmsetzungWertes']>['nodes']>(
-            `/ap_umsetzung_werte?order=sort.asc&select=value:code,label:text`,
-          ),
-        ])
-      return {
-        apById: rows?.[0] ?? null,
-        allAdresses: { nodes: adresses ?? [] },
-        allApBearbstandWertes: { nodes: bearbstandWerte ?? [] },
-        allApUmsetzungWertes: { nodes: umsetzungWerte ?? [] },
-      }
-    },
-  })
+  const { data, refetch } = useSuspenseQuery(apQueryOptions(apId))
 
   const row = (data.apById ?? {}) as NonNullable<ApQueryResult['apById']>
 
