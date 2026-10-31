@@ -166,7 +166,8 @@ export const Visible = ({
         const ekPlan =
           (tpop?.ekPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
         const ekfPlan =
-          (tpop?.ekfPlans?.nodes ?? []).filter((n) => n.jahr === year).length > 0
+          (tpop?.ekfPlans?.nodes ?? []).filter((n) => n.jahr === year).length >
+          0
         const eks = (tpop?.eks?.nodes ?? []).filter((n) => n.jahr === year)
         const ekfs = (tpop?.ekfs?.nodes ?? []).filter((n) => n.jahr === year)
         const ansiedlungs = (tpop?.ansiedlungs?.nodes ?? []).filter(

@@ -33,7 +33,8 @@ export const Options = ({ type }: { type: string }) => {
       return result.data as PopStatusWerteQueryResult
     },
   })
-  const options = (data as PopStatusWerteQueryResult).allPopStatusWertes?.nodes ?? []
+  const options =
+    (data as PopStatusWerteQueryResult).allPopStatusWertes?.nodes ?? []
 
   return (
     <FormGroup className={styles.formGroup}>

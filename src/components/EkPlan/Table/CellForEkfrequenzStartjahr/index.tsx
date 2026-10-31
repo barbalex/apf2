@@ -33,9 +33,8 @@ export const CellForEkfrequenzStartjahr = ({
   const isHovered = hovered.tpopId === row.id
 
   const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
-  const [prevEkfrequenzStartjahr, setPrevEkfrequenzStartjahr] = useState(
-    ekfrequenzStartjahr,
-  )
+  const [prevEkfrequenzStartjahr, setPrevEkfrequenzStartjahr] =
+    useState(ekfrequenzStartjahr)
   if (prevEkfrequenzStartjahr !== ekfrequenzStartjahr) {
     setPrevEkfrequenzStartjahr(ekfrequenzStartjahr)
     setStateValue(ekfrequenzStartjahr ?? '')

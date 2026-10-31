@@ -13,10 +13,7 @@ import type { EkPlanTpopFilter } from './tableTypes.ts'
 import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'
 import { getYears } from './getYears.ts'
-import {
-  exportRowFromTpop,
-  type ExportTpopNode,
-} from './exportRowFromTpop.ts'
+import { exportRowFromTpop, type ExportTpopNode } from './exportRowFromTpop.ts'
 import { exportModule } from '../../../modules/export.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
@@ -314,14 +311,12 @@ export const EkPlanTable = () => {
         },
       })
     }
-    const tpops = (
-      (result?.data as { allTpops?: { nodes?: unknown[] } } | undefined)
-        ?.allTpops?.nodes ?? []
-    ) as ExportTpopNode[]
-    const ekfrequenzs = (
-      (result?.data as { allEkfrequenzs?: { nodes?: unknown[] } } | undefined)
-        ?.allEkfrequenzs?.nodes ?? []
-    ) as { id: string; code: string | null }[]
+    const tpops = ((
+      result?.data as { allTpops?: { nodes?: unknown[] } } | undefined
+    )?.allTpops?.nodes ?? []) as ExportTpopNode[]
+    const ekfrequenzs = ((
+      result?.data as { allEkfrequenzs?: { nodes?: unknown[] } } | undefined
+    )?.allEkfrequenzs?.nodes ?? []) as { id: string; code: string | null }[]
     const data = tpops.map((tpop) =>
       exportRowFromTpop({ tpop, years, ekfrequenzs }),
     )

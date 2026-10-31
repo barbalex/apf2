@@ -1,9 +1,6 @@
 import { fields } from '../fields.ts'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
-import {
-  store,
-  ekPlanFieldsAtom,
-} from '../../../../store/index.ts'
+import { store, ekPlanFieldsAtom } from '../../../../store/index.ts'
 import type { RowTpopNode, TpopRow } from '../tableTypes.ts'
 
 export const tpopRowFromTpop = (

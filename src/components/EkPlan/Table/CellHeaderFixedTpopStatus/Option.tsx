@@ -29,7 +29,8 @@ export const Option = ({
     const newStatus =
       option.code !== null && filterStatus.includes(option.code) ?
         filterStatus.filter((el: number) => el !== option.code)
-      : option.code !== null ? [...new Set([...filterStatus, option.code])] : filterStatus
+      : option.code !== null ? [...new Set([...filterStatus, option.code])]
+      : filterStatus
 
     setFilterStatus(newStatus)
   }
