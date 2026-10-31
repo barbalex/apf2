@@ -10,7 +10,6 @@ import { RadioButtonGroupWithInfo } from '../../../../shared/RadioButtonGroupWit
 import { TextField } from '../../../../shared/TextField.tsx'
 import { Select } from '../../../../shared/Select.tsx'
 import { SelectLoadingOptions } from '../../../../shared/SelectLoadingOptions.tsx'
-import { queryAeTaxonomies } from '../queryAeTaxonomies.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 import { userNameAtom } from '../../../../../store/index.ts'
 
@@ -160,9 +159,7 @@ export const Ap = ({ children }: Props) => {
         label="Art (das namensgebende Taxon)"
         labelSize={undefined}
         row={row}
-        query={queryAeTaxonomies}
         filter={aeTaxonomiesfilterForData}
-        queryNodesName="allAeTaxonomies"
         saveToDb={saveToDb}
         error={fieldErrors.artId}
       />

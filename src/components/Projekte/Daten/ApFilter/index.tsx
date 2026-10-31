@@ -8,7 +8,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import {
   treeNodeLabelFilterAtom,
   treeDataFilterAtom,
@@ -235,9 +234,7 @@ export const ApFilter = () => {
                 ...row,
                 ...{ aeTaxonomyByArtId: { artname } },
               }}
-              query={queryAeTaxonomies}
               filter={aeTaxonomiesFilter}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               error={undefined}
             />

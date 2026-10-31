@@ -12,7 +12,6 @@ import { useAtomValue } from 'jotai'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -183,9 +182,7 @@ export const Component = () => {
               labelSize={12}
               label="Taxon"
               row={row}
-              query={queryAeTaxonomies}
               filter={aeTaxonomiesfilter}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               error={fieldErrors.artId}
             />

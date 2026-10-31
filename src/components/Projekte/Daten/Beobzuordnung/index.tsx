@@ -16,7 +16,6 @@ import { DateField } from '../../../shared/Date.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { Beob } from '../Beob/index.tsx'
 import { query } from './query.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { saveNichtZuordnenToDb } from './saveNichtZuordnenToDb.ts'
 import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
@@ -249,9 +248,7 @@ export const Component = () => {
               error={undefined}
               row={row}
               saveToDb={onSaveArtIdToDb}
-              query={queryAeTaxonomies}
               filter={aeTaxonomiesfilter}
-              queryNodesName="allAeTaxonomies"
             />
             <CheckboxWithInfo
               key={`${row.id}nichtZuordnen`}

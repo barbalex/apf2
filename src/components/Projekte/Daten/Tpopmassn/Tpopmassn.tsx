@@ -19,7 +19,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -489,8 +488,6 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           key={`${tpopmassnId}${!!row.wirtspflanze}`}
           label="Wirtspflanze"
           row={row}
-          query={queryAeTaxonomies}
-          queryNodesName="allAeTaxonomies"
           saveToDb={saveToDb}
           error={fieldErrors.wirtspflanze}
         />

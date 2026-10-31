@@ -5,10 +5,9 @@
  */
 
 import AsyncSelect from 'react-select/async'
-import { useApolloClient } from '@apollo/client/react'
-import type { DocumentNode } from '@apollo/client'
 import { get } from 'es-toolkit/compat'
 
+import { apiFetch } from '../../modules/api.ts'
 import type { SaveToDbHandler } from './types.ts'
 
 import styles from './Select.module.css'
@@ -16,10 +15,6 @@ import styles from './Select.module.css'
 interface SelectLoadingOption {
   value: string
   label: string
-}
-
-interface SelectLoadingNodes {
-  nodes?: SelectLoadingOption[]
 }
 
 export interface SelectLoadingOptionsProps {
@@ -31,9 +26,7 @@ export interface SelectLoadingOptionsProps {
   labelSize?: number | undefined
   error?: string | null | undefined
   saveToDb: SaveToDbHandler
-  query: DocumentNode
   filter?: (inputValue: string) => Record<string, unknown>
-  queryNodesName: string
 }
 
 export const SelectLoadingOptions = ({
@@ -45,33 +38,46 @@ export const SelectLoadingOptions = ({
   labelSize,
   error: saveToDbError,
   saveToDb,
-  query,
   filter,
-  queryNodesName,
 }: SelectLoadingOptionsProps) => {
-  const apolloClient = useApolloClient()
   const rowRecord = row as Record<string, unknown> | null | undefined
+
+  // every consumer queries aeTaxonomies; the former GraphQL filter
+  // (artname includesInsensitive / isNull false, id notIn, taxArtName
+  // includesInsensitive) translates to PostgREST URL params
+  const filterToParams = (f: Record<string, unknown>): string => {
+    const params: string[] = []
+    for (const [key, value] of Object.entries(f)) {
+      const ops = value as Record<string, unknown>
+      if (ops.includesInsensitive != null)
+        params.push(
+          `${key === 'taxArtName' ? 'tax_art_name' : key}=ilike.*${encodeURIComponent(String(ops.includesInsensitive))}*`,
+        )
+      if (ops.isNull === false) params.push(`${key}=not.is.null`)
+      if (Array.isArray(ops.notIn))
+        params.push(`id=not.in.(${(ops.notIn as string[]).join(',')})`)
+    }
+    return params.join('&')
+  }
 
   const loadOptions = async (inputValue: string) => {
     const ownFilter =
       inputValue ?
         { artname: { includesInsensitive: inputValue } }
       : { artname: { isNull: false } }
-    let result: { data?: unknown } | undefined
     try {
-      result = await apolloClient.query({
-        query,
-        variables: {
-          filter: filter ? filter(inputValue) : ownFilter,
-        },
-      })
+      const params = filterToParams(
+        (filter ? filter(inputValue) : ownFilter) as Record<string, unknown>,
+      )
+      const options =
+        (await apiFetch<SelectLoadingOption[]>(
+          `/ae_taxonomies?${params}&select=value:id,label:artname&order=artname.asc&limit=8`,
+        )) ?? []
+      return options
     } catch (error) {
       console.log({ error })
+      return []
     }
-    const data = result?.data as Record<string, unknown> | undefined
-    const options =
-      (data?.[queryNodesName] as SelectLoadingNodes | undefined)?.nodes ?? []
-    return options
   }
 
   const onChange = (option: SelectLoadingOption | null) => {
@@ -88,9 +94,9 @@ export const SelectLoadingOptions = ({
   const value = {
     value: (rowRecord?.[field] as string | undefined) ?? '',
     label:
-      valueLabel ?
-        valueLabel
-      : ((get(rowRecord ?? {}, valueLabelPath ?? '') as string | null) ?? ''),
+      valueLabel ? valueLabel : (
+        ((get(rowRecord ?? {}, valueLabelPath ?? '') as string | null) ?? '')
+      ),
   }
 
   return (

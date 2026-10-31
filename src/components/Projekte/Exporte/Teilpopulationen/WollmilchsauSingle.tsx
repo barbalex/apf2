@@ -3,7 +3,6 @@ import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
-import { graphql } from '../../../../gql/index.ts'
 import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
 
@@ -263,18 +262,7 @@ export const WollmilchsauSingle = () => {
             fileName: 'anzkontrinklletzterundletztertpopber',
           })
         }}
-        query={graphql(`
-          query allAeTaxonomiesQuery($filter: AeTaxonomyFilter!) {
-            allAeTaxonomies(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
-              nodes {
-                value: id
-                label: artname
-              }
-            }
-          }
-        `)}
         filter={aeTaxonomiesfilter}
-        queryNodesName="allAeTaxonomies"
         error={ewmMessage}
       />
     </div>

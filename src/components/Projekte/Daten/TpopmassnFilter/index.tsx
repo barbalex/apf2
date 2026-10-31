@@ -12,7 +12,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -428,8 +427,6 @@ export const TpopmassnFilter = () => {
               key={`${row?.id}wirtspflanze`}
               field="wirtspflanze"
               label="Wirtspflanze"
-              query={queryAeTaxonomies}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               row={row}
               error={undefined}

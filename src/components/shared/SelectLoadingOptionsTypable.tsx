@@ -1,19 +1,14 @@
 import { useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { useApolloClient } from '@apollo/client/react'
-import type { DocumentNode } from '@apollo/client'
 
 import type { SaveToDbHandler } from './types.ts'
 
+import { apiFetch } from '../../modules/api.ts'
 import styles from './SelectLoadingOptionsTypable.module.css'
 
 interface TypableOption {
   value: string | null
   label: string | null
-}
-
-interface TypableNodes {
-  nodes?: { value: string; label: string }[]
 }
 
 export interface SelectLoadingOptionsTypableProps {
@@ -22,8 +17,6 @@ export interface SelectLoadingOptionsTypableProps {
   label?: string | undefined
   error?: string | null | undefined
   saveToDb: SaveToDbHandler
-  query: DocumentNode
-  queryNodesName: string
 }
 
 export const SelectLoadingOptionsTypable = ({
@@ -32,12 +25,10 @@ export const SelectLoadingOptionsTypable = ({
   label,
   error: saveToDbError,
   saveToDb,
-  query,
-  queryNodesName,
 }: SelectLoadingOptionsTypableProps) => {
-  const apolloClient = useApolloClient()
-  const wirtspflanze = (row as { wirtspflanze?: string | null } | null | undefined)
-    ?.wirtspflanze
+  const wirtspflanze = (
+    row as { wirtspflanze?: string | null } | null | undefined
+  )?.wirtspflanze
 
   const [inputValue, setInputValue] = useState(wirtspflanze || '')
 
@@ -48,23 +39,16 @@ export const SelectLoadingOptionsTypable = ({
     setInputValue(wirtspflanze || '')
   }
 
+  // queries aeTaxonomies (the only table this component has been used with)
   const loadOptions = async (inputValue: string) => {
-    const filter =
+    const params =
       inputValue ?
-        { artname: { includesInsensitive: inputValue } }
-      : { artname: { isNull: false } }
-    const { data } = await apolloClient.query({
-      query,
-      variables: {
-        filter,
-      },
-    })
+        `artname=ilike.*${encodeURIComponent(inputValue)}*`
+      : 'artname=not.is.null'
     const options =
-      (
-        (data as Record<string, unknown> | undefined)?.[
-          queryNodesName
-        ] as TypableNodes | undefined
-      )?.nodes ?? []
+      (await apiFetch<TypableOption[]>(
+        `/ae_taxonomies?${params}&select=value:id,label:artname&order=artname.asc&limit=8`,
+      )) ?? []
     return options
   }
 
@@ -79,10 +63,7 @@ export const SelectLoadingOptionsTypable = ({
     void saveToDb(fakeEvent)
   }
 
-  const onInputChange = (
-    value: string,
-    { action }: { action: string },
-  ) => {
+  const onInputChange = (value: string, { action }: { action: string }) => {
     // update inputValue when typing in the input
     if (!['input-blur', 'menu-close'].includes(action)) {
       if (!value) {
@@ -132,7 +113,7 @@ export const SelectLoadingOptionsTypable = ({
         backspaceRemovesValue
         classNamePrefix="react-select"
         onInputChange={onInputChange}
-        loadOptions={loadOptions}
+        loadOptions={loadOptions as never}
       />
       {saveToDbError && (
         <div className={styles.errorClass}>{saveToDbError}</div>

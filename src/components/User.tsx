@@ -1,4 +1,4 @@
-import { rpc } from '../modules/api.ts'
+import { apiFetch, rpc } from '../modules/api.ts'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -12,11 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { graphql } from '../gql/index.ts'
-import { gql as dynamicGql } from '../apolloGql.ts'
 import { useAtom } from 'jotai'
-
-import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { Password } from './Projekte/Daten/User/Password.tsx'
@@ -36,13 +32,6 @@ interface TokenState {
   fetchingToken: boolean
 }
 
-interface CheckUserPasswordResult {
-  userByName: {
-    id: string
-    requireNewPasswordOnNextLogin: boolean
-  } | null
-}
-
 type TokenAction = { type: 'reset' } | { type: 'set'; payload: string | null }
 
 function tokenStateReducer(
@@ -60,7 +49,6 @@ function tokenStateReducer(
 }
 
 export const User = () => {
-  const apolloClient = useApolloClient()
   const [user, setUser] = useAtom(userAtom)
 
   const [name, setName] = useState('')
@@ -93,18 +81,20 @@ export const User = () => {
   // require_new_password_on_next_login, but never pass
   const checkUserPassword = async (nameToCheck: string) => {
     try {
-      const userResult = await apolloClient.query<CheckUserPasswordResult>({
-        query: dynamicGql`
-          query checkUserPassword($name: String!) {
-            userByName(name: $name) {
-              id
-              requireNewPasswordOnNextLogin
-            }
+      const rows =
+        (await apiFetch<
+          { id: string; require_new_password_on_next_login: boolean | null }[]
+        >(
+          `/user?name=eq.${encodeURIComponent(nameToCheck)}&select=id,require_new_password_on_next_login`,
+        )) ?? []
+      const row = rows[0]
+      return row ?
+          {
+            id: row.id,
+            requireNewPasswordOnNextLogin:
+              row.require_new_password_on_next_login,
           }
-        `,
-        variables: { name: nameToCheck },
-      })
-      return userResult?.data?.userByName
+        : null
     } catch (error) {
       // never block the login attempt on a failed precheck
       console.log(error)
@@ -153,27 +143,20 @@ export const User = () => {
       return console.log(error)
     }
     // Need userId to navigate freiwillige to the correct path
-    let userResult
+    let userId: string | null = null
     try {
-      userResult = await apolloClient.query({
-        query: graphql(`
-          query userLoginQuery($name: String!) {
-            userByName(name: $name) {
-              id
-            }
-          }
-        `),
-        variables: {
-          name: nameToUse,
-        },
-      })
+      const rows =
+        (await apiFetch<{ id: string }[]>(
+          `/user?name=eq.${encodeURIComponent(nameToUse)}&select=id`,
+        )) ?? []
+      userId = rows[0]?.id ?? null
     } catch (error) {
       console.log(error)
     }
     setUser({
       name: nameToUse,
       token: result?.token ?? null,
-      id: userResult?.data?.userByName?.id ?? null,
+      id: userId,
     })
     // this is easiest way to make sure everything is correct
     // as client is rebuilt with new settings
