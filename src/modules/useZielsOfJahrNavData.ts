@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -14,7 +13,6 @@ export const useZielsOfJahrNavData = (
       }
     | undefined,
 ) => {
-  const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -27,45 +25,37 @@ export const useZielsOfJahrNavData = (
   const { data } = useSuspenseQuery({
     queryKey: ['treeZielsOfJahr', apId, jahr, zielGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeZielsOfJahrQuery(
-            $zielsFilter: ZielFilter!
-            $jahrFilter: ZielFilter!
-            $apId: UUID!
-          ) {
-            apById(id: $apId) {
-              id
-              zielsByApId(filter: $jahrFilter) {
-                totalCount
-              }
-              filteredZiels: zielsByApId(
-                filter: $zielsFilter
-                orderBy: [JAHR_ASC, LABEL_ASC]
-              ) {
-                nodes {
-                  id
-                  label
-                  jahr
-                }
-              }
-            }
-          }
-        `),
-        variables: {
-          jahrFilter: {
-            jahr: { equalTo: jahr },
-          },
-          zielsFilter: {
-            ...zielGqlFilterForTree,
-            jahr: { equalTo: jahr },
-          },
-          apId,
+      const filter = {
+        ...zielGqlFilterForTree,
+        apByApId: {
+          ...((zielGqlFilterForTree as { apByApId?: object }).apByApId ?? {}),
+          id: { equalTo: apId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+        jahr: { equalTo: jahr },
+      }
+      const [filteredZiels, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null; jahr: number | null }[]>(
+          `/rpc/query_ziel?select=id,label,jahr`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [
+                { field: 'jahr', dir: 'asc' },
+                { field: 'label', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount(`/q_ziel?ap_id=eq.${apId}&jahr=eq.${jahr}`),
+      ])
+      return {
+        apById: {
+          id: apId,
+          zielsByApId: { totalCount },
+          filteredZiels: { nodes: filteredZiels ?? [] },
+        },
+      }
     },
   })
 

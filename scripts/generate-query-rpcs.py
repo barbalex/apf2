@@ -145,6 +145,11 @@ for t in TABLES:
     extras = []
     if t in LABEL_TABLES:
         extras.append(f'apflora.{t}_label(t) AS label')
+    if t == 'tpopkontr':
+        # no plain tpopkontr_label exists: ek (Feld-Kontrollen) and ekf
+        # (Freiwilligen-Kontrollen) have separate label functions
+        extras.append('apflora.tpopkontr_label_ek(t) AS label_ek')
+        extras.append('apflora.tpopkontr_label_ekf(t) AS label_ekf')
     if t == 'tpopmassn':
         # the tree label appends the zieleinheit werte text
         extras.append(

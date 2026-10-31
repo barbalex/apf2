@@ -1758,7 +1758,9 @@ grant execute on function apflora.query_tpopber(jsonb, jsonb, integer, integer) 
 
 create or replace view apflora.q_tpopkontr with (security_invoker = true) as
   select
-    t.*
+    t.*,
+    apflora.tpopkontr_label_ek(t) AS label_ek,
+    apflora.tpopkontr_label_ekf(t) AS label_ekf
   from apflora.tpopkontr t;
 grant select on apflora.q_tpopkontr to apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 

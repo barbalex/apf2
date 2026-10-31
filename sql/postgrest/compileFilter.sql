@@ -136,9 +136,11 @@ BEGIN
         ];
       END IF;
 
-    -- computed label column, e.g. apflora.tpop_label(tpop)
-    ELSIF v_key = 'label' THEN
-      v_label_fn := split_part(p_table, '.', 2) || '_label';
+    -- computed label column, e.g. apflora.tpop_label(tpop);
+    -- variants labelEk/labelEkf map to e.g. tpopkontr_label_ek(tpopkontr)
+    ELSIF v_key IN ('label', 'labelEk', 'labelEkf') THEN
+      v_label_fn :=
+        split_part(p_table, '.', 2) || '_' || apflora.camel_to_snake(v_key);
       IF NOT EXISTS (
         SELECT 1
         FROM pg_proc p
@@ -164,9 +166,17 @@ BEGIN
             v_parts := v_parts || ARRAY[format(
               'apflora.%s(%s) = %L', v_label_fn, p_alias, v_lit
             )];
+          WHEN 'distinctFrom' THEN
+            v_parts := v_parts || ARRAY[format(
+              'apflora.%s(%s) IS DISTINCT FROM %L', v_label_fn, p_alias, v_lit
+            )];
+          WHEN 'notDistinctFrom' THEN
+            v_parts := v_parts || ARRAY[format(
+              'apflora.%s(%s) IS NOT DISTINCT FROM %L', v_label_fn, p_alias, v_lit
+            )];
           ELSE
             RAISE EXCEPTION
-              'compile_filter: unsupported operator "%" on label (supported: includes, includesInsensitive, equalTo)',
+              'compile_filter: unsupported operator "%" on label (supported: includes, includesInsensitive, equalTo, distinctFrom, notDistinctFrom)',
               v_op;
         END CASE;
       END LOOP;
@@ -250,6 +260,14 @@ BEGIN
                   format('%I.%I IS NOT NULL', p_alias, v_col)
                 ];
               END IF;
+            WHEN 'distinctFrom' THEN
+              v_parts := v_parts || ARRAY[format(
+                '%I.%I IS DISTINCT FROM %L::%s', p_alias, v_col, v_lit, v_col_type
+              )];
+            WHEN 'notDistinctFrom' THEN
+              v_parts := v_parts || ARRAY[format(
+                '%I.%I IS NOT DISTINCT FROM %L::%s', p_alias, v_col, v_lit, v_col_type
+              )];
             WHEN 'includes' THEN
               v_parts := v_parts || ARRAY[format(
                 '%I.%I LIKE %L', p_alias, v_col, '%' || v_lit || '%'
@@ -270,7 +288,7 @@ BEGIN
               )];
             ELSE
               RAISE EXCEPTION
-                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThanOrEqualTo, lessThanOrEqualTo, in, isNull, includes, includesInsensitive, coveredBy)',
+                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThanOrEqualTo, lessThanOrEqualTo, in, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
                 v_op, p_table, v_col;
           END CASE;
         END LOOP;
