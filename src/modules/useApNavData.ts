@@ -21,7 +21,10 @@ import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/Beobnichtbe
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
-export const useApNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
+export const useApNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const apolloClient = useApolloClient()
   const projId = props?.projId ?? ''
   const apId = props?.apId ?? ''

@@ -9,7 +9,9 @@ import {
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
 
-export const useProjektNavData = (props?: { projId?: string | undefined } | undefined) => {
+export const useProjektNavData = (
+  props?: { projId?: string | undefined } | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId =

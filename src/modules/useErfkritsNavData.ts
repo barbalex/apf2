@@ -1,15 +1,16 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
 
-export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useErfkritsNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
@@ -17,37 +18,36 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
   const { data } = useSuspenseQuery({
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeErfkritsQuery(
-            $erfkritsFilter: ErfkritFilter!
-            $apId: UUID!
-          ) {
-            apById(id: $apId) {
-              id
-              erfkritsByApId(
-                filter: $erfkritsFilter
-                orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
-              ) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: erfkritsByApId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          erfkritsFilter: erfkritGqlFilterForTree,
-          apId,
+      // phase 5: the former erfkritsByApId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...erfkritGqlFilterForTree,
+        apByApId: {
+          ...((erfkritGqlFilterForTree as { apByApId?: object }).apByApId ??
+            {}),
+          id: { equalTo: apId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_erfkrit?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'apErfkritWerteByErfolg.sort', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount(`/q_erfkrit?ap_id=eq.${apId}`),
+      ])
+      return {
+        apById: {
+          id: apId,
+          erfkritsByApId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 
@@ -74,7 +74,14 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
       treeId: p?.id,
       treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p?.id],
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'AP-Erfolgskriterien',
+        p?.id,
+      ],
       hasChildren: false,
     })),
   }

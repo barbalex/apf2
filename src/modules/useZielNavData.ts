@@ -3,14 +3,22 @@ import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-
-export const useZielNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined; zielId?: string | undefined } | undefined) => {
+export const useZielNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        jahr?: string | undefined
+        zielId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const jahr = (props?.jahr ?? params.jahr ?? '')
-  const zielId = (props?.zielId ?? params.zielId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const jahr = props?.jahr ?? params.jahr ?? ''
+  const zielId = props?.zielId ?? params.zielId ?? ''
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeZiel', zielId],

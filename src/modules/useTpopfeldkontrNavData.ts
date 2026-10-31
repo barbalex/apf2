@@ -44,14 +44,24 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
+export const useTpopfeldkontrNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        tpopkontrId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
 
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -102,30 +112,18 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
 
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingBiotopAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(copyingBiotopAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const label = data.tpopkontrById?.label
   const tpopkontrzaehlCount =

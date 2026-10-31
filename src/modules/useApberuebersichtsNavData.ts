@@ -4,11 +4,11 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeApberuebersichtGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeApberuebersichtGqlFilterForTreeAtom } from '../store/index.ts'
 
-export const useApberuebersichtsNavData = (props?: { projId?: string | undefined } | undefined) => {
+export const useApberuebersichtsNavData = (
+  props?: { projId?: string | undefined } | undefined,
+) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()

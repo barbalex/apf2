@@ -41,16 +41,23 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const usePopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
+export const usePopNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
 
   const copying = useAtomValue(copyingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
-
 
   const moving = useAtomValue(movingAtom)
 
@@ -138,8 +145,13 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
   const popIconIsHighlighted = props?.popId === params.popId
   const PopIcon =
     status ?
-      popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[status + 'Highlighted']
-      : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[status]
+      popIconIsHighlighted ?
+        (popIcons as Record<string, Record<string, React.ComponentType>>)[
+          popIconName as string
+        ]?.[status + 'Highlighted']
+      : (popIcons as Record<string, Record<string, React.ComponentType>>)[
+          popIconName as string
+        ]?.[status]
     : popIconIsHighlighted ? PopIconQHighlighted
     : PopIconQ
 

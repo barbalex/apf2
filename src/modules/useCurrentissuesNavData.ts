@@ -2,7 +2,6 @@ import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()
 

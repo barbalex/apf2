@@ -30,14 +30,24 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopmassnId?: string | undefined } | undefined) => {
+export const useTpopmassnNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        tpopmassnId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const tpopmassnId = (props?.tpopmassnId ?? params.tpopmassnId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const tpopmassnId = props?.tpopmassnId ?? params.tpopmassnId ?? ''
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
@@ -77,22 +87,14 @@ export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const zielAnzahl = data.tpopmassnById?.zieleinheitAnzahl
   const zielEinheit =

@@ -1,6 +1,5 @@
+import { apiCount, apiFetch } from './api.ts'
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -14,13 +13,21 @@ import {
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 
-export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useTpopmassnsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
 
   const moving = useAtomValue(movingAtom)
   const tpopmassnGqlFilterForTree = useAtomValue(
@@ -30,45 +37,48 @@ export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId
   const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeTpopmassnsQuery(
-            $tpopmassnsFilter: TpopmassnFilter!
-            $tpopId: UUID!
-          ) {
-            tpopById(id: $tpopId) {
-              tpopmassnsByTpopId(
-                filter: $tpopmassnsFilter
-                orderBy: [JAHR_ASC, DATUM_ASC]
-              ) {
-                nodes {
-                  id
-                  label
-                  zieleinheitAnzahl
-                  tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
-                    text
-                    # ekzaehleinheitsByZaehleinheitId {
-                    #   nodes {
-                    #     zielrelevant
-                    #   }
-                    # }
-                  }
-                }
-              }
-              totalCount: tpopmassnsByTpopId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopmassnsFilter: tpopmassnGqlFilterForTree,
-          tpopId,
+      // phase 5: the former tpopmassnsByTpopId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...tpopmassnGqlFilterForTree,
+        tpopByTpopId: {
+          ...((tpopmassnGqlFilterForTree as { tpopByTpopId?: object })
+            .tpopByTpopId ?? {}),
+          id: { equalTo: tpopId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            label: string | null
+            zieleinheitAnzahl: number | null
+            tpopkontrzaehlEinheitWerteByZieleinheitEinheit: {
+              text: string | null
+            } | null
+          }[]
+        >(
+          `/rpc/query_tpopmassn?select=id,label,zieleinheitAnzahl:zieleinheit_anzahl,tpopkontrzaehlEinheitWerteByZieleinheitEinheit:tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [
+                { field: 'jahr', dir: 'asc' },
+                { field: 'datum', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount(`/q_tpopmassn?tpop_id=eq.${tpopId}`),
+      ])
+      return {
+        tpopById: {
+          id: tpopId,
+          tpopmassnsByTpopId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 
@@ -77,23 +87,15 @@ export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
   const copying = useAtomValue(copyingAtom)
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const count = data.tpopById?.tpopmassnsByTpopId.nodes.length
   const totalCount = data.tpopById?.totalCount.totalCount
@@ -134,7 +136,8 @@ export const useTpopmassnsNavData = (props?: { projId?: string | undefined; apId
       }
 
       const zielAnzahl = p?.zieleinheitAnzahl
-      const zielEinheit = p?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+      const zielEinheit =
+        p?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
       const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
       const label =
         p?.label + (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')

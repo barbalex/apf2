@@ -2064,7 +2064,11 @@ grant execute on function apflora.query_tpopkontrzaehl_einheit_werte(jsonb, json
 create or replace view apflora.q_tpopmassn with (security_invoker = true) as
   select
     t.*,
-    apflora.tpopmassn_label(t) AS label
+    apflora.tpopmassn_label(t) AS label,
+    (select jsonb_build_object('text', w.text)
+      from apflora.tpopkontrzaehl_einheit_werte w
+      where w.code = t.zieleinheit_einheit)
+      AS tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit
   from apflora.tpopmassn t;
 grant select on apflora.q_tpopmassn to apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 

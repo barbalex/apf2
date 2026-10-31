@@ -5,14 +5,24 @@ import { useParams } from 'react-router'
 
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
-export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
+export const useTpopfreiwkontrzaehlsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        tpopkontrId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
   const tpopkontrzaehlGqlFilterForTree =
     getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 

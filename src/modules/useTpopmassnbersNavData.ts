@@ -1,17 +1,24 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
 
-export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useTpopmassnbersNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
@@ -19,37 +26,36 @@ export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; a
   const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeTpopmassnbersQuery(
-            $tpopmassnbersFilter: TpopmassnberFilter!
-            $tpopId: UUID!
-          ) {
-            tpopById(id: $tpopId) {
-              id
-              tpopmassnbersByTpopId(
-                filter: $tpopmassnbersFilter
-                orderBy: LABEL_ASC
-              ) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: tpopmassnbersByTpopId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopmassnbersFilter: tpopmassnberGqlFilterForTree,
-          tpopId,
+      // phase 5: the former tpopmassnbersByTpopId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...tpopmassnberGqlFilterForTree,
+        tpopByTpopId: {
+          ...((tpopmassnberGqlFilterForTree as { tpopByTpopId?: object })
+            .tpopByTpopId ?? {}),
+          id: { equalTo: tpopId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_tpopmassnber?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount(`/q_tpopmassnber?tpop_id=eq.${tpopId}`),
+      ])
+      return {
+        tpopById: {
+          id: tpopId,
+          tpopmassnbersByTpopId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 

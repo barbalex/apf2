@@ -12,11 +12,14 @@ const getZieljahrsCount = (ziels: ({ jahr?: number | null } | null)[]) => {
   return count
 }
 
-export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
+export const useZieljahrsNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
@@ -62,8 +65,14 @@ export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?
   const ziels = data.apById?.zielsByApId?.nodes ?? []
   const filteredZiels = data.apById?.filteredZiels?.nodes ?? []
   const zieljahrsCount = getZieljahrsCount(ziels)
-  const countByJahr = countBy(filteredZiels, (e) => e?.jahr ?? 0) as Record<string, number>
-  const unfilteredCountByJahr = countBy(ziels, (e) => e?.jahr ?? 0) as Record<string, number>
+  const countByJahr = countBy(filteredZiels, (e) => e?.jahr ?? 0) as Record<
+    string,
+    number
+  >
+  const unfilteredCountByJahr = countBy(ziels, (e) => e?.jahr ?? 0) as Record<
+    string,
+    number
+  >
 
   // convert into array of objects with id=jahr and count
   const menus = Object.keys(countByJahr).map((jahr) => ({

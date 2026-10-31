@@ -50,13 +50,22 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
+export const useTpopNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
@@ -78,7 +87,7 @@ export const useTpopNavData = (props?: { projId?: string | undefined; apId?: str
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-const { data } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpop',
       tpopId,
@@ -88,7 +97,8 @@ const { data } = useSuspenseQuery({
       beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
-      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
+      const tpopmassnberGqlFilterForTree =
+        getTpopmassnberGqlFilterForTree(tpopId)
       const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
       const result = await apolloClient.query({
         query: graphql(`
@@ -120,9 +130,7 @@ const { data } = useSuspenseQuery({
                 totalCount
               }
               tpopfeldkontrs: tpopkontrsByTpopId(
-                filter: {
-                  typ: { distinctFrom: "Freiwilligen-Kontrolle" }
-                }
+                filter: { typ: { distinctFrom: "Freiwilligen-Kontrolle" } }
               ) {
                 totalCount
               }
@@ -184,46 +192,26 @@ const { data } = useSuspenseQuery({
       return result.data as NonNullable<typeof result.data>
     },
   })
-  useEffect(
-    () => {
-      const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(mapTpopIconAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(treeShowTpopIconAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(mapTpopIconAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(treeShowTpopIconAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const label = data.tpopById?.label
   const status = data.tpopById?.status
@@ -252,8 +240,13 @@ const { data } = useSuspenseQuery({
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =
     status ?
-      tpopIconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[status + 'Highlighted']
-      : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[status]
+      tpopIconIsHighlighted ?
+        (tpopIcons as Record<string, Record<string, React.ComponentType>>)[
+          tpopIconName as string
+        ]?.[status + 'Highlighted']
+      : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[
+          tpopIconName as string
+        ]?.[status]
     : tpopIconIsHighlighted ? TpopIconQHighlighted
     : TpopIconQ
 

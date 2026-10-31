@@ -3,9 +3,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeEkAbrechnungstypWerteGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()

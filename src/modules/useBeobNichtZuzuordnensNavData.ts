@@ -4,20 +4,26 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeBeobNichtZuzuordnenGqlFilterForTreeAtom } from '../store/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { BeobnichtzuzuordnenFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredAbsenzMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
 import { BeobnichtzuzuordnenAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenAbsenzMapIcon.tsx'
 
-export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
+export const useBeobNichtZuzuordnensNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        beobId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const beobId = (props?.beobId ?? params.beobId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const beobId = props?.beobId ?? params.beobId ?? ''
 
   const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
     treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
@@ -89,8 +95,7 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
   })
 
   const count = data.beobsNichtZuzuordnen?.totalCount
-  const filteredCount =
-    data.filteredBeobsNichtZuzuordnen?.nodes.length
+  const filteredCount = data.filteredBeobsNichtZuzuordnen?.nodes.length
 
   const navData = {
     id: 'nicht-zuzuordnende-Beobachtungen',
@@ -133,8 +138,7 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
           beobId === p?.id ?
             [BeobnichtzuzuordnenFilteredAbsenzMapIcon]
           : [BeobnichtzuzuordnenAbsenzMapIcon]
-        : beobId === p?.id ?
-          [BeobnichtzuzuordnenFilteredMapIcon]
+        : beobId === p?.id ? [BeobnichtzuzuordnenFilteredMapIcon]
         : [BeobnichtzuzuordnenMapIcon],
     })),
   }

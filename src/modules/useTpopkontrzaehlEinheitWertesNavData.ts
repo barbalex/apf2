@@ -3,9 +3,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const apolloClient = useApolloClient()

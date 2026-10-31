@@ -145,6 +145,14 @@ for t in TABLES:
     extras = []
     if t in LABEL_TABLES:
         extras.append(f'apflora.{t}_label(t) AS label')
+    if t == 'tpopmassn':
+        # the tree label appends the zieleinheit werte text
+        extras.append(
+            '(select jsonb_build_object(\'text\', w.text)\n'
+            '      from apflora.tpopkontrzaehl_einheit_werte w\n'
+            '      where w.code = t.zieleinheit_einheit)\n'
+            '      AS tpopkontrzaehl_einheit_werte_by_zieleinheit_einheit'
+        )
     if t in GEO_TABLES:
         extras += [
             'public.lv95_x(t) AS lv95_x',

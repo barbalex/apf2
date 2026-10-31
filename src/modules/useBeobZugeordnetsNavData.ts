@@ -10,15 +10,25 @@ import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/B
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { BeobzugeordnetAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetAbsenzMapIcon.tsx'
 
-export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; beobId?: string | undefined } | undefined) => {
+export const useBeobZugeordnetsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        beobId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const beobId = (props?.beobId ?? params.beobId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const beobId = props?.beobId ?? params.beobId ?? ''
 
   const beobZugeordnetGqlFilterForTree = useAtomValue(
     treeBeobZugeordnetGqlFilterForTreeAtom,

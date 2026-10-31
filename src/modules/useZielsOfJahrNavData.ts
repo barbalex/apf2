@@ -5,11 +5,19 @@ import { useParams } from 'react-router'
 
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 
-export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined } | undefined) => {
+export const useZielsOfJahrNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        jahr?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
   const jahrParam = props?.jahr ?? params.jahr
   const jahr = jahrParam ? +jahrParam : undefined
 

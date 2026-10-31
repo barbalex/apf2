@@ -3,11 +3,14 @@ import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-export const useIdealbiotopNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
+export const useIdealbiotopNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeIdealbiotop', apId],

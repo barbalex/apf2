@@ -4,20 +4,26 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeBeobNichtBeurteiltGqlFilterForTreeAtom } from '../store/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
 import { BeobnichtbeurteiltFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredAbsenzMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtbeurteiltAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltAbsenzMapIcon.tsx'
 
-export const useBeobNichtBeurteiltsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
+export const useBeobNichtBeurteiltsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        beobId?: string | undefined
+      }
+    | undefined,
+) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const beobId = (props?.beobId ?? params.beobId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const beobId = props?.beobId ?? params.beobId ?? ''
 
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
@@ -133,8 +139,7 @@ export const useBeobNichtBeurteiltsNavData = (props?: { projId?: string | undefi
           beobId === p?.id ?
             [BeobnichtbeurteiltFilteredAbsenzMapIcon]
           : [BeobnichtbeurteiltAbsenzMapIcon]
-        : beobId === p?.id ?
-          [BeobnichtbeurteiltFilteredMapIcon]
+        : beobId === p?.id ? [BeobnichtbeurteiltFilteredMapIcon]
         : [BeobnichtbeurteiltMapIcon],
     })),
   }

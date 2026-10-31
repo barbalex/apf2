@@ -67,7 +67,8 @@ AS $$
     ca.attname::text
   FROM pg_constraint fk
   JOIN pg_constraint pk
-    ON pk.conrelid = fk.confrelid AND pk.contype = 'p'
+    ON pk.conrelid = fk.confrelid
+   AND (pk.contype = 'p' OR (pk.contype = 'u' AND fk.confkey = pk.conkey))
   JOIN pg_attribute ca
     ON ca.attrelid = fk.conrelid AND ca.attnum = ANY (fk.conkey)
   JOIN pg_attribute pa
