@@ -1,13 +1,13 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { idealbiotopSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { DateField } from '../../../shared/Date.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -51,7 +51,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -59,12 +58,10 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['idealbiotop', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<IdealbiotopQueryResult>({
-        query,
-        variables: { id: apId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<IdealbiotopQueryResult['allIdealbiotops']>['nodes']
+      >(`/idealbiotop?ap_id=eq.${apId}&select=${idealbiotopSelect}`)
+      return { allIdealbiotops: { nodes: rows ?? [] } }
     },
   })
 

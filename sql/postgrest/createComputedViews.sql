@@ -18,7 +18,13 @@ GRANT SELECT ON apflora.v_adresse TO apflora_reader, apflora_ap_reader, apflora_
 CREATE OR REPLACE VIEW apflora.v_ap WITH (security_invoker = true) AS
   SELECT
     t.*,
-    apflora.ap_label(t) AS label
+    apflora.ap_label(t) AS label,
+    (SELECT jsonb_build_object(
+        'taxonomieId', x.taxonomie_id, 'taxonomieName', x.taxonomie_name,
+        'id', x.id, 'taxid', x.taxid, 'familie', x.familie,
+        'artname', x.artname, 'taxArtName', x.tax_art_name,
+        'artwert', x.artwert)
+      FROM apflora.ae_taxonomies x WHERE x.id = t.art_id) AS ae_taxonomy_by_art_id
   FROM apflora.ap t;
 GRANT SELECT ON apflora.v_ap TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 

@@ -1,7 +1,8 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { zielSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { isEqual } from 'es-toolkit'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -10,7 +11,6 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
-import { query } from './query.ts'
 import {
   userNameAtom,
   treeActiveNodeArrayAtom,
@@ -74,7 +74,6 @@ export const Component = () => {
   const { search } = useLocation()
   const navigate = useNavigate()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const userName = useAtomValue(userNameAtom)
@@ -87,12 +86,18 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['ziel', id],
     queryFn: async () => {
-      const result = await apolloClient.query<ZielQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, werte] = await Promise.all([
+        apiFetch<NonNullable<ZielQueryResult['zielById']>[]>(
+          `/v_ziel?id=eq.${id}&select=${zielSelect}`,
+        ),
+        apiFetch<NonNullable<ZielQueryResult['allZielTypWertes']>['nodes']>(
+          `/ziel_typ_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+      ])
+      return {
+        zielById: rows?.[0] ?? null,
+        allZielTypWertes: { nodes: werte ?? [] },
+      }
     },
   })
 

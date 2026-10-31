@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -15,7 +16,6 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -56,7 +56,6 @@ type TpopberUseQueryOptions = UseQueryOptions<
 export const Component = () => {
   const { tpopberId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -64,12 +63,20 @@ export const Component = () => {
   const tpopberQueryOptions: TpopberUseQueryOptions = {
     queryKey: ['tpopber', tpopberId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopberQueryResult>({
-        query,
-        variables: { id: tpopberId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, werte] = await Promise.all([
+        apiFetch<NonNullable<TpopberQueryResult['tpopberById']>[]>(
+          `/v_tpopber?id=eq.${tpopberId}&select=${tpopberSelect}`,
+        ),
+        apiFetch<
+          NonNullable<TpopberQueryResult['allTpopEntwicklungWertes']>['nodes']
+        >(
+          `/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+      ])
+      return {
+        tpopberById: rows?.[0] ?? null,
+        allTpopEntwicklungWertes: { nodes: werte ?? [] },
+      }
     },
     suspense: true,
   }

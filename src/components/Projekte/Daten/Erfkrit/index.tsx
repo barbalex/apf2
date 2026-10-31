@@ -1,6 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { erfkritSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -8,7 +9,6 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -51,19 +51,24 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useSuspenseQuery({
     queryKey: ['erfkrit', id],
     queryFn: async () => {
-      const result = await apolloClient.query<ErfkritQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, werte] = await Promise.all([
+        apiFetch<NonNullable<ErfkritQueryResult['erfkritById']>[]>(
+          `/v_erfkrit?id=eq.${id}&select=${erfkritSelect}`,
+        ),
+        apiFetch<
+          NonNullable<ErfkritQueryResult['allApErfkritWertes']>['nodes']
+        >(`/ap_erfkrit_werte?order=sort.asc&select=value:code,label:text`),
+      ])
+      return {
+        erfkritById: rows?.[0] ?? null,
+        allApErfkritWertes: { nodes: werte ?? [] },
+      }
     },
   })
 

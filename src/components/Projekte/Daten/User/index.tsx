@@ -1,13 +1,13 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { userSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { Select } from '../../../shared/Select.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -80,7 +80,6 @@ const roleWerte = [
 export const Component = () => {
   const { userId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -88,12 +87,18 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
-      const result = await apolloClient.query<UserQueryResult>({
-        query,
-        variables: { id: userId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, adresses] = await Promise.all([
+        apiFetch<NonNullable<UserQueryResult['userById']>[]>(
+          `/v_user?id=eq.${userId}&select=${userSelect}`,
+        ),
+        apiFetch<NonNullable<UserQueryResult['allAdresses']>['nodes']>(
+          `/adresse?order=name.asc&select=value:id,label:name`,
+        ),
+      ])
+      return {
+        userById: rows?.[0] ?? null,
+        allAdresses: { nodes: adresses ?? [] },
+      }
     },
   })
 
