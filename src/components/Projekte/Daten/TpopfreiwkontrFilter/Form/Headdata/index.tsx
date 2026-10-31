@@ -1,11 +1,10 @@
 import type { SaveToDbEvent } from '../../../../../shared/types.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
+import { apiFetch } from '../../../../../../modules/api.ts'
 import { Select } from '../../../../../shared/Select.tsx'
 import { treeDataFilterSetValueAtom } from '../../../../../../store/index.ts'
-import { query } from './query.ts'
 
 import type { AdresseId } from '../../../../../../models/apflora/Adresse.ts'
 import type { TpopfreiwkontrFilterRow } from '../index.tsx'
@@ -38,17 +37,17 @@ type TpopfreiwkontrAdressesFilterUseQueryOptions = UseQueryOptions<
 export const Headdata = ({ row, activeTab }: HeaddataProps) => {
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
-  const apolloClient = useApolloClient()
-
   const adressesQueryOptions: TpopfreiwkontrAdressesFilterUseQueryOptions = {
     queryKey: ['tpopfreiwkontrFilterAdresses'],
     queryFn: async () => {
-      const result =
-        await apolloClient.query<TpopfreiwkontrAdressesFilterQueryResult>({
-          query,
-        })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<
+        NonNullable<
+          TpopfreiwkontrAdressesFilterQueryResult['allAdresses']
+        >['nodes']
+      >(`/v_adresse?select=value:id,label:name&order=name.asc`)
+      return {
+        allAdresses: { nodes: nodes ?? [] },
+      } as TpopfreiwkontrAdressesFilterQueryResult
     },
     suspense: true,
     staleTime: Infinity,

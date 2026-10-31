@@ -2,7 +2,6 @@ import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -16,8 +15,6 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
-import { query } from './query.ts'
-import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -29,6 +26,7 @@ import {
   treeTpopIsFilteredAtom,
   treeEkGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { apiFetch, rpcCount } from '../../../../modules/api.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -152,19 +150,45 @@ export const TpopfeldkontrFilter = () => {
   const row = dataFilter.tpopfeldkontr[activeTab] as
     TpopfeldkontrFilterRow | undefined
 
-  const apolloClient = useApolloClient()
-
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
   const tpopfeldkontrFilterQueryOptions = {
     queryKey: ['tpopfeldkontrFilterData'],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopfeldkontrFilterQueryResult>({
-        query,
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [idbiotuebereinstWertes, entwicklungWertes, lrDelarzes, adresses] =
+        await Promise.all([
+          apiFetch<
+            NonNullable<
+              TpopfeldkontrFilterQueryResult['allTpopkontrIdbiotuebereinstWertes']
+            >['nodes']
+          >(
+            `/tpopkontr_idbiotuebereinst_werte?select=value:code,label:text&order=sort.asc`,
+          ),
+          apiFetch<
+            NonNullable<
+              TpopfeldkontrFilterQueryResult['allTpopEntwicklungWertes']
+            >['nodes']
+          >(
+            `/tpop_entwicklung_werte?select=value:code,label:text&order=sort.asc`,
+          ),
+          apiFetch<
+            NonNullable<
+              TpopfeldkontrFilterQueryResult['allAeLrDelarzes']
+            >['nodes']
+          >(`/ae_lr_delarze?select=id,label,einheit&order=label.asc`),
+          apiFetch<
+            NonNullable<TpopfeldkontrFilterQueryResult['allAdresses']>['nodes']
+          >(`/v_adresse?select=value:id,label:name&order=name.asc`),
+        ])
+      return {
+        allTpopkontrIdbiotuebereinstWertes: {
+          nodes: idbiotuebereinstWertes ?? [],
+        },
+        allTpopEntwicklungWertes: { nodes: entwicklungWertes ?? [] },
+        allAeLrDelarzes: { nodes: lrDelarzes ?? [] },
+        allAdresses: { nodes: adresses ?? [] },
+      } as TpopfeldkontrFilterQueryResult
     },
     suspense: true,
   }
@@ -173,15 +197,14 @@ export const TpopfeldkontrFilter = () => {
   const { data: dataTpopkontrs } = useQuery({
     queryKey: ['tpopkontrsCount', ekGqlFilter.filtered, ekGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: queryTpopkontrs,
-        variables: {
-          filteredFilter: ekGqlFilter.filtered,
-          allFilter: ekGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [allTpopkontrs, tpopkontrsFiltered] = await Promise.all([
+        rpcCount('query_tpopkontr', { p_filter: ekGqlFilter.all }),
+        rpcCount('query_tpopkontr', { p_filter: ekGqlFilter.filtered }),
+      ])
+      return {
+        allTpopkontrs: { totalCount: allTpopkontrs },
+        tpopkontrsFiltered: { totalCount: tpopkontrsFiltered },
+      }
     },
   })
 

@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
+import { rpcCount } from '../../../../modules/api.ts'
 import { treeEkfGqlFilterAtom } from '../../../../store/index.ts'
 import {
   treeNodeLabelFilterAtom,
@@ -53,20 +52,17 @@ export const TpopfreiwkontrFilter = () => {
 
   const row = dataFilter.tpopfreiwkontr[activeTab]
 
-  const apolloClient = useApolloClient()
-
   const { data: dataTpopkontrs } = useQuery({
     queryKey: ['tpopfreiwkontrsCount', ekfGqlFilter.filtered, ekfGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrsQueryResult>({
-        query,
-        variables: {
-          filteredFilter: ekfGqlFilter.filtered,
-          allFilter: ekfGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [allTpopkontrs, tpopkontrsFiltered] = await Promise.all([
+        rpcCount('query_tpopkontr', { p_filter: ekfGqlFilter.all }),
+        rpcCount('query_tpopkontr', { p_filter: ekfGqlFilter.filtered }),
+      ])
+      return {
+        allTpopkontrs: { totalCount: allTpopkontrs },
+        tpopkontrsFiltered: { totalCount: tpopkontrsFiltered },
+      } as TpopkontrsQueryResult
     },
   })
 

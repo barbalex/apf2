@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -10,7 +9,6 @@ import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
 import { Status } from '../../../shared/Status.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { query } from './query.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -20,6 +18,7 @@ import {
   treeArtIsFilteredAtom,
   treePopGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { rpcCount } from '../../../../modules/api.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { PopOrTabs, type PopFilterRow } from './PopOrTabs.tsx'
@@ -37,8 +36,6 @@ interface PopFilterQueryResult {
 
 export const PopFilter = () => {
   const { apId } = useParams()
-
-  const apolloClient = useApolloClient()
 
   const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
@@ -63,15 +60,14 @@ export const PopFilter = () => {
   const { data: dataPops } = useQuery({
     queryKey: ['popFilter', popGqlFilter.filtered, popGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query<PopFilterQueryResult>({
-        query,
-        variables: {
-          filteredFilter: popGqlFilter.filtered,
-          allFilter: popGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [pops, popsFiltered] = await Promise.all([
+        rpcCount('query_pop', { p_filter: popGqlFilter.all }),
+        rpcCount('query_pop', { p_filter: popGqlFilter.filtered }),
+      ])
+      return {
+        pops: { totalCount: pops },
+        popsFiltered: { totalCount: popsFiltered },
+      } as PopFilterQueryResult
     },
   })
 

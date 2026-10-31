@@ -1,10 +1,9 @@
 import Switch from '@mui/material/Switch'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
-import { apById } from './apById.ts'
+import { apiFetch } from '../../../../modules/api.ts'
 import { Label } from '../../../shared/Label.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
@@ -26,7 +25,6 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onChange = async () => {
@@ -41,21 +39,15 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
         queryKey: [`treeProject`],
       })
       // apFilter was set to true
-      let result:
-        | {
-            data?:
-              | { apById?: { bearbeitung: number | null } | null }
-              | undefined
-          }
-        | undefined
+      let bearbeitung: number | null = null
       if (apId) {
         // check if this is real ap
-        result = (await apolloClient.query({
-          query: apById,
-          variables: { id: apId },
-        })) as typeof result
+        const rows = await apiFetch<{ bearbeitung: number | null }[]>(
+          `/v_ap?id=eq.${apId}&select=bearbeitung`,
+        )
+        bearbeitung = rows?.[0]?.bearbeitung ?? null
       }
-      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung ?? 0) //@485
+      const isAp = [1, 2, 3].includes(bearbeitung ?? 0) //@485
       if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
         // shorten active node array to Arten
@@ -85,7 +77,11 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Label label="nur AP" color={color ?? undefined} htmlFor="ap-filter" />
+        <Label
+          label="nur AP"
+          color={color ?? undefined}
+          htmlFor="ap-filter"
+        />
         <Switch
           data-id="ap-filter"
           id="ap-filter"
