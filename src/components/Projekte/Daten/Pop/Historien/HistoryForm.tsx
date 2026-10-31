@@ -21,14 +21,14 @@ interface Options {
 }
 
 interface HistoryRow {
-  year: number | null
+  year?: number | null | undefined
   nr: number | null
   name: string | null
   status: number | null
   statusUnklar: boolean | null
   statusUnklarBegruendung: string | null
   bekanntSeit: number | null
-  geomPoint?: { x: number | null; y: number | null } | null | undefined
+  geomPoint?: { type: string; coordinates: [number, number] } | null | undefined
 }
 
 interface Props {
@@ -57,8 +57,8 @@ export const HistoryForm = ({
     statusUnklar: historyRow?.statusUnklar ?? null,
     statusUnklarBegruendung: historyRow?.statusUnklarBegruendung ?? null,
     bekanntSeit: historyRow?.bekanntSeit ?? null,
-    x: historyRow?.geomPoint?.x ?? null,
-    y: historyRow?.geomPoint?.y ?? null,
+    x: historyRow?.geomPoint?.coordinates?.[0] ?? null,
+    y: historyRow?.geomPoint?.coordinates?.[1] ?? null,
   })
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(

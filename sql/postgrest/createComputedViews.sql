@@ -347,4 +347,59 @@ CREATE OR REPLACE VIEW apflora.v_ekfrequenz WITH (security_invoker = true) AS
   FROM apflora.ekfrequenz t;
 GRANT SELECT ON apflora.v_ekfrequenz TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 
+
+-- history views: base table plus the werte/adresse relations the
+-- Historien lists render per row
+CREATE OR REPLACE VIEW apflora.v_ap_history WITH (security_invoker = true) AS
+  SELECT
+    t.*,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.ap_bearbstand_werte w WHERE w.code = t.bearbeitung)
+      AS ap_bearbstand_werte_by_bearbeitung,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.ap_umsetzung_werte w WHERE w.code = t.umsetzung)
+      AS ap_umsetzung_werte_by_umsetzung,
+    (SELECT jsonb_build_object('id', ad.id, 'name', ad.name)
+      FROM apflora.adresse ad WHERE ad.id = t.bearbeiter)
+      AS adresse_by_bearbeiter,
+    (SELECT jsonb_build_object('id', x.id, 'artname', x.artname)
+      FROM apflora.ae_taxonomies x WHERE x.id = t.art_id)
+      AS ae_taxonomy_by_art_id
+  FROM apflora.ap_history t;
+GRANT SELECT ON apflora.v_ap_history TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
+
+CREATE OR REPLACE VIEW apflora.v_pop_history WITH (security_invoker = true) AS
+  SELECT
+    t.*,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.pop_status_werte w WHERE w.code = t.status)
+      AS pop_status_werte_by_status,
+    (SELECT jsonb_build_object('id', a.id, 'aeTaxonomyByArtId',
+        jsonb_build_object('id', x.id, 'artname', x.artname))
+      FROM apflora.ap a JOIN apflora.ae_taxonomies x ON x.id = a.art_id
+      WHERE a.id = t.ap_id) AS ap_by_ap_id
+  FROM apflora.pop_history t;
+GRANT SELECT ON apflora.v_pop_history TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
+
+CREATE OR REPLACE VIEW apflora.v_tpop_history WITH (security_invoker = true) AS
+  SELECT
+    t.*,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.pop_status_werte w WHERE w.code = t.status)
+      AS pop_status_werte_by_status,
+    (SELECT jsonb_build_object('id', w.id, 'text', w.text)
+      FROM apflora.tpop_apberrelevant_grund_werte w
+      WHERE w.code = t.apber_relevant_grund)
+      AS tpop_apberrelevant_grund_werte_by_apber_relevant_grund,
+    (SELECT jsonb_build_object('id', e.id, 'code', e.code)
+      FROM apflora.ekfrequenz e WHERE e.id = t.ekfrequenz)
+      AS ekfrequenz_by_ekfrequenz,
+    (SELECT jsonb_build_object('id', ad.id, 'name', ad.name)
+      FROM apflora.adresse ad WHERE ad.id = t.ekf_kontrolleur)
+      AS adresse_by_ekf_kontrolleur,
+    (SELECT jsonb_build_object('id', p.id, 'label', apflora.pop_label(p), 'nr', p.nr)
+      FROM apflora.pop p WHERE p.id = t.pop_id) AS pop_by_pop_id
+  FROM apflora.tpop_history t;
+GRANT SELECT ON apflora.v_tpop_history TO apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
+
 COMMIT;
