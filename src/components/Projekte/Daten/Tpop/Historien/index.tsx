@@ -105,6 +105,8 @@ interface TpopHistoryQueryResult {
   }
 }
 
+type THistoryRowSelect = NonNullable<TpopHistoryQueryResult['tpopById']>
+
 type TpopHistoryUseQueryOptions = UseQueryOptions<
   TpopHistoryQueryResult,
   Error
@@ -125,7 +127,7 @@ export const Component = () => {
           apiFetch<NonNullable<TpopHistoryQueryResult['tpopById']>[]>(
             `/v_tpop?id=eq.${tpopId}&select=${select}`,
           ),
-          apiFetch<NonNullable<TpopHistoryQueryResult['tpopById']>[]>(
+          apiFetch<NonNullable<THistoryRowSelect>[]>(
             `/v_tpop_history?id=eq.${tpopId}&select=${select},year&order=year.desc`,
           ),
           apiFetch(
@@ -136,6 +138,31 @@ export const Component = () => {
           ),
           apiFetch(`/adresse?order=name.asc&select=value:id,label:name`),
         ])
+      // the tpop's ap's EK-Frequenzen (the old document never fetched
+      // them — the select was always empty; fixed with the migration)
+      const popId = tpopRows?.[0]?.popId ?? null
+      const pops =
+        popId ?
+          ((await apiFetch<{ ap_id: string | null }[]>(
+            `/q_pop?id=eq.${popId}&select=ap_id`,
+          )) ?? [])
+        : []
+      const apId = pops[0]?.ap_id ?? null
+      const ekfrequenzRows =
+        apId ?
+          ((await apiFetch<
+            { id: string; code: string | null; anwendungsfall: string | null }[]
+          >(
+            `/q_ekfrequenz?ap_id=eq.${apId}&select=id,code,anwendungsfall&order=sort.asc`,
+          )) ?? [])
+        : []
+      const longestAnwendungsfall = Math.max(
+        ...ekfrequenzRows.map((e) => (e.anwendungsfall || '').length),
+      )
+      const ekfrequenzs = ekfrequenzRows.map((e) => ({
+        value: e.id,
+        label: `${(e.code || '').padEnd(8)}:${(e.anwendungsfall || '').padEnd(longestAnwendungsfall)}`,
+      }))
       return {
         tpopById: tpopRows?.[0] ?? null,
         allTpopHistories: {
@@ -145,6 +172,7 @@ export const Component = () => {
         allPopStatusWertes: { nodes: statusWerte ?? [] },
         allTpopApberrelevantGrundWertes: { nodes: grundWerte ?? [] },
         allAdresses: { nodes: adresses ?? [] },
+        allEkfrequenzs: { nodes: ekfrequenzs },
       } as TpopHistoryQueryResult
     },
     suspense: true,

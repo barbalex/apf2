@@ -160,7 +160,7 @@ export const Component = () => {
       // phase 5: beob + its taxa; the ap's tpops with coordinates
       const [beobs, taxaR, tpopsR, popsR, statusWerteR] = await Promise.all([
         apiFetch<Record<string, unknown>[]>(
-          `/q_beob?id=eq.${id}&select=id,art_id:art_id,art_id_original:art_id_original,tpop_id:tpop_id,nicht_zuordnen:nicht_zuordnen,bemerkungen,quelle,data:data:json,lv95_x,lv95_y,infoflora_informiert_datum`,
+          `/q_beob?id=eq.${id}&select=id,art_id:art_id,art_id_original:art_id_original,tpop_id:tpop_id,nicht_zuordnen:nicht_zuordnen,bemerkungen,quelle,data,lv95_x,lv95_y,infoflora_informiert_datum`,
         ).then(async (rows: Record<string, unknown>[] | null) => {
           // data arrives as jsonb object; the form expects the raw string
           const fixed = (rows ?? []).map((r: Record<string, unknown>) => ({

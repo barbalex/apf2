@@ -9,7 +9,7 @@
  */
 
 export const adresseSelect =
-  'id,label,name,adresse,telefon,email,freiwErfko:freiw_erfko,changedBy:changed_by'
+  'id,value:id,label,name,adresse,telefon,email,freiwErfko:freiw_erfko,changedBy:changed_by'
 export const aeTaxonomiesSelect =
   'taxonomieId:taxonomie_id,taxonomieName:taxonomie_name,id,taxid,familie,artname,taxArtName:tax_art_name,artwert'
 export const aeLrDelarzeSelect = 'id,label,einheit'
@@ -101,7 +101,7 @@ export const tpopkontrIdbiotuebereinstWerteSelect =
 export const tpopkontrTypWerteSelect =
   'id,code,text,sort,historic,changedBy:changed_by'
 export const tpopkontrzaehlEinheitWerteSelect =
-  'id,code,text,correspondsToMassnAnzTriebe:corresponds_to_massn_anz_triebe,correspondsToMassnAnzPflanzen:corresponds_to_massn_anz_pflanzen,sort,historic,label,changedBy:changed_by'
+  'id,value:code,label:text,correspondsToMassnAnzTriebe:corresponds_to_massn_anz_triebe,correspondsToMassnAnzPflanzen:corresponds_to_massn_anz_pflanzen,sort,historic,changedBy:changed_by'
 export const tpopkontrzaehlMethodeWerteSelect =
   'id,code,text,sort,historic,changedBy:changed_by'
 export const tpopmassnErfbeurtWerteSelect =
