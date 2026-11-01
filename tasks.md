@@ -165,11 +165,26 @@ Opened (31.10.2026):
 - map polygon filters (coveredBy/contains/within/intersects, 29 uses) stay inside the RPC jsonb — no PostgREST URL syntax needed.
 - DataFilter OR-tabs and the all/filtered variants verified against the Playwright tree tests.
 
-## Phase 6 — Cutover & cleanup
+## Current production state (01.11.2026)
 
-**VPS SQL deploy DONE (01.11.2026, via SSH):** compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessThan/greaterThan), createGetGemeinde, createKarteHelpers, createApberForYear, createApberForApFromAp — all applied + NOTIFY; every new RPC verified 200 through production PostgREST with a minted manager JWT (query_ap lessThan, get_gemeinde \Zürich\, all 4 karte helpers, both print RPCs returning full trees, jber_abc, v_q views). Previous list (applied 31.10): `sql/postgrest/createGetGemeinde.sql`, `createKarteHelpers.sql`, `createApberForYear.sql`, `createApberForApFromAp.sql` — each: `docker compose exec -T db psql -U postgres -d apflora < sql/... ` then `NOTIFY pgrst, 'reload schema'`.
+**Production is DUAL-STACK on the API side, still GraphQL on the frontend:**
 
-- migrate Qk/Qk (the only remaining Apollo consumer) — then:
+- **VPS (root@139.162.172.88, project in `~/apf`)** runs BOTH api containers side by side: `apf_graphql` (PostGraphile, the old api) and `apf_postgrest` (api.apflora.ch/postgrest). This is deliberate — the `login` RPC mints JWTs valid on both, so the old and new frontend can coexist safely.
+- **Database/API side: READY.** All SQL the new app needs is deployed to prod and verified (see VPS deploy note below): the 24 `query_<table>` RPCs, all `v_*`/`q_*` views, compile_filter with every operator, the Karte click-helpers, both print RPCs. The new frontend could be served today and find everything it calls.
+- **Frontend side: NOT switched.** The production bundle (built from `master`) still talks GraphQL — verified against the live bundle at apflora.ch (zero `postgrest` references, still references `graphql`). The entire migration lives on the `postgrest` branch and runs only in dev so far.
+
+**Remaining cutover sequence (no big-bang — the risky DB side is already live):**
+
+1. merge `postgrest` → `master` and `npm run deploy` (the usual deploy flow)
+2. watch production — `apf_graphql` stays up as the instant rollback path (redeploy the old master and you're back)
+3. once confident: phase 6 teardown below
+
+## VPS SQL deploy DONE (01.11.2026, via SSH)
+
+compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessThan/greaterThan), createGetGemeinde, createKarteHelpers, createApberForYear, createApberForApFromAp — all applied + NOTIFY; every new RPC verified 200 through production PostgREST with a minted manager JWT (query_ap lessThan, get_gemeinde \Zürich\, all 4 karte helpers, both print RPCs returning full trees, jber_abc, v_q views). Earlier applies: 31.10.2026 createComputedViews.sql + createQueryRpcs.sql + compileFilter.sql. Any future DDL on the VPS: `docker compose exec -T db psql -U postgres -d apflora < sql/...` then `NOTIFY pgrst, 'reload schema'` (PostgREST caches the schema).
+
+## Phase 6 — Cutover & cleanup (after the new frontend is deployed and verified in prod)
+
 - remove PostGraphile containers (`backend/`, `backend-dev/`), `graphql/` dir, `apollo.config.cjs`, `codegen.ts`, schema-dump script.
 - remove `@apollo/client`, `graphql`, `rxjs`, graphql-codegen deps; `src/apolloClient.ts`, `src/apolloGql.ts`, `src/gql/`, `fragments.ts`; the `dataIdFromObject` allowlist logic goes with it.
 - Caddy: `/graphql` gone; Playwright suite green against the PostgREST-only stack.
@@ -177,12 +192,6 @@ Opened (31.10.2026):
 
 ---
 
-One pre-existing gap surfaced honestly: ekfrequenz has no label function (its fragment never had one), so v_ekfrequenz simply doesn't expose a label — no invented behavior
-
 ---
 
-nav tree: Arten (0/0)
-
 ---
-
-'AP Flora' app header title: text should be white. seems more like the nav tree background color?
