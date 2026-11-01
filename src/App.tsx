@@ -17,14 +17,14 @@ import { theme } from './utils/materialTheme.ts'
 
 import { buildApolloClient } from './apolloClient.ts'
 
-import { store } from './store/index.ts'
+import { store, userTokenAtom, removeUserAtom } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
-import { ApiError } from './modules/api.ts'
+import { ApiError, isTokenExpired } from './modules/api.ts'
 
 import './app.css'
 
@@ -89,6 +89,18 @@ export const App = () => {
 
   useEffect(() => {
     navigateToLastActiveNodeArray()
+  }, [])
+
+  // a token that expires mid-session logs the user out at expiry —
+  // otherwise the app silently browses on cached data until a refetch
+  // fails (api.ts catches the request-time cases; this catches idle tabs)
+  useEffect(() => {
+    const check = () => {
+      if (isTokenExpired(store.get(userTokenAtom))) store.set(removeUserAtom)
+    }
+    check()
+    const id = setInterval(check, 60_000)
+    return () => clearInterval(id)
   }, [])
 
   return (

@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode'
 
 import { camelToSnake } from './camelToSnake.ts'
 import { tables } from './tables.ts'
-import { store, userTokenAtom } from '../store/index.ts'
+import { store, userTokenAtom, removeUserAtom } from '../store/index.ts'
 
 export const postgrestUri = () => {
   // check localhost BEFORE electron:
@@ -30,24 +30,46 @@ export class ApiError extends Error {
   details?: unknown | undefined
 }
 
-// headers with the login token attached; expires the token like the
-// apollo auth link does (src/apolloClient.ts). An invalid or expired
-// token is simply not sent — the request runs anonymous, the server
-// answers 401/permission denied and the app opens the login dialog.
+export const isTokenExpired = (token: string | null) => {
+  if (!token) return false
+  try {
+    const { exp } = jwtDecode<{ exp: number }>(token)
+    return exp <= Date.now() / 1000
+  } catch {
+    // malformed token
+    return true
+  }
+}
+
+/**
+ * A dead session is logged out: the Anmeldung dialog opens instead of the
+ * app silently browsing on cached data until a refetch fails. Guarded by
+ * "a token exists" so the anonymous login flow is never logged out.
+ */
+const logoutDeadSession = () => {
+  if (store.get(userTokenAtom)) store.set(removeUserAtom)
+}
+
+// headers with the login token attached. An expired or malformed token
+// logs the session out (Anmeldung) and is not sent.
 const authHeaders = () => {
   const headers = new Headers()
   const token = store.get(userTokenAtom)
   if (token) {
-    try {
-      const { exp } = jwtDecode<{ exp: number }>(token)
-      if (exp > Date.now() / 1000) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-    } catch {
-      // malformed token > request anonymous
+    if (isTokenExpired(token)) {
+      logoutDeadSession()
+    } else {
+      headers.set('authorization', `Bearer ${token}`)
     }
   }
   return headers
+}
+
+/** 401 with a session = the server rejected the token (rotation, clock
+ * skew, tampering) — that session is dead too */
+const throwOrLogoutOnUnauthorized = async (res: Response) => {
+  if (res.status === 401) logoutDeadSession()
+  throw await buildError(res)
 }
 
 const buildError = async (res: Response): Promise<ApiError> => {
@@ -95,7 +117,7 @@ export const apiFetch = async <T = unknown>(
     ...options,
     headers,
   })
-  if (!res.ok) throw await buildError(res)
+  if (!res.ok) throw await throwOrLogoutOnUnauthorized(res)
   const text = await res.text()
   return text ? (JSON.parse(text) as T) : null
 }
@@ -164,7 +186,7 @@ export const apiCount = async (path: string): Promise<number> => {
     `${postgrestUri()}${path}${path.includes('?') ? '&' : '?'}limit=0`,
     { headers },
   )
-  if (!res.ok) throw await buildError(res)
+  if (!res.ok) throw await throwOrLogoutOnUnauthorized(res)
   // e.g. "*/423"
   const range = res.headers.get('content-range') ?? '*/0'
   return parseInt(range.split('/')[1] ?? '0', 10) || 0
@@ -188,7 +210,7 @@ export const rpcCount = async (
     headers,
     body: JSON.stringify(body),
   })
-  if (!res.ok) throw await buildError(res)
+  if (!res.ok) throw await throwOrLogoutOnUnauthorized(res)
   const range = res.headers.get('content-range') ?? '*/0'
   return parseInt(range.split('/')[1] ?? '0', 10) || 0
 }
