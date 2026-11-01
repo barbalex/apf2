@@ -2,6 +2,9 @@
   position: absolute;
   top: -2px;
   right: 6px;
+  /* the virtualized .rows are positioned too and follow in DOM order;
+     without this they paint over the button and swallow its clicks */
+  z-index: 1;
 }
 
 .menu {
