@@ -300,7 +300,15 @@ export const EkPlanTable = () => {
     try {
       const [tpopRows, ekfrequenzRows, popsR, apsR, statusWerteR, adressenR] =
         await Promise.all([
-          apiFetch<Record<string, unknown>[]>('/rpc/query_tpop?select=*', {
+          // ekplan has no query_ RPC — its rows come embedded, keeping
+          // every tpop id out of the URL (a ~30 kB URL kills the
+          // connection on production, #830)
+          apiFetch<
+            Record<string, unknown> & {
+              id: string
+              ekplan: { jahr: number | null; typ: string | null }[]
+            }[]
+          >('/rpc/query_tpop?select=*,ekplan(jahr,typ)', {
             method: 'POST',
             body: JSON.stringify({ p_filter: tpopFilter }),
           }),
@@ -313,16 +321,17 @@ export const EkPlanTable = () => {
           apiFetch('/v_adresse?select=id,name'),
         ])
       const tpopIds = ((tpopRows ?? []) as { id: string }[]).map((t) => t.id)
-      const [ekplansR, kontrsR, massnsR, massnTypWerteR] =
+      const [kontrsR, massnsR, massnTypWerteR] =
         tpopIds.length ?
           await Promise.all([
-            apiFetch<
-              { tpop_id: string; jahr: number | null; typ: string | null }[]
-            >(
-              `/ekplan?tpop_id=in.(${tpopIds.join(',')})&select=tpop_id,jahr,typ`,
-            ),
             apiFetch<{ id: string; tpop_id: string; jahr: number | null }[]>(
-              `/q_tpopkontr?tpop_id=in.(${tpopIds.join(',')})&select=id,tpop_id,jahr`,
+              '/rpc/query_tpopkontr?select=id,tpop_id,jahr',
+              {
+                method: 'POST',
+                body: JSON.stringify({
+                  p_filter: { tpopByTpopId: { id: { in: tpopIds } } },
+                }),
+              },
             ),
             apiFetch(
               '/rpc/query_tpopmassn?select=id,tpop_id,jahr,typ,zieleinheit_anzahl',
@@ -341,7 +350,7 @@ export const EkPlanTable = () => {
               }[]
             >('/tpopmassn_typ_werte?select=code,text,ansiedlung'),
           ])
-        : [[], [], [], []]
+        : [[], [], []]
       const popsById = new Map(
         ((popsR ?? []) as { id: string }[]).map((p) => [p.id, p]),
       )
@@ -372,16 +381,16 @@ export const EkPlanTable = () => {
         string,
         { jahr: number | null; typ: string | null }[]
       >()
-      for (const e of (ekplansR ?? []) as {
-        tpop_id: string
-        jahr: number | null
-        typ: string | null
-      }[]) {
-        const list = ekplansByTpop.get(e.tpop_id) ?? []
+      for (const t of tpopRows ?? []) {
         // ek_type enum labels arrive lowercase; the export compares
         // the uppercased graphql values
-        list.push({ jahr: e.jahr, typ: e.typ?.toUpperCase() ?? null })
-        ekplansByTpop.set(e.tpop_id, list)
+        ekplansByTpop.set(
+          t.id,
+          (t.ekplan ?? []).map((e) => ({
+            jahr: e.jahr,
+            typ: e.typ?.toUpperCase() ?? null,
+          })),
+        )
       }
       const kontrsByTpop = new Map<string, unknown[]>()
       for (const k of (kontrsR ?? []) as { tpop_id: string }[]) {

@@ -10,8 +10,16 @@ test.describe('EkPlan year header', () => {
     page,
   }) => {
     const rpcCalls: Record<string, number> = {}
+    // a ~30 kB URL (every tpop id in `in.(...)`) kills the whole http/2
+    // connection on production — no request may come close (#830)
+    let longestUrl = 0
+    let longestUrlPath = ''
     page.on('request', (request) => {
       const url = request.url()
+      if (url.length > longestUrl) {
+        longestUrl = url.length
+        longestUrlPath = url.slice(0, 80)
+      }
       if (request.method() !== 'POST') return
       // the header's batched queries (tpop_id + jahr in one response)
       for (const fn of [
@@ -52,6 +60,7 @@ test.describe('EkPlan year header', () => {
     expect(rpcCalls['rpc/query_tpop?select=id']).toBeLessThanOrEqual(4)
     expect(rpcCalls['rpc/query_tpopkontr?select=tpop_id (per-year)'] ?? 0).toBe(0)
     expect(rpcCalls['rpc/query_tpopmassn?select=tpop_id (per-year)'] ?? 0).toBe(0)
+    expect(longestUrl).toBeLessThan(8_000)
 
     // the counts must reach the menus: at least one year between 2015 and
     // the current year offers an enabled Kontrollen filter

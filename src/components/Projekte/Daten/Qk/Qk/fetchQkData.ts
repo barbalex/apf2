@@ -10,7 +10,7 @@
  * The returned shape matches QkQueryData exactly, so createMessageFunctions
  * stays unchanged.
  */
-import { apiCount, apiFetch } from '../../../../../modules/api.ts'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import type { QkQueryData } from './createMessageFunctions.ts'
 
@@ -1014,35 +1014,24 @@ export const fetchQkData = async ({
       // reverse relations): tpops with status 200 whose massns are only
       // Ansaat (typ 1), with no kontr and no beob
       const tpops =
-        (await apiFetch<{ id: string; nr: number | null; pop_id: string }[]>(
-          '/rpc/query_tpop?select=id,nr,pop_id',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              p_filter: tpopOf({ status: { equalTo: 200 } }),
-            }),
-          },
+        (await rpc<{ id: string; nr: number | null; pop_id: string }>(
+          'query_tpop',
+          'id,nr,pop_id',
+          tpopOf({ status: { equalTo: 200 } }),
         )) ?? []
-      const ids = tpops.map((t) => t.id)
-      if (!ids.length) return popWrap([])
-      const [massns, kontrCount, beobCount] = await Promise.all([
-        apiFetch<{ tpop_id: string; typ: number | null }[]>(
-          `/q_tpopmassn?tpop_id=in.(${ids.join(',')})&select=tpop_id,typ`,
+      if (!tpops.length) return popWrap([])
+      // the children run through their query_ RPCs with the same tpop
+      // filter — hundreds of uuids in one URL kill the connection
+      // through the api proxy (#830)
+      const childFilter = { tpopByTpopId: tpopOf({ status: { equalTo: 200 } }) }
+      const [massns, kontrs, beobs] = await Promise.all([
+        rpc<{ tpop_id: string; typ: number | null }>(
+          'query_tpopmassn',
+          'tpop_id,typ',
+          childFilter,
         ),
-        apiCount(`/q_tpopkontr?tpop_id=in.(${ids.join(',')})`),
-        apiCount(`/q_beob?tpop_id=in.(${ids.join(',')})`),
-      ])
-      const [kontrs, beobs] = await Promise.all([
-        kontrCount === 0 ?
-          Promise.resolve([] as { tpop_id: string }[])
-        : (apiFetch<{ tpop_id: string }[]>(
-            `/q_tpopkontr?tpop_id=in.(${ids.join(',')})&select=tpop_id`,
-          ) ?? []),
-        beobCount === 0 ?
-          Promise.resolve([] as { tpop_id: string }[])
-        : (apiFetch<{ tpop_id: string }[]>(
-            `/q_beob?tpop_id=in.(${ids.join(',')})&select=tpop_id`,
-          ) ?? []),
+        rpc<{ tpop_id: string }>('query_tpopkontr', 'tpop_id', childFilter),
+        rpc<{ tpop_id: string }>('query_beob', 'tpop_id', childFilter),
       ])
       const massnTypsByTpop = new Map<string, Set<number>>()
       for (const m of massns ?? []) {
@@ -1068,20 +1057,17 @@ export const fetchQkData = async ({
     },
     tpopStatusAnsaatversuchMitAnpflanzung: async () => {
       const tpops =
-        (await apiFetch<{ id: string; nr: number | null; pop_id: string }[]>(
-          '/rpc/query_tpop?select=id,nr,pop_id',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              p_filter: tpopOf({ status: { equalTo: 201 } }),
-            }),
-          },
+        (await rpc<{ id: string; nr: number | null; pop_id: string }>(
+          'query_tpop',
+          'id,nr,pop_id',
+          tpopOf({ status: { equalTo: 201 } }),
         )) ?? []
-      const ids = tpops.map((t) => t.id)
-      if (!ids.length) return popWrap([])
+      if (!tpops.length) return popWrap([])
       const massns =
-        (await apiFetch<{ tpop_id: string; typ: number | null }[]>(
-          `/q_tpopmassn?tpop_id=in.(${ids.join(',')})&select=tpop_id,typ`,
+        (await rpc<{ tpop_id: string; typ: number | null }>(
+          'query_tpopmassn',
+          'tpop_id,typ',
+          { tpopByTpopId: tpopOf({ status: { equalTo: 201 } }) },
         )) ?? []
       const withAnpflanzung = new Set(
         massns.filter((m) => m.typ === 2 || m.typ === 3).map((m) => m.tpop_id),
