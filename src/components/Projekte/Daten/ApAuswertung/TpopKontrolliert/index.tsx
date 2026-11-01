@@ -24,7 +24,7 @@ interface TpopKontrolliertNode {
   anzTpopber: string | null
 }
 
-interface TpopKontrolliertQueryResult {
+export interface TpopKontrolliertQueryResult {
   tpopKontrolliertForJber: {
     nodes: TpopKontrolliertNode[]
   }
@@ -36,6 +36,9 @@ interface TpopKontrolliertProps {
   print?: boolean
   isSubReport?: boolean
   jahr?: number
+  /** precomputed rows (f.i. from apber_charts_bulk on the Jahresbericht print);
+   * without it the component fetches for itself */
+  data?: TpopKontrolliertQueryResult
 }
 
 const color = {
@@ -44,12 +47,45 @@ const color = {
 }
 
 export const TpopKontrolliert = ({
+  data: dataPassed,
+  ...rest
+}: TpopKontrolliertProps) =>
+  dataPassed ?
+    <TpopKontrolliertData
+      data={dataPassed}
+      {...rest}
+    />
+  : <TpopKontrolliertSelfFetching {...rest} />
+
+interface TpopKontrolliertDataProps {
+  data: TpopKontrolliertQueryResult
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const TpopKontrolliertData = ({ data, ...rest }: TpopKontrolliertDataProps) => (
+  <TpopKontrolliertChart
+    rows={data.tpopKontrolliertForJber.nodes ?? []}
+    {...rest}
+  />
+)
+
+interface TpopKontrolliertSelfFetchingProps {
+  apId?: ApId
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+  jahr?: number | undefined
+}
+
+const TpopKontrolliertSelfFetching = ({
   apId: apIdPassed,
-  height = 400,
+  height,
   print,
   isSubReport,
   jahr,
-}: TpopKontrolliertProps) => {
+}: TpopKontrolliertSelfFetchingProps) => {
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
@@ -73,7 +109,30 @@ export const TpopKontrolliert = ({
       } as TpopKontrolliertQueryResult
     },
   })
-  const erfolgData = data.tpopKontrolliertForJber.nodes.map((d) => ({
+  return (
+    <TpopKontrolliertChart
+      rows={data.tpopKontrolliertForJber.nodes}
+      height={height}
+      print={print}
+      isSubReport={isSubReport}
+    />
+  )
+}
+
+interface TpopKontrolliertChartProps {
+  rows: TpopKontrolliertNode[]
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const TpopKontrolliertChart = ({
+  rows,
+  height = 400,
+  print,
+  isSubReport,
+}: TpopKontrolliertChartProps) => {
+  const erfolgData = rows.map((d) => ({
     jahr: d.year,
     'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
     kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,

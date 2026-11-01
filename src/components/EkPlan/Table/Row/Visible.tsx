@@ -37,6 +37,46 @@ export const Visible = ({
   const apValues = useAtomValue(ekPlanApValuesAtom)
   const isOdd = isItOdd(index)
 
+  // pop/ap/adresse/status context is identical for every row - fetched
+  // once per apValues instead of per row (the phase 5 migration had
+  // dropped it entirely, leaving the Art column and pop fields empty)
+  const { data: context } = useQuery({
+    queryKey: ['EkPlanContext', apValues],
+    enabled: apValues.length > 0,
+    queryFn: async () => {
+      const [apsR, popsR, statusWerteR, adressenR] = await Promise.all([
+        apiFetch<{ id: string; label: string | null; proj_id: string | null }[]>(
+          `/v_ap?id=in.(${apValues.join(',')})&select=id,label,proj_id`,
+        ),
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            name: string | null
+            status: number | null
+            ap_id: string | null
+          }[]
+        >(
+          `/q_pop?ap_id=in.(${apValues.join(',')})&select=id,nr,name,status,ap_id`,
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          '/pop_status_werte?select=code,text',
+        ),
+        apiFetch<{ id: string; name: string | null }[]>(
+          '/v_adresse?select=id,name',
+        ),
+      ])
+      return {
+        apsById: new Map((apsR ?? []).map((a) => [a.id, a])),
+        popsById: new Map((popsR ?? []).map((p) => [p.id, p])),
+        statusText: new Map(
+          (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+        ),
+        adressenById: new Map((adressenR ?? []).map((a) => [a.id, a.name])),
+      }
+    },
+  })
+
   const { data, error } = useQuery({
     queryKey: ['RowQueryForEkPlan', apValues, tpopId, years, fieldsShown],
     queryFn: async (): Promise<RowQueryForEkPlanResult> => {
@@ -170,10 +210,12 @@ export const Visible = ({
           })),
         },
       })
-      const ekplanRows = (ekplansR ?? []) as {
+      // ek_type enum: PostgREST returns lowercase labels, graphql returned
+      // the uppercased values the consumers compare against
+      const ekplanRows = ((ekplansR ?? []) as {
         jahr: number | null
         typ: string | null
-      }[]
+      }[]).map((e) => ({ jahr: e.jahr, typ: e.typ?.toUpperCase() ?? null }))
       return {
         allEkfrequenzs: { nodes: ekfrequenzNodes },
         tpopById: {
@@ -228,7 +270,55 @@ export const Visible = ({
     },
   })
 
-  const tpop = data?.tpopById
+  const tpopRaw = data?.tpopById as
+    | (Record<string, unknown> & { id: string })
+    | undefined
+  const pop = tpopRaw?.pop_id ?
+    context?.popsById.get(tpopRaw.pop_id as string)
+  : undefined
+  const ap = pop?.ap_id ? context?.apsById.get(pop.ap_id) : undefined
+  const tpop =
+    tpopRaw ?
+      ({
+        ...tpopRaw,
+        popStatusWerteByStatus:
+          tpopRaw.status == null ?
+            null
+          : {
+              text:
+                context?.statusText.get(tpopRaw.status as number) ?? null,
+            },
+        adresseByEkfKontrolleur:
+          tpopRaw.ekf_kontrolleur == null ?
+            null
+          : {
+              name:
+                context?.adressenById.get(
+                  tpopRaw.ekf_kontrolleur as string,
+                ) ?? null,
+            },
+        ekfrequenzByEkfrequenz:
+          (data?.allEkfrequenzs?.nodes ?? []).find(
+            (e) => e.id === tpopRaw.ekfrequenz,
+          ) ?? null,
+        popByPopId:
+          pop ?
+            {
+              id: pop.id,
+              nr: pop.nr,
+              name: pop.name,
+              popStatusWerteByStatus:
+                pop.status == null ?
+                  null
+                : { text: context?.statusText.get(pop.status) ?? null },
+              apByApId:
+                ap ?
+                  { id: ap.id, projId: ap.proj_id, label: ap.label }
+                : null,
+            }
+          : null,
+      } as RowQueryForEkPlanResult['tpopById'])
+    : null
   const ekfrequenz = tpop?.ekfrequenz
   const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
   const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
