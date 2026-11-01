@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -16,14 +16,16 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopber } from '../../../shared/fragments.ts'
-import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
-import type { TpopId, TpopEntwicklungWerteCode } from '../../../../models/apflora/index.ts'
+import type {
+  TpopId,
+  TpopEntwicklungWerteCode,
+} from '../../../../models/apflora/index.ts'
 import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface TpopberQueryResult {
   tpopberById?: {
@@ -42,13 +44,6 @@ interface TpopberQueryResult {
   } | null
 }
 
-const fieldTypes: Record<string, string> = {
-  tpopId: 'UUID',
-  jahr: 'Int',
-  entwicklung: 'Int',
-  bemerkungen: 'String',
-}
-
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type TpopberUseQueryOptions = UseQueryOptions<
@@ -58,27 +53,36 @@ type TpopberUseQueryOptions = UseQueryOptions<
   suspense: boolean
 }
 
+export const tpopberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<TpopberQueryResult['tpopberById']>[]>(
+        `/v_tpopber?id=eq.${id}&select=${tpopberSelect}`,
+      ),
+      apiFetch<
+        NonNullable<TpopberQueryResult['allTpopEntwicklungWertes']>['nodes']
+      >(`/tpop_entwicklung_werte?order=sort.asc&select=value:code,label:text`),
+    ])
+    return {
+      tpopberById: rows?.[0] ?? null,
+      allTpopEntwicklungWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { tpopberId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const tpopberQueryOptions: TpopberUseQueryOptions = {
-    queryKey: ['tpopber', tpopberId],
-    queryFn: async () => {
-      const result = await apolloClient.query<TpopberQueryResult>({
-        query,
-        variables: { id: tpopberId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+  const tpopberOptions: TpopberUseQueryOptions = {
+    ...tpopberQueryOptions(tpopberId),
     suspense: true,
   }
-  const { data } = useQuery(tpopberQueryOptions)
+  const { data } = useQuery(tpopberOptions)
 
   const row = (data?.tpopberById ?? {}) as NonNullable<
     TpopberQueryResult['tpopberById']
@@ -95,29 +99,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation updateTpopber(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                $changedBy: String
-              ) {
-                updateTpopberById(
-                  input: {
-                    id: $id
-                    tpopberPatch: {
-                      ${field}: $${field}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopber { ...TpopberFields }
-                }
-              }
-              ${tpopber}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -159,7 +141,9 @@ export const Component = () => {
           <RadioButtonGroup
             name="entwicklung"
             label="Entwicklung"
-            dataSource={(data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]}
+            dataSource={
+              (data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]
+            }
             value={row.entwicklung as null}
             saveToDb={saveToDb}
             error={fieldErrors.entwicklung}

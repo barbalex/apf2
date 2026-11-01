@@ -1,5 +1,4 @@
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from '../../../../../modules/api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -27,41 +26,17 @@ interface ApUsersQueryResult {
 }
 
 export const ApUsers = () => {
-  const apolloClient = useApolloClient()
-
   const { apId } = useParams<{ apId: string }>()
 
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['apUsers', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<ApUsersQueryResult>({
-        query: graphql(`
-          query apUsersForApQuery($apId: UUID!) {
-            allApUsers(
-              filter: {
-                apId: { equalTo: $apId }
-                # uncommented because ap_writer's dont see other names otherwise
-                # userByUserName: {
-                #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
-                # }
-              }
-            ) {
-              nodes {
-                id
-                userName
-                userByUserName {
-                  id
-                  role
-                }
-              }
-            }
-          }
-        `),
-        variables: { apId: apId ?? '' },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as ApUsersQueryResult
+      // phase 5: the old userByUserName relation embeds through the
+      // ap_user_user_name_fkey FK (PostgREST names it after the target table)
+      const nodes = await apiFetch<ApUserNode[]>(
+        `/ap_user?ap_id=eq.${apId ?? ''}&select=id,userName:user_name,userByUserName:user(id,role)&order=user_name.asc`,
+      )
+      return { allApUsers: { nodes: nodes ?? [] } } as ApUsersQueryResult
     },
   })
   const apUsers = data.allApUsers?.nodes ?? []

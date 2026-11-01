@@ -1,39 +1,32 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useUsersNavData = () => {
-  const apolloClient = useApolloClient()
-
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeUsersQuery($usersFilter: UserFilter!) {
-            allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
-              nodes {
-                id
-                label
-              }
-            }
-            totalCount: allUsers {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          usersFilter: userGqlFilterForTree,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_user?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: userGqlFilterForTree,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount('/q_user'),
+      ])
+      return {
+        allUsers: { nodes: nodes ?? [] },
+        totalCount: { totalCount },
+      }
     },
   })
 

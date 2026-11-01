@@ -1,11 +1,10 @@
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from '../../../../modules/api.ts'
+import { currentIssueSelect } from '../../../../modules/selects.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { currentIssue as currentIssueFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type Currentissue from '../../../../models/apflora/Currentissue.ts'
@@ -14,35 +13,20 @@ import styles from './index.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const query = dynamicGql`
-  query currentissueById($id: UUID!) {
-    currentissueById(id: $id) {
-      ...CurrentIssueFields
-    }
-  }
-  ${currentIssueFragment}
-`
-
 interface CurrentIssueQueryResult {
   currentissueById: Currentissue | null
 }
 
 export const Component = () => {
-  const apolloClient = useApolloClient()
-
   const { issueId } = useParams<{ issueId: string }>()
 
   const { data } = useSuspenseQuery({
     queryKey: ['currentIssue', issueId],
     queryFn: async () => {
-      const result = await apolloClient.query<CurrentIssueQueryResult>({
-        query,
-        variables: {
-          id: issueId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<CurrentIssueQueryResult['currentissueById']>[]
+      >(`/v_currentissue?id=eq.${issueId}&select=${currentIssueSelect}`)
+      return { currentissueById: rows?.[0] ?? null }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })

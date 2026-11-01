@@ -1,6 +1,5 @@
+import { apiCount, apiFetch } from './api.ts'
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -85,12 +84,19 @@ export const popIcons = {
   },
 }
 
-export const usePopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const usePopsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
@@ -99,32 +105,38 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
   const { data } = useSuspenseQuery({
     queryKey: ['treePop', apId, popGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreePopsQuery($popsFilter: PopFilter!, $apId: UUID!) {
-            apById(id: $apId) {
-              id
-              popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
-                nodes {
-                  id
-                  label
-                  status
-                }
-              }
-              totalCount: popsByApId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          popsFilter: popGqlFilterForTree,
-          apId,
+      // phase 5: the former popsByApId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...popGqlFilterForTree,
+        apByApId: {
+          ...((popGqlFilterForTree as { apByApId?: object }).apByApId ?? {}),
+          id: { equalTo: apId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null; status: number | null }[]>(
+          `/rpc/query_pop?select=id,label,status`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [
+                { field: 'nr', dir: 'asc' },
+                { field: 'name', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount(`/q_pop?ap_id=eq.${apId}`),
+      ])
+      return {
+        apById: {
+          id: apId,
+          popsByApId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
   // this is how to make the filter reactive in a hook
@@ -132,38 +144,22 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = store.sub(mapPopIconAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(treeShowPopIconAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(mapPopIconAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(treeShowPopIconAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const count = data.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data.apById?.totalCount?.totalCount ?? 0
@@ -200,8 +196,13 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
       const popIconIsHighlighted = p?.id === popId
       const PopIcon =
         p?.status ?
-          popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[p?.status + 'Highlighted']
-          : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[p?.status]
+          popIconIsHighlighted ?
+            (popIcons as Record<string, Record<string, React.ComponentType>>)[
+              popIconName as string
+            ]?.[p?.status + 'Highlighted']
+          : (popIcons as Record<string, Record<string, React.ComponentType>>)[
+              popIconName as string
+            ]?.[p?.status]
         : popIconIsHighlighted ? PopIconQHighlighted
         : PopIconQ
 

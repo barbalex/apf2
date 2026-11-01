@@ -1,89 +1,47 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface PopOhneKoordsQueryResult {
-  allPops: {
-    nodes: {
-      id: PopId
-      vPopOhnekoordsById: {
-        nodes: {
-          apId: ApId
-          artname: string | null
-          apBearbeitung: string | null
-          apStartJahr: number | null
-          apUmsetzung: string | null
-          id: PopId
-          nr: number | null
-          name: string | null
-          status: string | null
-          bekanntSeit: number | null
-          statusUnklar: boolean | null
-          statusUnklarBegruendung: string | null
-          x: number | null
-          y: number | null
-          createdAt: string | null
-          updatedAt: string | null
-          changedBy: string | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const OhneKoord = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickOhneKoord = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: PopOhneKoordsQueryResult | undefined } | undefined
+    let nodes:
+      | {
+          ap_id: string | null
+          artname: string | null
+          ap_bearbeitung: string | null
+          ap_start_jahr: number | null
+          ap_umsetzung: string | null
+          id: string
+          nr: number | null
+          name: string | null
+          status: string | null
+          bekannt_seit: number | null
+          status_unklar: boolean | null
+          status_unklar_begruendung: string | null
+          x: number | null
+          y: number | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<PopOhneKoordsQueryResult>({
-        query: graphql(`
-              query popOhneKoordsQuery {
-                allPops(filter: { vPopOhnekoordsByIdExist: true }) {
-                  nodes {
-                    id
-                    vPopOhnekoordsById {
-                      nodes {
-                        apId
-                        artname
-                        apBearbeitung
-                        apStartJahr
-                        apUmsetzung
-                        id
-                        nr
-                        name
-                        status
-                        bekanntSeit
-                        statusUnklar
-                        statusUnklarBegruendung
-                        x
-                        y
-                        createdAt
-                        updatedAt
-                        changedBy
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_pop_ohnekoord?select=ap_id,artname,ap_bearbeitung,ap_start_jahr,ap_umsetzung,id,nr,name,status,bekannt_seit,status_unklar,status_unklar_begruendung,x,y,created_at,updated_at,changed_by`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -93,26 +51,24 @@ export const OhneKoord = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-      ap_id: z?.vPopOhnekoordsById?.nodes?.[0]?.apId ?? '',
-      artname: z?.vPopOhnekoordsById?.nodes?.[0]?.artname ?? '',
-      ap_bearbeitung:
-        z?.vPopOhnekoordsById?.nodes?.[0]?.apBearbeitung ?? '',
-      ap_start_jahr: z?.vPopOhnekoordsById?.nodes?.[0]?.apStartJahr ?? '',
-      ap_umsetzung: z?.vPopOhnekoordsById?.nodes?.[0]?.apUmsetzung ?? '',
-      id: z?.vPopOhnekoordsById?.nodes?.[0]?.id ?? '',
-      nr: z?.vPopOhnekoordsById?.nodes?.[0]?.nr ?? '',
-      name: z?.vPopOhnekoordsById?.nodes?.[0]?.name ?? '',
-      status: z?.vPopOhnekoordsById?.nodes?.[0]?.status ?? '',
-      bekannt_seit: z?.vPopOhnekoordsById?.nodes?.[0]?.bekanntSeit ?? '',
-      status_unklar: z?.vPopOhnekoordsById?.nodes?.[0]?.statusUnklar ?? '',
-      status_unklar_begruendung:
-        z?.vPopOhnekoordsById?.nodes?.[0]?.statusUnklarBegruendung ?? '',
-      lv95X: z?.vPopOhnekoordsById?.nodes?.[0]?.x ?? '',
-      lv95Y: z?.vPopOhnekoordsById?.nodes?.[0]?.y ?? '',
-      created_at: z?.vPopOhnekoordsById?.nodes?.[0]?.createdAt ?? '',
-      updated_at: z?.vPopOhnekoordsById?.nodes?.[0]?.updatedAt ?? '',
-      changed_by: z?.vPopOhnekoordsById?.nodes?.[0]?.changedBy ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      ap_id: z.ap_id ?? '',
+      artname: z.artname ?? '',
+      ap_bearbeitung: z.ap_bearbeitung ?? '',
+      ap_start_jahr: z.ap_start_jahr ?? '',
+      ap_umsetzung: z.ap_umsetzung ?? '',
+      id: z.id ?? '',
+      nr: z.nr ?? '',
+      name: z.name ?? '',
+      status: z.status ?? '',
+      bekannt_seit: z.bekannt_seit ?? '',
+      status_unklar: z.status_unklar ?? '',
+      status_unklar_begruendung: z.status_unklar_begruendung ?? '',
+      lv95X: z.x ?? '',
+      lv95Y: z.y ?? '',
+      created_at: z.created_at ?? '',
+      updated_at: z.updated_at ?? '',
+      changed_by: z.changed_by ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)

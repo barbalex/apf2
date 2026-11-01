@@ -1,8 +1,7 @@
 import { GeoJSON } from 'react-leaflet'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import type { Feature, FeatureCollection } from 'geojson'
+import { apiFetch } from '../../../../modules/api.ts'
 
 interface GemeindeNode {
   id: string
@@ -32,29 +31,22 @@ const style = () => ({
 })
 
 export const Gemeinden = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['gemeinden'],
     queryFn: async () => {
-      const result = await apolloClient.query<GemeindenQueryResult>({
-        query: graphql(`
-          query karteGemeindesQuery {
-            allChAdministrativeUnits(
-              filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-            ) {
-              nodes {
-                id
-                geom {
-                  geojson
-                }
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the former geometry embed arrives as raw GeoJSON
+      const nodes =
+        (await apiFetch<{ id: string; geom: unknown }[]>(
+          `/ch_administrative_unit?localisedcharacterstring=eq.Gemeinde&select=id,geom`,
+        )) ?? []
+      return {
+        allChAdministrativeUnits: {
+          nodes: nodes.map((n) => ({
+            id: n.id,
+            geom: { geojson: JSON.stringify(n.geom) },
+          })),
+        },
+      } as GemeindenQueryResult
     },
   })
 

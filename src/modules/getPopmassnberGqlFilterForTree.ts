@@ -1,4 +1,4 @@
-import type { PopmassnberFilter } from '../gql/graphql.ts'
+import type { PopmassnberFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getPopmassnberGqlFilterForTree = (_popId: string) => {

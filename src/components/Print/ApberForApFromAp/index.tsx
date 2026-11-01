@@ -1,23 +1,13 @@
-import { graphql } from '../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from '../../../modules/api.ts'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { apByIdJahr } from './apByIdJahr.ts'
 import { ApberForAp } from '../ApberForAp/index.tsx'
 import type {
   ApberForApApNode,
   ApberForApJberAbcNode,
 } from '../ApberForAp/types.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
-import type { ApberId } from '../../../models/apflora/index.ts'
-
-interface ApberQueryResult {
-  apberById: {
-    id: ApberId
-    jahr: number | null
-  } | null
-}
 
 // result type of the apByIdJahr query (apByIdJahr.ts)
 interface ApByIdJahrQueryResult {
@@ -29,35 +19,25 @@ interface ApByIdJahrQueryResult {
 export const Component = () => {
   const { apberId, apId } = useParams()
 
-  const apolloClient = useApolloClient()
-
   const { data, error } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
-      const { data: apberData, error: apberError } = await apolloClient.query<ApberQueryResult>({
-        query: graphql(`
-          query apberById($apberId: UUID!) {
-            apberById(id: $apberId) {
-              id
-              jahr
-            }
-          }
-        `),
-        variables: {
-          apberId,
-          apId,
-        },
-      })
+      const rows = await apiFetch<{ id: string; jahr: number | null }[]>(
+        `/apber?id=eq.${apberId}&select=id,jahr`,
+      )
+      const apberData = { apberById: rows?.[0] ?? null }
       const jahr = apberData?.apberById?.jahr
-      if (apberError) throw apberError
       if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
 
-      const { data, error } = await apolloClient.query<ApByIdJahrQueryResult>({
-        query: apByIdJahr,
-        variables: { apId, jahr },
-      })
-      if (error) throw error
-      return { data, jahr }
+      // phase 5: the deep history tree comes from one RPC
+      const data = await apiFetch<ApByIdJahrQueryResult | null>(
+        '/rpc/apber_for_ap_from_ap',
+        {
+          method: 'POST',
+          body: JSON.stringify({ p_ap_id: apId, p_jahr: jahr }),
+        },
+      )
+      return { data: data ?? undefined, jahr }
     },
   })
 

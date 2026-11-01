@@ -1,7 +1,8 @@
+import { camelToSnake } from '../../../../modules/camelToSnake.ts'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -19,9 +20,6 @@ import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-// key: create${typename}; value: { [table]: { id } }
-type CreateWertResult = Record<string, Record<string, { id: string }>>
-
 interface MenuProps {
   row: {
     id: string
@@ -36,7 +34,6 @@ export const Menu = ({ row, table }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const typename = upperFirst(table)
@@ -47,21 +44,9 @@ export const Menu = ({ row, table }: MenuProps) => {
     : 'uups'
 
   const onClickAdd = async () => {
-    let result: { data?: CreateWertResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateWertResult>({
-        mutation: dynamicGql`
-            mutation create${typename}For${typename}Form {
-              create${typename}(
-                input: { ${table}: {  } }
-              ) {
-                ${table} {
-                  id
-                }
-              }
-            }
-          `,
-      })
+      await apiInsert(camelToSnake(table), { id: newId })
     } catch (error) {
       console.log('error', error)
       return addNotification({
@@ -77,7 +62,7 @@ export const Menu = ({ row, table }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeWerteFolders`],
     })
-    const id = result?.data?.[`create${typename}`]?.[table]?.id
+    const id = newId
     void navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
   }
 
@@ -91,13 +76,11 @@ export const Menu = ({ row, table }: MenuProps) => {
       search,
       toDelete: {
         table:
-          table === 'tpopApberrelevantGrundWerte' ? (
+          table === 'tpopApberrelevantGrundWerte' ?
             'tpop_apberrelevant_grund_werte'
-          )
           : table === 'ekAbrechnungstypWerte' ? 'ek_abrechnungstyp_werte'
-          : table === 'tpopkontrzaehlEinheitWerte' ? (
+          : table === 'tpopkontrzaehlEinheitWerte' ?
             'tpopkontrzaehl_einheit_werte'
-          )
           : table,
         id: row.id,
         label: null,

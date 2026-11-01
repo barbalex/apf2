@@ -37,7 +37,9 @@ export const Menu = ({ apfloraLayer, toggleFilterInput }: MenuProps) => {
   const onClickShowOnMap = () => {
     showMapIfNotYetVisible(projekteTabs)
     // apfloraLayer is always passed via menuBarProps
-    setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer as string]))
+    setActiveApfloraLayers(
+      uniq([...activeApfloraLayers, apfloraLayer as string]),
+    )
   }
 
   return (

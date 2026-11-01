@@ -3,12 +3,11 @@
 
 import { useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { DateTime } from 'luxon'
 
-import { query } from './query.ts'
+import { apiFetch } from '../../../../modules/api.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
@@ -30,23 +29,14 @@ interface MessageRowData {
   active: boolean
 }
 
-interface MessagesQueryResult {
-  allMessages?: {
-    nodes: MessageRowData[]
-  }
-}
-
 export const Component = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useSuspenseQuery({
     queryKey: ['messages'],
     queryFn: async () => {
-      const result = await apolloClient.query<MessagesQueryResult>({
-        query,
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<MessageRowData[]>(
+        `/message?select=id,message,time,active&order=time.desc`,
+      )
+      return { allMessages: { nodes: rows ?? [] } }
     },
   })
 

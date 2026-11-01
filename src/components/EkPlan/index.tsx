@@ -16,11 +16,9 @@ const Table = lazy(async () => ({
 const Choose = lazy(async () => ({
   default: (await import('./Choose.tsx')).Choose,
 }))
-import { queryAps } from './queryAps.ts'
+import { apiFetch } from '../../modules/api.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import {
-  store,
-  apolloClientAtom,
   type EkPlanApsData,
   userTokenAtom,
   ekPlanApsAtom,
@@ -114,16 +112,54 @@ export const Component = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['ekplanAps', aps.map((ap) => ap.value)],
     queryFn: async () => {
-      const apolloClient = store.get(apolloClientAtom)
-      if (!apolloClient) throw new Error('apolloClient was not set')
-      const result = await apolloClient.query({
-        query: queryAps,
-        variables: {
-          ids: aps.map((ap) => ap.value),
+      // phase 5: aps with their zielrelevant zaehleinheiten; sort by the
+      // einheit-werte sort client-side
+      const ids = aps.map((ap) => ap.value)
+      if (!ids.length) return { allAps: { nodes: [] } } as EkplanApQueryResult
+      const [apRows, ekzaehleinheitRows, einheitWerteRows] = await Promise.all([
+        apiFetch<{ id: string }[]>(`/q_ap?id=in.(${ids.join(',')})&select=id`),
+        apiFetch<
+          {
+            ap_id: string
+            zaehleinheit_id: number | null
+            zielrelevant: boolean | null
+          }[]
+        >(
+          `/ekzaehleinheit?ap_id=in.(${ids.join(',')})&zielrelevant=eq.true&select=ap_id,zaehleinheit_id:zaehleinheit_id,zielrelevant`,
+        ),
+        apiFetch<
+          {
+            id: number
+            code: number
+            text: string | null
+            sort: number | null
+          }[]
+        >('/v_tpopkontrzaehl_einheit_werte?select=id,code,text,sort'),
+      ])
+      const werteById = new Map((einheitWerteRows ?? []).map((w) => [w.id, w]))
+      const nodes = (apRows ?? []).map((a) => ({
+        id: a.id,
+        ekzaehleinheitsByApId: {
+          nodes: (ekzaehleinheitRows ?? [])
+            .filter((e) => e.ap_id === a.id && e.zaehleinheit_id != null)
+            .map((e) => ({
+              id: `${a.id}_${e.zaehleinheit_id}`,
+              tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+                id: e.zaehleinheit_id,
+                code: werteById.get(e.zaehleinheit_id ?? 0)?.code,
+                text: werteById.get(e.zaehleinheit_id ?? 0)?.text ?? null,
+                sort: werteById.get(e.zaehleinheit_id ?? 0)?.sort ?? 0,
+              },
+            }))
+            // former orderBy ...EINHEIT_WERTE_BY_ZAEHLEINHEIT_ID__SORT_ASC
+            .sort(
+              (x, y) =>
+                (x.tpopkontrzaehlEinheitWerteByZaehleinheitId.sort ?? 0) -
+                (y.tpopkontrzaehlEinheitWerteByZaehleinheitId.sort ?? 0),
+            ),
         },
-      })
-      if (result.error) throw result.error
-      return result.data as EkplanApQueryResult
+      }))
+      return { allAps: { nodes } } as unknown as EkplanApQueryResult
     },
   })
   // mirror the query data into atoms for the ApList children.

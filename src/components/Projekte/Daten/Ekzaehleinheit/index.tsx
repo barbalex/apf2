@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { ekzaehleinheitSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -10,15 +10,9 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
-import { queryLists } from './queryLists.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  ekzaehleinheit,
-  tpopkontrzaehlEinheitWerte,
-} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -28,6 +22,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface EkzaehleinheitNode {
   id: EkzaehleinheitId
@@ -62,24 +57,17 @@ interface EkzaehleinheitQueryResult {
   ekzaehleinheitById: EkzaehleinheitNode | null
 }
 
-interface ListsQueryResult {
-  allTpopkontrzaehlEinheitWertes: {
-    nodes: {
-      id: TpopkontrzaehlEinheitWerteId
-      value: TpopkontrzaehlEinheitWerteId
-      label: string | null
-    }[]
-  }
-}
-
-const fieldTypes: Record<string, string> = {
-  bemerkungen: 'String',
-  apId: 'UUID',
-  zaehleinheitId: 'UUID',
-  zielrelevant: 'Boolean',
-  notMassnCountUnit: 'Boolean',
-  sort: 'Int',
-}
+export const ekzaehleinheitQueryOptions = (id: string | undefined) => ({
+  queryKey: ['ekzaehleinheit', id],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<EkzaehleinheitQueryResult['ekzaehleinheitById']>[]
+    >(
+      `/v_ekzaehleinheit?id=eq.${id}&select=${ekzaehleinheitSelect},tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id,apByApId:ap_by_ap_id`,
+    )
+    return { ekzaehleinheitById: rows?.[0] ?? null }
+  },
+})
 
 export const Component = () => {
   const { zaehleinheitId: id } = useParams()
@@ -87,22 +75,11 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useSuspenseQuery({
-    queryKey: ['ekzaehleinheit', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<EkzaehleinheitQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+    ...ekzaehleinheitQueryOptions(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
@@ -115,17 +92,22 @@ export const Component = () => {
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter =
     notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
+  // phase 5: the notIn/isNull filter maps to PostgREST's not.in / not.is.null
+  const zaehleinheitWerteParams =
+    notToShow.length ? `id=not.in.(${notToShow.join(',')})` : 'id=not.is.null'
   const { data: dataLists } = useSuspenseQuery({
     queryKey: ['ekzaehleinheitLists', zaehleinheitWerteFilter],
     queryFn: async () => {
-      const result = await apolloClient.query<ListsQueryResult>({
-        query: queryLists,
-        variables: {
-          filter: zaehleinheitWerteFilter,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<
+        {
+          id: TpopkontrzaehlEinheitWerteId
+          value: TpopkontrzaehlEinheitWerteId
+          label: string | null
+        }[]
+      >(
+        `/tpopkontrzaehl_einheit_werte?select=id,value:id,label:text&${zaehleinheitWerteParams}&order=sort.asc`,
+      )
+      return { allTpopkontrzaehlEinheitWertes: { nodes: nodes ?? [] } }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
@@ -140,35 +122,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateEkzaehleinheit(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateEkzaehleinheitById(
-                input: {
-                  id: $id
-                  ekzaehleinheitPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ekzaehleinheit {
-                  ...EkzaehleinheitFields
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    ...TpopkontrzaehlEinheitWerteFields
-                  }
-                }
-              }
-            }
-            ${ekzaehleinheit}
-            ${tpopkontrzaehlEinheitWerte}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ekzaehleinheit', variables)
     } catch (error) {
       if (
         field === 'zielrelevant' &&

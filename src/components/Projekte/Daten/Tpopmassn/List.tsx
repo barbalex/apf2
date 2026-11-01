@@ -1,4 +1,3 @@
-
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { useTpopmassnNavData } from '../../../../modules/useTpopmassnNavData.ts'
@@ -22,7 +21,12 @@ export const List = () => {
   return (
     <SharedList
       navData={navDataForList}
-      MenuBarComponent={(props) => <Menu {...props} row={navData} />}
+      MenuBarComponent={(props) => (
+        <Menu
+          {...props}
+          row={navData}
+        />
+      )}
       menuBarProps={{ row: navData }}
     />
   )

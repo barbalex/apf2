@@ -1,8 +1,8 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { zielSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { isEqual } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -11,7 +11,6 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
-import { query } from './query.ts'
 import {
   userNameAtom,
   treeActiveNodeArrayAtom,
@@ -20,7 +19,6 @@ import {
 } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { ziel as zielFragment } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -56,22 +54,14 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: number; label: string | null }[]
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './Ziel.module.css'
-
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  typ: 'Int',
-  jahr: 'Int',
-  bezeichnung: 'String',
-  erreichung: 'String',
-  bemerkungen: 'String',
-}
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 const erreichungOptions = [
   { value: 'erreicht', label: 'erreicht' },
@@ -79,12 +69,29 @@ const erreichungOptions = [
   { value: 'unsicher', label: 'unsicher' },
 ]
 
+export const zielQueryOptions = (id: string | undefined) => ({
+  queryKey: ['ziel', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<ZielQueryResult['zielById']>[]>(
+        `/v_ziel?id=eq.${id}&select=${zielSelect}`,
+      ),
+      apiFetch<NonNullable<ZielQueryResult['allZielTypWertes']>['nodes']>(
+        `/ziel_typ_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      zielById: rows?.[0] ?? null,
+      allZielTypWertes: { nodes: werte ?? [] },
+    }
+  },
+})
+
 export const Component = () => {
   const { zielId: id } = useParams()
   const { search } = useLocation()
   const navigate = useNavigate()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const userName = useAtomValue(userNameAtom)
@@ -94,17 +101,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['ziel', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<ZielQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(zielQueryOptions(id))
 
   const row: Partial<ZielNode> = data?.zielById ?? {}
 
@@ -118,31 +115,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateZiel(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateZielById(
-                input: {
-                  id: $id
-                  zielPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                ziel {
-                  ...ZielFields
-                }
-              }
-            }
-            ${zielFragment}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('ziel', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

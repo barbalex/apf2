@@ -1,5 +1,5 @@
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -26,8 +26,6 @@ import {
   setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { CreateApForApsFormMutation } from '../../../../gql/graphql.ts'
-
 import styles from './Menu.module.css'
 
 interface MenuProps {
@@ -42,7 +40,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { projId, apId } = useParams<{ projId: string; apId: string }>()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const moving = useAtomValue(movingAtom)
@@ -52,22 +49,11 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   const onClickAdd = async () => {
-    let result:
-      | { data?: CreateApForApsFormMutation | undefined }
-      | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApForApsForm($projId: UUID!) {
-            createAp(input: { ap: { projId: $projId } }) {
-              ap {
-                id
-                projId
-              }
-            }
-          }
-        `),
-        variables: { projId: projId ?? '' },
+      await apiInsert('ap', {
+        id: newId,
+        proj_id: projId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -83,7 +69,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id = result?.data?.createAp?.ap?.id
+    const id = newId
     void navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
   }
 

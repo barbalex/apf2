@@ -1,21 +1,18 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopfreiwkontrSelect } from '../../../../modules/selects.ts'
+import type { TpopkontrRow } from './Form/index.tsx'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router'
 
-import { query } from './query.ts'
-import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Form } from './Form/index.tsx'
 import { Menu } from './Menu.tsx'
-
-import type {
-  TpopkontrQueryResult,
-  TpopkontrRow,
-} from './Form/index.tsx'
 
 interface ComponentProps {
   id?: string | undefined
@@ -29,6 +26,16 @@ import {
   isPrintAtom,
 } from '../../../../store/index.ts'
 
+export const tpopfreiwkontrQueryOptions = (id: string | undefined) => ({
+  queryKey: ['TpopkontrQuery', id],
+  queryFn: async () => {
+    const rows = await apiFetch<TpopkontrRow[]>(
+      `/v_tpopkontr?id=eq.${id}&select=${tpopfreiwkontrSelect},tpopByTpopId:tpop_by_tpop_id,adresseByBearbeiter:adresse_by_bearbeiter,tpopkontrzaehlsByTpopkontrId:tpopkontrzaehls_by_tpopkontr_id`,
+    )
+    return { tpopkontrById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = ({ id: idPassed }: ComponentProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
@@ -36,27 +43,17 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
 
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['TpopkontrQuery', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data, isLoading, error, refetch } = useQuery(
+    tpopfreiwkontrQueryOptions(id),
+  )
   // DO NOT use apId from url because this form is also used for mass prints
   const apId =
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
     '99999999-9999-9999-9999-999999999999'
 
-  const zaehls =
-    data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+  const zaehls = data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
   const row: Partial<TpopkontrRow> = data?.tpopkontrById ?? {}
 
@@ -76,18 +73,15 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
           // remove ekzaehleinheits without zaehleinheit_id
           .filter((z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code)
 
-        Promise.all(
-          ekzaehleinheits.map((z) =>
-            apolloClient.mutate({
-              mutation: createTpopkontrzaehl,
-              variables: {
-                tpopkontrId: row.id,
-                einheit:
-                  z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
-                changedBy: userName,
-              },
-            }),
-          ),
+        apiInsert(
+          'tpopkontrzaehl',
+          ekzaehleinheits.map((z) => ({
+            id: uuidv7(),
+            tpopkontr_id: row.id,
+            einheit:
+              z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
+            changed_by: userName,
+          })),
         )
           .then(() => {
             if (!isActive) return
@@ -111,7 +105,6 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
     }
   }, [
     addNotification,
-    apolloClient,
     data,
     isLoading,
     refetch,

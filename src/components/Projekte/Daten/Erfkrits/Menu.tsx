@@ -1,13 +1,12 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
 import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import type { ErfkritId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -17,15 +16,6 @@ import {
   addNotificationAtom,
   setOpenChooseApToCopyErfkritsFromAtom,
 } from '../../../../store/index.ts'
-
-interface CreateErfkritResult {
-  createErfkrit?: {
-    erfkrit?: {
-      id: ErfkritId
-      apId: ApId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -39,7 +29,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { apId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const setOpenChooseApToCopyErfkritsFrom = useSetAtom(
@@ -47,20 +36,11 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   )
 
   const onClickAdd = async () => {
-    let result: { data?: CreateErfkritResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateErfkritResult>({
-        mutation: graphql(`
-          mutation createErfkritForErfkritsForm($apId: UUID!) {
-            createErfkrit(input: { erfkrit: { apId: $apId } }) {
-              erfkrit {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId },
+      await apiInsert('erfkrit', {
+        id: newId,
+        ap_id: apId,
       })
     } catch (error) {
       return addNotification({
@@ -79,7 +59,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    const id = result?.data?.createErfkrit?.erfkrit?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

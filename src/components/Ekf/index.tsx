@@ -1,19 +1,16 @@
 import { useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
+import { apiFetch } from '../../modules/api.ts'
 
 import { isPrintAtom, isEkfSinglePrintAtom } from '../../store/index.ts'
-
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { EkfList } from './List/index.tsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
-import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
-import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
 import { getEkfFromData, type EkfQueryResult } from './getEkfFromData.ts'
 
 import styles from './index.module.css'
@@ -24,25 +21,117 @@ export const Component = () => {
   const { userId, ekfId, ekfYear } = useParams()
   const isPrint = useAtomValue(isPrintAtom)
   const isEkfSinglePrint = useAtomValue(isEkfSinglePrintAtom)
-  const apolloClient = useApolloClient()
 
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-  const query =
-    ekfRefYear === +(ekfYear ?? 0) ? dataByUserIdGql : dataWithDateByUserIdGql
-
   const { data } = useSuspenseQuery({
     queryKey: ['ekf', userId, ekfYear],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query,
-        variables: { id: userId, jahr: +(ekfYear ?? 0) },
+      // phase 5: user → its adresse → this year's freiwilligen-kontrollen,
+      // joined with tpop/pop/ap/projekt context client-side.
+      // accept empty jahr only when the reference year matches (former
+      // dataByUserId vs dataWithDateByUserId)
+      const jahr = +(ekfYear ?? 0)
+      const acceptNullJahr = ekfRefYear === jahr
+      const users =
+        (await apiFetch<{ adresse_id: string | null }[]>(
+          `/user?id=eq.${userId}&select=adresse_id:adresse_id`,
+        )) ?? []
+      const adresseId = users[0]?.adresse_id ?? null
+      if (!adresseId) return { userById: null }
+      const [kontrs, tpops, pops, aps] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            datum: string | null
+            tpop_id: string | null
+          }[]
+        >('/rpc/query_tpopkontr?select=id,datum,tpop_id', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              bearbeiter: adresseId,
+              typ: { equalTo: 'Freiwilligen-Kontrolle' },
+              ...(acceptNullJahr ?
+                {
+                  or: [{ jahr: { equalTo: jahr } }, { jahr: { isNull: true } }],
+                }
+              : { jahr: { equalTo: jahr } }),
+            },
+          }),
+        }),
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            flurname: string | null
+            gemeinde: string | null
+            pop_id: string | null
+          }[]
+        >(`/q_tpop?select=id,nr,flurname,gemeinde,pop_id`),
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            name: string | null
+            ap_id: string | null
+          }[]
+        >(`/q_pop?select=id,nr,name,ap_id`),
+        apiFetch<
+          {
+            id: string
+            ae_taxonomy_by_art_id: { artname: string | null } | null
+            projekt_by_proj_id: {
+              id: string | null
+              name: string | null
+            } | null
+          }[]
+        >(`/v_ap?select=id,ae_taxonomy_by_art_id,projekt_by_proj_id`),
+      ])
+      const tpopById = new Map((tpops ?? []).map((t) => [t.id, t]))
+      const popById = new Map((pops ?? []).map((p) => [p.id, p]))
+      const apById = new Map((aps ?? []).map((a) => [a.id, a]))
+      const nodes = (kontrs ?? []).map((e) => {
+        const tpop = e.tpop_id ? tpopById.get(e.tpop_id) : undefined
+        const pop = tpop?.pop_id ? popById.get(tpop.pop_id) : undefined
+        const apBy = pop?.ap_id ? apById.get(pop.ap_id) : undefined
+        return {
+          id: e.id,
+          datum: e.datum,
+          tpopByTpopId:
+            tpop ?
+              {
+                id: tpop.id,
+                nr: tpop.nr,
+                flurname: tpop.flurname,
+                gemeinde: tpop.gemeinde,
+                popByPopId:
+                  pop ?
+                    {
+                      id: pop.id,
+                      nr: pop.nr,
+                      name: pop.name,
+                      apByApId:
+                        apBy ?
+                          {
+                            id: apBy.id,
+                            aeTaxonomyByArtId: apBy.ae_taxonomy_by_art_id,
+                            projektByProjId: apBy.projekt_by_proj_id,
+                          }
+                        : null,
+                    }
+                  : null,
+              }
+            : null,
+        }
       })
-      if (result.error) throw result.error
-      // the query document is built dynamically, so type the result by hand
-      // errors are thrown above; an empty fallback renders the no-data notice
-      return (result.data as EkfQueryResult | undefined) ?? { userById: null }
+      return {
+        userById: {
+          id: userId,
+          adresseByAdresseId: { tpopkontrsByBearbeiter: { nodes } },
+        },
+      } as unknown as EkfQueryResult
     },
   })
 
@@ -54,7 +143,9 @@ export const Component = () => {
     if (ekf.length > 0 && !ekfId) {
       const firstEkf = ekf[0]
       if (firstEkf) {
-        void navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${firstEkf.id}${search}`)
+        void navigate(
+          `/Daten/Benutzer/${userId}/EKF/${ekfYear}/${firstEkf.id}${search}`,
+        )
       }
     }
     // adding ekf as dependency causes infinite loop

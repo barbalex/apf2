@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
@@ -15,9 +14,9 @@ import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../modules/exists.ts'
+import { apiFetch } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -44,7 +43,7 @@ interface PopAuswertungQueryResult {
   popAuswTpopMenge?: {
     nodes: {
       jahr: number | null
-      values: string
+      values: Record<string, unknown>
     }[]
   }
   allEkzaehleinheits?: {
@@ -65,9 +64,9 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem: number) => {
   const value =
-    exists(tickItem) && tickItem?.toLocaleString
-      ? tickItem.toLocaleString('de-ch')
-      : null
+    exists(tickItem) && tickItem?.toLocaleString ?
+      tickItem.toLocaleString('de-ch')
+    : null
   return value
 }
 
@@ -77,17 +76,36 @@ interface ComponentProps {
 
 export const Component = ({ height = 400 }: ComponentProps) => {
   const { apId, popId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data } = useSuspenseQuery({
     queryKey: ['popAuswertung', apId, popId],
     queryFn: async () => {
-      const result = await apolloClient.query<PopAuswertungQueryResult>({
-        query,
-        variables: { apId, id: popId },
-      })
-      if (result.error) throw result.error
-      return result.data as PopAuswertungQueryResult
+      // popAuswTpopMenge is the db function behind the old GraphQL field
+      const [pops, menges, ekzaehleinheits, tpops] = await Promise.all([
+        apiFetch<NonNullable<PopAuswertungQueryResult['popById']>[]>(
+          `/q_pop?id=eq.${popId}&select=id,label`,
+        ),
+        apiFetch<
+          NonNullable<PopAuswertungQueryResult['popAuswTpopMenge']>['nodes']
+        >(`/rpc/pop_ausw_tpop_menge?select=jahr,values`, {
+          method: 'POST',
+          body: JSON.stringify({ popid: popId }),
+        }),
+        apiFetch<
+          NonNullable<PopAuswertungQueryResult['allEkzaehleinheits']>['nodes']
+        >(
+          `/v_ekzaehleinheit?ap_id=eq.${apId}&zielrelevant=eq.true&select=id,tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id`,
+        ),
+        apiFetch<TpopData[]>(
+          `/q_tpop?pop_id=eq.${popId}&select=id,nr,label,status&order=nr.asc,label.asc`,
+        ),
+      ])
+      return {
+        popById: pops?.[0] ?? null,
+        popAuswTpopMenge: { nodes: menges ?? [] },
+        allEkzaehleinheits: { nodes: ekzaehleinheits ?? [] },
+        allTpops: { nodes: tpops ?? [] },
+      } as PopAuswertungQueryResult
     },
   })
 
@@ -97,7 +115,8 @@ export const Component = ({ height = 400 }: ComponentProps) => {
   const tpopMengeData: Record<string, unknown>[] = tpopMengeRawData.map(
     (e) => ({
       jahr: e.jahr,
-      ...JSON.parse(e.values),
+      // values is jsonb — PostgREST delivers it as an object
+      ...(e.values ?? {}),
     }),
   )
   const nonUniqueTpopIdsWithData = tpopMengeData.flatMap((d) =>
@@ -133,7 +152,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
   return (
     <>
       <FormTitle title={`${popLabel}: Auswertung`} />
-      {tpopMengeData.length ? (
+      {tpopMengeData.length ?
         <>
           <div className={styles.titleRow}>
             <h4
@@ -178,9 +197,8 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                   color = 'grey'
                 } else {
                   const isUrspruenglich = (tpop?.status ?? 0) < 200
-                  color = isUrspruenglich
-                    ? colorUrspruenglich
-                    : colorAngesiedelt
+                  color =
+                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                 }
 
                 return (
@@ -197,12 +215,14 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                 )
               })}
               <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </>
-      ) : (
-        <>
+      : <>
           <div className={styles.titleRow}>
             <h4
               className={styles.title}
@@ -219,7 +239,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
           </div>
           <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
-      )}
+      }
     </>
   )
 }

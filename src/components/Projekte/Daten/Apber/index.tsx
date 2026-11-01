@@ -1,8 +1,12 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { apberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
-import { useQuery, type UseQueryOptions, useQueryClient } from '@tanstack/react-query'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import {
+  useQuery,
+  type UseQueryOptions,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -11,12 +15,10 @@ import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { veraenderungZumVorjahr } from '../../../../modules/veraenderungZumVorjahr.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ApberId } from '../../../../models/apflora/Apber.ts'
@@ -24,25 +26,7 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
-
-const fieldTypes: Record<string, string> = {
-  jahr: 'Int',
-  situation: 'String',
-  vergleichVorjahrGesamtziel: 'String',
-  beurteilung: 'Int',
-  apberAnalyse: 'String',
-  konsequenzenUmsetzung: 'String',
-  konsequenzenErfolgskontrolle: 'String',
-  biotopeNeue: 'String',
-  biotopeOptimieren: 'String',
-  massnahmenOptimieren: 'String',
-  wirkungAufArt: 'String',
-  datum: 'Date',
-  massnahmenApBearb: 'String',
-  massnahmenPlanungVsAusfuehrung: 'String',
-  apId: 'UUID',
-  bearbeiter: 'UUID',
-}
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ApberQueryResult {
   apberById: {
@@ -91,32 +75,54 @@ interface ApberQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type ApberUseQueryOptions = UseQueryOptions<ApberQueryResult | undefined, Error> & {
+type ApberUseQueryOptions = UseQueryOptions<
+  {
+    apberById: NonNullable<ApberQueryResult['apberById']> | null
+    allAdresses: {
+      nodes: NonNullable<ApberQueryResult['allAdresses']>['nodes']
+    }
+    allApErfkritWertes: {
+      nodes: NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']
+    }
+  },
+  Error
+> & {
   suspense: boolean
 }
+
+export const apberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['apber', id],
+  queryFn: async () => {
+    const [rows, adressesOpts, aperfkritwertesOpts] = await Promise.all([
+      apiFetch<NonNullable<ApberQueryResult['apberById']>[]>(
+        `/v_apber?id=eq.${id}&select=${apberSelect},apByApId:ap_by_ap_id`,
+      ),
+      apiFetch<NonNullable<ApberQueryResult['allAdresses']>['nodes']>(
+        `/adresse?order=name.asc&select=value:id,label:name`,
+      ),
+      apiFetch<NonNullable<ApberQueryResult['allApErfkritWertes']>['nodes']>(
+        `/ap_erfkrit_werte?order=sort.asc&select=value:code,label:text,sort`,
+      ),
+    ])
+    return {
+      apberById: rows?.[0] ?? null,
+      allAdresses: { nodes: adressesOpts ?? [] },
+      allApErfkritWertes: { nodes: aperfkritwertesOpts ?? [] },
+    }
+  },
+})
 
 export const Component = () => {
   const { apberId } = useParams<{ apberId: string }>()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: ApberUseQueryOptions = {
-    queryKey: ['apber', apberId],
-    queryFn: async () => {
-      const result = await apolloClient.query<ApberQueryResult>({
-        query,
-        variables: {
-          id: apberId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+    ...apberQueryOptions(apberId),
     suspense: true,
   }
 
@@ -129,11 +135,11 @@ export const Component = () => {
   )
   const jahr = row?.jahr
   const beurteilungVorjahr =
-    jahr == null
-      ? null
-      : ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
-          (apber) => apber.jahr === jahr - 1,
-        )?.beurteilung ?? null)
+    jahr == null ? null : (
+      ((row?.apByApId?.apbersByApId?.nodes ?? []).find(
+        (apber) => apber.jahr === jahr - 1,
+      )?.beurteilung ?? null)
+    )
   const veraenderung = veraenderungZumVorjahr({
     beurteilung: row?.beurteilung,
     beurteilungVorjahr,
@@ -150,31 +156,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApberById(
-                input: {
-                  id: $id
-                  apberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apber {
-                  ...ApberFields
-                }
-              }
-            }
-            ${apber}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

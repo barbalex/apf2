@@ -1,10 +1,6 @@
-import { queryEkplans } from './queryEkplans.ts'
-import { queryEkfrequenz } from './queryEkfrequenz.ts'
-import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
-import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
+import { apiFetch, apiInsert } from '../../../../modules/api.ts'
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
   type Notification,
 } from '../../../../store/index.ts'
@@ -21,29 +17,16 @@ export const setEkplans = async ({
   ekfrequenz: string | null
   ekfrequenzStartjahr: number | null
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  if (!apolloClient) return
-  // TODO:
-  // only return if set ekfrequenz has kontrolljahre?
-  // but then: query ekplans beginning when? This year
-  //console.log('setEkplans', { ekfrequenzValue })
-  if (!ekfrequenzStartjahr) return // 1. query all ekplans beginning with ekfrequenzStartJahr
-  let ekplansToDeleteResult:
-    | {
-        data?:
-          | { allEkplans?: { nodes?: { id: string }[] } }
-          | undefined
-      }
-    | undefined
+  if (!ekfrequenzStartjahr) return
+  if (!ekfrequenzValue) return
+  // 1. query all ekplans beginning with ekfrequenzStartjahr
+  let ekplanIds: string[]
   try {
-    ekplansToDeleteResult = (await apolloClient.query({
-      query: queryEkplans,
-      fetchPolicy: 'network-only',
-      variables: {
-        tpopId,
-        jahr: ekfrequenzStartjahr,
-      },
-    })) as typeof ekplansToDeleteResult
+    ekplanIds = (
+      (await apiFetch<{ id: string }[]>(
+        `/ekplan?tpop_id=eq.${tpopId}&jahr=gte.${ekfrequenzStartjahr}&select=id`,
+      )) ?? []
+    ).map((e) => e.id)
   } catch (error) {
     return addNotification({
       message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${(error as Error).message}`,
@@ -52,17 +35,11 @@ export const setEkplans = async ({
       },
     })
   }
-  const ekplansToDelete = (
-    ekplansToDeleteResult?.data?.allEkplans?.nodes ?? []
-  ).map((e) => e.id)
   // 2. delete them
-  for (const id of ekplansToDelete) {
+  if (ekplanIds.length) {
     try {
-      await apolloClient.mutate({
-        mutation: mutationDeleteEkplan,
-        variables: {
-          id,
-        },
+      await apiFetch(`/ekplan?id=in.(${ekplanIds.join(',')})`, {
+        method: 'DELETE',
       })
     } catch (error) {
       return addNotification({
@@ -74,24 +51,13 @@ export const setEkplans = async ({
     }
   }
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
-  let ekfrequenzsResult:
-    | {
-        data?:
-          | {
-              allEkfrequenzs?: {
-                nodes?: { ektyp: string; kontrolljahre: number[] | null }[]
-              }
-            }
-          | undefined
-      }
-    | undefined
+  let ekfrequenz: { ektyp: string; kontrolljahre: number[] | null } | undefined
   try {
-    ekfrequenzsResult = (await apolloClient.query({
-      query: queryEkfrequenz,
-      variables: {
-        id: ekfrequenzValue ?? '',
-      },
-    })) as typeof ekfrequenzsResult
+    ekfrequenz = ((await apiFetch<
+      { ektyp: string; kontrolljahre: number[] | null }[]
+    >(
+      `/ekfrequenz?id=eq.${ekfrequenzValue}&ektyp=not.is.null&select=ektyp,kontrolljahre`,
+    )) ?? [])[0]
   } catch (error) {
     return addNotification({
       message: `Fehler beim Abfragen der Kontrolljahre: ${(error as Error).message}`,
@@ -100,10 +66,11 @@ export const setEkplans = async ({
       },
     })
   }
-  const ekfrequenz = ekfrequenzsResult?.data?.allEkfrequenzs?.nodes?.[0]
   if (!ekfrequenz) return
   // 4. add kontrolljahre to ekplan
-  const typ = ekfrequenz.ektyp.toUpperCase()
+  // ek_type enum labels are lowercase (PostgREST returns labels,
+  // graphql used to return uppercased values)
+  const typ = ekfrequenz.ektyp
   const kontrolljahre: number[] = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
     return addNotification({
@@ -113,20 +80,15 @@ export const setEkplans = async ({
       },
     })
   }
-  // parallel execution:
-  const mutationPromises = kontrolljahre.map((jahr: number) =>
-    apolloClient.mutate({
-      mutation: mutationCreateEkplan,
-      variables: {
-        tpopId,
+  try {
+    await apiInsert(
+      'ekplan',
+      kontrolljahre.map((jahr: number) => ({
+        tpop_id: tpopId,
         jahr: jahr + ekfrequenzStartjahr,
         typ,
-      },
-    }),
-  )
-  // await all mutations
-  try {
-    await Promise.all(mutationPromises)
+      })),
+    )
   } catch (error) {
     return addNotification({
       message: `Fehler beim Schaffen neuer EK-Pläne: ${(error as Error).message}`,
@@ -136,20 +98,5 @@ export const setEkplans = async ({
     })
   }
   // 5. tell user how it went
-  // let jahreList = kontrolljahre.join(', ')
-  // const formatter = new Intl.ListFormat('de', {
-  //   style: 'long',
-  //   type: 'conjunction',
-  // })
-  // jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
-  // addNotification({
-  //   message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
-  //     kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
-  //   } ${jahreList} gesetzt`,
-  //   options: {
-  //     variant: 'success',
-  //   },
-  // })
-
   return
 }

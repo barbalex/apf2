@@ -1,8 +1,7 @@
 import { GeoJSON } from 'react-leaflet'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import type { Feature, FeatureCollection } from 'geojson'
+import { apiFetch } from '../../../../modules/api.ts'
 
 interface DetailplanNode {
   id: string
@@ -30,28 +29,23 @@ const style = () => ({
 })
 
 export const Detailplaene = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['detailplaene'],
     queryFn: async () => {
-      const result = await apolloClient.query<DetailplaeneQueryResult>({
-        query: graphql(`
-          query karteDetailplaenesQuery {
-            allDetailplaenes {
-              nodes {
-                id
-                data
-                geom {
-                  geojson
-                }
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the former geometry embed arrives as raw GeoJSON
+      const nodes =
+        (await apiFetch<{ id: string; data: string | null; geom: unknown }[]>(
+          `/detailplaene?select=id,data,geom`,
+        )) ?? []
+      return {
+        allDetailplaenes: {
+          nodes: nodes.map((n) => ({
+            id: n.id,
+            data: n.data,
+            geom: { geojson: JSON.stringify(n.geom) },
+          })),
+        },
+      } as DetailplaeneQueryResult
     },
   })
 

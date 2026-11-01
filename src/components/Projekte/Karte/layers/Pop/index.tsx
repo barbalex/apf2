@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
+import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
-import { query } from './query.ts'
 
 import type {
   PopId,
@@ -20,7 +19,6 @@ import {
   addNotificationAtom,
   treePopGqlFilterAtom,
 } from '../../../../../store/index.ts'
-
 
 export interface PopNode {
   id: PopId
@@ -78,7 +76,6 @@ const ObservedPop = () => {
   const map = useMap()
   const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
 
   const popFilter = cloneDeep(popGqlFilter.filtered)
   popFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
@@ -86,12 +83,65 @@ const ObservedPop = () => {
   const { data, error } = useQuery({
     queryKey: ['PopForMapQuery', popFilter],
     queryFn: async () => {
-      const result = await apolloClient.query<PopQueryResult>({
-        query: query,
-        variables: { popFilter },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the cascade filter runs through query_pop; status text
+      // and artname join client-side
+      const [popsR, statusWerteR, apsR] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            name: string | null
+            status: number | null
+            wgs84_lat: number | null
+            wgs84_long: number | null
+            lv95_x: number | null
+            lv95_y: number | null
+            ap_id: string | null
+          }[]
+        >(
+          '/rpc/query_pop?select=id,nr,name,status,wgs84_lat,wgs84_long,lv95_x,lv95_y,ap_id',
+          {
+            method: 'POST',
+            body: JSON.stringify({ p_filter: popFilter }),
+          },
+        ),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/pop_status_werte?select=code,text`,
+        ),
+        apiFetch<
+          {
+            id: string
+            ae_taxonomy_by_art_id: { artname: string | null } | null
+          }[]
+        >(`/v_ap?select=id,ae_taxonomy_by_art_id`),
+      ])
+      const statusWerte = new Map(
+        (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      const apById = new Map((apsR ?? []).map((a) => [a.id, a]))
+      const nodes = (popsR ?? []).map((p) => ({
+        id: p.id,
+        nr: p.nr,
+        name: p.name,
+        status: p.status,
+        wgs84Lat: p.wgs84_lat,
+        wgs84Long: p.wgs84_long,
+        lv95X: p.lv95_x,
+        lv95Y: p.lv95_y,
+        popStatusWerteByStatus:
+          p.status == null ?
+            null
+          : { id: p.status, text: statusWerte.get(p.status) ?? null },
+        apByApId:
+          p.ap_id ?
+            {
+              id: p.ap_id,
+              aeTaxonomyByArtId:
+                apById.get(p.ap_id)?.ae_taxonomy_by_art_id ?? null,
+            }
+          : null,
+      }))
+      return { allPops: { nodes } } as PopQueryResult
     },
   })
 

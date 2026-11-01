@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -13,17 +13,6 @@ import Tooltip from '@mui/material/Tooltip'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
-
-import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
-
-interface CreateZielResult {
-  createZiel?: {
-    ziel?: {
-      id: ZielId
-      apId: ApId
-    }
-  }
-}
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
@@ -37,24 +26,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, jahr, zielId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateZielResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateZielResult>({
-        mutation: graphql(`
-          mutation createZielForZielForm($apId: UUID!) {
-            createZiel(input: { ziel: { apId: $apId } }) {
-              ziel {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId },
+      await apiInsert('ziel', {
+        id: newId,
+        ap_id: apId,
       })
     } catch (error) {
       return addNotification({
@@ -73,7 +52,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
-    const id = result?.data?.createZiel?.ziel?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
     )

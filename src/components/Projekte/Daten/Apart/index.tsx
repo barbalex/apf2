@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { apartSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -12,12 +12,9 @@ import { useAtomValue } from 'jotai'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apart } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
@@ -25,11 +22,7 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
-
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  artId: 'UUID',
-}
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ApartNode {
   id: ApartId
@@ -56,30 +49,34 @@ interface ApartQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type ApartUseQueryOptions = UseQueryOptions<ApartQueryResult | undefined, Error> & {
+type ApartUseQueryOptions = UseQueryOptions<
+  { apartById: NonNullable<ApartQueryResult['apartById']> | null },
+  Error
+> & {
   suspense: boolean
 }
+
+export const apartQueryOptions = (id: string | undefined) => ({
+  queryKey: ['apart', id],
+  queryFn: async () => {
+    const rows = await apiFetch<NonNullable<ApartQueryResult['apartById']>[]>(
+      `/v_apart?id=eq.${id}&select=${apartSelect},aeTaxonomyByArtId:ae_taxonomy_by_art_id,apByApId:ap_by_ap_id`,
+    )
+    return { apartById: rows?.[0] ?? null }
+  },
+})
 
 export const Component = () => {
   const { taxonId: id } = useParams<{ taxonId: string }>()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: ApartUseQueryOptions = {
-    queryKey: ['apart', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<ApartQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+    ...apartQueryOptions(id),
     suspense: true,
   }
 
@@ -120,31 +117,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApart(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApartById(
-                input: {
-                  id: $id
-                  apartPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apart {
-                  ...ApartFields
-                }
-              }
-            }
-            ${apart}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apart', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -209,9 +182,7 @@ export const Component = () => {
               labelSize={12}
               label="Taxon"
               row={row}
-              query={queryAeTaxonomies}
               filter={aeTaxonomiesfilter}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               error={fieldErrors.artId}
             />

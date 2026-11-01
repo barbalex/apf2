@@ -45,17 +45,17 @@ export const getXlsxBuffer = async ({
       },
     ],
     // autoFilter is applied below — exceljs' option typing misses it here
-    ...( {
-    autoFilter: {
-      from: {
-        row: 1,
-        column: 1,
+    ...({
+      autoFilter: {
+        from: {
+          row: 1,
+          column: 1,
+        },
+        to: {
+          row: 1,
+          column: numberOfColumns,
+        },
       },
-      to: {
-        row: 1,
-        column: numberOfColumns,
-      },
-    },
     } as unknown as Record<string, unknown>),
   })
   worksheet.addRows(dataArray)
@@ -88,6 +88,6 @@ export const getXlsxBuffer = async ({
       },
     })
   }
-  
+
   return buffer
 }

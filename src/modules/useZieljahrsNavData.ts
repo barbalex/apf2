@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
@@ -12,11 +11,13 @@ const getZieljahrsCount = (ziels: ({ jahr?: number | null } | null)[]) => {
   return count
 }
 
-export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useZieljahrsNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
@@ -24,46 +25,54 @@ export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?
   const { data } = useSuspenseQuery({
     queryKey: ['treeZieljahrs', apId, zielGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeZieljahrsQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
-            apById(id: $apId) {
-              id
-              zielsByApId {
-                nodes {
-                  id
-                  jahr
-                }
-              }
-              filteredZiels: zielsByApId(
-                filter: $zielsFilter
-                orderBy: [JAHR_ASC, LABEL_ASC]
-              ) {
-                nodes {
-                  id
-                  label
-                  jahr
-                }
-              }
-            }
-          }
-        `),
-        variables: {
-          zielsFilter: zielGqlFilterForTree,
-          apId,
+      // phase 5: the former zielsByApId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...zielGqlFilterForTree,
+        apByApId: {
+          ...((zielGqlFilterForTree as { apByApId?: object }).apByApId ?? {}),
+          id: { equalTo: apId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [ziels, filteredZiels] = await Promise.all([
+        apiFetch<{ id: string; jahr: number | null }[]>(
+          `/q_ziel?ap_id=eq.${apId}&select=id,jahr`,
+        ),
+        apiFetch<{ id: string; label: string | null; jahr: number | null }[]>(
+          `/rpc/query_ziel?select=id,label,jahr`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [
+                { field: 'jahr', dir: 'asc' },
+                { field: 'label', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+      ])
+      return {
+        apById: {
+          id: apId,
+          zielsByApId: { nodes: ziels ?? [] },
+          filteredZiels: { nodes: filteredZiels ?? [] },
+        },
+      }
     },
   })
 
   const ziels = data.apById?.zielsByApId?.nodes ?? []
   const filteredZiels = data.apById?.filteredZiels?.nodes ?? []
   const zieljahrsCount = getZieljahrsCount(ziels)
-  const countByJahr = countBy(filteredZiels, (e) => e?.jahr ?? 0) as Record<string, number>
-  const unfilteredCountByJahr = countBy(ziels, (e) => e?.jahr ?? 0) as Record<string, number>
+  const countByJahr = countBy(filteredZiels, (e) => e?.jahr ?? 0) as Record<
+    string,
+    number
+  >
+  const unfilteredCountByJahr = countBy(ziels, (e) => e?.jahr ?? 0) as Record<
+    string,
+    number
+  >
 
   // convert into array of objects with id=jahr and count
   const menus = Object.keys(countByJahr).map((jahr) => ({

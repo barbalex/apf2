@@ -1,9 +1,8 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { apiFetch } from '../../../../modules/api.ts'
 
 import { Qk } from './Qk/index.tsx'
-import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type {
@@ -37,17 +36,27 @@ interface QkQueryResult {
 
 export const Component = () => {
   const { apId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['qk', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<QkQueryResult>({
-        query,
-        variables: { apId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [qks, apqks] = await Promise.all([
+        apiFetch<
+          {
+            name: string
+            titel: string | null
+            beschreibung: string | null
+            sort: number | null
+          }[]
+        >(`/qk?select=name,titel,beschreibung,sort&order=sort.asc,name.asc`),
+        apiFetch<{ ap_id: string; qk_name: string }[]>(
+          `/apqk?ap_id=eq.${apId}&select=ap_id,qkName:qk_name`,
+        ),
+      ])
+      return {
+        allQks: { nodes: qks ?? [], totalCount: (qks ?? []).length },
+        allApqks: { nodes: apqks ?? [] },
+      } as unknown as QkQueryResult
     },
     // no suspense as else the node will not turn red on click, only after QK's were queried
   })

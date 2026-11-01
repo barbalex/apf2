@@ -1,37 +1,25 @@
-import { graphql } from '../gql/index.ts'
+import { apiFetch } from './api.ts'
 
 import {
   store,
   addNotificationAtom,
   type Notification,
-  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
-
-const beobById = graphql(`
-  query beobById($id: UUID!) {
-    beobById(id: $id) {
-      id
-      lv95X
-      lv95Y
-    }
-  }
-`)
 
 export const getAndValidateCoordinatesOfBeob = async ({
   id,
 }: {
   id: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
-  let beobResult
+  let beob: { lv95X: number | null; lv95Y: number | null } | undefined
   try {
-    beobResult = await apolloClient.query({
-      query: beobById,
-      variables: { id },
-    })
+    const beobs = await apiFetch<
+      { lv95X: number | null; lv95Y: number | null }[]
+    >(`/q_beob?id=eq.${id}&select=lv95X:lv95_x,lv95Y:lv95_y`)
+    beob = beobs?.[0]
   } catch (error) {
     addNotification({
       message: (error as Error).message,
@@ -40,12 +28,11 @@ export const getAndValidateCoordinatesOfBeob = async ({
       },
     })
   }
-  const beob = beobResult?.data?.beobById
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y
   if (!lv95X) {
     addNotification({
-      message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
+      message: `Die Beobachtung mit der ID ${id} hat keine (vollständigen) Koordinaten`,
       options: {
         variant: 'error',
       },

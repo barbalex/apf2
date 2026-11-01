@@ -1,23 +1,22 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { idealbiotopSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { DateField } from '../../../shared/Date.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { idealbiotop } from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { IdealbiotopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Idealbiotop.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface IdealbiotopNode {
   id: IdealbiotopId
@@ -47,49 +46,26 @@ interface IdealbiotopQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  erstelldatum: 'Date',
-  hoehenlage: 'String',
-  region: 'String',
-  exposition: 'String',
-  besonnung: 'String',
-  hangneigung: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  wasserhaushalt: 'String',
-  konkurrenz: 'String',
-  moosschicht: 'String',
-  krautschicht: 'String',
-  strauchschicht: 'String',
-  baumschicht: 'String',
-  bemerkungen: 'String',
-}
+export const idealbiotopQueryOptions = (apId: string | undefined) => ({
+  queryKey: ['idealbiotop', apId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<IdealbiotopQueryResult['allIdealbiotops']>['nodes']
+    >(`/idealbiotop?ap_id=eq.${apId}&select=${idealbiotopSelect}`)
+    return { allIdealbiotops: { nodes: rows ?? [] } }
+  },
+})
 
 export const Component = () => {
   const { apId } = useParams()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['idealbiotop', apId],
-    queryFn: async () => {
-      const result = await apolloClient.query<IdealbiotopQueryResult>({
-        query,
-        variables: { id: apId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(idealbiotopQueryOptions(apId))
 
   const row: Partial<IdealbiotopNode> = data?.allIdealbiotops?.nodes?.[0] ?? {}
 
@@ -104,31 +80,7 @@ export const Component = () => {
     }
 
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateIdealbiotop(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateIdealbiotopById(
-                input: {
-                  id: $id
-                  idealbiotopPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                idealbiotop {
-                  ...IdealbiotopFields
-                }
-              }
-            }
-            ${idealbiotop}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('idealbiotop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

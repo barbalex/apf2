@@ -1,25 +1,32 @@
-import { queryBeob } from './queryBeob.ts'
-import { updateTpopById } from './updateTpopById.ts'
+import { apiFetch, apiUpdateByVariables } from '../api.ts'
 
 import {
   store,
   addNotificationAtom,
   type Notification,
-  getApolloClientFromStore,
 } from '../../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
-  const apolloClient = getApolloClientFromStore()
   // fetch beob coodinates
-  let beobResult
+  let beob:
+    | {
+        tpop_id: string | null
+        wgs84_lat: number | null
+        wgs84_long: number | null
+      }
+    | undefined
   try {
-    beobResult = await apolloClient.query({
-      query: queryBeob,
-      variables: { id },
-    })
+    const beobs = await apiFetch<
+      {
+        tpop_id: string | null
+        wgs84_lat: number | null
+        wgs84_long: number | null
+      }[]
+    >(`/q_beob?id=eq.${id}&select=tpop_id,wgs84_lat,wgs84_long`)
+    beob = beobs?.[0]
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -28,8 +35,11 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
       },
     })
   }
-  const beob = beobResult?.data?.beobById
-  const { wgs84Lat, wgs84Long, tpopId } = beob ?? {}
+  const {
+    wgs84_lat: wgs84Lat,
+    wgs84_long: wgs84Long,
+    tpop_id: tpopId,
+  } = beob ?? {}
   if (!tpopId) {
     return addNotification({
       message: 'Die Beobachtung ist keiner Teil-Population zugeordnet',
@@ -52,12 +62,9 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
 
   // set tpop coordinates
   try {
-    await apolloClient.mutate({
-      mutation: updateTpopById,
-      variables: {
-        id: tpopId,
-        geomPoint,
-      },
+    await apiUpdateByVariables('tpop', {
+      id: tpopId,
+      geomPoint,
     })
   } catch (error) {
     return addNotification({

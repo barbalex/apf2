@@ -1,8 +1,8 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { apberuebersichtSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import Button from '@mui/material/Button'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
 import { useParams } from 'react-router'
@@ -14,11 +14,9 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { apberuebersicht } from '../../../shared/fragments.ts'
 import { Error } from '../../../shared/Error.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { historize } from '../../../../modules/historize.ts'
@@ -28,14 +26,7 @@ import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersic
 import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 
 import styles from './index.module.css'
-
-const fieldTypes: Record<string, string> = {
-  projId: 'UUID',
-  jahr: 'Int',
-  historyDate: 'Date',
-  historyFixed: 'Boolean',
-  bemerkungen: 'String',
-}
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ApberuebersichtNode {
   id: ApberuebersichtId
@@ -48,10 +39,6 @@ interface ApberuebersichtNode {
   changedBy: string | null
 }
 
-interface ApberuebersichtQueryResult {
-  apberuebersichtById: ApberuebersichtNode | null
-}
-
 const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
   const now = new Date()
   const currentMonth = now.getMonth()
@@ -59,6 +46,16 @@ const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
   const previousYear = currentYear - 1
   return (currentMonth < 3 && previousYear === jahr) || currentYear === jahr
 }
+
+export const apberuebersichtQueryOptions = (id: string | undefined) => ({
+  queryKey: ['Apberuebersicht', id],
+  queryFn: async () => {
+    const rows = await apiFetch<ApberuebersichtNode[]>(
+      `/v_apberuebersicht?id=eq.${id}&select=${apberuebersichtSelect}`,
+    )
+    return { apberuebersichtById: rows?.[0] ?? null }
+  },
+})
 
 export const Component = () => {
   const { apberuebersichtId } = useParams<{ apberuebersichtId: string }>()
@@ -68,23 +65,14 @@ export const Component = () => {
   const role = token ? jwtDecode<{ role?: string }>(token).role : null
   const userIsManager = role === 'apflora_manager'
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [historizing, setHistorizing] = useState(false)
 
-  const { data, error } = useQuery({
-    queryKey: [`Apberuebersicht`, apberuebersichtId],
-    queryFn: async () => {
-      const result = await apolloClient.query<ApberuebersichtQueryResult>({
-        query,
-        variables: { id: apberuebersichtId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data, error } = useQuery(
+    apberuebersichtQueryOptions(apberuebersichtId),
+  )
 
   const row = data?.apberuebersichtById
 
@@ -99,31 +87,7 @@ export const Component = () => {
       changedBy: user.name,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateApberuebersicht(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateApberuebersichtById(
-                input: {
-                  id: $id
-                  apberuebersichtPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                apberuebersicht {
-                  ...ApberuebersichtFields
-                }
-              }
-            }
-            ${apberuebersicht}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('apberuebersicht', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

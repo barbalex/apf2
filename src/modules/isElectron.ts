@@ -1,19 +1,32 @@
 export const isElectron = () => {
-    // Renderer process
-    if (typeof window !== 'undefined' && typeof (window as unknown as { process?: { type?: string } }).process === 'object' &&
-        (window as unknown as { process?: { type?: string } }).process?.type === 'renderer') {
-        return true;
-    }
+  // Renderer process
+  if (
+    typeof window !== 'undefined' &&
+    typeof (window as unknown as { process?: { type?: string } }).process ===
+      'object' &&
+    (window as unknown as { process?: { type?: string } }).process?.type ===
+      'renderer'
+  ) {
+    return true
+  }
 
-    // Main process
-    if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!process.versions.electron) {
-        return true;
-    }
+  // Main process
+  if (
+    typeof process !== 'undefined' &&
+    typeof process.versions === 'object' &&
+    !!process.versions.electron
+  ) {
+    return true
+  }
 
-    // Detect the user agent when the `nodeIntegration` option is set to true
-    if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
-        return true;
-    }
+  // Detect the user agent when the `nodeIntegration` option is set to true
+  if (
+    typeof navigator === 'object' &&
+    typeof navigator.userAgent === 'string' &&
+    navigator.userAgent.indexOf('Electron') >= 0
+  ) {
+    return true
+  }
 
-    return false;
+  return false
 }

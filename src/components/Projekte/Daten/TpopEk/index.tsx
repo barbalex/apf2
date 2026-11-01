@@ -6,8 +6,6 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { groupBy } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import {
   useQuery,
   useQueryClient,
@@ -20,17 +18,12 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
-import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
-import { query } from './query.ts'
+import { tpopQueryOptions } from '../Tpop/Tpop.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import {
-  popStatusWerte,
-  tpop as tpopFragment,
-  tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.ts'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -164,43 +157,6 @@ interface TpopEkListsQueryResult {
   } | null
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  nr: 'Int',
-  gemeinde: 'String',
-  flurname: 'String',
-  radius: 'Int',
-  hoehe: 'Int',
-  exposition: 'String',
-  klima: 'String',
-  neigung: 'String',
-  bodenTyp: 'String',
-  bodenKalkgehalt: 'String',
-  bodenDurchlaessigkeit: 'String',
-  bodenHumus: 'String',
-  bodenNaehrstoffgehalt: 'String',
-  bodenAbtrag: 'String',
-  wasserhaushalt: 'String',
-  beschreibung: 'String',
-  katasterNr: 'String',
-  status: 'Int',
-  statusUnklarGrund: 'String',
-  apberRelevant: 'Boolean',
-  apberRelevantGrund: 'Int',
-  bekanntSeit: 'Int',
-  eigentuemer: 'String',
-  kontakt: 'String',
-  nutzungszone: 'String',
-  bewirtschafter: 'String',
-  bewirtschaftung: 'String',
-  ekfrequenz: 'UUID',
-  ekfrequenzAbweichend: 'Boolean',
-  ekfKontrolleur: 'UUID',
-  ekfrequenzStartjahr: 'Int',
-  bemerkungen: 'String',
-  statusUnklar: 'Boolean',
-}
-
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
 type TpopEkUseQueryOptions = UseQueryOptions<
@@ -220,26 +176,23 @@ type TpopEkListsUseQueryOptions = UseQueryOptions<
 export const Component = () => {
   const { tpopId, apId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
+  // the tpop row comes from the Tpop form's factory (same shape the
+  // form renders)
   const tpopEkQueryOptions: TpopEkUseQueryOptions = {
+    // only the key and the fetcher are needed from the factory; the row
+    // is cast to TpopEk's narrower view below
+    ...(tpopQueryOptions(tpopId) as {
+      queryKey: readonly unknown[]
+      queryFn: () => Promise<unknown>
+    }),
     queryKey: ['TpopEk', tpopId],
-    queryFn: async () => {
-      const result = await apolloClient.query<TpopEkQueryResult>({
-        query: tpopQuery,
-        variables: { id: tpopId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
     suspense: true,
-  }
+  } as unknown as TpopEkUseQueryOptions
   const { data: tpopData } = useQuery(tpopEkQueryOptions)
 
-  const tpop = (tpopData?.tpopById ?? {}) as NonNullable<
-    TpopEkQueryResult['tpopById']
-  >
+  const tpop = (tpopData ?? {}) as NonNullable<TpopEkQueryResult['tpopById']>
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const userName = useAtomValue(userNameAtom)
 
@@ -253,44 +206,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpop${field}(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopById(
-                input: {
-                  id: $id
-                  tpopPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpop {
-                  ...TpopFields
-                  popStatusWerteByStatus {
-                    ...PopStatusWerteFields
-                  }
-                  tpopApberrelevantGrundWerteByApberRelevantGrund {
-                    ...TpopApberrelevantGrundWerteFields
-                  }
-                  popByPopId {
-                    id
-                    apId
-                  }
-                }
-              }
-            }
-            ${popStatusWerte}
-            ${tpopFragment}
-            ${tpopApberrelevantGrundWerte}
-          `,
-        variables,
-        // no optimistic responce as geomPoint
-      })
+      await apiUpdateByVariables('tpop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -327,15 +243,36 @@ export const Component = () => {
   const tpopEkListsQueryOptions: TpopEkListsUseQueryOptions = {
     queryKey: ['TpopEkLists', tpopId, apId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopEkListsQueryResult>({
-        query: query,
-        variables: {
-          id: tpopId,
-          apId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the old usersByAdresseIdExist reverse relation becomes
+      // an id in-list of the users' adresse_ids
+      const usersWithAdresse = await apiFetch<{ adresse_id: string }[]>(
+        `/user?select=adresse_id&adresse_id=not.is.null`,
+      )
+      const adresseIds = [
+        ...new Set((usersWithAdresse ?? []).map((u) => u.adresse_id)),
+      ]
+      const [ekplans, tpopkontrs, ekfrequenzs, adresses] = await Promise.all([
+        apiFetch<NonNullable<TpopEkListsQueryResult['allEkplans']>['nodes']>(
+          `/ekplan?tpop_id=eq.${tpopId}&select=id,jahr,typ`,
+        ),
+        apiFetch<NonNullable<TpopEkListsQueryResult['allTpopkontrs']>['nodes']>(
+          `/q_tpopkontr?tpop_id=eq.${tpopId}&select=id,jahr,typ`,
+        ),
+        apiFetch<
+          NonNullable<TpopEkListsQueryResult['allEkfrequenzs']>['nodes']
+        >(
+          `/q_ekfrequenz?ap_id=eq.${apId}&select=id,code,anwendungsfall&order=sort.asc`,
+        ),
+        apiFetch<NonNullable<TpopEkListsQueryResult['allAdresses']>['nodes']>(
+          `/v_adresse?id=in.(${adresseIds.join(',')})&select=value:id,label:name&order=name.asc`,
+        ),
+      ])
+      return {
+        allEkplans: { nodes: ekplans ?? [] },
+        allTpopkontrs: { nodes: tpopkontrs ?? [] },
+        allEkfrequenzs: { nodes: ekfrequenzs ?? [] },
+        allAdresses: { nodes: adresses ?? [] },
+      }
     },
     suspense: true,
   }

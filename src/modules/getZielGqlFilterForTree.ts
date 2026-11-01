@@ -1,4 +1,4 @@
-import type { ZielFilter } from '../gql/graphql.ts'
+import type { ZielFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getZielGqlFilterForTree = (_apId: string) => {

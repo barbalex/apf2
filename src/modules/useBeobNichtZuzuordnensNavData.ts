@@ -1,40 +1,31 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeBeobNichtZuzuordnenGqlFilterForTreeAtom } from '../store/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { BeobnichtzuzuordnenFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredAbsenzMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
 import { BeobnichtzuzuordnenAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenAbsenzMapIcon.tsx'
 
-export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useBeobNichtZuzuordnensNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        beobId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const beobId = (props?.beobId ?? params.beobId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const beobId = props?.beobId ?? params.beobId ?? ''
 
   const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
     treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   )
-
-  const allBeobNichtZuzuordnenFilter = {
-    nichtZuordnen: { equalTo: true },
-    aeTaxonomyByArtId: {
-      apartsByArtId: {
-        some: {
-          apByApId: {
-            id: { equalTo: apId },
-          },
-        },
-      },
-    },
-  }
 
   const { data } = useSuspenseQuery({
     queryKey: [
@@ -43,54 +34,45 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
       beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavBeobNichtZuzuordnensQuery(
-            $beobNichtZuzuordnenFilter: BeobFilter!
-            $allBeobNichtZuzuordnenFilter: BeobFilter!
-          ) {
-            beobsNichtZuzuordnen: allBeobs(
-              filter: $allBeobNichtZuzuordnenFilter
-            ) {
-              totalCount
-            }
-            filteredBeobsNichtZuzuordnen: allBeobs(
-              filter: $beobNichtZuzuordnenFilter
-              orderBy: [DATUM_DESC, AUTOR_ASC]
-            ) {
-              nodes {
-                id
-                label
-                absenz
-              }
-            }
-          }
-        `),
-        variables: {
-          beobNichtZuzuordnenFilter: {
-            ...beobNichtZuzuordnenGqlFilterForTree,
-            aeTaxonomyByArtId: {
-              apartsByArtId: {
-                some: {
-                  apByApId: {
-                    id: { equalTo: apId },
-                  },
-                },
-              },
+      // phase 5: the old aeTaxonomyByArtId.apartsByArtId reverse relation
+      // scopes beobs to the ap's taxa — expressed as an artId in-list of
+      // the ap's apart rows instead
+      const aparts = await apiFetch<{ art_id: string | null }[]>(
+        `/apart?ap_id=eq.${apId}&select=art_id&art_id=not.is.null`,
+      )
+      const artIds = (aparts ?? []).map((r) => r.art_id) as string[]
+      const [nodes, count] = await Promise.all([
+        apiFetch<
+          { id: string; label: string | null; absenz: boolean | null }[]
+        >('/rpc/query_beob?select=id,label,absenz', {
+          method: 'POST',
+          body: JSON.stringify({
+            p_filter: {
+              ...beobNichtZuzuordnenGqlFilterForTree,
+              artId: { in: artIds },
             },
+            p_order: [
+              { field: 'datum', dir: 'desc' },
+              { field: 'autor', dir: 'asc' },
+            ],
+          }),
+        }),
+        rpcCount('query_beob', {
+          p_filter: {
+            nichtZuordnen: { equalTo: true },
+            artId: { in: artIds },
           },
-          allBeobNichtZuzuordnenFilter,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+        }),
+      ])
+      return {
+        beobsNichtZuzuordnen: { totalCount: count },
+        filteredBeobsNichtZuzuordnen: { nodes: nodes ?? [] },
+      }
     },
   })
 
   const count = data.beobsNichtZuzuordnen?.totalCount
-  const filteredCount =
-    data.filteredBeobsNichtZuzuordnen?.nodes.length
+  const filteredCount = data.filteredBeobsNichtZuzuordnen?.nodes.length
 
   const navData = {
     id: 'nicht-zuzuordnende-Beobachtungen',
@@ -133,8 +115,7 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
           beobId === p?.id ?
             [BeobnichtzuzuordnenFilteredAbsenzMapIcon]
           : [BeobnichtzuzuordnenAbsenzMapIcon]
-        : beobId === p?.id ?
-          [BeobnichtzuzuordnenFilteredMapIcon]
+        : beobId === p?.id ? [BeobnichtzuzuordnenFilteredMapIcon]
         : [BeobnichtzuzuordnenMapIcon],
     })),
   }

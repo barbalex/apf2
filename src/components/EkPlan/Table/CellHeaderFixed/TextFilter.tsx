@@ -128,7 +128,7 @@ export const TextFilter = ({
 
   const onBlur = (event: { target: { value: string } }) => {
     if (
-      event.target.value != storeValue &&  
+      event.target.value != storeValue &&
       !(event.target.value === '' && storeValue === null)
     ) {
       storeSetFunction(valForStore(event.target.value) as never)

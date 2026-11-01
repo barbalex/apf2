@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -15,9 +15,6 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 
-import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
-import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-
 import {
   addNotificationAtom,
   copyingAtom,
@@ -25,15 +22,6 @@ import {
   movingAtom,
   setMovingAtom,
 } from '../../../../store/index.ts'
-
-interface CreateTpopmassnResult {
-  createTpopmassn: {
-    tpopmassn: {
-      id: TpopmassnId
-      tpopId: TpopId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -52,26 +40,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopmassnResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopmassnResult>({
-        mutation: graphql(`
-          mutation createTpopmassnForTpopmassnsForm($tpopId: UUID!) {
-            createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
-              tpopmassn {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopId: tpopId ?? '',
-        },
+      await apiInsert('tpopmassn', {
+        id: newId,
+        tpop_id: tpopId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -87,7 +63,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopmassn?.tpopmassn?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

@@ -191,18 +191,18 @@ export const Password = ({
               type={showPass ? 'text' : 'password'}
               value={password}
               onChange={onChangePassword}
-                  onBlur={onBlurPassword}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      // MUI types the root div's key event; the target is the input
-                      onBlurPassword(
-                        e as unknown as FocusEvent<
-                          HTMLInputElement | HTMLTextAreaElement
-                        >,
-                      )
-                    }
-                  }}
-                  autoComplete="current-password"
+              onBlur={onBlurPassword}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  // MUI types the root div's key event; the target is the input
+                  onBlurPassword(
+                    e as unknown as FocusEvent<
+                      HTMLInputElement | HTMLTextAreaElement
+                    >,
+                  )
+                }
+              }}
+              autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
               error={!!errors.pass}
@@ -283,8 +283,8 @@ export const Password = ({
             />
           </div>
           <div className={styles.passwordHint}>
-            Tipp: gut merkbar ist eine Wortkombination, zum Beispiel
-            «Gratiola 2026 im Zürichsee!»
+            Tipp: gut merkbar ist eine Wortkombination, zum Beispiel «Gratiola
+            2026 im Zürichsee!»
           </div>
 
           {passwordValidation.minLength &&

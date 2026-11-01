@@ -1,4 +1,4 @@
-import type { EkzaehleinheitFilter } from '../gql/graphql.ts'
+import type { EkzaehleinheitFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getEkzaehleinheitGqlFilterForTree = (_apId: string) => {

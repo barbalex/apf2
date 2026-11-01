@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -9,10 +9,6 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import type {
-  EkzaehleinheitId,
-  ApId,
-} from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -22,15 +18,6 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface CreateEkzaehleinheitResult {
-  createEkzaehleinheit: {
-    ekzaehleinheit: {
-      id: EkzaehleinheitId
-      apId: ApId
-    }
-  }
-}
-
 const iconStyle = { color: 'white' }
 
 export const Menu = () => {
@@ -39,24 +26,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, zaehleinheitId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateEkzaehleinheitResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateEkzaehleinheitResult>({
-        mutation: graphql(`
-          mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
-            createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
-              ekzaehleinheit {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId: apId ?? '' },
+      await apiInsert('ekzaehleinheit', {
+        id: newId,
+        ap_id: apId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -75,7 +52,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten/${id}${search}`,
     )

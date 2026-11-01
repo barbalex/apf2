@@ -679,11 +679,17 @@ COMMENT ON COLUMN apflora.user.adresse_id IS 'Datensatz bzw. Fremdschlüssel des
 ALTER TABLE apflora.user
   ADD COLUMN adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- reads the username from whichever JWT GUC the API layer set:
+-- PostgREST v12 sets one JSON GUC "request.jwt.claims", PostGraphile sets
+-- one GUC per claim ("jwt.claims.username"). Both work while the
+-- PostgREST migration runs dual-stack (tasks.md).
 CREATE OR REPLACE FUNCTION current_user_name()
   RETURNS text
   AS $$
-  SELECT
-    nullif(current_setting('jwt.claims.username', TRUE), '')::text;
+  SELECT coalesce(
+    nullif(current_setting('request.jwt.claims', TRUE)::jsonb ->> 'username', ''),
+    nullif(current_setting('jwt.claims.username', TRUE), '')
+  )::text;
 $$
 LANGUAGE sql
 STABLE

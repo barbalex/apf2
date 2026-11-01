@@ -9,7 +9,9 @@
 import { xmlToJson } from './xmlToJson.ts'
 
 const asObj = (value: unknown): Record<string, unknown> | undefined =>
-  value && typeof value === 'object' ? (value as Record<string, unknown>) : undefined
+  value && typeof value === 'object' ?
+    (value as Record<string, unknown>)
+  : undefined
 
 export const vndOgcGmlToLayersData = (xml: Document) => {
   const obj = xmlToJson(xml)

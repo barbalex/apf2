@@ -1,18 +1,26 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
-export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useTpopfreiwkontrzaehlsNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        tpopkontrId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
   const tpopkontrzaehlGqlFilterForTree =
     getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
@@ -23,37 +31,39 @@ export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undef
       tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeTpopfreiwkontrzaehlsQuery(
-            $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
-            $tpopkontrId: UUID!
-          ) {
-            tpopkontrById(id: $tpopkontrId) {
-              id
-              tpopkontrzaehlsByTpopkontrId(
-                filter: $tpopkontrzaehlsFilter
-                orderBy: LABEL_ASC
-              ) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: tpopkontrzaehlsByTpopkontrId {
-                totalCount
-              }
+      // phase 5: the former tpopkontrzaehlsByTpopkontrId relation constraint
+      // merges into the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...tpopkontrzaehlGqlFilterForTree,
+        tpopkontrByTpopkontrId: {
+          ...((
+            tpopkontrzaehlGqlFilterForTree as {
+              tpopkontrByTpopkontrId?: object
             }
-          }
-        `),
-        variables: {
-          tpopkontrzaehlsFilter: tpopkontrzaehlGqlFilterForTree,
-          tpopkontrId,
+          ).tpopkontrByTpopkontrId ?? {}),
+          id: { equalTo: tpopkontrId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          '/rpc/query_tpopkontrzaehl?select=id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount(`/q_tpopkontrzaehl?tpopkontr_id=eq.${tpopkontrId}`),
+      ])
+      return {
+        tpopkontrById: {
+          id: tpopkontrId,
+          tpopkontrzaehlsByTpopkontrId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 

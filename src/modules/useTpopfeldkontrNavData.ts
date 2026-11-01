@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -44,14 +43,23 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useTpopfeldkontrNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+        tpopId?: string | undefined
+        tpopkontrId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
-  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
+  const tpopId = props?.tpopId ?? params.tpopId ?? ''
+  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
 
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -66,66 +74,54 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
       tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavTpopfeldkontrQuery(
-            $tpopkontrId: UUID!
-            $tpopkontrzaehlFilter: TpopkontrzaehlFilter!
-          ) {
-            tpopkontrById(id: $tpopkontrId) {
-              id
-              label: labelEk
-              tpopkontrzaehlsByTpopkontrId {
-                totalCount
-              }
-              tpopkontrFilesByTpopkontrId {
-                totalCount
-              }
-              filteredTpopkontrzaehls: tpopkontrzaehlsByTpopkontrId(
-                filter: $tpopkontrzaehlFilter
-              ) {
-                totalCount
-              }
+      // phase 5: the former tpopkontrzaehlsByTpopkontrId relation constraint
+      // merges into the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...tpopkontrzaehlGqlFilterForTree,
+        tpopkontrByTpopkontrId: {
+          ...((
+            tpopkontrzaehlGqlFilterForTree as {
+              tpopkontrByTpopkontrId?: object
             }
-          }
-        `),
-        variables: {
-          tpopkontrId,
-          tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,
+          ).tpopkontrByTpopkontrId ?? {}),
+          id: { equalTo: tpopkontrId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [kontr, zaehlCount, filteredZaehlCount, filesCount] =
+        await Promise.all([
+          apiFetch<{ id: string; label: string | null }[]>(
+            `/q_tpopkontr?id=eq.${tpopkontrId}&select=id,label:label_ek`,
+          ),
+          apiCount(`/q_tpopkontrzaehl?tpopkontr_id=eq.${tpopkontrId}`),
+          rpcCount('query_tpopkontrzaehl', { p_filter: filter }),
+          apiCount(`/tpopkontr_file?tpopkontr_id=eq.${tpopkontrId}`),
+        ])
+      return {
+        tpopkontrById: {
+          id: tpopkontrId,
+          label: kontr?.[0]?.label ?? null,
+          tpopkontrzaehlsByTpopkontrId: { totalCount: zaehlCount },
+          filteredTpopkontrzaehls: { totalCount: filteredZaehlCount },
+          tpopkontrFilesByTpopkontrId: { totalCount: filesCount },
+        },
+      }
     },
   })
 
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingBiotopAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(movingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(copyingAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(copyingBiotopAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(movingAtom, rerender)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = store.sub(copyingAtom, rerender)
+    return unsub
+  }, [])
 
   const label = data.tpopkontrById?.label
   const tpopkontrzaehlCount =

@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { popmassnberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -9,15 +9,9 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  pop,
-  popmassnber,
-  tpopmassnErfbeurtWerte,
-} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -28,6 +22,7 @@ import type {
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface PopmassnberQueryResult {
   popmassnberById?: {
@@ -54,38 +49,37 @@ interface PopmassnberQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  popId: 'UUID',
-  jahr: 'Int',
-  beurteilung: 'Int',
-  bemerkungen: 'String',
-}
+export const popmassnberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['popmassnber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<PopmassnberQueryResult['popmassnberById']>[]>(
+        `/v_popmassnber?id=eq.${id}&select=${popmassnberSelect},tpopmassnErfbeurtWerteByBeurteilung:tpopmassn_erfbeurt_werte_by_beurteilung,popByPopId:pop_by_pop_id`,
+      ),
+      apiFetch(
+        `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      popmassnberById: rows?.[0] ?? null,
+      allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
+    }
+  },
+})
 
 export const Component = () => {
   const { popmassnberId: id } = useParams()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['popmassnber', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<PopmassnberQueryResult>({
-        query,
-        variables: { id },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(popmassnberQueryOptions(id))
 
   const row: Partial<NonNullable<PopmassnberQueryResult['popmassnberById']>> =
     data?.popmassnberById ?? {}
-
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
     if (!field) return
@@ -97,39 +91,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updatePopmassnber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updatePopmassnberById(
-                input: {
-                  id: $id
-                  popmassnberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                popmassnber {
-                  ...PopmassnberFields
-                  tpopmassnErfbeurtWerteByBeurteilung {
-                    ...TpopmassnErfbeurtWerteFields
-                  }
-                  popByPopId {
-                    ...PopFields
-                  }
-                }
-              }
-            }
-            ${pop}
-            ${popmassnber}
-            ${tpopmassnErfbeurtWerte}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('popmassnber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

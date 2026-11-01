@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -13,8 +12,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { query } from './query.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -26,6 +23,7 @@ import {
   treeTpopIsFilteredAtom,
   treeTpopmassnGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { apiFetch, rpcCount } from '../../../../modules/api.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -99,9 +97,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource: { value: number; label: string; historic?: boolean | null }[]
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -129,7 +127,6 @@ export const TpopmassnFilter = () => {
     }
   }, [activeTab, dataFilter.tpopmassn.length])
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const { data } = useQuery({
     queryKey: [
@@ -138,15 +135,42 @@ export const TpopmassnFilter = () => {
       tpopmassnGqlFilter.all,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopmassnsFilterQueryResult>({
-        query,
-        variables: {
-          filteredFilter: tpopmassnGqlFilter.filtered,
-          allFilter: tpopmassnGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [
+        allTpopmassns,
+        tpopmassnsFiltered,
+        adresses,
+        typWertes,
+        einheitWertes,
+      ] = await Promise.all([
+        rpcCount('query_tpopmassn', { p_filter: tpopmassnGqlFilter.all }),
+        rpcCount('query_tpopmassn', {
+          p_filter: tpopmassnGqlFilter.filtered,
+        }),
+        apiFetch<
+          NonNullable<TpopmassnsFilterQueryResult['allAdresses']>['nodes']
+        >(`/v_adresse?select=id,value:id,label:name&order=name.asc`),
+        apiFetch<
+          NonNullable<
+            TpopmassnsFilterQueryResult['allTpopmassnTypWertes']
+          >['nodes']
+        >(
+          `/tpopmassn_typ_werte?select=id,value:code,label:text,anpflanzung&order=sort.asc`,
+        ),
+        apiFetch<
+          NonNullable<
+            TpopmassnsFilterQueryResult['allTpopkontrzaehlEinheitWertes']
+          >['nodes']
+        >(
+          `/v_tpopkontrzaehl_einheit_werte?select=id,value:code,label:text&order=sort.asc`,
+        ),
+      ])
+      return {
+        allTpopmassns: { totalCount: allTpopmassns },
+        tpopmassnsFiltered: { totalCount: tpopmassnsFiltered },
+        allAdresses: { nodes: adresses ?? [] },
+        allTpopmassnTypWertes: { nodes: typWertes ?? [] },
+        allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
+      } as TpopmassnsFilterQueryResult
     },
     staleTime: Infinity,
     gcTime: Infinity,
@@ -403,8 +427,6 @@ export const TpopmassnFilter = () => {
               key={`${row?.id}wirtspflanze`}
               field="wirtspflanze"
               label="Wirtspflanze"
-              query={queryAeTaxonomies}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               row={row}
               error={undefined}

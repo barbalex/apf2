@@ -6,8 +6,15 @@
 }
 
 api.apflora.ch {
-  reverse_proxy * apf_graphql:5000 {
-    header_down Access-Control-Allow-Origin *
+  # PostgREST handles CORS itself (PGRST_SERVER_CORS_ENABLED)
+  handle_path /postgrest/* {
+    reverse_proxy apf_postgrest:3000
+  }
+  # everything else stays on PostGraphile during the migration
+  handle {
+    reverse_proxy apf_graphql:5000 {
+      header_down Access-Control-Allow-Origin *
+    }
   }
 }
 

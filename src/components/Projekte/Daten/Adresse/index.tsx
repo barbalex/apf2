@@ -1,7 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -9,25 +7,17 @@ import { useAtomValue } from 'jotai'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { adresse } from '../../../shared/fragments.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
-
-const fieldTypes: Record<string, string> = {
-  name: 'String',
-  adresse: 'String',
-  telefon: 'String',
-  email: 'String',
-  freiwErfko: 'Boolean',
-}
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
+import { adresseSelect } from '../../../../modules/selects.ts'
 
 interface AdresseQueryResult {
   adresseById: {
@@ -40,23 +30,22 @@ interface AdresseQueryResult {
   } | null
 }
 
+export const adresseQueryOptions = (adrId: string | undefined) => ({
+  queryKey: ['Adresse', adrId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<AdresseQueryResult['adresseById']>[]
+    >(`/v_adresse?id=eq.${adrId}&select=${adresseSelect}`)
+    return { adresseById: rows?.[0] ?? null }
+  },
+})
+
 export const Component = () => {
   const { adrId } = useParams<{ adrId: string }>()
   const userName = useAtomValue(userNameAtom)
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, error } = useQuery({
-    queryKey: ['Adresse', adrId],
-    queryFn: async () => {
-      const result = await apolloClient.query<AdresseQueryResult>({
-        query,
-        variables: { id: adrId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data, error } = useQuery(adresseQueryOptions(adrId))
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
@@ -74,31 +63,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateAdresse(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateAdresseById(
-                input: {
-                  id: $id
-                  adressePatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                adresse {
-                  ...AdresseFields
-                }
-              }
-            }
-            ${adresse}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('adresse', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

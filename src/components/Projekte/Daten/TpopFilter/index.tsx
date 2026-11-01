@@ -2,13 +2,12 @@ import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect, type SyntheticEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { queryTpops } from './queryTpops.ts'
+import { rpcCount } from '../../../../modules/api.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { Ek } from './Ek/index.tsx'
 import { Tpop } from './Tpop.tsx'
@@ -51,20 +50,17 @@ export const TpopFilter = () => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
-  const apolloClient = useApolloClient()
-
   const { data: dataTpops } = useQuery({
     queryKey: ['tpopsCount', tpopGqlFilter.filtered, tpopGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopsQueryResult>({
-        query: queryTpops,
-        variables: {
-          filteredFilter: tpopGqlFilter.filtered,
-          allFilter: tpopGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [allTpops, allTpopsFiltered] = await Promise.all([
+        rpcCount('query_tpop', { p_filter: tpopGqlFilter.all }),
+        rpcCount('query_tpop', { p_filter: tpopGqlFilter.filtered }),
+      ])
+      return {
+        allTpops: { totalCount: allTpops },
+        allTpopsFiltered: { totalCount: allTpopsFiltered },
+      } as TpopsQueryResult
     },
   })
 

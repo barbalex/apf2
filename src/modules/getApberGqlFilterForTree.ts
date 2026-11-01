@@ -1,4 +1,4 @@
-import type { ApberFilter } from '../gql/graphql.ts'
+import type { ApberFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getApberGqlFilterForTree = (_apId: string) => {

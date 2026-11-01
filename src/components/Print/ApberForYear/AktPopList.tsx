@@ -1,31 +1,12 @@
 import { sumBy } from 'es-toolkit'
-import { graphql } from '../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { apiFetch } from '../../../modules/api.ts'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-import type { ApId } from '../../../models/apflora/Ap.ts'
 
 import styles from './AktPopList.module.css'
-
-interface JberAktPopNode {
-  artname: string | null
-  id: ApId
-  pop100: number | null
-  pop200: number | null
-  popTotal: number | null
-  pop100Diff: number | null
-  pop200Diff: number | null
-  popTotalDiff: number | null
-}
-
-interface AktPopListQueryResult {
-  jberAktPop: {
-    nodes: JberAktPopNode[]
-  }
-}
 
 interface AktPopListProps {
   year?: number | undefined
@@ -34,35 +15,34 @@ interface AktPopListProps {
 export const AktPopList = ({ year }: AktPopListProps) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
-  const apolloClient = useApolloClient()
-
   const previousYear = (year ?? 0) - 1
   const { data, error } = useQuery({
     queryKey: ['jberAktPopQuery', projId, previousYear, year],
-    queryFn: () =>
-      apolloClient.query<AktPopListQueryResult>({
-        query: graphql(`
-          query AktPopListAps($jahr: Int!) {
-            jberAktPop(jahr: $jahr) {
-              nodes {
-                artname
-                id
-                pop100
-                pop200
-                popTotal
-                pop100Diff
-                pop200Diff
-                popTotalDiff
-              }
-            }
-          }
-        `),
-        variables: {
-          projektId: projId,
-          previousYear,
-          jahr: year,
+    queryFn: async () => ({
+      data: {
+        jberAktPop: {
+          nodes:
+            (await apiFetch<
+              {
+                artname: string | null
+                id: string
+                pop100: number | null
+                pop200: number | null
+                popTotal: number | null
+                pop100Diff: number | null
+                pop200Diff: number | null
+                popTotalDiff: number | null
+              }[]
+            >(
+              '/rpc/jber_akt_pop?select=artname,id,pop100:pop_100,pop200:pop_200,popTotal:pop_total,pop100Diff:pop_100_diff,pop200Diff:pop_200_diff,popTotalDiff:pop_total_diff',
+              {
+                method: 'POST',
+                body: JSON.stringify({ jahr: year }),
+              },
+            )) ?? [],
         },
-      }),
+      },
+    }),
   })
   const aps = data?.data?.jberAktPop?.nodes ?? []
   const pop100 = sumBy(aps, (e) => e.pop100 ?? 0)

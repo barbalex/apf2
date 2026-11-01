@@ -53,7 +53,9 @@ export const Popup = ({
               }}
             >{`${key}:`}</div>
             <Linkify options={{ target: '_blank' }}>
-              <div style={{ overflowWrap: 'anywhere' }}>{value as ReactNode}</div>
+              <div style={{ overflowWrap: 'anywhere' }}>
+                {value as ReactNode}
+              </div>
             </Linkify>
           </div>
         ))}

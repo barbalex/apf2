@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -25,24 +25,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { apId } = useParams<{ apId: string }>()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApartForApartsForm($apId: UUID!) {
-            createApart(input: { apart: { apId: $apId } }) {
-              apart {
-                id
-                apId
-              }
-            }
-          }
-        `),
-        variables: { apId: apId as string },
+      await apiInsert('apart', {
+        id: newId,
+        ap_id: apId as string,
       })
     } catch (error) {
       return addNotification({
@@ -61,7 +51,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    const id = result?.data?.createApart?.apart?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

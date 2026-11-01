@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { apiFetch } from '../../../../modules/api.ts'
 
-import { queryApsToChoose } from './queryApsToChoose.ts'
 import { ekPlanApsAtom, ekPlanAddApAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
@@ -19,7 +18,6 @@ export const ChooseAp = ({
 
   const aps = useAtomValue(ekPlanApsAtom)
   const addAp = useSetAtom(ekPlanAddApAtom)
-  const apolloClient = useApolloClient()
 
   const apValues = aps.map((a) => a.value)
 
@@ -41,20 +39,32 @@ export const ChooseAp = ({
           id: { notIn: apValues },
           projId: { equalTo: projId },
         }
-    let result: { data?: unknown } | undefined
+    let result:
+      { allAps?: { nodes?: { value: string; label: string }[] } } | undefined
     try {
-      result = await apolloClient.query({
-        query: queryApsToChoose,
-        variables: {
-          filter,
-        },
-      })
+      const nodes =
+        (await apiFetch<{ value: string; label: string }[]>(
+          '/rpc/query_ap?select=value:id,label',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+              p_limit: 8,
+            }),
+          },
+        )) ?? []
+      result = { allAps: { nodes } }
     } catch (err) {
       setError(err)
     }
-    data.current = result?.data
-    const options = ((data.current as { allAps?: { nodes?: { value: string; label: string }[] } } | null
-      | undefined)?.allAps?.nodes ?? []) as { value: string; label: string }[]
+    data.current = result
+    const options = ((
+      data.current as
+        | { allAps?: { nodes?: { value: string; label: string }[] } }
+        | null
+        | undefined
+    )?.allAps?.nodes ?? []) as { value: string; label: string }[]
     cb(options)
   }
 
@@ -98,9 +108,9 @@ export const ChooseAp = ({
           menuPortalTarget={document.body}
           styles={{ menuPortal: (base) => ({ ...base, zIndex: 4 }) }}
         />
-        {error ? (
+        {error ?
           <div className={styles.errorClass}>{(error as Error).message}</div>
-        ) : null}
+        : null}
       </div>
     </ErrorBoundary>
   )

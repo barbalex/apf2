@@ -1,19 +1,14 @@
+import { apiDelete } from '../../../../../modules/api.ts'
 import { useSetAtom } from 'jotai'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { graphql } from '../../../../../gql/index.ts'
-
-import { useApolloClient } from '@apollo/client/react'
 
 import styles from './ApUser.module.css'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
-import {
-  addNotificationAtom,
-} from '../../../../../store/index.ts'
-
+import { addNotificationAtom } from '../../../../../store/index.ts'
 
 interface ApUserProps {
   user: {
@@ -29,20 +24,10 @@ interface ApUserProps {
 
 export const ApUser = ({ user, refetch }: ApUserProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
 
   const onClickDelete = async () => {
     try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteApUserForApMutation($id: UUID!) {
-            deleteApUserById(input: { id: $id }) {
-              clientMutationId
-            }
-          }
-        `),
-        variables: { id: user.id },
-      })
+      await apiDelete('ap_user', user.id)
     } catch (error) {
       addNotification({
         message: (error as Error).message,

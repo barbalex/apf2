@@ -1,14 +1,13 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 import type { Marker as LeafletMarkerType } from 'leaflet'
+import { apiFetch } from '../../../../../modules/api.ts'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
 import type { BeobNichtZuzuordnenNode } from './Marker.tsx'
-import { query } from './query.ts'
 
 import {
   addNotificationAtom,
@@ -46,7 +45,6 @@ const BeobNichtZuzuordnenMarker = ({ clustered }: { clustered: boolean }) => {
   const beobNichtZuzuordnenGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('nichtZuzuordnen'),
   )
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
@@ -54,17 +52,60 @@ const BeobNichtZuzuordnenMarker = ({ clustered }: { clustered: boolean }) => {
       beobNichtZuzuordnenGqlFilter.filtered,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query<BeobNichtZuzuordnenQueryResult>({
-        query,
-        variables: {
-          beobFilter: beobNichtZuzuordnenGqlFilter.filtered,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows =
+        (await apiFetch<
+          {
+            id: string
+            tpop_id: string | null
+            art_id: string | null
+            wgs84_lat: number
+            wgs84_long: number
+            lv95_x: number
+            lv95_y: number
+            datum: string | null
+            autor: string | null
+            quelle: string | null
+            absenz: boolean | null
+          }[]
+        >(
+          '/rpc/query_beob?select=id,tpop_id,art_id,wgs84_lat,wgs84_long,lv95_x,lv95_y,datum,autor,quelle,absenz',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: beobNichtZuzuordnenGqlFilter.filtered,
+            }),
+          },
+        )) ?? []
+
+      const aeIds = [
+        ...new Set((rows ?? []).map((r) => r.art_id).filter(Boolean)),
+      ]
+      const taxa =
+        aeIds.length ?
+          ((await apiFetch<{ id: string; artname: string | null }[]>(
+            `/ae_taxonomies?id=in.(${aeIds.join(',')})&select=id,artname`,
+          )) ?? [])
+        : []
+      const taxonById = new Map(taxa.map((t) => [t.id, t]))
+
+      const nodes = (rows ?? []).map((r) => ({
+        id: r.id,
+        wgs84Lat: r.wgs84_lat,
+        wgs84Long: r.wgs84_long,
+        lv95X: r.lv95_x,
+        lv95Y: r.lv95_y,
+        datum: r.datum,
+        autor: r.autor,
+        quelle: r.quelle,
+        absenz: r.absenz,
+        aeTaxonomyByArtId:
+          r.art_id ?
+            { id: r.art_id, artname: taxonById.get(r.art_id)?.artname ?? null }
+          : null,
+      }))
+      return { allBeobs: { nodes } } as BeobNichtZuzuordnenQueryResult
     },
   })
-
 
   // const [refetchProvoker, setRefetchProvoker] = useState(1)
   // useEffect(() => {

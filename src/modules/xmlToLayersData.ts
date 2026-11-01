@@ -11,7 +11,9 @@ import { sortBy } from 'es-toolkit'
 import { xmlToJson } from './xmlToJson.ts'
 
 const asObj = (value: unknown): Record<string, unknown> | undefined =>
-  value && typeof value === 'object' ? (value as Record<string, unknown>) : undefined
+  value && typeof value === 'object' ?
+    (value as Record<string, unknown>)
+  : undefined
 
 export const xmlToLayersData = (xml: Document) => {
   const obj = xmlToJson(xml)

@@ -1,4 +1,3 @@
- 
 import { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
@@ -48,11 +47,7 @@ const filterAtomMap = {
   ekfrequenzAbweichend: ekPlanFilterEkfrequenzAbweichendAtom,
 }
 
-export const CellHeaderFixed = ({
-  column,
-}: {
-  column: EkPlanField
-}) => {
+export const CellHeaderFixed = ({ column }: { column: EkPlanField }) => {
   const { name, label, nofilter } = column
 
   const filterAtom = filterAtomMap[name as keyof typeof filterAtomMap]

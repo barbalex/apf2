@@ -236,9 +236,7 @@ export const exportRowFromTpop = ({
       if (showCount) {
         const ansiedlungsSumCounted = sum(
           ansiedlungsOfYear
-            .filter(
-              (ans) => ans.anzTriebe !== null || ans.anzPflanzen !== null,
-            )
+            .filter((ans) => ans.anzTriebe !== null || ans.anzPflanzen !== null)
             .map(
               (ans) =>
                 (ans.anzTriebe !== null ? ans.anzTriebe : 0) +

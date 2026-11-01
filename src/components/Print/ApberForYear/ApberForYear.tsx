@@ -1,12 +1,9 @@
+import { apiFetch } from '../../../modules/api.ts'
 import { DateTime } from 'luxon'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
-import { jberQuery } from './jberQuery.ts'
-import { query as queryForApberuebersicht } from '../../Projekte/Daten/Apberuebersicht/query.ts'
 import fnslogo from './fnslogo.png'
 import { AvList } from './AvList.tsx'
 import { AktPopList } from './AktPopList.tsx'
@@ -15,11 +12,7 @@ import { ApberForAps } from './ApberForAps.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 
-import type {
-  ApberForYearQueryResult,
-  ApberuebersichtQueryResult,
-  JberQueryResult,
-} from './types.ts'
+import type { ApberForYearQueryResult, JberQueryResult } from './types.ts'
 
 import styles from './ApberForYear.module.css'
 
@@ -33,38 +26,39 @@ interface ApberForYearProps {
 export const ApberForYear = (_props: ApberForYearProps) => {
   const { apberuebersichtId, projId } = useParams()
 
-  const apolloClient = useApolloClient()
-
   const { data, error, isLoading } = useQuery({
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
-      const { data: data1 } = await apolloClient.query<ApberuebersichtQueryResult>({
-        query: queryForApberuebersicht,
-        variables: {
-          id: apberuebersichtId,
+      const rows = await apiFetch<{ jahr: number | null }[]>(
+        `/apberuebersicht?id=eq.${apberuebersichtId}&select=jahr`,
+      )
+      const data1 = { apberuebersichtById: rows?.[0] ?? { jahr: undefined } }
+      const jahr = data1?.apberuebersichtById?.jahr ?? undefined
+      // then get data: the deep history tree comes from one RPC
+      const data = await apiFetch<ApberForYearQueryResult | null>(
+        '/rpc/apber_for_year_data',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            p_projekt_id: projId,
+            p_jahr: jahr,
+            p_apberuebersicht_id: apberuebersichtId,
+          }),
         },
-      })
-      const jahr = data1?.apberuebersichtById?.jahr
-      // then get data
-      const { data } = await apolloClient.query<ApberForYearQueryResult>({
-        query: query,
-        variables: {
-          projektId: projId,
-          jahr,
-          apberuebersichtId,
+      )
+      // then get jber data (camelCase aliases on the db function's columns)
+      const jberData = await apiFetch<JberQueryResult | null>(
+        '/rpc/jber_abc?select=artname,id,startJahr:start_jahr,bearbeiter,bearbeitung,a3LPop:a_3_l_pop,a3LTpop:a_3_l_tpop,a4LPop:a_4_l_pop,a4LTpop:a_4_l_tpop,a5LPop:a_5_l_pop,a5LTpop:a_5_l_tpop,a7LPop:a_7_l_pop,a7LTpop:a_7_l_tpop,a8LPop:a_8_l_pop,a8LTpop:a_8_l_tpop,a9LPop:a_9_l_pop,a9LTpop:a_9_l_tpop,b1LPop:b_1_l_pop,b1LTpop:b_1_l_tpop,b1FirstYear:b_1_first_year,b1RPop:b_1_r_pop,b1RTpop:b_1_r_tpop,c1LPop:c_1_l_pop,c1LTpop:c_1_l_tpop,c1RPop:c_1_r_pop,c1RTpop:c_1_r_tpop,c1FirstYear:c_1_first_year,firstMassn:first_massn,c2RPop:c_2_r_pop,c2RTpop:c_2_r_tpop,c3RPop:c_3_r_pop,c3RTpop:c_3_r_tpop,c4RPop:c_4_r_pop,c4RTpop:c_4_r_tpop,c5RPop:c_5_r_pop,c5RTpop:c_5_r_tpop,c6RPop:c_6_r_pop,c6RTpop:c_6_r_tpop,c7RPop:c_7_r_pop,c7RTpop:c_7_r_tpop,erfolg,erfolgVorjahr:erfolg_vorjahr',
+        {
+          method: 'POST',
+          body: JSON.stringify({ jahr }),
         },
-      })
-      // then get jber data
-      // WARNING: this HAS to be queried later or somehow loading never ended
-      const { data: jberData } = await apolloClient.query<JberQueryResult>({
-        query: jberQuery,
-        variables: {
-          jahr,
-        },
-      })
+      ).then((rows) =>
+        rows ? ({ jberAbc: { nodes: rows } } as unknown as JberQueryResult) : undefined,
+      )
 
-      return { data, jberData, jahr }
+      return { data: data ?? undefined, jberData, jahr }
     },
   })
 

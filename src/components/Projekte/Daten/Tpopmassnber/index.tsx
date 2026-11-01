@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { tpopmassnberSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -9,11 +9,9 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopmassnber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { ComponentType } from 'react'
@@ -58,27 +56,42 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource?: { value: number; label: string }[] | undefined
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './index.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  tpopId: 'UUID',
-  jahr: 'Int',
-  beurteilung: 'Int',
-  bemerkungen: 'String',
-}
+export const tpopmassnberQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopmassnber', id],
+  queryFn: async () => {
+    const [rows, werte] = await Promise.all([
+      apiFetch<NonNullable<TpopmassnberQueryResult['tpopmassnberById']>[]>(
+        `/v_tpopmassnber?id=eq.${id ?? ''}&select=${tpopmassnberSelect},tpopByTpopId:tpop_by_tpop_id`,
+      ),
+      apiFetch<
+        NonNullable<
+          TpopmassnberQueryResult['allTpopmassnErfbeurtWertes']
+        >['nodes']
+      >(
+        `/tpopmassn_erfbeurt_werte?order=sort.asc&select=value:code,label:text`,
+      ),
+    ])
+    return {
+      tpopmassnberById: rows?.[0] ?? null,
+      allTpopmassnErfbeurtWertes: { nodes: werte ?? [] },
+    }
+  },
+})
 
 export const Component = () => {
   const { tpopmassnberId: id } = useParams()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -86,22 +99,13 @@ export const Component = () => {
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
-  const tpopmassnberQueryOptions = {
-    queryKey: ['tpopmassnber', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<TpopmassnberQueryResult>({
-        query,
-        variables: { id: id ?? '' },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+  const tpopmassnberOptions = {
+    ...tpopmassnberQueryOptions(id),
     suspense: true,
   }
-  const { data } = useQuery(tpopmassnberQueryOptions)
+  const { data } = useQuery(tpopmassnberOptions)
 
   const row: Partial<TpopmassnberNode> = data?.tpopmassnberById ?? {}
-
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
@@ -112,38 +116,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopmassnber(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateTpopmassnberById(
-                input: {
-                  id: $id
-                  tpopmassnberPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopmassnber {
-                  ...TpopmassnberFields
-                  tpopByTpopId {
-                    id
-                    popByPopId {
-                      id
-                      apId
-                    }
-                  }
-                }
-              }
-            }
-            ${tpopmassnber}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopmassnber', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

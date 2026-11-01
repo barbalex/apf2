@@ -96,9 +96,7 @@ export const WMS = () => {
         // Something happened in setting up the request that triggered an Error
         console.error('error.message', axiosError.message)
       }
-      if (
-        axiosError.message?.toLowerCase()?.includes('failed to fetch')
-      ) {
+      if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
         failedToFetch = true
       } else {
         return
@@ -180,8 +178,7 @@ export const WMS = () => {
       }
     }
 
-    window.L
-      .popup()
+    window.L.popup()
       .setLatLng(e.latlng)
       // the text/html branch assigns a React element (untested code path);
       // leaflet only types strings and nodes as popup content

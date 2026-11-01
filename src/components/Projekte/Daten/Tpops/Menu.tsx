@@ -1,5 +1,5 @@
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -25,17 +25,6 @@ import {
   movingAtom,
 } from '../../../../store/index.ts'
 
-import type { TpopId, PopId } from '../../../../models/apflora/index.ts'
-
-interface CreateTpopResult {
-  createTpop: {
-    tpop: {
-      id: TpopId
-      popId: PopId
-    }
-  }
-}
-
 interface MenuProps {
   toggleFilterInput?: () => void
 }
@@ -46,7 +35,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const { projId, apId, popId } = useParams()
   const moving = useAtomValue(movingAtom)
@@ -54,22 +42,11 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const setCopying = useSetAtom(setCopyingAtom)
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopResult | null | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopResult>({
-        mutation: graphql(`
-          mutation createTpopForTpopsForm($popId: UUID!) {
-            createTpop(input: { tpop: { popId: $popId } }) {
-              tpop {
-                id
-                popId
-              }
-            }
-          }
-        `),
-        variables: {
-          popId,
-        },
+      await apiInsert('tpop', {
+        id: newId,
+        pop_id: popId,
       })
     } catch (error) {
       return addNotification({
@@ -88,7 +65,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    const id = result?.data?.createTpop?.tpop?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

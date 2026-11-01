@@ -1,23 +1,19 @@
+import { apiFetch, apiInsert } from '../../../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
-import { query } from './query.ts'
-import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import {
   setToDeleteAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../../../store/index.ts'
-import type {
-  EkzaehleinheitNode,
-  ZaehleinheitWerteNode,
-} from '../index.tsx'
+import type { EkzaehleinheitNode, ZaehleinheitWerteNode } from '../index.tsx'
 
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/Tpopkontrzaehl.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/Tpopkontr.ts'
@@ -97,163 +93,168 @@ const getZaehleinheitWerte = ({
 }
 
 export const Count = ({
-    id,
-    tpopkontrId,
-    nr,
-    showEmpty,
-    showNew,
-    refetch,
-    einheitsUsed = [],
-    ekzaehleinheits = [],
-    ekzaehleinheitsOriginal = [],
-  }: CountProps) => {
-    const setToDelete = useSetAtom(setToDeleteAtom)
-    const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  id,
+  tpopkontrId,
+  nr,
+  showEmpty,
+  showNew,
+  refetch,
+  einheitsUsed = [],
+  ekzaehleinheits = [],
+  ekzaehleinheitsOriginal = [],
+}: CountProps) => {
+  const setToDelete = useSetAtom(setToDeleteAtom)
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const tsQueryClient = useQueryClient()
 
-    const { data, refetch: refetchMe } = useQuery({
-      queryKey: ['tpopkontrzaehl', id],
-      queryFn: async () => {
-        const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
-          query,
-          variables: {
-            id: id || '99999999-9999-9999-9999-999999999999',
-          },
-        })
-        if (result.error) throw result.error
-        return result.data
-      },
-    })
-
-    const row: Partial<TpopkontrzaehlRow> = data?.tpopkontrzaehlById ?? {}
-
-    const createNew = () =>
-      apolloClient
-        .mutate({
-          mutation: createTpopkontrzaehl,
-          variables: { tpopkontrId },
-        })
-        .then(() => {
-          refetch()
-          void tsQueryClient.invalidateQueries({
-            queryKey: [`treeTpopfreiwkontrzaehl`],
-          })
-          void tsQueryClient.invalidateQueries({
-            queryKey: [`treeTpopfreiwkontrzaehlFolders`],
-          })
-        })
-
-    const zaehleinheitWerte = getZaehleinheitWerte({
-      data,
-      einheitsUsed,
-      ekzaehleinheits,
-      ekzaehleinheitsOriginal,
-      row,
-    })
-
-    const showDelete = Number(nr) > 1
-
-    const remove = ({ row }: { row: Partial<TpopkontrzaehlRow> }) => {
-      const afterDeletionHook = () => {
-        refetch()
-        void tsQueryClient.invalidateQueries({
-          queryKey: [`treeTpopfreiwkontrzaehl`],
-        })
-        void tsQueryClient.invalidateQueries({
-          queryKey: [`treeTpopfreiwkontrzaehlFolders`],
-        })
+  const { data, refetch: refetchMe } = useQuery({
+    queryKey: ['tpopkontrzaehl', id],
+    queryFn: async () => {
+      const [rows, einheitWertes] = await Promise.all([
+        apiFetch<
+          NonNullable<TpopkontrzaehlQueryResult['tpopkontrzaehlById']>[]
+        >(
+          `/v_tpopkontrzaehl?id=eq.${id || '99999999-9999-9999-9999-999999999999'}&select=id,einheit,anzahl,methode`,
+        ),
+        apiFetch<
+          NonNullable<
+            TpopkontrzaehlQueryResult['allTpopkontrzaehlEinheitWertes']
+          >['nodes']
+        >(`/v_tpopkontrzaehl_einheit_werte?select=id,code,text&order=sort.asc`),
+      ])
+      return {
+        tpopkontrzaehlById: rows?.[0] ?? null,
+        allTpopkontrzaehlEinheitWertes: { nodes: einheitWertes ?? [] },
       }
-      setToDelete({
-        table: 'tpopkontrzaehl',
-        id: row.id ?? null,
-        label: null,
-        url: activeNodeArray,
-        afterDeletionHook,
+    },
+  })
+
+  const row: Partial<TpopkontrzaehlRow> = data?.tpopkontrzaehlById ?? {}
+
+  const createNew = () =>
+    apiInsert('tpopkontrzaehl', {
+      id: uuidv7(),
+      tpopkontr_id: tpopkontrId,
+    }).then(() => {
+      refetch()
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehl`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
+      })
+    })
+
+  const zaehleinheitWerte = getZaehleinheitWerte({
+    data,
+    einheitsUsed,
+    ekzaehleinheits,
+    ekzaehleinheitsOriginal,
+    row,
+  })
+
+  const showDelete = Number(nr) > 1
+
+  const remove = ({ row }: { row: Partial<TpopkontrzaehlRow> }) => {
+    const afterDeletionHook = () => {
+      refetch()
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehl`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
       })
     }
+    setToDelete({
+      table: 'tpopkontrzaehl',
+      id: row.id ?? null,
+      label: null,
+      url: activeNodeArray,
+      afterDeletionHook,
+    })
+  }
 
-    const containerStyle = {
-      gridArea: `count${nr}`,
-    }
-    const containerClass =
-      showNew ? styles.containerNew
-      : showEmpty ? styles.containerEmpty
-      : styles.containerElse
+  const containerStyle = {
+    gridArea: `count${nr}`,
+  }
+  const containerClass =
+    showNew ? styles.containerNew
+    : showEmpty ? styles.containerEmpty
+    : styles.containerElse
 
-    const formStyle = {
-      gridArea: `count${nr}`,
-    }
-    const formClass = showDelete ? styles.formShowDelete : styles.formElse
+  const formStyle = {
+    gridArea: `count${nr}`,
+  }
+  const formClass = showDelete ? styles.formShowDelete : styles.formElse
 
-    if (showNew) {
-      return (
-        <div
-          style={containerStyle}
-          className={`${styles.containerBase} ${containerClass}`}
-        >
-          <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
-          <div className={styles.showNewClass}>
-            <Button
-              color="primary"
-              onClick={() => void createNew()}
-            >
-              <MdAddCircleOutline className={styles.styledAddIcon} /> Neu
-            </Button>
-          </div>
-        </div>
-      )
-    }
-    if (showEmpty) {
-      return (
-        <div
-          style={containerStyle}
-          className={`${styles.containerBase} ${containerClass}`}
-        >
-          <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
-        </div>
-      )
-    }
-
+  if (showNew) {
     return (
       <div
-        data-id={`count${nr}`}
-        style={formStyle}
-        className={`${styles.containerBase} ${formClass}`}
+        style={containerStyle}
+        className={`${styles.containerBase} ${containerClass}`}
       >
-        <Einheit
-          row={row}
-          refetch={refetch}
-          zaehleinheitWerte={zaehleinheitWerte}
-          nr={nr}
-        />
-        <div className={styles.gezaehltLabel}>gezählt</div>
-        <div className={styles.geschaetztLabel}>geschätzt</div>
-        <div className={styles.gezaehltVal}>
-          <Gezaehlt
-            row={row}
-            refetch={() => void refetchMe()}
-          />
+        <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
+        <div className={styles.showNewClass}>
+          <Button
+            color="primary"
+            onClick={() => void createNew()}
+          >
+            <MdAddCircleOutline className={styles.styledAddIcon} /> Neu
+          </Button>
         </div>
-        <div className={styles.geschaetztVal}>
-          <Geschaetzt
-            row={row}
-            refetch={() => void refetchMe()}
-          />
-        </div>
-        {showDelete && (
-          <div className={styles.deleteClass}>
-            <Button
-              title="löschen"
-              onClick={() => remove({ row })}
-              color="inherit"
-              className={styles.styledDeleteButton}
-            >
-              <MdDeleteForever className={styles.deleteIcon} />
-            </Button>
-          </div>
-        )}
       </div>
     )
   }
+  if (showEmpty) {
+    return (
+      <div
+        style={containerStyle}
+        className={`${styles.containerBase} ${containerClass}`}
+      >
+        <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      data-id={`count${nr}`}
+      style={formStyle}
+      className={`${styles.containerBase} ${formClass}`}
+    >
+      <Einheit
+        row={row}
+        refetch={refetch}
+        zaehleinheitWerte={zaehleinheitWerte}
+        nr={nr}
+      />
+      <div className={styles.gezaehltLabel}>gezählt</div>
+      <div className={styles.geschaetztLabel}>geschätzt</div>
+      <div className={styles.gezaehltVal}>
+        <Gezaehlt
+          row={row}
+          refetch={() => void refetchMe()}
+        />
+      </div>
+      <div className={styles.geschaetztVal}>
+        <Geschaetzt
+          row={row}
+          refetch={() => void refetchMe()}
+        />
+      </div>
+      {showDelete && (
+        <div className={styles.deleteClass}>
+          <Button
+            title="löschen"
+            onClick={() => remove({ row })}
+            color="inherit"
+            className={styles.styledDeleteButton}
+          >
+            <MdDeleteForever className={styles.deleteIcon} />
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}

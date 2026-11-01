@@ -1,84 +1,54 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface TPopKmlNamenQueryResult {
-  allTpops: {
-    nodes: {
-      id: TpopId
-      vTpopKmlnamenById: {
-        nodes: {
-          art: string | null
-          label: string | null
-          inhalte: string | null
-          id: TpopId
-          wgs84Lat: number | null
-          wgs84Long: number | null
-          url: string | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const TPopFuerGEArtname = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPopKmlNamen = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: TPopKmlNamenQueryResult | undefined } | undefined
+    let nodes:
+      | {
+          art: string | null
+          label: string | null
+          inhalte: string | null
+          id: string | null
+          wgs84_lat: number | null
+          wgs84_long: number | null
+          url: string | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<TPopKmlNamenQueryResult>({
-        query: graphql(`
-              query tpopKmlnamenQuery {
-                allTpops(filter: { vTpopKmlnamenByIdExist: true }) {
-                  nodes {
-                    id
-                    vTpopKmlnamenById {
-                      nodes {
-                        art
-                        label
-                        inhalte
-                        id
-                        wgs84Lat
-                        wgs84Long
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            `),
-      })
+      nodes =
+        (await apiFetch<NonNullable<typeof nodes>>(
+          `/v_tpop_kmlnamen?select=art,label,inhalte,id,wgs84_lat,wgs84_long,url`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
-        options: { variant: 'error' },
+        options: {
+          variant: 'error',
+        },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allTpops?.nodes ?? []).map((z) => ({
-      art: z?.vTpopKmlnamenById?.nodes?.[0]?.art ?? '',
-      label: z?.vTpopKmlnamenById?.nodes?.[0]?.label ?? '',
-      inhalte: z?.vTpopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
-      id: z?.vTpopKmlnamenById?.nodes?.[0]?.id ?? '',
-      wgs84Lat: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
-      wgs84Long: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
-      url: z?.vTpopKmlnamenById?.nodes?.[0]?.url ?? '',
+    const rows = (nodes ?? []).map((z) => ({
+      art: z.art ?? '',
+      label: z.label ?? '',
+      inhalte: z.inhalte ?? '',
+      id: z.id ?? '',
+      wgs84Lat: z.wgs84_lat ?? '',
+      wgs84Long: z.wgs84_long ?? '',
+      url: z.url ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)

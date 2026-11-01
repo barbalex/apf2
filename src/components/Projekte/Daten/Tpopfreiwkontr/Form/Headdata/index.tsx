@@ -1,23 +1,14 @@
+import {
+  apiFetch,
+  apiUpdateByVariables,
+} from '../../../../../../modules/api.ts'
 import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import {
-  userNameAtom,
-  isPrintAtom,
-} from '../../../../../../store/index.ts'
-import { query } from './query.ts'
-import {
-  adresse as adresseFragment,
-  pop as popFragment,
-  tpop as tpopFragment,
-  tpopfreiwkontr as tpopfreiwkontrFragment,
-  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../../shared/fragments.ts'
+import { userNameAtom, isPrintAtom } from '../../../../../../store/index.ts'
 
 import type { AdresseId } from '../../../../../../models/apflora/Adresse.ts'
 import type {
@@ -47,7 +38,6 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
   const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<string | null>(null)
@@ -55,12 +45,10 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
   const { data } = useQuery({
     queryKey: ['tpopfreiwkontrAdresses'],
     queryFn: async () => {
-      const result =
-        await apolloClient.query<TpopfreiwkontrAdressesQueryResult>({
-          query,
-        })
-      if (result.error) throw result.error
-      return result.data
+      const nodes = await apiFetch<
+        NonNullable<TpopfreiwkontrAdressesQueryResult['allAdresses']>['nodes']
+      >(`/v_adresse?select=value:id,label:name&order=name.asc`)
+      return { allAdresses: { nodes: nodes ?? [] } }
     },
   })
 
@@ -72,65 +60,7 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-          mutation updateTpopkontrForEkfHeaddata(
-            $id: UUID!
-            $bearbeiter: UUID
-            $changedBy: String
-          ) {
-            updateTpopkontrById(
-              input: {
-                id: $id
-                tpopkontrPatch: {
-                  bearbeiter: $bearbeiter
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              tpopkontr {
-                ...TpopfreiwkontrFields
-                adresseByBearbeiter {
-                  ...AdresseFields
-                  usersByAdresseId {
-                    totalCount
-                  }
-                }
-                tpopByTpopId {
-                  ...TpopFields
-                  popByPopId {
-                    ...PopFields
-                    apByApId {
-                      id
-                      ekzaehleinheitsByApId {
-                        nodes {
-                          id
-                          tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                            ...TpopkontrzaehlEinheitWerteFields
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                tpopkontrzaehlsByTpopkontrId {
-                  nodes {
-                    id
-                    anzahl
-                    einheit
-                  }
-                }
-              }
-            }
-          }
-          ${adresseFragment}
-          ${popFragment}
-          ${tpopFragment}
-          ${tpopfreiwkontrFragment}
-          ${tpopkontrzaehlEinheitWerteFragment}
-        `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontr', variables)
     } catch (error) {
       return setErrors((error as Error).message)
     }

@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -27,28 +27,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     projId: string
   }>()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApberuebersichtForApberuebersichtsForm(
-            $projId: UUID!
-          ) {
-            createApberuebersicht(
-              input: { apberuebersicht: { projId: $projId } }
-            ) {
-              apberuebersicht {
-                id
-                projId
-              }
-            }
-          }
-        `),
-        variables: { projId: projId as string },
+      await apiInsert('apberuebersicht', {
+        id: newId,
+        proj_id: projId as string,
       })
     } catch (error) {
       return addNotification({
@@ -64,7 +50,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 
