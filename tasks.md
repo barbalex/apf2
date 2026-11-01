@@ -205,13 +205,13 @@ compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessT
 
 ---
 
-EK-Planung (http://localhost:5173/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/EK-Planung) issues:
-
-1. Art names not rendering
-2. 
+- [x] **EK-Planung broken: ChooseAp's query_ap call 400 (01.11.2026, user-reported).** Two gaps in compile_filter, both fixed in `sql/postgrest/compileFilter.sql`: (a) the `notIn` operator (ChooseAp excludes already-chosen aps) did not exist — added as the mirrored `NOT (= ANY(...))` of `in`; (b) the label-function branch (ap.label resolves via `apflora.ap_label()`) only knew the text operators — added `isNull`/`IS NOT NULL`. **Both applied to the VPS on 01.11.2026 + NOTIFY; verified through prod query_ap (notIn + label isNull, lessThan regression green).**
+- [x] **single-Art AP-Bericht print: "Sorry, es gibt nicht ausreichend Daten" flashed during load (01.11.2026, user-reported).** ApberForApFromAp rendered ApberForAp before its query resolved — `node` undefined hit the no-data fallback. Gated with the Spinner while isLoading. Verified live: no flash, "Jahresbericht 2025" renders.
+- [ ] **user report 01.11.2026 (open):** EK-Planung (http://localhost:5173/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/EK-Planung):
+  1. Art names not rendering
+  2. EK and EKF Planungen not rendering
+3. more?
 
 ---
 
 ---
-
-
