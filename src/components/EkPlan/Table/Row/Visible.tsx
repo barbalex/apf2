@@ -170,10 +170,12 @@ export const Visible = ({
           })),
         },
       })
-      const ekplanRows = (ekplansR ?? []) as {
+      // ek_type enum: PostgREST returns lowercase labels, graphql returned
+      // the uppercased values the consumers compare against
+      const ekplanRows = ((ekplansR ?? []) as {
         jahr: number | null
         typ: string | null
-      }[]
+      }[]).map((e) => ({ jahr: e.jahr, typ: e.typ?.toUpperCase() ?? null }))
       return {
         allEkfrequenzs: { nodes: ekfrequenzNodes },
         tpopById: {

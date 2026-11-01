@@ -65,10 +65,13 @@ export const CellForYearMenu = () => {
       qResult = {
         data: {
           allEkplans: {
-            nodes:
+            nodes: (
               (await apiFetch<{ id: string; typ: string }[]>(
                 `/ekplan?tpop_id=eq.${tpopId}&jahr=eq.${year}&select=id,typ`,
-              )) ?? [],
+              )) ?? []
+              // ek_type enum labels arrive lowercase; the caller passes
+              // the uppercased graphql values
+            ).map((o) => ({ ...o, typ: o.typ?.toUpperCase() ?? null })),
           },
         },
       }

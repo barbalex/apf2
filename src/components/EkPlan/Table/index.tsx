@@ -378,7 +378,9 @@ export const EkPlanTable = () => {
         typ: string | null
       }[]) {
         const list = ekplansByTpop.get(e.tpop_id) ?? []
-        list.push({ jahr: e.jahr, typ: e.typ })
+        // ek_type enum labels arrive lowercase; the export compares
+        // the uppercased graphql values
+        list.push({ jahr: e.jahr, typ: e.typ?.toUpperCase() ?? null })
         ekplansByTpop.set(e.tpop_id, list)
       }
       const kontrsByTpop = new Map<string, unknown[]>()
