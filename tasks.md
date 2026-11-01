@@ -167,7 +167,7 @@ Opened (31.10.2026):
 
 ## Phase 6 — Cutover & cleanup
 
-**pending VPS SQL deploy (all applied to dev + NOTIFY'd):** `sql/postgrest/createGetGemeinde.sql`, `createKarteHelpers.sql`, `createApberForYear.sql`, `createApberForApFromAp.sql` — each: `docker compose exec -T db psql -U postgres -d apflora < sql/... ` then `NOTIFY pgrst, 'reload schema'`.
+**VPS SQL deploy DONE (01.11.2026, via SSH):** compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessThan/greaterThan), createGetGemeinde, createKarteHelpers, createApberForYear, createApberForApFromAp — all applied + NOTIFY; every new RPC verified 200 through production PostgREST with a minted manager JWT (query_ap lessThan, get_gemeinde \Zürich\, all 4 karte helpers, both print RPCs returning full trees, jber_abc, v_q views). Previous list (applied 31.10): `sql/postgrest/createGetGemeinde.sql`, `createKarteHelpers.sql`, `createApberForYear.sql`, `createApberForApFromAp.sql` — each: `docker compose exec -T db psql -U postgres -d apflora < sql/... ` then `NOTIFY pgrst, 'reload schema'`.
 
 - migrate Qk/Qk (the only remaining Apollo consumer) — then:
 - remove PostGraphile containers (`backend/`, `backend-dev/`), `graphql/` dir, `apollo.config.cjs`, `codegen.ts`, schema-dump script.
