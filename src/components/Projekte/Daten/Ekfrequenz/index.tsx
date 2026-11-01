@@ -61,13 +61,15 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   error?: string | undefined
 }>
 
+// values are the ek_type/ek_kontrolljahre_ab enum LABELS PostgREST
+// returns and accepts (lowercase); graphql delivered uppercased values
 const ektypeWertes = [
-  { value: 'EK', label: 'EK' },
-  { value: 'EKF', label: 'EKF' },
+  { value: 'ek', label: 'EK' },
+  { value: 'ekf', label: 'EKF' },
 ]
 const kontrolljahreAbWertes = [
-  { value: 'EK', label: 'Kontrolle' },
-  { value: 'ANSIEDLUNG', label: 'Ansiedlung' },
+  { value: 'ek', label: 'Kontrolle' },
+  { value: 'ansiedlung', label: 'Ansiedlung' },
 ]
 
 export const Component = () => {

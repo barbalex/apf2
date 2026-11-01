@@ -81,6 +81,53 @@ AS $$
   LIMIT 1
 $$;
 
+-- Resolves a PostGraphile-style reverse relation key of p_table
+-- ("ekplansByTpopId" = child collection + the fk column in the child
+-- pointing at p_table's pk). Returns no row when the key is not a
+-- reverse relation of this shape.
+CREATE OR REPLACE FUNCTION apflora.resolve_reverse_relation(
+  p_table text,
+  p_relation_key text
+)
+RETURNS TABLE (
+  child_table text,
+  child_fk_col text,
+  parent_pk_col text
+)
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = pg_catalog
+AS $$
+  SELECT
+    'apflora.' || c.relname,
+    ca.attname,
+    pa.attname
+  FROM pg_class c
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN pg_constraint fk
+    ON fk.conrelid = c.oid AND fk.contype = 'f'
+  JOIN pg_attribute ca
+    ON ca.attrelid = c.oid AND ca.attnum = ANY (fk.conkey)
+  JOIN pg_constraint pk
+    ON pk.conrelid = p_table::regclass AND pk.contype = 'p'
+  JOIN pg_attribute pa
+    ON pa.attrelid = p_table::regclass AND pa.attnum = ANY (pk.conkey)
+  WHERE n.nspname = 'apflora'
+    AND c.relkind = 'r'
+    -- postgraphile collection name: table name + 's'
+    AND (c.relname || 's') = apflora.camel_to_snake(
+      substring(p_relation_key FROM '^([a-zA-Z0-9]+)By')
+    )
+    AND ca.attname = apflora.camel_to_snake(
+      substring(p_relation_key FROM 'By([a-zA-Z0-9]+)$')
+    )
+    AND fk.confrelid = p_table::regclass
+    AND array_length(fk.conkey, 1) = 1
+    AND array_length(pk.conkey, 1) = 1
+  LIMIT 1
+$$;
+
 CREATE OR REPLACE FUNCTION apflora.compile_filter(
   p_table text,  -- schema-qualified, e.g. 'apflora.tpop'
   p_alias text,  -- alias the expression will be evaluated against
@@ -107,6 +154,7 @@ DECLARE
   v_sub_parts text[] := ARRAY[]::text[];
   v_item jsonb;
   v_rel record;
+  v_rev record;
   v_label_fn text;
   v_expr text;
 BEGIN
@@ -214,6 +262,35 @@ BEGIN
           v_sub
         )];
       ELSE
+        SELECT * INTO v_rev
+        FROM apflora.resolve_reverse_relation(p_table, v_key);
+
+        IF FOUND THEN
+          -- reverse relation ("ekplansByTpopId"): at least one child row
+          -- matching the filter, like postgraphile's "some"
+          IF NOT (v_value ? 'some') THEN
+            RAISE EXCEPTION
+              'compile_filter: reverse relation % only supports "some"',
+              v_key;
+          END IF;
+          v_sub := apflora.compile_filter(
+            v_rev.child_table,
+            p_alias || '__' || v_rev.child_fk_col,
+            v_value->'some'
+          );
+          v_parts := v_parts || ARRAY[format(
+            'exists (select 1 from %s %I where %I.%I = %I.%I and (%s))',
+            v_rev.child_table,
+            p_alias || '__' || v_rev.child_fk_col,
+            p_alias || '__' || v_rev.child_fk_col,
+            v_rev.child_fk_col,
+            p_alias,
+            v_rev.parent_pk_col,
+            v_sub
+          )];
+          CONTINUE;
+        END IF;
+
         -- plain column
         v_col := apflora.camel_to_snake(v_key);
         SELECT format_type(a.atttypid, a.atttypmod),
@@ -361,9 +438,12 @@ $func$;
 -- but query_tpop runs with invoker rights and calls them directly, so the
 -- calling roles need EXECUTE on them too
 REVOKE EXECUTE ON FUNCTION apflora.camel_to_snake(text) FROM public;
+REVOKE EXECUTE ON FUNCTION apflora.resolve_reverse_relation(text, text) FROM public;
 REVOKE EXECUTE ON FUNCTION apflora.resolve_forward_relation(text, text) FROM public;
 REVOKE EXECUTE ON FUNCTION apflora.compile_filter(text, text, jsonb) FROM public;
 GRANT EXECUTE ON FUNCTION apflora.camel_to_snake(text) TO
+  apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
+GRANT EXECUTE ON FUNCTION apflora.resolve_reverse_relation(text, text) TO
   apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
 GRANT EXECUTE ON FUNCTION apflora.resolve_forward_relation(text, text) TO
   apflora_reader, apflora_ap_reader, apflora_ap_writer, apflora_manager, apflora_freiwillig;
