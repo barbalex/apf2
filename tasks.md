@@ -161,6 +161,12 @@ Opened (31.10.2026):
   - **four bugs found by the live check-run (all fixed):** (a) the Qk Chooser's apqk fetch returned `qk_name` while the parent compared `qkName` → ALL checks were inactive (zero requests); now aliased in the select. (b) compile_filter lacked lessThan/greaterThan (apMitApOhneUmsetzung's `bearbeitung lessThan 4`); added alongside the existing <=/>= ops — **compileFilter.sql changed again, needs VPS re-apply**. (c) the q_* fns take arg names `projid/apid` or `ap_id/proj_id` per function — the body args are per-fn now (a name mismatch is a PGRST202 404). (d) `lv95X` is the GraphQL computed name — camel_to_snake('lv95Lat')→lv95_lat doesn't exist; the filter key must stay `lv95X` (compile_filter's function fallback resolves lv95x).
   - verified live: Abies alba (all 108 checks active) → **439 messages** rendered, zero console/request errors; Rhamnus (few checks) → correct no-findings state. Playwright 26/26, typecheck 0, lint 0 errors.
 - [x] **tree options menu unclickable after virtualization (01.11.2026, user-reported):** the cog button top-right of the nav tree was covered by the virtualized rows — `.rows` is positioned AND follows `<Menu />` in DOM order, so the first full-width row painted over the button and swallowed clicks (broken since the tree virtualization, 75c215985). Fixed with `z-index: 1` on the Menu container in `Tree/Menu.module.css`. Verified live: menu opens, items work (`onlyShowActivePath=true` lands in the URL). Playwright 26/26 (`npm test` = NODE_ENV=dev; plain `npx playwright test` runs against apflora.ch!).
+- [x] **Jahresbericht aller Arten print: slow + 504s + console error flood (01.11.2026, user-reported). Root cause: per-AP request fan-out.** The ApberForYear print renders ~92 `ApberForAp` sub-reports, each firing its own chart queries -> **~460 requests** (3 chart RPCs + `v_ekzaehleinheit` + `q_pop` per AP). PostGraphile resolved all of these server-side inside ONE request; PostgREST's default db pool (10 conns, 10 s pool-timeout) queues them on the 2-vCPU VPS - requests waiting >10 s get 504. TanStack's default 3 retries per failure then QUADRUPLED the load -> spiral. Reproduced against production with a 3-wave burst: 142x 504. (In dev the same storm appeared as 1847x 401: that session's token had EXPIRED - apiFetch silently drops the auth header then, so every request went anonymous; PostgREST answers anonymous as 401 "permission denied for table X".)
+  - **fix 1 - one bulk RPC:** `sql/postgrest/createApberChartsBulk.sql` -> `apber_charts_bulk(p_projekt_id, p_jahr, p_ap_ids)` returns all three chart datasets for all aps at once (LATERAL over the existing functions, rows tagged with apId; p_ap_ids scopes to jber_abc's list). ~5 s in ONE request on dev. **Applied to DEV only - needs VPS apply + NOTIFY BEFORE the next frontend deploy that includes this code (the print calls the rpc; a missing rpc = broken print).**
+  - **fix 2 - fetch once, pass down:** ApberForYear's queryFn runs jber_abc first (defines the report's aps), then Promise.all: apber_for_year_data + apber_charts_bulk + one `v_ekzaehleinheit?ap_id=in.(...)` + one `q_pop?ap_id=in.(...)` GET. The per-ap slices travel as `chartData` through ApberForAps -> ApberForAp into the three chart components (PopStatus/TpopKontrolliert/PopMenge now take an optional `data` prop - without it they self-fetch exactly as before, so the single-Art Auswertung page and the ApberForApFromAp print are unchanged).
+  - **fix 3 - retry policy:** QueryClient default now never retries 4xx (an expired token's 401s previously multiplied into ~1800 requests) and retries everything else once instead of three times (App.tsx).
+  - verified live in dev: print renders all 92 sections with all three charts; `pg_stat_activity` sampled during load shows exactly ONE chart query (the bulk rpc), zero per-ap calls; Auswertung page still renders its self-fetched charts; Playwright 26/26, typecheck 0, lint 0 errors.
+  - open (not blocking): token expiry still doesn't force a re-login - an expired session silently browses on cached data until a refetch 401s (now without the retry storm). A 401 -> logout/reset would be the cleaner UX.
 - `query_<table>` RPC family for the tree-filtered tables: reuse `compile_filter` (beob/tpopmassn/tpopkontr now covered; qk still open).
 - serialize `tree*GqlFilterAtom` outputs into queryFn bodies — the atoms themselves stay unchanged.
 - map polygon filters (coveredBy/contains/within/intersects, 29 uses) stay inside the RPC jsonb — no PostgREST URL syntax needed.
@@ -199,4 +205,26 @@ compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessT
 
 ---
 
+Opening EK-Planung (http://localhost:5173/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/EK-Planung) fails. 1. error message in Art wählen field, see image. 2. Error in console log:
+
+POST http://localhost:3000/rpc/query_ap?select=value:id,label 400 (Bad Request)
+(anonymous) @ api.ts:94
+(anonymous) @ index.tsx:46
+<ForwardRef>
+(anonymous) @ index.tsx:88
+<ChooseAp>
+(anonymous) @ index.tsx:42
+<...>
+(anonymous) @ index.tsx:210
+await in (anonymous)
+(anonymous) @ index.tsx:194
+<...>
+(anonymous) @ App.tsx:115
+<App>
+(anonymous) @ main.tsx:15
+
 ---
+
+---
+
+apber loading (https://apflora.ch/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-7610-8d5d-2b343c4334f5): before the print loads, a message flashes (something like 'sorry, not enough data'). Should not happen

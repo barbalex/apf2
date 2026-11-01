@@ -24,6 +24,8 @@ import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
+import { ApiError } from './modules/api.ts'
+
 import './app.css'
 
 const Notifier = lazy(async () => ({
@@ -60,6 +62,18 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      // 4xx never recovers by retrying; retrying them (f.i. an expired
+      // token's 401s on a 460-request print page) only multiplies the load.
+      // Everything else gets one retry instead of the default three
+      retry: (failureCount, error) => {
+        if (
+          error instanceof ApiError &&
+          (error.status ?? 0) >= 400 &&
+          (error.status ?? 0) < 500
+        )
+          return false
+        return failureCount < 1
+      },
     },
   },
 })

@@ -35,6 +35,9 @@ export const ApberForAp = ({
   // and need to build print button only once
   // so only when index is 0
   subReportIndex,
+  // precomputed chart data from apber_charts_bulk; without it (single-ap
+  // prints) the charts fetch for themselves
+  chartData,
 }: ApberForApProps) => {
   const setIsPrint = useSetAtom(setIsPrintAtom)
 
@@ -160,6 +163,7 @@ export const ApberForAp = ({
             <TpopKontrolliert
               apId={apId as ApId}
               {...(jahr !== undefined && { jahr })}
+              {...(chartData && { data: chartData.tpopKontrolliert })}
               height={250}
               print
               isSubReport={isSubReport}
@@ -169,6 +173,7 @@ export const ApberForAp = ({
             <PopStatus
               apId={apId as ApId}
               {...(jahr !== undefined && { year: jahr })}
+              {...(chartData && { data: chartData.popStatus })}
               height={250}
               print
               isSubReport={isSubReport}
@@ -178,6 +183,7 @@ export const ApberForAp = ({
             <PopMenge
               apId={apId as ApId}
               {...(jahr !== undefined && { jahr })}
+              {...(chartData && { data: chartData.popMenge })}
               height={250}
               print
               isSubReport={isSubReport}

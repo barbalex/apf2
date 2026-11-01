@@ -2,6 +2,7 @@ import type { ApberId } from '../../../models/apflora/Apber.ts'
 import type { ErfkritId } from '../../../models/apflora/Erfkrit.ts'
 import type { TpopmassnId } from '../../../models/apflora/Tpopmassn.ts'
 import type { ZielId } from '../../../models/apflora/Ziel.ts'
+import type { ChartsForAp } from '../ApberForYear/types.ts'
 
 // node types of the queries feeding ApberForAp:
 // ApberForApFromAp/apByIdJahr.ts and ApberForYear/query.ts
@@ -172,4 +173,10 @@ export interface ApberForApProps {
   // and need to build print button only once
   // so only when index is 0
   subReportIndex?: number
+  /**
+   * precomputed chart data (apber_charts_bulk); passed by ApberForYear
+   * so the charts don't fan out into 3 requests per ap.
+   * Without it the charts fetch for themselves
+   */
+  chartData?: ChartsForAp | undefined
 }

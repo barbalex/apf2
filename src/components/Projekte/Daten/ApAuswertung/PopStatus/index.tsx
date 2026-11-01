@@ -28,7 +28,7 @@ interface PopStatusNode {
   a9Lpop: string | null
 }
 
-interface PopStatusQueryResult {
+export interface PopStatusQueryResult {
   popNachStatusForJber: {
     nodes: PopStatusNode[]
   }
@@ -40,6 +40,9 @@ interface PopStatusProps {
   print?: boolean
   isSubReport?: boolean
   year?: number
+  /** precomputed rows (f.i. from apber_charts_bulk on the Jahresbericht print);
+   * without it the component fetches for itself */
+  data?: PopStatusQueryResult
 }
 
 const color = {
@@ -54,12 +57,45 @@ const color = {
 }
 
 export const PopStatus = ({
+  data: dataPassed,
+  ...rest
+}: PopStatusProps) =>
+  dataPassed ?
+    <PopStatusData
+      data={dataPassed}
+      {...rest}
+    />
+  : <PopStatusSelfFetching {...rest} />
+
+interface PopStatusDataProps {
+  data: PopStatusQueryResult
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const PopStatusData = ({ data, ...rest }: PopStatusDataProps) => (
+  <PopStatusChart
+    rows={data.popNachStatusForJber.nodes ?? []}
+    {...rest}
+  />
+)
+
+interface PopStatusSelfFetchingProps {
+  apId?: ApId
+  height?: number
+  print?: boolean
+  isSubReport?: boolean
+  year?: number
+}
+
+const PopStatusSelfFetching = ({
   apId: apIdPassed,
-  height = 400,
+  height,
   print,
   isSubReport,
   year: yearPassed,
-}: PopStatusProps) => {
+}: PopStatusSelfFetchingProps) => {
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
@@ -80,8 +116,29 @@ export const PopStatus = ({
       } as PopStatusQueryResult
     },
   })
-  const rows = dataPopStati.popNachStatusForJber.nodes ?? []
+  return (
+    <PopStatusChart
+      rows={dataPopStati.popNachStatusForJber.nodes ?? []}
+      height={height}
+      print={print}
+      isSubReport={isSubReport}
+    />
+  )
+}
 
+interface PopStatusChartProps {
+  rows: PopStatusNode[]
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const PopStatusChart = ({
+  rows,
+  height = 400,
+  print,
+  isSubReport,
+}: PopStatusChartProps) => {
   const popStatusData = rows.map((row) => ({
     jahr: row.year,
     'ursprünglich, aktuell': row?.a3Lpop ? Number(row?.a3Lpop) : 0,

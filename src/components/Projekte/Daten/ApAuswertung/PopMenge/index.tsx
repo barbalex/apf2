@@ -45,7 +45,7 @@ interface EkzaehleinheitNode {
   } | null
 }
 
-interface PopMengeQueryResult {
+export interface PopMengeQueryResult {
   apAuswPopMenge: {
     nodes: ApAuswPopMengeNode[]
   }
@@ -63,6 +63,9 @@ interface PopMengeProps {
   print?: boolean
   isSubReport?: boolean
   jahr?: number
+  /** precomputed rows (f.i. from apber_charts_bulk on the Jahresbericht print);
+   * without it the component fetches for itself */
+  data?: PopMengeQueryResult
 }
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
@@ -76,12 +79,47 @@ const formatNumber = (tickItem: number) => {
 }
 
 export const PopMenge = ({
+  data: dataPassed,
+  ...rest
+}: PopMengeProps) =>
+  dataPassed ?
+    <PopMengeData
+      data={dataPassed}
+      {...rest}
+    />
+  : <PopMengeSelfFetching {...rest} />
+
+interface PopMengeDataProps {
+  data: PopMengeQueryResult
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const PopMengeData = ({ data, ...rest }: PopMengeDataProps) => (
+  <PopMengeChart
+    menges={data.apAuswPopMenge.nodes ?? []}
+    ekzaehleinheits={data.allEkzaehleinheits.nodes ?? []}
+    pops={data.allPops.nodes ?? []}
+    {...rest}
+  />
+)
+
+interface PopMengeSelfFetchingProps {
+  apId?: ApId
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+  jahr?: number | undefined
+}
+
+const PopMengeSelfFetching = ({
   apId: apIdPassed,
-  height = 400,
+  height,
   print,
   isSubReport,
   jahr: jahrPassed,
-}: PopMengeProps) => {
+}: PopMengeSelfFetchingProps) => {
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
@@ -112,9 +150,37 @@ export const PopMenge = ({
       } as PopMengeQueryResult
     },
   })
+  return (
+    <PopMengeChart
+      menges={dataPopMenge.apAuswPopMenge.nodes ?? []}
+      ekzaehleinheits={dataPopMenge.allEkzaehleinheits.nodes ?? []}
+      pops={dataPopMenge.allPops.nodes ?? []}
+      height={height}
+      print={print}
+      isSubReport={isSubReport}
+    />
+  )
+}
 
-  const popsData = dataPopMenge.allPops.nodes ?? []
-  const popMengeRawData = dataPopMenge.apAuswPopMenge.nodes ?? []
+interface PopMengeChartProps {
+  menges: ApAuswPopMengeNode[]
+  ekzaehleinheits: EkzaehleinheitNode[]
+  pops: PopNode[]
+  height?: number | undefined
+  print?: boolean | undefined
+  isSubReport?: boolean | undefined
+}
+
+const PopMengeChart = ({
+  menges,
+  ekzaehleinheits,
+  pops,
+  height = 400,
+  print,
+  isSubReport,
+}: PopMengeChartProps) => {
+  const popsData = pops
+  const popMengeRawData = menges
   const popMengeData: Record<string, unknown>[] = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     // values is jsonb — PostgREST delivers it as an object
@@ -136,8 +202,8 @@ export const PopMenge = ({
   ])
 
   const zielEinheit =
-    dataPopMenge.allEkzaehleinheits?.nodes?.[0]
-      ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Einheit)'
+    ekzaehleinheits?.[0]?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ??
+    '(keine Einheit)'
 
   const onClickMoreInfo = () => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'

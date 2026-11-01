@@ -3,6 +3,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 import type {
   ApberForYearQueryResult,
+  ChartsForAp,
   JberQueryResult,
 } from './types.ts'
 
@@ -10,9 +11,15 @@ interface ApberForApsProps {
   jahr?: number | undefined
   data?: ApberForYearQueryResult | undefined
   jberData?: JberQueryResult | undefined
+  charts?: Record<string, ChartsForAp> | undefined
 }
 
-export const ApberForAps = ({ jahr, data, jberData }: ApberForApsProps) => {
+export const ApberForAps = ({
+  jahr,
+  data,
+  jberData,
+  charts,
+}: ApberForApsProps) => {
   const aps = (data?.allAps?.nodes ?? []).filter(
     (ap) => (ap?.apbersByApId?.totalCount ?? 0) > 0,
   )
@@ -30,6 +37,7 @@ export const ApberForAps = ({ jahr, data, jberData }: ApberForApsProps) => {
           node={node}
           isSubReport={true}
           subReportIndex={index}
+          {...(charts?.[node.id] && { chartData: charts[node.id] })}
         />
       ))}
     </ErrorBoundary>
