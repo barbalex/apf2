@@ -50,7 +50,7 @@ export const Component = () => {
           }[]
         >(`/qk?select=name,titel,beschreibung,sort&order=sort.asc,name.asc`),
         apiFetch<{ ap_id: string; qk_name: string }[]>(
-          `/apqk?ap_id=eq.${apId}&select=ap_id,qk_name`,
+          `/apqk?ap_id=eq.${apId}&select=ap_id,qkName:qk_name`,
         ),
       ])
       return {

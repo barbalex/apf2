@@ -1,3 +1,4 @@
+import { fetchQkData } from './fetchQkData.ts'
 import { useState, type ChangeEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -5,7 +6,6 @@ import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import Badge from '@mui/material/Badge'
 import Paper from '@mui/material/Paper'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -13,11 +13,7 @@ import { useParams, useLocation } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { standardQkYear } from '../../../../../modules/standardQkYear.ts'
-import { query } from './query.ts'
-import {
-  createMessageFunctions,
-  type QkQueryData,
-} from './createMessageFunctions.ts'
+import { createMessageFunctions } from './createMessageFunctions.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
@@ -46,7 +42,6 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
 
-  const apolloClient = useApolloClient()
   const now = new Date()
   const minDatum = new Date(
     now.getFullYear() - 100,
@@ -65,20 +60,15 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const { data, refetch, isFetching } = useQuery({
     queryKey: ['qk', apId, projId, berichtjahr, qkNameQueries],
     queryFn: async () => {
-      const result = await apolloClient.query<QkQueryData>({
-        query,
-        variables: {
-          ...qkNameQueries,
-          berichtjahr,
-          notIsBerichtjahr: !berichtjahr,
-          apId,
-          projId,
-          minDatum,
-          maxDatum,
-        },
+      // phase 5: only the active checks are fetched (former @include doc)
+      return await fetchQkData({
+        projId: projId ?? '',
+        apId: apId ?? '',
+        berichtjahr,
+        activeChecks: qkNameQueries,
+        minDatum: minDatum ?? '',
+        maxDatum: maxDatum ?? '',
       })
-      if (result.error) throw result.error
-      return result.data
     },
     // no suspense as loading state is managed via isFetching
   })

@@ -254,9 +254,17 @@ BEGIN
               v_parts := v_parts || ARRAY[format(
                 '%s <> %L::%s', v_expr, v_lit, v_col_type
               )];
+            WHEN 'greaterThan' THEN
+              v_parts := v_parts || ARRAY[format(
+                '%s > %L::%s', v_expr, v_lit, v_col_type
+              )];
             WHEN 'greaterThanOrEqualTo' THEN
               v_parts := v_parts || ARRAY[format(
                 '%s >= %L::%s', v_expr, v_lit, v_col_type
+              )];
+            WHEN 'lessThan' THEN
+              v_parts := v_parts || ARRAY[format(
+                '%s < %L::%s', v_expr, v_lit, v_col_type
               )];
             WHEN 'lessThanOrEqualTo' THEN
               v_parts := v_parts || ARRAY[format(
@@ -312,7 +320,7 @@ BEGIN
               )];
             ELSE
               RAISE EXCEPTION
-                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThanOrEqualTo, lessThanOrEqualTo, in, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
+                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThan, greaterThanOrEqualTo, lessThan, lessThanOrEqualTo, in, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
                 v_op, p_table, v_col;
           END CASE;
         END LOOP;
