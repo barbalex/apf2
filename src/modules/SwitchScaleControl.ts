@@ -277,8 +277,7 @@ const SwitchScaleControl = L.Control.extend({
         if (e.which !== 13) return
 
         const scaleRatioFound = this.value
-          .replace(' ', '')
-          .replace("'", '')
+          .replace(/[' ]/g, '')
           .match(/^(1:){0,1}([0-9]*)$/)
         if (scaleRatioFound && scaleRatioFound[2]) {
           const maxScale = Math.max(...scales)

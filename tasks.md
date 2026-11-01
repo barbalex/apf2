@@ -180,6 +180,8 @@ Opened (31.10.2026):
 2. watch production — `apf_graphql` stays up as the instant rollback path (redeploy the old master and you're back)
 3. once confident: phase 6 teardown below
 
+**PR #833 (postgrest → master, opened 01.11.2026):** all checks green except CodeQL — a `js/incomplete-sanitization` "high" alert on `src/modules/SwitchScaleControl.ts` (the leaflet custom-scale input: `.replace(' ', '').replace("'", '')` strips only the FIRST space/apostrophe). Not a real vulnerability — the stripped value only feeds a `^(1:){0,1}[0-9]*$` match for the map scale — but flagged because the big diff touched (reformatted) that old file. Fixed with `.replace(/[' ]/g, '')`; worst pre-fix effect was a scale like `25'000'000` silently failing the regex.
+
 ## VPS SQL deploy DONE (01.11.2026, via SSH)
 
 compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessThan/greaterThan), createGetGemeinde, createKarteHelpers, createApberForYear, createApberForApFromAp — all applied + NOTIFY; every new RPC verified 200 through production PostgREST with a minted manager JWT (query_ap lessThan, get_gemeinde \Zürich\, all 4 karte helpers, both print RPCs returning full trees, jber_abc, v_q views). Earlier applies: 31.10.2026 createComputedViews.sql + createQueryRpcs.sql + compileFilter.sql. Any future DDL on the VPS: `docker compose exec -T db psql -U postgres -d apflora < sql/...` then `NOTIFY pgrst, 'reload schema'` (PostgREST caches the schema).
