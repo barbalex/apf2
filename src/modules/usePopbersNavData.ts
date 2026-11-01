@@ -1,16 +1,22 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getPopberGqlFilterForTree } from './getPopberGqlFilterForTree.ts'
 
-export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const usePopbersNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const popberGqlFilterForTree = getPopberGqlFilterForTree(popId)
@@ -18,31 +24,36 @@ export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: 
   const { data } = useSuspenseQuery({
     queryKey: ['treePopber', popId, popberGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreePopbersQuery($popbersFilter: PopberFilter!, $popId: UUID!) {
-            popById(id: $popId) {
-              id
-              popbersByPopId(filter: $popbersFilter, orderBy: LABEL_ASC) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: popbersByPopId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          popbersFilter: popberGqlFilterForTree,
-          popId,
+      // phase 5: the former popbersByPopId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...popberGqlFilterForTree,
+        popByPopId: {
+          ...((popberGqlFilterForTree as { popByPopId?: object }).popByPopId ??
+            {}),
+          id: { equalTo: popId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_popber?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount(`/q_popber?pop_id=eq.${popId}`),
+      ])
+      return {
+        popById: {
+          id: popId,
+          popbersByPopId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 

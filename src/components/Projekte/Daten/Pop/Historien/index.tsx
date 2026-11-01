@@ -1,6 +1,5 @@
+import { apiFetch } from '../../../../../modules/api.ts'
 import { useState, useRef, useEffect } from 'react'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Tooltip, IconButton } from '@mui/material'
@@ -22,77 +21,9 @@ import type {
 
 import indexStyles from './index.module.css'
 
-const query = graphql(`
-  query popHistoryQuery($popId: UUID!) {
-    popById(id: $popId) {
-      id
-      apId
-      apByApId {
-        id
-        aeTaxonomyByArtId {
-          id
-          artname
-        }
-      }
-      nr
-      name
-      label
-      status
-      popStatusWerteByStatus {
-        id
-        text
-      }
-      statusUnklar
-      statusUnklarBegruendung
-      bekanntSeit
-      geomPoint {
-        geojson
-        x
-        y
-      }
-      changedBy
-    }
-    allPopHistories(filter: { id: { equalTo: $popId } }, orderBy: YEAR_DESC) {
-      totalCount
-      nodes {
-        id
-        year
-        apId
-        apByApId {
-          id
-          aeTaxonomyByArtId {
-            id
-            artname
-          }
-        }
-        nr
-        name
-        status
-        popStatusWerteByStatus {
-          id
-          text
-        }
-        statusUnklar
-        statusUnklarBegruendung
-        bekanntSeit
-        geomPoint {
-          geojson
-          x
-          y
-        }
-        changedBy
-      }
-    }
-    allPopStatusWertes(orderBy: CODE_ASC) {
-      nodes {
-        value: code
-        label: text
-      }
-    }
-  }
-`)
-
 interface PopHistoryData {
+  label?: string | null
+  year?: number | null
   id: PopId
   apId: ApId
   apByApId?: {
@@ -112,44 +43,43 @@ interface PopHistoryData {
   statusUnklar: boolean | null
   statusUnklarBegruendung: string | null
   bekanntSeit: number | null
+  /** GeoJSON object; [0]/[1] are the former x/y (long/lat) */
   geomPoint?: {
-    geojson: unknown
-    x: number | null
-    y: number | null
+    type: string
+    coordinates: [number, number]
   }
   changedBy: string | null
 }
 
-type PopHistoryRow = PopHistoryData & { year: number | null }
-
-interface PopHistoryQueryResult {
-  popById?: PopHistoryData & {
-    label: string | null
-  }
-  allPopHistories?: {
-    totalCount: number
-    nodes: (PopHistoryData & {
-        year: number | null
-      })[]
-  }
-  allPopStatusWertes?: {
-    nodes: { value: number; label: string }[]
-  }
-}
+type PopHistoryRow = PopHistoryData & { year?: number | null | undefined }
 
 export const Component = () => {
   const { popId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['popHistory', popId],
     queryFn: async () => {
-      const result = await apolloClient.query<PopHistoryQueryResult>({
-        query,
-        variables: { popId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const commonSelect =
+        'id,apId:ap_id,apByApId:ap_by_ap_id,nr,name,status,statusUnklar:status_unklar,statusUnklarBegruendung:status_unklar_begruendung,bekanntSeit:bekannt_seit,geomPoint:geom_point,changedBy:changed_by'
+      const [popRows, historyRows, statusWerte] = await Promise.all([
+        apiFetch<PopHistoryData[]>(
+          `/v_pop?id=eq.${popId}&select=${commonSelect},label`,
+        ),
+        apiFetch<PopHistoryData[]>(
+          `/v_pop_history?id=eq.${popId}&select=${commonSelect},year,popStatusWerteByStatus:pop_status_werte_by_status&order=year.desc`,
+        ),
+        apiFetch<{ value: number; label: string }[]>(
+          `/pop_status_werte?order=code.asc&select=value:code,label:text`,
+        ),
+      ])
+      return {
+        popById: popRows?.[0] ?? null,
+        allPopHistories: {
+          nodes: historyRows ?? [],
+          totalCount: historyRows?.length ?? 0,
+        },
+        allPopStatusWertes: { nodes: statusWerte ?? [] },
+      }
     },
   })
 
@@ -267,13 +197,13 @@ export const Component = () => {
               label: 'Begründung (für Status unklar)',
             },
             {
-              valueInRow: row?.geomPoint?.x,
-              valueInHist: r?.geomPoint?.x,
+              valueInRow: row?.geomPoint?.coordinates?.[0],
+              valueInHist: r?.geomPoint?.coordinates?.[0],
               label: 'Längengrad',
             },
             {
-              valueInRow: row?.geomPoint?.y,
-              valueInHist: r?.geomPoint?.y,
+              valueInRow: row?.geomPoint?.coordinates?.[1],
+              valueInHist: r?.geomPoint?.coordinates?.[1],
               label: 'Breitengrad',
             },
           ]
@@ -287,7 +217,7 @@ export const Component = () => {
                 <Tooltip title="bearbeiten">
                   <IconButton
                     size="small"
-                    onClick={() => setEditingYear(r.year)}
+                    onClick={() => setEditingYear(r.year ?? null)}
                   >
                     <MdEdit />
                   </IconButton>

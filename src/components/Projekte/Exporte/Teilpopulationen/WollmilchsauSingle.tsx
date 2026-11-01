@@ -1,192 +1,18 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql/index.ts'
-
-import { useApolloClient } from '@apollo/client/react'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type {
-  ApId,
-  PopId,
-  TpopId,
-} from '../../../../models/apflora/index.ts'
 
 import styles from './WollmilchsauSingle.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 
-interface ApByArtIdQueryResult {
-  apByArtId: {
-    id: ApId
-  } | null
-}
-
-interface TPopErsteUndLetzteKontrolleFilteredQueryResult {
-  allTpops: {
-    totalCount: number
-    nodes: {
-      id: TpopId
-      vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById: {
-        nodes: {
-          apId: ApId
-          familie: string | null
-          artname: string | null
-          apBearbeitung: string | null
-          apStartJahr: number | null
-          apUmsetzung: string | null
-          popId: PopId
-          popNr: number | null
-          popName: string | null
-          popStatus: string | null
-          popBekanntSeit: number | null
-          popStatusUnklar: boolean | null
-          popStatusUnklarBegruendung: string | null
-          popX: number | null
-          popY: number | null
-          id: TpopId
-          nr: number | null
-          gemeinde: string | null
-          flurname: string | null
-          status: string | null
-          statusDecodiert: string | null
-          bekanntSeit: number | null
-          statusUnklar: boolean | null
-          statusUnklarGrund: string | null
-          x: number | null
-          y: number | null
-          radius: number | null
-          hoehe: number | null
-          exposition: string | null
-          klima: string | null
-          neigung: string | null
-          beschreibung: string | null
-          katasterNr: string | null
-          apberRelevant: number | null
-          apberRelevantGrund: string | null
-          eigentuemer: string | null
-          kontakt: string | null
-          nutzungszone: string | null
-          bewirtschafter: string | null
-          bewirtschaftung: string | null
-          bodenTyp: string | null
-          bodenKalkgehalt: string | null
-          bodenDurchlaessigkeit: string | null
-          bodenHumus: string | null
-          bodenNaehrstoffgehalt: string | null
-          bodenAbtrag: string | null
-          wasserhaushalt: string | null
-          ekfrequenz: number | null
-          ekfrequenzAbweichend: boolean | null
-          createdAt: string | null
-          updatedAt: string | null
-          changedBy: string | null
-          anzahlKontrollen: number | null
-          ersteKontrolleId: string | null
-          ersteKontrolleJahr: number | null
-          ersteKontrolleDatum: string | null
-          ersteKontrolleTyp: string | null
-          ersteKontrolleBearbeiter: string | null
-          ersteKontrolleUeberlebensrate: number | null
-          ersteKontrolleVitalitaet: string | null
-          ersteKontrolleEntwicklung: number | null
-          ersteKontrolleUrsachen: string | null
-          ersteKontrolleErfolgsbeurteilung: string | null
-          ersteKontrolleUmsetzungAendern: string | null
-          ersteKontrolleKontrolleAendern: string | null
-          ersteKontrolleBemerkungen: string | null
-          ersteKontrolleLrDelarze: string | null
-          ersteKontrolleLrUmgebungDelarze: string | null
-          ersteKontrolleVegetationstyp: string | null
-          ersteKontrolleKonkurrenz: string | null
-          ersteKontrolleMoosschicht: string | null
-          ersteKontrolleKrautschicht: string | null
-          ersteKontrolleStrauchschicht: string | null
-          ersteKontrolleBaumschicht: string | null
-          ersteKontrolleIdealbiotopUebereinstimmung: string | null
-          ersteKontrolleHandlungsbedarf: string | null
-          ersteKontrolleFlaecheUeberprueft: number | null
-          ersteKontrolleFlaeche: number | null
-          ersteKontrollePlanVorhanden: boolean | null
-          ersteKontrolleDeckungVegetation: number | null
-          ersteKontrolleDeckungNackterBoden: number | null
-          ersteKontrolleDeckungApArt: number | null
-          ersteKontrolleJungpflanzenVorhanden: boolean | null
-          ersteKontrolleVegetationshoeheMaximum: number | null
-          ersteKontrolleVegetationshoeheMittel: number | null
-          ersteKontrolleGefaehrdung: string | null
-          ersteKontrolleCreatedAt: string | null
-          ersteKontrolleUpdatedAt: string | null
-          ersteKontrolleChangedBy: string | null
-          ersteKontrolleApberNichtRelevant: number | null
-          ersteKontrolleApberNichtRelevantGrund: string | null
-          ersteKontrolleEkfBemerkungen: string | null
-          ersteKontrolleZaehlungAnzahlen: string | null
-          ersteKontrolleZaehlungEinheiten: string | null
-          ersteKontrolleZaehlungMethoden: string | null
-          letzteKontrolleId: string | null
-          letzteKontrolleJahr: number | null
-          letzteKontrolleDatum: string | null
-          letzteKontrolleTyp: string | null
-          letzteKontrolleBearbeiter: string | null
-          letzteKontrolleUeberlebensrate: number | null
-          letzteKontrolleVitalitaet: string | null
-          letzteKontrolleEntwicklung: number | null
-          letzteKontrolleUrsachen: string | null
-          letzteKontrolleErfolgsbeurteilung: string | null
-          letzteKontrolleUmsetzungAendern: string | null
-          letzteKontrolleKontrolleAendern: string | null
-          letzteKontrolleBemerkungen: string | null
-          letzteKontrolleLrDelarze: string | null
-          letzteKontrolleLrUmgebungDelarze: string | null
-          letzteKontrolleVegetationstyp: string | null
-          letzteKontrolleKonkurrenz: string | null
-          letzteKontrolleMoosschicht: string | null
-          letzteKontrolleKrautschicht: string | null
-          letzteKontrolleStrauchschicht: string | null
-          letzteKontrolleBaumschicht: string | null
-          letzteKontrolleIdealbiotopUebereinstimmung: string | null
-          letzteKontrolleHandlungsbedarf: string | null
-          letzteKontrolleFlaecheUeberprueft: number | null
-          letzteKontrolleFlaeche: number | null
-          letzteKontrollePlanVorhanden: boolean | null
-          letzteKontrolleDeckungVegetation: number | null
-          letzteKontrolleDeckungNackterBoden: number | null
-          letzteKontrolleDeckungApArt: number | null
-          letzteKontrolleJungpflanzenVorhanden: boolean | null
-          letzteKontrolleVegetationshoeheMaximum: number | null
-          letzteKontrolleVegetationshoeheMittel: number | null
-          letzteKontrolleGefaehrdung: string | null
-          letzteKontrolleChanged: string | null
-          letzteKontrolleCreatedAt: string | null
-          letzteKontrolleUpdatedAt: string | null
-          letzteKontrolleChangedBy: string | null
-          letzteKontrolleApberNichtRelevant: number | null
-          letzteKontrolleApberNichtRelevantGrund: string | null
-          letzteKontrolleEkfBemerkungen: string | null
-          letzteKontrolleZaehlungAnzahlen: string | null
-          letzteKontrolleZaehlungEinheiten: string | null
-          letzteKontrolleZaehlungMethoden: string | null
-          tpopberAnz: number | null
-          tpopberId: string | null
-          tpopberJahr: number | null
-          tpopberEntwicklung: number | null
-          tpopberBemerkungen: string | null
-          tpopberCreatedAt: string | null
-          tpopberUpdatedAt: string | null
-          tpopberChangedBy: string | null
-        }[]
-      }
-    }[]
-  }
-}
-
 export const WollmilchsauSingle = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
 
   const [ewmMessage, setEwmMessage] = useState('')
 
@@ -214,610 +40,216 @@ export const WollmilchsauSingle = () => {
           setEwmMessage(
             'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
           )
-          let result: { data?: ApByArtIdQueryResult | undefined } | undefined
-          try {
-            result = await apolloClient.query<ApByArtIdQueryResult>({
-              query: graphql(`
-                query apByArtIdQuery($aeId: UUID!) {
-                  apByArtId(artId: $aeId) {
-                    id
-                  }
-                }
-              `),
-              variables: { aeId },
-            })
-          } catch (error) {
-            addNotification({
-              message: (error as Error).message,
-              options: { variant: 'error' },
-            })
+          // the art's ap
+          const aps =
+            (await apiFetch<{ id: string }[]>(
+              `/ap?art_id=eq.${aeId}&select=id`,
+            )) ?? []
+          const apId = aps[0]?.id
+          let nodes: Record<string, unknown>[] = []
+          if (apId) {
+            // the export view, scoped to the art
+            nodes =
+              (await apiFetch<Record<string, unknown>[]>(
+                `/v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber?ap_id=eq.${apId}&select=*`,
+              )) ?? []
           }
-          const apId = result?.data?.apByArtId?.id
-          const { data } =
-            await apolloClient.query<TPopErsteUndLetzteKontrolleFilteredQueryResult>({
-              query: graphql(`
-                query tpopErsteUndLetzteKontrolleUndLetzterTpopbersFilteredQuery(
-                  $apId: UUID!
-                ) {
-                  allTpops(
-                    filter: {
-                      vTpopErsteUndLetzteKontrolleUndLetzterTpopbersByIdExist: true
-                      popByPopId: { apId: { equalTo: $apId } }
-                    }
-                  ) {
-                    totalCount
-                    nodes {
-                      id
-                      vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById {
-                        nodes {
-                          apId
-                          familie
-                          artname
-                          apBearbeitung
-                          apStartJahr
-                          apUmsetzung
-                          popId
-                          popNr
-                          popName
-                          popStatus
-                          popBekanntSeit
-                          popStatusUnklar
-                          popStatusUnklarBegruendung
-                          popX
-                          popY
-                          id
-                          nr
-                          gemeinde
-                          flurname
-                          status
-                          statusDecodiert
-                          bekanntSeit
-                          statusUnklar
-                          statusUnklarGrund
-                          x
-                          y
-                          radius
-                          hoehe
-                          exposition
-                          klima
-                          neigung
-                          beschreibung
-                          katasterNr
-                          apberRelevant
-                          apberRelevantGrund
-                          eigentuemer
-                          kontakt
-                          nutzungszone
-                          bewirtschafter
-                          bewirtschaftung
-                          bodenTyp
-                          bodenKalkgehalt
-                          bodenDurchlaessigkeit
-                          bodenHumus
-                          bodenNaehrstoffgehalt
-                          bodenAbtrag
-                          wasserhaushalt
-                          ekfrequenz
-                          ekfrequenzAbweichend
-                          createdAt
-                          updatedAt
-                          changedBy
-                          anzahlKontrollen
-                          ersteKontrolleId
-                          ersteKontrolleJahr
-                          ersteKontrolleDatum
-                          ersteKontrolleTyp
-                          ersteKontrolleBearbeiter
-                          ersteKontrolleUeberlebensrate
-                          ersteKontrolleVitalitaet
-                          ersteKontrolleEntwicklung
-                          ersteKontrolleUrsachen
-                          ersteKontrolleErfolgsbeurteilung
-                          ersteKontrolleUmsetzungAendern
-                          ersteKontrolleKontrolleAendern
-                          ersteKontrolleBemerkungen
-                          ersteKontrolleLrDelarze
-                          ersteKontrolleLrUmgebungDelarze
-                          ersteKontrolleVegetationstyp
-                          ersteKontrolleKonkurrenz
-                          ersteKontrolleMoosschicht
-                          ersteKontrolleKrautschicht
-                          ersteKontrolleStrauchschicht
-                          ersteKontrolleBaumschicht
-                          ersteKontrolleIdealbiotopUebereinstimmung
-                          ersteKontrolleHandlungsbedarf
-                          ersteKontrolleFlaecheUeberprueft
-                          ersteKontrolleFlaeche
-                          ersteKontrollePlanVorhanden
-                          ersteKontrolleDeckungVegetation
-                          ersteKontrolleDeckungNackterBoden
-                          ersteKontrolleDeckungApArt
-                          ersteKontrolleJungpflanzenVorhanden
-                          ersteKontrolleVegetationshoeheMaximum
-                          ersteKontrolleVegetationshoeheMittel
-                          ersteKontrolleGefaehrdung
-                          ersteKontrolleCreatedAt
-                          ersteKontrolleUpdatedAt
-                          ersteKontrolleChangedBy
-                          ersteKontrolleApberNichtRelevant
-                          ersteKontrolleApberNichtRelevantGrund
-                          ersteKontrolleEkfBemerkungen
-                          ersteKontrolleZaehlungAnzahlen
-                          ersteKontrolleZaehlungEinheiten
-                          ersteKontrolleZaehlungMethoden
-                          letzteKontrolleId
-                          letzteKontrolleJahr
-                          letzteKontrolleDatum
-                          letzteKontrolleTyp
-                          letzteKontrolleBearbeiter
-                          letzteKontrolleUeberlebensrate
-                          letzteKontrolleVitalitaet
-                          letzteKontrolleEntwicklung
-                          letzteKontrolleUrsachen
-                          letzteKontrolleErfolgsbeurteilung
-                          letzteKontrolleUmsetzungAendern
-                          letzteKontrolleKontrolleAendern
-                          letzteKontrolleBemerkungen
-                          letzteKontrolleLrDelarze
-                          letzteKontrolleLrUmgebungDelarze
-                          letzteKontrolleVegetationstyp
-                          letzteKontrolleKonkurrenz
-                          letzteKontrolleMoosschicht
-                          letzteKontrolleKrautschicht
-                          letzteKontrolleStrauchschicht
-                          letzteKontrolleBaumschicht
-                          letzteKontrolleIdealbiotopUebereinstimmung
-                          letzteKontrolleHandlungsbedarf
-                          letzteKontrolleFlaecheUeberprueft
-                          letzteKontrolleFlaeche
-                          letzteKontrollePlanVorhanden
-                          letzteKontrolleDeckungVegetation
-                          letzteKontrolleDeckungNackterBoden
-                          letzteKontrolleDeckungApArt
-                          letzteKontrolleJungpflanzenVorhanden
-                          letzteKontrolleVegetationshoeheMaximum
-                          letzteKontrolleVegetationshoeheMittel
-                          letzteKontrolleGefaehrdung
-                          letzteKontrolleCreatedAt
-                          letzteKontrolleUpdatedAt
-                          letzteKontrolleChangedBy
-                          letzteKontrolleApberNichtRelevant
-                          letzteKontrolleApberNichtRelevantGrund
-                          letzteKontrolleEkfBemerkungen
-                          letzteKontrolleZaehlungAnzahlen
-                          letzteKontrolleZaehlungEinheiten
-                          letzteKontrolleZaehlungMethoden
-                          tpopberAnz
-                          tpopberId
-                          tpopberJahr
-                          tpopberEntwicklung
-                          tpopberBemerkungen
-                          tpopberCreatedAt
-                          tpopberUpdatedAt
-                          tpopberChangedBy
-                        }
-                      }
-                    }
-                  }
-                }
-              `),
-              variables: { apId },
-            })
-          const rows = (data?.allTpops?.nodes ?? []).map((n) => ({
-            ap_id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apId ?? '',
-            familie:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.familie ?? '',
-            artname:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.artname ?? '',
-            ap_bearbeitung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apBearbeitung ?? '',
-            ap_start_jahr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apStartJahr ?? '',
-            ap_umsetzung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apUmsetzung ?? '',
-            pop_id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popId ?? '',
-            pop_nr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popNr ?? '',
-            pop_name:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popName ?? '',
-            pop_status:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popStatus ?? '',
-            pop_bekannt_seit:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popBekanntSeit ?? '',
-            pop_status_unklar:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popStatusUnklar ?? '',
+          const rows = nodes.map((z) => ({
+            ap_id: z['ap_id'] ?? '',
+            familie: z['familie'] ?? '',
+            artname: z['artname'] ?? '',
+            ap_bearbeitung: z['ap_bearbeitung'] ?? '',
+            ap_start_jahr: z['ap_start_jahr'] ?? '',
+            ap_umsetzung: z['ap_umsetzung'] ?? '',
+            pop_id: z['pop_id'] ?? '',
+            pop_nr: z['pop_nr'] ?? '',
+            pop_name: z['pop_name'] ?? '',
+            pop_status: z['pop_status'] ?? '',
+            pop_bekannt_seit: z['pop_bekannt_seit'] ?? '',
+            pop_status_unklar: z['pop_status_unklar'] ?? '',
             pop_status_unklar_begruendung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popStatusUnklarBegruendung ?? '',
-            pop_x:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popX ?? '',
-            pop_y:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.popY ?? '',
-            id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.id ?? '',
-            nr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.nr ?? '',
-            gemeinde:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.gemeinde ?? '',
-            flurname:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.flurname ?? '',
-            status:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.status ?? '',
-            status_decodiert:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.statusDecodiert ?? '',
-            bekannt_seit:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.bekanntSeit ?? '',
-            status_unklar:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.statusUnklar ?? '',
-            status_unklar_grund:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.statusUnklarGrund ?? '',
-            lv95X:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.x ?? '',
-            lv95Y:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.y ?? '',
-            radius:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.radius ?? '',
-            hoehe:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.hoehe ?? '',
-            exposition:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.exposition ?? '',
-            klima:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.klima ?? '',
-            neigung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.neigung ?? '',
-            beschreibung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.beschreibung ?? '',
-            kataster_nr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.katasterNr ?? '',
-            apber_relevant:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apberRelevant ?? '',
-            apber_relevant_grund:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.apberRelevantGrund ?? '',
-            eigentuemer:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.eigentuemer ?? '',
-            kontakt:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.kontakt ?? '',
-            nutzungszone:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.nutzungszone ?? '',
-            bewirtschafter:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.bewirtschafter ?? '',
-            bewirtschaftung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.bewirtschaftung ?? '',
-            ekfrequenz:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ekfrequenz ?? '',
-            ekfrequenz_abweichend:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ekfrequenzAbweichend ?? '',
-            created_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.createdAt ?? '',
-            updated_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.updatedAt ?? '',
-            changed_by:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.changedBy ?? '',
-            anzahl_kontrollen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.anzahlKontrollen ?? '',
-            erste_kontrolle_id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleId ?? '',
-            erste_kontrolle_jahr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleJahr ?? '',
-            erste_kontrolle_datum:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleDatum ?? '',
-            erste_kontrolle_typ:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleTyp ?? '',
-            erste_kontrolle_bearbeiter:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleBearbeiter ?? '',
+              z['pop_status_unklar_begruendung'] ?? '',
+            pop_x: z['pop_x'] ?? '',
+            pop_y: z['pop_y'] ?? '',
+            id: z['id'] ?? '',
+            nr: z['nr'] ?? '',
+            gemeinde: z['gemeinde'] ?? '',
+            flurname: z['flurname'] ?? '',
+            status: z['status'] ?? '',
+            status_decodiert: z['status_decodiert'] ?? '',
+            bekannt_seit: z['bekannt_seit'] ?? '',
+            status_unklar: z['status_unklar'] ?? '',
+            status_unklar_grund: z['status_unklar_grund'] ?? '',
+            lv95X: z['x'] ?? '',
+            lv95Y: z['y'] ?? '',
+            radius: z['radius'] ?? '',
+            hoehe: z['hoehe'] ?? '',
+            exposition: z['exposition'] ?? '',
+            klima: z['klima'] ?? '',
+            neigung: z['neigung'] ?? '',
+            beschreibung: z['beschreibung'] ?? '',
+            kataster_nr: z['kataster_nr'] ?? '',
+            apber_relevant: z['apber_relevant'] ?? '',
+            apber_relevant_grund: z['apber_relevant_grund'] ?? '',
+            eigentuemer: z['eigentuemer'] ?? '',
+            kontakt: z['kontakt'] ?? '',
+            nutzungszone: z['nutzungszone'] ?? '',
+            bewirtschafter: z['bewirtschafter'] ?? '',
+            bewirtschaftung: z['bewirtschaftung'] ?? '',
+            ekfrequenz: z['ekfrequenz'] ?? '',
+            ekfrequenz_abweichend: z['ekfrequenz_abweichend'] ?? '',
+            created_at: z['created_at'] ?? '',
+            updated_at: z['updated_at'] ?? '',
+            changed_by: z['changed_by'] ?? '',
+            anzahl_kontrollen: z['anzahl_kontrollen'] ?? '',
+            erste_kontrolle_id: z['erste_kontrolle_id'] ?? '',
+            erste_kontrolle_jahr: z['erste_kontrolle_jahr'] ?? '',
+            erste_kontrolle_datum: z['erste_kontrolle_datum'] ?? '',
+            erste_kontrolle_typ: z['erste_kontrolle_typ'] ?? '',
+            erste_kontrolle_bearbeiter: z['erste_kontrolle_bearbeiter'] ?? '',
             erste_kontrolle_ueberlebensrate:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleUeberlebensrate ?? '',
-            erste_kontrolle_vitalitaet:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleVitalitaet ?? '',
-            erste_kontrolle_entwicklung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleEntwicklung ?? '',
-            erste_kontrolle_ursachen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleUrsachen ?? '',
+              z['erste_kontrolle_ueberlebensrate'] ?? '',
+            erste_kontrolle_vitalitaet: z['erste_kontrolle_vitalitaet'] ?? '',
+            erste_kontrolle_entwicklung: z['erste_kontrolle_entwicklung'] ?? '',
+            erste_kontrolle_ursachen: z['erste_kontrolle_ursachen'] ?? '',
             erste_kontrolle_erfolgsbeurteilung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleErfolgsbeurteilung ?? '',
+              z['erste_kontrolle_erfolgsbeurteilung'] ?? '',
             erste_kontrolle_umsetzung_aendern:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleUmsetzungAendern ?? '',
+              z['erste_kontrolle_umsetzung_aendern'] ?? '',
             erste_kontrolle_kontrolle_aendern:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleKontrolleAendern ?? '',
-            erste_kontrolle_bemerkungen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleBemerkungen ?? '',
-            erste_kontrolle_lr_delarze:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleLrDelarze ?? '',
+              z['erste_kontrolle_kontrolle_aendern'] ?? '',
+            erste_kontrolle_bemerkungen: z['erste_kontrolle_bemerkungen'] ?? '',
+            erste_kontrolle_lr_delarze: z['erste_kontrolle_lr_delarze'] ?? '',
             erste_kontrolle_lr_umgebung_delarze:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleLrUmgebungDelarze ?? '',
+              z['erste_kontrolle_lr_umgebung_delarze'] ?? '',
             erste_kontrolle_vegetationstyp:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleVegetationstyp ?? '',
-            erste_kontrolle_konkurrenz:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleKonkurrenz ?? '',
-            erste_kontrolle_moosschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleMoosschicht ?? '',
+              z['erste_kontrolle_vegetationstyp'] ?? '',
+            erste_kontrolle_konkurrenz: z['erste_kontrolle_konkurrenz'] ?? '',
+            erste_kontrolle_moosschicht: z['erste_kontrolle_moosschicht'] ?? '',
             erste_kontrolle_krautschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleKrautschicht ?? '',
+              z['erste_kontrolle_krautschicht'] ?? '',
             erste_kontrolle_strauchschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleStrauchschicht ?? '',
-            erste_kontrolle_baumschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleBaumschicht ?? '',
+              z['erste_kontrolle_strauchschicht'] ?? '',
+            erste_kontrolle_baumschicht: z['erste_kontrolle_baumschicht'] ?? '',
             erste_kontrolle_idealbiotop_uebereinstimmung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleIdealbiotopUebereinstimmung ?? '',
+              z['erste_kontrolle_idealbiotop_uebereinstimmung'] ?? '',
             erste_kontrolle_handlungsbedarf:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleHandlungsbedarf ?? '',
+              z['erste_kontrolle_handlungsbedarf'] ?? '',
             erste_kontrolle_flaeche_ueberprueft:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleFlaecheUeberprueft ?? '',
-            erste_kontrolle_flaeche:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleFlaeche ?? '',
+              z['erste_kontrolle_flaeche_ueberprueft'] ?? '',
+            erste_kontrolle_flaeche: z['erste_kontrolle_flaeche'] ?? '',
             erste_kontrolle_plan_vorhanden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrollePlanVorhanden ?? '',
+              z['erste_kontrolle_plan_vorhanden'] ?? '',
             erste_kontrolle_deckung_vegetation:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleDeckungVegetation ?? '',
+              z['erste_kontrolle_deckung_vegetation'] ?? '',
             erste_kontrolle_deckung_nackter_boden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleDeckungNackterBoden ?? '',
+              z['erste_kontrolle_deckung_nackter_boden'] ?? '',
             erste_kontrolle_deckung_ap_art:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleDeckungApArt ?? '',
+              z['erste_kontrolle_deckung_ap_art'] ?? '',
             erste_kontrolle_jungpflanzen_vorhanden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleJungpflanzenVorhanden ?? '',
+              z['erste_kontrolle_jungpflanzen_vorhanden'] ?? '',
             erste_kontrolle_vegetationshoehe_maximum:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleVegetationshoeheMaximum ?? '',
+              z['erste_kontrolle_vegetationshoehe_maximum'] ?? '',
             erste_kontrolle_vegetationshoehe_mittel:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleVegetationshoeheMittel ?? '',
-            erste_kontrolle_gefaehrdung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleGefaehrdung ?? '',
-            erste_kontrolle_created_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleCreatedAt ?? '',
-            erste_kontrolle_updated_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleUpdatedAt ?? '',
-            erste_kontrolle_changed_by:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleChangedBy ?? '',
+              z['erste_kontrolle_vegetationshoehe_mittel'] ?? '',
+            erste_kontrolle_gefaehrdung: z['erste_kontrolle_gefaehrdung'] ?? '',
+            erste_kontrolle_created_at: z['erste_kontrolle_created_at'] ?? '',
+            erste_kontrolle_updated_at: z['erste_kontrolle_updated_at'] ?? '',
+            erste_kontrolle_changed_by: z['erste_kontrolle_changed_by'] ?? '',
             erste_kontrolle_apber_nicht_relevant:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleApberNichtRelevant ?? '',
+              z['erste_kontrolle_apber_nicht_relevant'] ?? '',
             erste_kontrolle_apber_nicht_relevant_grund:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleApberNichtRelevantGrund ?? '',
+              z['erste_kontrolle_apber_nicht_relevant_grund'] ?? '',
             erste_kontrolle_ekf_bemerkungen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleEkfBemerkungen ?? '',
+              z['erste_kontrolle_ekf_bemerkungen'] ?? '',
             erste_kontrolle_zaehlung_anzahlen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleZaehlungAnzahlen ?? '',
+              z['erste_kontrolle_zaehlung_anzahlen'] ?? '',
             erste_kontrolle_zaehlung_einheiten:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleZaehlungEinheiten ?? '',
+              z['erste_kontrolle_zaehlung_einheiten'] ?? '',
             erste_kontrolle_zaehlung_methoden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.ersteKontrolleZaehlungMethoden ?? '',
-            letzte_kontrolle_id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleId ?? '',
-            letzte_kontrolle_jahr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleJahr ?? '',
-            letzte_kontrolle_datum:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleDatum ?? '',
-            letzte_kontrolle_typ:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleTyp ?? '',
-            letzte_kontrolle_bearbeiter:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleBearbeiter ?? '',
+              z['erste_kontrolle_zaehlung_methoden'] ?? '',
+            letzte_kontrolle_id: z['letzte_kontrolle_id'] ?? '',
+            letzte_kontrolle_jahr: z['letzte_kontrolle_jahr'] ?? '',
+            letzte_kontrolle_datum: z['letzte_kontrolle_datum'] ?? '',
+            letzte_kontrolle_typ: z['letzte_kontrolle_typ'] ?? '',
+            letzte_kontrolle_bearbeiter: z['letzte_kontrolle_bearbeiter'] ?? '',
             letzte_kontrolle_ueberlebensrate:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleUeberlebensrate ?? '',
-            letzte_kontrolle_vitalitaet:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleVitalitaet ?? '',
+              z['letzte_kontrolle_ueberlebensrate'] ?? '',
+            letzte_kontrolle_vitalitaet: z['letzte_kontrolle_vitalitaet'] ?? '',
             letzte_kontrolle_entwicklung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleEntwicklung ?? '',
-            letzte_kontrolle_ursachen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleUrsachen ?? '',
+              z['letzte_kontrolle_entwicklung'] ?? '',
+            letzte_kontrolle_ursachen: z['letzte_kontrolle_ursachen'] ?? '',
             letzte_kontrolle_erfolgsbeurteilung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleErfolgsbeurteilung ?? '',
+              z['letzte_kontrolle_erfolgsbeurteilung'] ?? '',
             letzte_kontrolle_umsetzung_aendern:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleUmsetzungAendern ?? '',
+              z['letzte_kontrolle_umsetzung_aendern'] ?? '',
             letzte_kontrolle_kontrolle_aendern:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleKontrolleAendern ?? '',
+              z['letzte_kontrolle_kontrolle_aendern'] ?? '',
             letzte_kontrolle_bemerkungen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleBemerkungen ?? '',
-            letzte_kontrolle_lr_delarze:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleLrDelarze ?? '',
+              z['letzte_kontrolle_bemerkungen'] ?? '',
+            letzte_kontrolle_lr_delarze: z['letzte_kontrolle_lr_delarze'] ?? '',
             letzte_kontrolle_lr_umgebung_delarze:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleLrUmgebungDelarze ?? '',
+              z['letzte_kontrolle_lr_umgebung_delarze'] ?? '',
             letzte_kontrolle_vegetationstyp:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleVegetationstyp ?? '',
-            letzte_kontrolle_konkurrenz:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleKonkurrenz ?? '',
+              z['letzte_kontrolle_vegetationstyp'] ?? '',
+            letzte_kontrolle_konkurrenz: z['letzte_kontrolle_konkurrenz'] ?? '',
             letzte_kontrolle_moosschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleMoosschicht ?? '',
+              z['letzte_kontrolle_moosschicht'] ?? '',
             letzte_kontrolle_krautschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleKrautschicht ?? '',
+              z['letzte_kontrolle_krautschicht'] ?? '',
             letzte_kontrolle_strauchschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleStrauchschicht ?? '',
+              z['letzte_kontrolle_strauchschicht'] ?? '',
             letzte_kontrolle_baumschicht:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleBaumschicht ?? '',
+              z['letzte_kontrolle_baumschicht'] ?? '',
             letzte_kontrolle_idealbiotop_uebereinstimmung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleIdealbiotopUebereinstimmung ?? '',
+              z['letzte_kontrolle_idealbiotop_uebereinstimmung'] ?? '',
             letzte_kontrolle_handlungsbedarf:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleHandlungsbedarf ?? '',
+              z['letzte_kontrolle_handlungsbedarf'] ?? '',
             letzte_kontrolle_flaeche_ueberprueft:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleFlaecheUeberprueft ?? '',
-            letzte_kontrolle_flaeche:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleFlaeche ?? '',
+              z['letzte_kontrolle_flaeche_ueberprueft'] ?? '',
+            letzte_kontrolle_flaeche: z['letzte_kontrolle_flaeche'] ?? '',
             letzte_kontrolle_plan_vorhanden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrollePlanVorhanden ?? '',
+              z['letzte_kontrolle_plan_vorhanden'] ?? '',
             letzte_kontrolle_deckung_vegetation:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleDeckungVegetation ?? '',
+              z['letzte_kontrolle_deckung_vegetation'] ?? '',
             letzte_kontrolle_deckung_nackter_boden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleDeckungNackterBoden ?? '',
+              z['letzte_kontrolle_deckung_nackter_boden'] ?? '',
             letzte_kontrolle_deckung_ap_art:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleDeckungApArt ?? '',
+              z['letzte_kontrolle_deckung_ap_art'] ?? '',
             letzte_kontrolle_jungpflanzen_vorhanden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleJungpflanzenVorhanden ?? '',
+              z['letzte_kontrolle_jungpflanzen_vorhanden'] ?? '',
             letzte_kontrolle_vegetationshoehe_maximum:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleVegetationshoeheMaximum ?? '',
+              z['letzte_kontrolle_vegetationshoehe_maximum'] ?? '',
             letzte_kontrolle_vegetationshoehe_mittel:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleVegetationshoeheMittel ?? '',
+              z['letzte_kontrolle_vegetationshoehe_mittel'] ?? '',
             letzte_kontrolle_gefaehrdung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleGefaehrdung ?? '',
-            letzte_kontrolle_changed:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleChanged ?? '',
-            letzte_kontrolle_changed_by:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleChangedBy ?? '',
+              z['letzte_kontrolle_gefaehrdung'] ?? '',
+            letzte_kontrolle_changed: z['letzte_kontrolle_changed'] ?? '',
+            letzte_kontrolle_changed_by: z['letzte_kontrolle_changed_by'] ?? '',
             letzte_kontrolle_apber_nicht_relevant:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleApberNichtRelevant ?? '',
+              z['letzte_kontrolle_apber_nicht_relevant'] ?? '',
             letzte_kontrolle_apber_nicht_relevant_grund:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleApberNichtRelevantGrund ?? '',
+              z['letzte_kontrolle_apber_nicht_relevant_grund'] ?? '',
             letzte_kontrolle_ekf_bemerkungen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleEkfBemerkungen ?? '',
+              z['letzte_kontrolle_ekf_bemerkungen'] ?? '',
             letzte_kontrolle_zaehlung_anzahlen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleZaehlungAnzahlen ?? '',
+              z['letzte_kontrolle_zaehlung_anzahlen'] ?? '',
             letzte_kontrolle_zaehlung_einheiten:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleZaehlungEinheiten ?? '',
+              z['letzte_kontrolle_zaehlung_einheiten'] ?? '',
             letzte_kontrolle_zaehlung_methoden:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.letzteKontrolleZaehlungMethoden ?? '',
-            tpopber_anz:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberAnz ?? '',
-            tpopber_id:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberId ?? '',
-            tpopber_jahr:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberJahr ?? '',
-            tpopber_entwicklung:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberEntwicklung ?? '',
-            tpopber_bemerkungen:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberBemerkungen ?? '',
-            tpopber_created_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberCreatedAt ?? '',
-            tpopber_updated_at:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberUpdatedAt ?? '',
-            tpopber_changed_by:
-              n?.vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById?.nodes?.[0]
-                ?.tpopberChangedBy ?? '',
+              z['letzte_kontrolle_zaehlung_methoden'] ?? '',
+            tpopber_anz: z['tpopber_anz'] ?? '',
+            tpopber_id: z['tpopber_id'] ?? '',
+            tpopber_jahr: z['tpopber_jahr'] ?? '',
+            tpopber_entwicklung: z['tpopber_entwicklung'] ?? '',
+            tpopber_bemerkungen: z['tpopber_bemerkungen'] ?? '',
+            tpopber_created_at: z['tpopber_created_at'] ?? '',
+            tpopber_updated_at: z['tpopber_updated_at'] ?? '',
+            tpopber_changed_by: z['tpopber_changed_by'] ?? '',
           }))
+
           setEwmMessage('')
-          if (rows.length === 0) {
+          if (nodes.length === 0) {
             return addNotification({
               message: 'Die Abfrage retournierte 0 Datensätze',
               options: {
@@ -830,18 +262,7 @@ export const WollmilchsauSingle = () => {
             fileName: 'anzkontrinklletzterundletztertpopber',
           })
         }}
-        query={graphql(`
-          query allAeTaxonomiesQuery($filter: AeTaxonomyFilter!) {
-            allAeTaxonomies(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
-              nodes {
-                value: id
-                label: artname
-              }
-            }
-          }
-        `)}
         filter={aeTaxonomiesfilter}
-        queryNodesName="allAeTaxonomies"
         error={ewmMessage}
       />
     </div>

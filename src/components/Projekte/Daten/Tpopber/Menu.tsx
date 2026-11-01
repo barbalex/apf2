@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -14,21 +14,9 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
-import type { TpopId } from '../../../../models/apflora/index.ts'
-import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
-
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
-
-interface CreateTpopberResult {
-  createTpopber: {
-    tpopber: {
-      id: TpopberId
-      tpopId: TpopId
-    }
-  }
-}
 
 const iconStyle = { color: 'white' }
 
@@ -38,24 +26,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopberId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopberResult | null | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopberResult>({
-        mutation: graphql(`
-          mutation createTpopberForTpopberForm($tpopId: UUID!) {
-            createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
-              tpopber {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: { tpopId },
+      await apiInsert('tpopber', {
+        id: newId,
+        tpop_id: tpopId,
       })
     } catch (error) {
       return addNotification({
@@ -71,7 +49,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopber?.tpopber?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte/${id}${search}`,
     )

@@ -29,14 +29,10 @@ export const useDocsNavData = () => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  useEffect(
-    () => {
-      const unsub = store.sub(treeApGqlFilterForTreeAtom, rerender)
-      return unsub
-    },
-     
-    [],
-  )
+  useEffect(() => {
+    const unsub = store.sub(treeApGqlFilterForTreeAtom, rerender)
+    return unsub
+  }, [])
 
   return navData
 }

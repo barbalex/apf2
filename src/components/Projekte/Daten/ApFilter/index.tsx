@@ -1,6 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 
@@ -9,11 +8,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { queryAeTaxonomiesById } from './queryAeTaxonomiesById.ts'
-import { queryLists } from './queryLists.ts'
-import { queryAps } from './queryAps.ts'
-import { queryAdresses } from './queryAdresses.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import {
   treeNodeLabelFilterAtom,
   treeDataFilterAtom,
@@ -21,13 +15,14 @@ import {
   treeApFilterAtom,
   treeApGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { apiFetch, rpcCount } from '../../../../modules/api.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
-import type { AeTaxonomyFilter } from '../../../../gql/graphql.ts'
+import type { AeTaxonomyFilter } from '../../../../modules/gqlFilterTypes.ts'
 
 import styles from './index.module.css'
 
@@ -65,9 +60,11 @@ interface ListsQueryResult {
 }
 
 interface AeTaxonomiesByIdQueryResult {
-  aeTaxonomyById?: {
-    artname: string | null
-  } | undefined
+  aeTaxonomyById?:
+    | {
+        artname: string | null
+      }
+    | undefined
 }
 
 interface ApFilterRow {
@@ -81,8 +78,6 @@ interface ApFilterRow {
 }
 
 export const ApFilter = () => {
-  const apolloClient = useApolloClient()
-
   const nurApFilter = useAtomValue(treeApFilterAtom)
   const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
@@ -101,16 +96,14 @@ export const ApFilter = () => {
   const { data: apsData } = useQuery({
     queryKey: ['aps', apGqlFilter.filtered, apGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query<ApsQueryResult>({
-        query: queryAps,
-        variables: {
-          filteredFilter: apGqlFilter.filtered,
-          allFilter: apGqlFilter.all,
-        },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as ApsQueryResult
+      const [allAps, filteredAps] = await Promise.all([
+        rpcCount('query_ap', { p_filter: apGqlFilter.all }),
+        rpcCount('query_ap', { p_filter: apGqlFilter.filtered }),
+      ])
+      return {
+        allAps: { totalCount: allAps },
+        filteredAps: { totalCount: filteredAps },
+      } as ApsQueryResult
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
@@ -118,12 +111,10 @@ export const ApFilter = () => {
   const { data: dataAdresses } = useSuspenseQuery({
     queryKey: ['adresses'],
     queryFn: async () => {
-      const result = await apolloClient.query<AdressesQueryResult>({
-        query: queryAdresses,
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as AdressesQueryResult
+      const nodes = await apiFetch<
+        NonNullable<AdressesQueryResult['allAdresses']>['nodes']
+      >(`/v_adresse?select=value:id,label:name&order=name.asc`)
+      return { allAdresses: { nodes: nodes ?? [] } } as AdressesQueryResult
     },
     staleTime: Infinity, // This data rarely changes
   })
@@ -131,12 +122,18 @@ export const ApFilter = () => {
   const { data: dataLists } = useSuspenseQuery({
     queryKey: ['apFilterLists'],
     queryFn: async () => {
-      const result = await apolloClient.query<ListsQueryResult>({
-        query: queryLists,
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as ListsQueryResult
+      const [bearbstandWertes, umsetzungWertes] = await Promise.all([
+        apiFetch<
+          NonNullable<ListsQueryResult['allApBearbstandWertes']>['nodes']
+        >(`/ap_bearbstand_werte?select=value:code,label:text&order=sort.asc`),
+        apiFetch<
+          NonNullable<ListsQueryResult['allApUmsetzungWertes']>['nodes']
+        >(`/ap_umsetzung_werte?select=value:code,label:text&order=sort.asc`),
+      ])
+      return {
+        allApBearbstandWertes: { nodes: bearbstandWertes ?? [] },
+        allApUmsetzungWertes: { nodes: umsetzungWertes ?? [] },
+      } as ListsQueryResult
     },
     staleTime: Infinity, // This data rarely changes
   })
@@ -144,15 +141,12 @@ export const ApFilter = () => {
   const { data: dataAeTaxonomiesById } = useQuery({
     queryKey: ['aeTaxonomiesById', dataFilter.ap?.[activeTab]?.artId],
     queryFn: async () => {
-      const result = await apolloClient.query<AeTaxonomiesByIdQueryResult>({
-        query: queryAeTaxonomiesById,
-        variables: {
-          id: dataFilter.ap?.[activeTab]?.artId ?? '',
-          run: !!dataFilter.ap?.[activeTab]?.artId,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<
+        NonNullable<AeTaxonomiesByIdQueryResult['aeTaxonomyById']>[]
+      >(
+        `/ae_taxonomies?id=eq.${dataFilter.ap?.[activeTab]?.artId}&select=id,artname`,
+      )
+      return { aeTaxonomyById: rows?.[0] ?? null }
     },
     enabled: !!dataFilter.ap?.[activeTab]?.artId,
     staleTime: Infinity, // Keep data fresh until artId changes
@@ -240,9 +234,7 @@ export const ApFilter = () => {
                 ...row,
                 ...{ aeTaxonomyByArtId: { artname } },
               }}
-              query={queryAeTaxonomies}
               filter={aeTaxonomiesFilter}
-              queryNodesName="allAeTaxonomies"
               saveToDb={saveToDb}
               error={undefined}
             />

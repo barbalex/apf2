@@ -1,106 +1,56 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { ApId, AdresseId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface ApApberUndMassnsQueryResult {
-  allAps: {
-    nodes: {
-      id: ApId
-      aeTaxonomyByArtId?: {
-        id: string
-        artname?: string
-        artwert?: number
-      }
-      apBearbstandWerteByBearbeitung?: {
-        id: number
-        text?: string
-      }
-      startJahr?: number
-      apUmsetzungWerteByUmsetzung?: {
-        id: number
-        text?: string
-      }
-      adresseByBearbeiter?: {
-        id: AdresseId
-        name?: string
-      }
-      vApApberundmassnsById?: {
-        nodes: {
-          id: ApId
-          massnJahr?: number
-          massnAnzahl?: number
-          massnAnzahlBisher?: number
-          berichtErstellt?: boolean
-        }[]
-      }
-      createdAt?: string
-      updatedAt?: string
-      changedBy?: string
-    }[]
-  }
-}
-
 export const BerUndMassn = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApBerUndMassn = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApApberUndMassnsQueryResult | undefined } | undefined
+    let aps:
+      | {
+          id: string
+          start_jahr: number | null
+          created_at: string | null
+          updated_at: string | null
+          changed_by: string | null
+          ae_taxonomy_by_art_id: {
+            artname: string | null
+            artwert: number | null
+          } | null
+          ap_bearbstand_werte_by_bearbeitung: { text: string | null } | null
+          ap_umsetzung_werte_by_umsetzung: { text: string | null } | null
+          adresse_by_bearbeiter: { name: string | null } | null
+        }[]
+      | undefined
+    let massns:
+      | {
+          id: string
+          massn_jahr: number | null
+          massn_anzahl: number | null
+          massn_anzahl_bisher: number | null
+          bericht_erstellt: boolean | null
+        }[]
+      | undefined
     try {
-      result = await apolloClient.query<ApApberUndMassnsQueryResult>({
-        query: graphql(`
-          query ApApberUndMassnsForExportQuery {
-            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
-              nodes {
-                id
-                aeTaxonomyByArtId {
-                  id
-                  artname
-                  artwert
-                }
-                apBearbstandWerteByBearbeitung {
-                  id
-                  text
-                }
-                startJahr
-                apUmsetzungWerteByUmsetzung {
-                  id
-                  text
-                }
-                adresseByBearbeiter {
-                  id
-                  name
-                }
-                vApApberundmassnsById {
-                  nodes {
-                    id
-                    massnJahr
-                    massnAnzahl
-                    massnAnzahlBisher
-                    berichtErstellt
-                  }
-                }
-                createdAt
-                updatedAt
-                changedBy
-              }
-            }
-          }
-        `),
-      })
+      const [apsR, massnsR] = await Promise.all([
+        apiFetch<NonNullable<typeof aps>>(
+          `/v_ap?select=id,start_jahr,created_at,updated_at,changed_by,ae_taxonomy_by_art_id,ap_bearbstand_werte_by_bearbeitung,ap_umsetzung_werte_by_umsetzung,adresse_by_bearbeiter`,
+        ),
+        apiFetch<NonNullable<typeof massns>>(
+          `/v_ap_apberundmassn?select=id,massn_jahr,massn_anzahl,massn_anzahl_bisher,bericht_erstellt`,
+        ),
+      ])
+      aps = apsR ?? []
+      massns = massnsR ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -110,24 +60,29 @@ export const BerUndMassn = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result?.data?.allAps?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z.startJahr,
-      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
-      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
-      massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
-      massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
-      massn_anzahl_bisher:
-        z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
-      bericht_erstellt:
-        z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
-    }))
+    const massnByAp = new Map((massns ?? []).map((m) => [m.id, m]))
+    const rows = (aps ?? [])
+      .map((z) => {
+        const m = massnByAp.get(z.id)
+        return {
+          ap_id: z.id,
+          artname: z.ae_taxonomy_by_art_id?.artname ?? '',
+          ap_bearbeitung: z.ap_bearbstand_werte_by_bearbeitung?.text ?? '',
+          ap_start_jahr: z.start_jahr,
+          ap_umsetzung: z.ap_umsetzung_werte_by_umsetzung?.text ?? '',
+          ap_bearbeiter: z.adresse_by_bearbeiter?.name ?? '',
+          artwert: z.ae_taxonomy_by_art_id?.artwert ?? '',
+          massn_jahr: m?.massn_jahr ?? '',
+          massn_anzahl: m?.massn_anzahl ?? '',
+          massn_anzahl_bisher: m?.massn_anzahl_bisher ?? '',
+          bericht_erstellt: m?.bericht_erstellt ?? '',
+          created_at: z.created_at,
+          updated_at: z.updated_at,
+          changed_by: z.changed_by,
+        }
+      })
+      // former orderBy AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+      .sort((a, b) => a.artname.localeCompare(b.artname))
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

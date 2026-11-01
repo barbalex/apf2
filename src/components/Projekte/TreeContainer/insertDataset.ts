@@ -1,7 +1,6 @@
-import { gql as dynamicGql } from '../../../apolloGql.ts'
-import { graphql } from '../../../gql/index.ts'
+import { apiInsert } from '../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { upperFirst } from 'es-toolkit'
-import { camelCase } from 'es-toolkit'
 
 import { tables } from '../../../modules/tables.ts'
 import {
@@ -15,28 +14,9 @@ import {
   treeSetOpenNodesAtom,
   type Notification,
 } from '../../../store/index.ts'
-import {
-  adresse as adresseFragment,
-  user as userFragment,
-  tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
-  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-  ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
-} from '../../shared/fragments.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
-
-const fragments = {
-  tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
-  tpopkontrzaehlEinheitWerte: tpopkontrzaehlEinheitWerteFragment,
-  ekAbrechnungstypWerte: ekAbrechnungstypWerteFragment,
-}
-
-// data of the dynamically built create mutations
-type CreateMutationData = Record<
-  string,
-  Record<string, Record<string, string>> | undefined
->
 
 export const insertDataset = async ({
   tablePassed,
@@ -91,7 +71,6 @@ export const insertDataset = async ({
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  const parentIdField = camelCase(tableMetadata.parentIdField ?? '')
   const idField = tableMetadata.idField
   if (!idField) {
     return addNotification({
@@ -101,154 +80,34 @@ export const insertDataset = async ({
       },
     })
   }
-  let mutation = dynamicGql`
-    mutation createWerte(
-      $parentId: UUID!
-    ) {
-      create${upperFirst(camelCase(table))} (
-        input: {
-          ${camelCase(table)}: {
-            ${parentIdField}: $parentId
-          }
-        }
-      ) {
-      ${camelCase(table)} {
-        id
-        ${parentIdField}
-      }
-    }
-  }`
-  let variables: {
-    parentId?: string | null | undefined
-    jahr?: number | undefined
-    role?: string | undefined
-  } = { parentId }
-
-  // console.log('insertDataset:', {
-  //   table,
-  //   parentId,
-  //   id,
-  //   menuType,
-  //   url,
-  //   tableMetadata,
-  // })
+  // build the new row; all the former per-menuType mutations differ
+  // only in which columns they set
+  const newId = uuidv7()
+  const row: Record<string, unknown> = { id: newId }
+  const withoutParent =
+    ['userFolder', 'user', 'adresseFolder', 'adresse'].includes(menuType) ||
+    menuType.includes('Werte')
+  if (!withoutParent && parentId && tableMetadata.parentIdField) {
+    row[tableMetadata.parentIdField] = parentId
+  }
   if (menuType === 'zieljahrFolder') {
-    mutation = dynamicGql`
-      mutation create${upperFirst(camelCase(table))}(
-        $parentId: UUID!
-        $jahr: Int
-      ) {
-        create${upperFirst(camelCase(table))} (
-          input: {
-            ${camelCase(table)}: {
-              ${parentIdField}: $parentId
-              jahr: $jahr
-            }
-          }
-        ) {
-        ${camelCase(table)} {
-          id
-          ${parentIdField}
-        }
-      }
-    }`
-    variables = { parentId, jahr: Number(jahrPassed) }
+    row.jahr = Number(jahrPassed)
   }
   if (menuType === 'tpopfreiwkontrFolder') {
-    mutation = dynamicGql`
-      mutation create${upperFirst(camelCase(table))}(
-        $parentId: UUID!
-      ) {
-        create${upperFirst(camelCase(table))} (
-          input: {
-            ${camelCase(table)}: {
-              ${parentIdField}: $parentId
-              typ: "Freiwilligen-Kontrolle"
-            }
-          }
-        ) {
-        ${camelCase(table)} {
-          id
-          ${parentIdField}
-        }
-      }
-    }`
+    row.typ = 'Freiwilligen-Kontrolle'
   }
   if (['tpopfeldkontrFolder', 'tpopfeldkontr'].includes(menuType)) {
-    mutation = dynamicGql`
-      mutation create${upperFirst(camelCase(table))}(
-        $parentId: UUID!
-      ) {
-        create${upperFirst(camelCase(table))} (
-          input: {
-            ${camelCase(table)}: {
-              ${parentIdField}: $parentId
-              typ: "Kontrolle"
-            }
-          }
-        ) {
-        ${camelCase(table)} {
-          id
-          ${parentIdField}
-        }
-      }
-    }`
+    row.typ = 'Kontrolle'
   }
   if (['userFolder', 'user'].includes(menuType)) {
-    mutation = dynamicGql`
-      mutation createUser($role: String!) {
-        createUser(input: { user: { role: $role } }) {
-          user {
-            ...UserFields
-          }
-        }
-      }
-      ${userFragment}
-    `
-    delete variables.parentId
-    variables.role = 'apflora_ap_reader'
-  }
-  if (['adresseFolder', 'adresse'].includes(menuType)) {
-    mutation = dynamicGql`
-      mutation createAdresse {
-        createAdresse(input: { adresse: {} }) {
-          adresse {
-            ...AdresseFields
-          }
-        }
-      }
-      ${adresseFragment}
-    `
-    delete variables.parentId
+    row.role = 'apflora_ap_reader'
   }
   if (menuType.includes('Werte')) {
-    const tableName = camelCase(table)
-    const fields = `${upperFirst(tableName)}Fields`
-    mutation = dynamicGql`
-      mutation createWerte {
-        create${upperFirst(tableName)}(input: { ${tableName}: {
-          changedBy: "${store.get(userNameAtom)}"
-        } }) {
-          ${tableName} {
-            ...${fields}
-          }
-        }
-      }
-      ${fragments[tableName as keyof typeof fragments]}
-    `
-    delete variables.parentId
+    row.changed_by = store.get(userNameAtom)
   }
 
-  let result: { data?: CreateMutationData | null | undefined } | undefined
   try {
-    if (Object.keys(variables).length) {
-      result = await apolloClient.mutate<CreateMutationData>({
-        mutation,
-        variables,
-      })
-    } else {
-      result = await apolloClient.mutate<CreateMutationData>({ mutation })
-    }
+    await apiInsert(table, row)
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -257,9 +116,7 @@ export const insertDataset = async ({
       },
     })
   }
-  const row =
-    result?.data?.[`create${upperFirst(camelCase(table))}`]?.[camelCase(table)]
-  const rowId = row?.[idField] ?? ''
+  const rowId = newId
   // set new url
   const newActiveNodeArray = [...url, rowId]
   // need to add single name to the url, i.e. 'Art' for ap
@@ -273,22 +130,12 @@ export const insertDataset = async ({
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
     // 1. add new zaehlung
-    const result = await apolloClient.mutate({
-      mutation: graphql(`
-        mutation createWerte($parentId: UUID!) {
-          createTpopkontrzaehl(
-            input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
-          ) {
-            tpopkontrzaehl {
-              id
-            }
-          }
-        }
-      `),
-      variables: { parentId: rowId },
+    const zaehlId = uuidv7()
+    await apiInsert('tpopkontrzaehl', {
+      id: zaehlId,
+      tpopkontr_id: rowId,
     })
     // 2. open the zaehlungFolder
-    const zaehlId = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id ?? ''
     const newOpenFolder = [...newActiveNodeArray, 'Zaehlungen']
     const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]

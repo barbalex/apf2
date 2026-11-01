@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
@@ -15,9 +14,9 @@ import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router'
 
-import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../../modules/exists.ts'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 import type { PopId } from '../../../../../models/apflora/Pop.ts'
@@ -28,7 +27,7 @@ import styles from './index.module.css'
 
 interface ApAuswPopMengeNode {
   jahr: number | null
-  values: string
+  values: Record<string, unknown>
 }
 
 interface PopNode {
@@ -83,8 +82,6 @@ export const PopMenge = ({
   isSubReport,
   jahr: jahrPassed,
 }: PopMengeProps) => {
-  const apolloClient = useApolloClient()
-
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
@@ -92,12 +89,27 @@ export const PopMenge = ({
   const { data: dataPopMenge } = useSuspenseQuery({
     queryKey: ['popMenge', id, jahr],
     queryFn: async () => {
-      const result = await apolloClient.query<PopMengeQueryResult>({
-        query,
-        variables: { id, jahr },
-      })
-      if (result.error) throw result.error
-      return result.data as PopMengeQueryResult
+      // apAuswPopMenge is the db function behind the old GraphQL field
+      const [menges, ekzaehleinheits, pops] = await Promise.all([
+        apiFetch<ApAuswPopMengeNode[]>(
+          `/rpc/ap_ausw_pop_menge?select=jahr,values`,
+          {
+            method: 'POST',
+            body: JSON.stringify({ apid: id, jahr }),
+          },
+        ),
+        apiFetch<EkzaehleinheitNode[]>(
+          `/v_ekzaehleinheit?ap_id=eq.${id}&zielrelevant=eq.true&select=id,tpopkontrzaehlEinheitWerteByZaehleinheitId:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id`,
+        ),
+        apiFetch<PopNode[]>(
+          `/q_pop?ap_id=eq.${id}&select=id,nr,name,status&order=nr.asc,name.asc`,
+        ),
+      ])
+      return {
+        apAuswPopMenge: { nodes: menges ?? [] },
+        allEkzaehleinheits: { nodes: ekzaehleinheits ?? [] },
+        allPops: { nodes: pops ?? [] },
+      } as PopMengeQueryResult
     },
   })
 
@@ -105,7 +117,8 @@ export const PopMenge = ({
   const popMengeRawData = dataPopMenge.apAuswPopMenge.nodes ?? []
   const popMengeData: Record<string, unknown>[] = popMengeRawData.map((e) => ({
     jahr: e.jahr,
-    ...JSON.parse(e.values),
+    // values is jsonb — PostgREST delivers it as an object
+    ...(e.values ?? {}),
   }))
   const nonUniquePopIdsWithData = popMengeData.flatMap((d) =>
     Object.entries(d)

@@ -5,10 +5,7 @@ import {
   ekPlanShowCountAtom,
   ekPlanShowEkCountAtom,
 } from '../../../../store/index.ts'
-import type {
-  RowTpopkontrNode,
-  RowTpopkontrzaehlNode,
-} from '../tableTypes.ts'
+import type { RowTpopkontrNode, RowTpopkontrzaehlNode } from '../tableTypes.ts'
 import styles from './EkIcon.module.css'
 
 export const EkIcon = ({

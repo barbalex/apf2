@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { popSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -14,14 +14,13 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { pop } from '../../../shared/fragments.ts'
-import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { PopFieldsFragment } from '../../../../gql/graphql.ts'
 
 import styles from './Pop.module.css'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface PopQueryResult {
   popById?: PopFieldsFragment & {
@@ -32,15 +31,17 @@ interface PopQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = {
-  apId: 'UUID',
-  nr: 'Int',
-  name: 'String',
-  status: 'Int',
-  statusUnklar: 'Boolean',
-  statusUnklarBegruendung: 'String',
-  bekanntSeit: 'Int',
-}
+export const popQueryOptions = (id: string | undefined) => ({
+  queryKey: ['pop', id],
+  queryFn: async () => {
+    // v_pop provides the computed columns (label, coordinates) and
+    // the ap relation as a jsonb column (selects.ts builds the keys)
+    const rows = await apiFetch<NonNullable<PopQueryResult['popById']>[]>(
+      `/v_pop?id=eq.${id}&select=${popSelect},apByApId:ap_by_ap_id`,
+    )
+    return rows?.[0] ?? null
+  },
+})
 
 export const Component = () => {
   const { popId } = useParams()
@@ -48,24 +49,12 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['pop', popId],
-    queryFn: async () => {
-      const result = await apolloClient.query<PopQueryResult>({
-        query,
-        variables: { id: popId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(popQueryOptions(popId))
 
-  const row: Partial<NonNullable<PopQueryResult['popById']>> =
-    data?.popById ?? {}
+  const row: Partial<NonNullable<PopQueryResult['popById']>> = data ?? {}
 
   const refetchForm = () => {
     void tsQueryClient.invalidateQueries({
@@ -84,31 +73,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updatePopForPop(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updatePopById(
-                input: {
-                  id: $id
-                  popPatch: {
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                pop {
-                  ...PopFields
-                }
-              }
-            }
-            ${pop}
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('pop', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

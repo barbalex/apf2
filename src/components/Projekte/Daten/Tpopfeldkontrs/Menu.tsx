@@ -1,5 +1,5 @@
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -31,30 +31,7 @@ import {
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
 
-import type {
-  TpopkontrId,
-  TpopId,
-  TpopkontrzaehlId,
-} from '../../../../models/apflora/index.ts'
-
 import styles from './Menu.module.css'
-
-interface CreateTpopkontrResult {
-  createTpopkontr: {
-    tpopkontr: {
-      id: TpopkontrId
-      tpopId: TpopId
-    }
-  }
-}
-
-interface CreateTpopkontrzaehlResult {
-  createTpopkontrzaehl: {
-    tpopkontrzaehl: {
-      id: TpopkontrzaehlId
-    }
-  }
-}
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -62,7 +39,6 @@ interface MenuProps {
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { search } = useLocation()
@@ -81,22 +57,12 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickAdd = async () => {
     // 1. create new tpopkontr
-    let result
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopkontrResult>({
-        mutation: graphql(`
-          mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
-            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Kontrolle" } }) {
-              tpopkontr {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: {
-          tpopId,
-        },
+      await apiInsert('tpopkontr', {
+        id: newId,
+        tpop_id: tpopId,
+        typ: 'Kontrolle',
       })
     } catch (error) {
       return addNotification({
@@ -106,26 +72,16 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    const id = result?.data?.createTpopkontr?.tpopkontr?.id
+    const id = newId
 
     // 2. add new tpopkontrzaehl
-    const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-      mutation: graphql(`
-        mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
-          createTpopkontrzaehl(
-            input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
-          ) {
-            tpopkontrzaehl {
-              id
-            }
-          }
-        }
-      `),
-      variables: { parentId: id },
+    const zaehlId = uuidv7()
+    await apiInsert('tpopkontrzaehl', {
+      id: zaehlId,
+      tpopkontr_id: id,
     })
 
     // 3. open the tpopkontrzaehl Folder
-    const zaehlId = resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
     const tpopkontrNode = [...activeNodeArray, id]
     const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
     const zaehlungNode = [...zaehlungenFolderNode, zaehlId]

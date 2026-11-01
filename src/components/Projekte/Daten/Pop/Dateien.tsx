@@ -1,6 +1,5 @@
+import { apiFetch } from '../../../../modules/api.ts'
 import { useParams } from 'react-router'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { FilesRouter } from '../../../shared/Files/index.tsx'
@@ -15,28 +14,16 @@ interface PopQueryResult {
   }
 }
 
-const query = graphql(`
-  query popByIdForPopDateienQuery($id: UUID!) {
-    popById(id: $id) {
-      id
-      label
-    }
-  }
-`)
-
 export const Component = () => {
   const { popId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data } = useSuspenseQuery({
     queryKey: ['pop', popId, 'label'],
     queryFn: async () => {
-      const result = await apolloClient.query<PopQueryResult>({
-        query,
-        variables: { id: popId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = await apiFetch<NonNullable<PopQueryResult['popById']>[]>(
+        `/v_pop?id=eq.${popId}&select=id,label`,
+      )
+      return { popById: rows?.[0] ?? null }
     },
   })
 

@@ -1,7 +1,5 @@
 // seems not in use
-export const getEncompassingBound = (
-  arrayOfBoundsPassed: number[][][],
-) => {
+export const getEncompassingBound = (arrayOfBoundsPassed: number[][][]) => {
   // remove array elements that are not arrays
   const arrayOfBounds = arrayOfBoundsPassed.filter((b) => b && b.length > 0)
   const xMinArray = arrayOfBounds.map((b) => b[0]?.[0] ?? 0)

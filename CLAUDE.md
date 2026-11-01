@@ -44,7 +44,8 @@ Local backend stack (Postgres + PostGraphile + Caddy) lives in [backend/](backen
 cd backend
 # backend/.env must define: POSTGRES_USER, POSTGRES_PASSWORD, AUTHENTICATOR_PASSWORD,
 # JWT_SECRET, DATABASE_URL (it already exists in this checkout)
-docker compose up      # db on :5432, graphql (PostGraphile) on :5000
+docker compose up      # db on :5432, graphql (PostGraphile) on :5000,
+                       # postgrest on :3000 (PostgREST-migration dual-stack, see tasks.md)
 ```
 
 The dev frontend (`graphQlUri()`) points at `http://localhost:5000/graphql`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack.)
@@ -95,6 +96,7 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 ## Conventions
 
 - **Always include file extensions in imports** (`.ts`/`.tsx`) — enforced by `eslint-plugin-import` (`import/extensions`) and used everywhere. MUI/Emotion is a dependency only because `@mui/material` needs it.
+- **Prettier config lives in the repo** ([.prettierrc.json](.prettierrc.json), previously only in VS Code user settings): single quotes, no semicolons, `experimentalTernaries`, `singleAttributePerLine`. Generated dirs (`src/gql/`, `src/models/`) are ignored via [.prettierignore](.prettierignore). Beware: prettier reformats the GraphQL template literals, and codegen matches documents by exact source text — so after formatting files containing `graphql(...)` calls, **run `npm run codegen`** or the `graphql()` calls resolve to `unknown` in typecheck.
 - **React Compiler is on** (`babel-plugin-react-compiler` via `@rolldown/plugin-babel` in [vite.config.ts](vite.config.ts)); write compiler-friendly components (stable refs, no manual memoization hacks).
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.
 - **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `apollo`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.

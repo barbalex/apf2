@@ -1,4 +1,3 @@
-
 import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 
@@ -14,7 +13,5 @@ export const List = () => {
     menus: navData.menus ?? [],
   } as NavData
 
-  return (
-    <SharedList navData={navDataForList} />
-  )
+  return <SharedList navData={navDataForList} />
 }

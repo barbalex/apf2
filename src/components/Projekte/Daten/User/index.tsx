@@ -1,22 +1,21 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { userSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { Select } from '../../../shared/Select.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { user as userFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 import { Password } from './Password.tsx'
 
 import type { ComponentType } from 'react'
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 import type { UserId } from '../../../../models/apflora/User.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
@@ -48,9 +47,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: string; label: string }[]
   value?: string | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -78,33 +77,32 @@ const roleWerte = [
   },
 ]
 
-const fieldTypes: Record<string, string> = {
-  name: 'String',
-  email: 'String',
-  role: 'String',
-  pass: 'String',
-  adresseId: 'UUID',
-}
+export const userQueryOptions = (userId: string | undefined) => ({
+  queryKey: ['user', userId],
+  queryFn: async () => {
+    const [rows, adresses] = await Promise.all([
+      apiFetch<NonNullable<UserQueryResult['userById']>[]>(
+        `/v_user?id=eq.${userId}&select=${userSelect}`,
+      ),
+      apiFetch<NonNullable<UserQueryResult['allAdresses']>['nodes']>(
+        `/adresse?order=name.asc&select=value:id,label:name`,
+      ),
+    ])
+    return {
+      userById: rows?.[0] ?? null,
+      allAdresses: { nodes: adresses ?? [] },
+    }
+  },
+})
 
 export const Component = () => {
   const { userId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['user', userId],
-    queryFn: async () => {
-      const result = await apolloClient.query<UserQueryResult>({
-        query,
-        variables: { id: userId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(userQueryOptions(userId))
 
   const row: Partial<NonNullable<UserQueryResult['userById']>> =
     data?.userById ?? {}
@@ -118,31 +116,9 @@ export const Component = () => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateUserForUser(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-            ) {
-              updateUserById(
-                input: {
-                  id: $id
-                  userPatch: {
-                    ${field}: $${field}
-                  }
-                }
-              ) {
-                user {
-                  ...UserFields
-                }
-              }
-            }
-            ${userFragment}
-          `,
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
+      await apiUpdateByVariables('user', {
+        id: row.id,
+        [field]: value,
       })
     } catch (error) {
       return setErrors({ [field]: (error as Error).message })
@@ -208,7 +184,10 @@ export const Component = () => {
             saveToDb={(event) => void saveToDb(event)}
             error={errors.adresseId ?? ''}
           />
-          <Password errors={errors} saveToDb={saveToDb} />
+          <Password
+            errors={errors}
+            saveToDb={saveToDb}
+          />
         </div>
       </div>
     </ErrorBoundary>

@@ -42,7 +42,9 @@ export const xmlToJson = (xml: Node): XmlNode => {
       if (typeof record()[nodeName] == 'undefined') {
         record()[nodeName] = xmlToJson(item)
       } else {
-        if (typeof (record()[nodeName] as { push?: unknown }).push == 'undefined') {
+        if (
+          typeof (record()[nodeName] as { push?: unknown }).push == 'undefined'
+        ) {
           const old = record()[nodeName]
           record()[nodeName] = [old]
         }

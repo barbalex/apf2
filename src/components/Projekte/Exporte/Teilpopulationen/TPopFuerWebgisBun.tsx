@@ -1,141 +1,35 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../store/index.ts'
-
-
-interface TPopWebgisBunQueryResult {
-  allVTpopWebgisbuns: {
-    nodes: {
-      APARTID: string | null
-      APART: string | null
-      APSTATUS: string | null
-      APSTARTJAHR: number | null
-      APSTANDUMSETZUNG: string | null
-      POPGUID: string | null
-      POPNR: number | null
-      POPNAME: string | null
-      POPSTATUS: string | null
-      POPSTATUSUNKLAR: boolean | null
-      POPUNKLARGRUND: string | null
-      POPBEKANNTSEIT: number | null
-      POP_X: number | null
-      POP_Y: number | null
-      TPOPID: TpopId
-      TPOPGUID: string | null
-      TPOPNR: number | null
-      TPOPGEMEINDE: string | null
-      TPOPFLURNAME: string | null
-      TPOPSTATUS: string | null
-      tpopapberrelevant: number | null
-      tpopapberrelevantgrund: string | null
-      TPOPSTATUSUNKLAR: boolean | null
-      TPOPUNKLARGRUND: string | null
-      TPOP_X: number | null
-      TPOP_Y: number | null
-      TPOPRADIUS: number | null
-      TPOPHOEHE: number | null
-      TPOPEXPOSITION: string | null
-      TPOPKLIMA: string | null
-      TPOPHANGNEIGUNG: string | null
-      TPOPBESCHREIBUNG: string | null
-      TPOPKATASTERNR: string | null
-      TPOPVERANTWORTLICH: string | null
-      TPOPBERICHTSRELEVANZ: string | null
-      TPOPBEKANNTSEIT: number | null
-      TPOPEIGENTUEMERIN: string | null
-      TPOPKONTAKTVO: string | null
-      TPOPNUTZUNGSZONE: string | null
-      TPOPBEWIRTSCHAFTER: string | null
-      TPOPBEWIRTSCHAFTUNG: string | null
-      TPOPCHANGEDAT: string | null
-      TPOPCHANGEBY: string | null
-    }[]
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 export const TPopFuerWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPopFuerWebgisBun = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: TPopWebgisBunQueryResult | undefined } | undefined
+    let rows: Record<string, unknown>[] = []
     try {
-      result = await apolloClient.query<TPopWebgisBunQueryResult>({
-        query: graphql(`
-              query viewTpopWebgisbuns {
-                allVTpopWebgisbuns {
-                  nodes {
-                    APARTID: apartid
-                    APART: apart
-                    APSTATUS: apstatus
-                    APSTARTJAHR: apstartjahr
-                    APSTANDUMSETZUNG: apstandumsetzung
-                    POPGUID: popguid
-                    POPNR: popnr
-                    POPNAME: popname
-                    POPSTATUS: popstatus
-                    POPSTATUSUNKLAR: popstatusunklar
-                    POPUNKLARGRUND: popunklargrund
-                    POPBEKANNTSEIT: popbekanntseit
-                    POP_X: popX
-                    POP_Y: popY
-                    TPOPID: tpopid
-                    TPOPGUID: tpopguid
-                    TPOPNR: tpopnr
-                    TPOPGEMEINDE: tpopgemeinde
-                    TPOPFLURNAME: tpopflurname
-                    TPOPSTATUS: tpopstatus
-                    tpopapberrelevant: tPopApberRelevant
-                    tpopapberrelevantgrund: tPopApberRelevantGrund
-                    TPOPSTATUSUNKLAR: tpopstatusunklar
-                    TPOPUNKLARGRUND: tpopunklargrund
-                    TPOP_X: tpopX
-                    TPOP_Y: tpopY
-                    TPOPRADIUS: tpopradius
-                    TPOPHOEHE: tpophoehe
-                    TPOPEXPOSITION: tpopexposition
-                    TPOPKLIMA: tpopklima
-                    TPOPHANGNEIGUNG: tpophangneigung
-                    TPOPBESCHREIBUNG: tpopbeschreibung
-                    TPOPKATASTERNR: tpopkatasternr
-                    TPOPVERANTWORTLICH: tpopverantwortlich
-                    TPOPBERICHTSRELEVANZ: tpopberichtsrelevanz
-                    TPOPBEKANNTSEIT: tpopbekanntseit
-                    TPOPEIGENTUEMERIN: tpopeigentuemerin
-                    TPOPKONTAKTVO: tpopkontaktVo
-                    TPOPNUTZUNGSZONE: tpopNutzungszone
-                    TPOPBEWIRTSCHAFTER: tpopbewirtschafter
-                    TPOPBEWIRTSCHAFTUNG: tpopbewirtschaftung
-                    TPOPCHANGEDAT: tpopchangedat
-                    TPOPCHANGEBY: tpopchangeby
-                  }
-                }
-              }
-            `),
-      })
+      rows =
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_tpop_webgisbun?select=*`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
-        options: { variant: 'error' },
+        options: {
+          variant: 'error',
+        },
       })
     }
     setQueryState('verarbeite...')
-    const rows = result?.data?.allVTpopWebgisbuns?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

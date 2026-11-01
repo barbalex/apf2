@@ -1,11 +1,7 @@
-import { queryEkfrequenz } from './queryEkfrequenz.ts'
-import { queryTpopkontr } from './queryTpopkontr.ts'
-import { queryTpopmassn } from './queryTpopmassn.ts'
-import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
 import type { TpopRow } from '../tableTypes.ts'
+import { apiFetch, apiUpdate } from '../../../../modules/api.ts'
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
   type Notification,
@@ -21,26 +17,17 @@ export const setStartjahr = async ({
   row: TpopRow
   ekfrequenz: string | null
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  if (!apolloClient) return
+  if (!ekfrequenz) return
   // 1  get ekfrequenz's kontrolljahreAb
-  let ekfrequenzResult:
-    | {
-        data?:
-          | {
-              ekfrequenzById?: {
-                kontrolljahre: number[] | null
-                kontrolljahreAb: string | null
-              }
-            }
-          | undefined
-      }
+  let ekfrequenzValues:
+    | { kontrolljahre: number[] | null; kontrolljahreAb: string | null }
     | undefined
   try {
-    ekfrequenzResult = (await apolloClient.query({
-      query: queryEkfrequenz,
-      variables: { id: ekfrequenz ?? '' },
-    })) as typeof ekfrequenzResult
+    ekfrequenzValues = ((await apiFetch<
+      { kontrolljahre: number[] | null; kontrolljahreAb: string | null }[]
+    >(
+      `/ekfrequenz?id=eq.${ekfrequenz}&select=kontrolljahre,kontrolljahreAb:kontrolljahre_ab`,
+    )) ?? [])[0]
   } catch (error) {
     return addNotification({
       message: `Fehler beim Abfragen der EK-Frequenz: ${(error as Error).message}`,
@@ -52,14 +39,12 @@ export const setStartjahr = async ({
   // return if no kontrolljahre exist
   // it makes no sense to set startjahr if there are no kontrolljahre
   // see: https://github.com/barbalex/apf2/issues/401
-  const kontrolljahre =
-    ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahre ?? []
+  const kontrolljahre = ekfrequenzValues?.kontrolljahre ?? []
 
   if (kontrolljahre.length === 0) return
   // so there exist kontrolljahre
   // now set startjahr
-  const kontrolljahreAb =
-    ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahreAb ?? null
+  const kontrolljahreAb = ekfrequenzValues?.kontrolljahreAb ?? null
   if (!kontrolljahreAb) {
     return addNotification({
       message: `Bei der gewählten EK-Frequenz wurde das Feld 'Kontrolljahre ab' nicht erfasst. Daher konnte das Startjahr nicht berechnet werden`,
@@ -68,17 +53,15 @@ export const setStartjahr = async ({
       },
     })
   }
-  // TODO: query last ek here instead of fetching from previously loaded
-  // reason: no need to load that data beforehand if it is not needed
   let ekfrequenzStartjahr: number | undefined
   // 2a if ek: get last ek
-  if (kontrolljahreAb === 'EK') {
-    let result: { data?: { tpopById?: { tpopkontrsByTpopId?: { nodes?: { jahr: number }[] }; tpopmassnsByTpopId?: { nodes?: { jahr: number }[] } } } } | undefined
+  if (kontrolljahreAb === 'ek') {
+    let kontrollen: { jahr: number }[]
     try {
-      result = (await apolloClient.query({
-        query: queryTpopkontr,
-        variables: { tpopId: row.id },
-      })) as typeof result
+      kontrollen =
+        (await apiFetch<{ jahr: number }[]>(
+          `/tpopkontr?tpop_id=eq.${row.id}&select=jahr`,
+        )) ?? []
     } catch (error) {
       return addNotification({
         message: `Fehler beim Abfragen der EK-Kontrollen: ${(error as Error).message}`,
@@ -89,7 +72,6 @@ export const setStartjahr = async ({
     }
     // ISSUE: if no kontrollen exist, ekfrequenzStartjahr becomes -Infinity
     // so we need to check for that case and set startjahr to null in case a value was set previously (should not happen outside text data?)
-    const kontrollen = result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
     if (!kontrollen.length) {
       addNotification({
         message: `Offenbar gibt es keine Kontrolle. Daher wird das aktuelle Jahr als Startjahr gesetzt`,
@@ -98,21 +80,22 @@ export const setStartjahr = async ({
         },
       })
     }
-    ekfrequenzStartjahr = kontrollen.length
-      ? Math.max(...kontrollen.map((n: { jahr: number }) => n.jahr))
+    ekfrequenzStartjahr =
+      kontrollen.length ?
+        Math.max(...kontrollen.map((n) => n.jahr))
       : new Date().getFullYear()
   }
   // 2b if ansiedlung: get last ansiedlung
-  if (kontrolljahreAb === 'ANSIEDLUNG') {
+  if (kontrolljahreAb === 'ansiedlung') {
     // TODO:
     // if tpop.status === 201 (Ansaatversuch): choose first ansaat
     // else: choose last anpflanzung
-    let result: { data?: { tpopById?: { tpopkontrsByTpopId?: { nodes?: { jahr: number }[] }; tpopmassnsByTpopId?: { nodes?: { jahr: number }[] } } } } | undefined
+    let massnahmen: { jahr: number }[]
     try {
-      result = (await apolloClient.query({
-        query: queryTpopmassn,
-        variables: { tpopId: row.id },
-      })) as typeof result
+      massnahmen =
+        (await apiFetch<{ jahr: number }[]>(
+          `/tpopmassn?tpop_id=eq.${row.id}&select=jahr`,
+        )) ?? []
     } catch (error) {
       return addNotification({
         message: `Fehler beim Abfragen der EK-Kontrollen: ${(error as Error).message}`,
@@ -121,11 +104,7 @@ export const setStartjahr = async ({
         },
       })
     }
-    ekfrequenzStartjahr = Math.max(
-      ...(result?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
-        (n) => n.jahr,
-      ),
-    )
+    ekfrequenzStartjahr = Math.max(...massnahmen.map((n) => n.jahr))
     if (!ekfrequenzStartjahr) {
       return addNotification({
         message: `Offenbar gibt es keine Ansiedlung. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
@@ -137,13 +116,9 @@ export const setStartjahr = async ({
   }
   // 3 set tpop.ekfrequenzStartjahr
   try {
-    await apolloClient.mutate({
-      mutation: mutationUpdateTpop,
-      variables: {
-        id: row.id,
-        ekfrequenzStartjahr,
-        changedBy: store.get(userNameAtom),
-      },
+    await apiUpdate('tpop', row.id, {
+      ekfrequenz_startjahr: ekfrequenzStartjahr,
+      changed_by: store.get(userNameAtom),
     })
   } catch (error) {
     return addNotification({
@@ -153,18 +128,5 @@ export const setStartjahr = async ({
       },
     })
   }
-  // 4inform user
-  // const message =
-  //   kontrolljahreAb === 'EK' ?
-  //     `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-  //   : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-  // addNotification({
-  //   message,
-  //   options: {
-  //     variant: 'success',
-  //   },
-  // })
-
-  // 5 return startjahr
-  return ekfrequenzStartjahr
+  return
 }

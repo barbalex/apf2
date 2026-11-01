@@ -3,19 +3,7 @@ import type { Getter } from 'jotai/vanilla'
 import { atomWithStorage, createJSONStorage } from 'jotai/utils'
 import queryString from 'query-string'
 import { isEqual, merge } from 'es-toolkit'
-import type {
-  AdresseFilter,
-  ApFilter,
-  BeobFilter,
-  EkAbrechnungstypWerteFilter,
-  PopFilter,
-  TpopApberrelevantGrundWerteFilter,
-  TpopFilter,
-  TpopkontrFilter,
-  TpopkontrzaehlEinheitWerteFilter,
-  TpopmassnFilter,
-  UserFilter,
-} from '../gql/graphql.ts'
+import type { AdresseFilter, ApFilter, BeobFilter, EkAbrechnungstypWerteFilter, PopFilter, TpopApberrelevantGrundWerteFilter, TpopFilter, TpopkontrFilter, TpopkontrzaehlEinheitWerteFilter, TpopmassnFilter, UserFilter } from '../modules/gqlFilterTypes.ts'
 import { validate as isUuid } from 'uuid'
 import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'

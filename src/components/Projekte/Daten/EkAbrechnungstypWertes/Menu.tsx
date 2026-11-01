@@ -1,6 +1,6 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -11,20 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { EkAbrechnungstypWerteId } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
-
-import {
-  addNotificationAtom,
-} from '../../../../store/index.ts'
-
-
-interface CreateEkAbrechnungstypWerteResult {
-  createEkAbrechnungstypWerte: {
-    ekAbrechnungstypWerte: {
-      id: EkAbrechnungstypWerteId
-    }
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -37,23 +24,12 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateEkAbrechnungstypWerteResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateEkAbrechnungstypWerteResult>({
-        mutation: graphql(`
-          mutation createEkAbrechnungstypWerteForEkAbrechnungstypWerteForm {
-            createEkAbrechnungstypWerte(input: { ekAbrechnungstypWerte: {} }) {
-              ekAbrechnungstypWerte {
-                id
-              }
-            }
-          }
-        `),
-      })
+      await apiInsert('ek_abrechnungstyp_werte', { id: newId })
     } catch (error) {
       return addNotification({
         message: (error as Error).message,
@@ -68,8 +44,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
-    const id =
-      result?.data?.createEkAbrechnungstypWerte?.ekAbrechnungstypWerte?.id
+    const id = newId
     void navigate(`./${id}${search}`)
   }
 

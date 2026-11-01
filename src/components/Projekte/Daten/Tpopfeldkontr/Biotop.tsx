@@ -1,7 +1,5 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -9,22 +7,17 @@ import { useAtomValue } from 'jotai'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { tpopfeldkontr } from '../../../shared/fragments.ts'
-import { fieldTypes } from './Form.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ComponentType } from 'react'
 
-import type {
-  TpopkontrId,
-  TpopId,
-} from '../../../../models/apflora/index.ts'
+import type { TpopkontrId, TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
 // shared RadioButtonGroup's props are inferred from an untyped signature
 // (dataSource infers as never, value as null);
@@ -34,9 +27,9 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   label: string
   dataSource: { value: number; label: string | null }[]
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
@@ -76,7 +69,6 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -87,12 +79,24 @@ export const Component = () => {
   const tpopfeldkontrBiotopQueryOptions = {
     queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
     queryFn: async () => {
-      const result = await apolloClient.query<BiotopQueryResult>({
-        query,
-        variables: { id: tpopkontrId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const [rows, idbiotuebereinstWerte, lrDelarzes] = await Promise.all([
+        apiFetch<NonNullable<BiotopQueryResult['tpopkontrById']>[]>(
+          `/v_tpopkontr?id=eq.${tpopkontrId}&select=id,tpopId:tpop_id,flaeche,lrDelarze:lr_delarze,lrUmgebungDelarze:lr_umgebung_delarze,vegetationstyp,konkurrenz,moosschicht,krautschicht,strauchschicht,baumschicht,idealbiotopUebereinstimmung:idealbiotop_uebereinstimmung,handlungsbedarf`,
+        ),
+        apiFetch<{ value: number; label: string | null }[]>(
+          `/tpopkontr_idbiotuebereinst_werte?order=sort.asc&select=value:code,label:text`,
+        ),
+        apiFetch<
+          { id: string; label: string | null; einheit: string | null }[]
+        >(`/ae_lr_delarze?order=label.asc&select=id,label,einheit`),
+      ])
+      return {
+        tpopkontrById: rows?.[0] ?? null,
+        allTpopkontrIdbiotuebereinstWertes: {
+          nodes: idbiotuebereinstWerte ?? [],
+        },
+        allAeLrDelarzes: { nodes: lrDelarzes ?? [] },
+      }
     },
     suspense: true,
   }
@@ -121,35 +125,7 @@ export const Component = () => {
       variables.jahr = newJahr
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-              mutation updateTpopkontrForEk(
-                $id: UUID!
-                $${field}: ${fieldTypes[field]}
-                ${field === 'jahr' ? '$datum: Date' : ''}
-                ${field === 'datum' ? '$jahr: Int' : ''}
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      ${field}: $${field}
-                      ${field === 'jahr' ? 'datum: $datum' : ''}
-                      ${field === 'datum' ? 'jahr: $jahr' : ''}
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpopkontr {
-                    ...TpopfeldkontrFields
-                  }
-                }
-              }
-              ${tpopfeldkontr}
-            `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopkontr', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

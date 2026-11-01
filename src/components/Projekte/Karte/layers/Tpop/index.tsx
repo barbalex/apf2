@@ -1,6 +1,6 @@
+import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
@@ -9,9 +9,8 @@ import type { LeafletMouseEvent } from 'leaflet'
 
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
+import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
-import { query } from './query.ts'
-import { updateTpopById } from './updateTpopById.ts'
 
 import type {
   TpopId,
@@ -19,7 +18,7 @@ import type {
   ApId,
   AeTaxonomiesId,
 } from '../../../../../models/apflora/index.ts'
-import type { TpopFilter } from '../../../../../gql/graphql.ts'
+import type { TpopFilter } from '../../../../../modules/gqlFilterTypes.ts'
 
 import {
   addNotificationAtom,
@@ -101,7 +100,6 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
   const setIdOfTpopBeingLocalized = useSetAtom(setIdOfTpopBeingLocalizedAtom)
   const addNotification = useSetAtom(addNotificationAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const tpopFilter = getTpopFilter(tpopGqlFilter)
@@ -109,12 +107,85 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
   const { data, error } = useQuery({
     queryKey: ['TpopForMapQuery', tpopFilter],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopQueryResult>({
-        query,
-        variables: { tpopFilter },
+      // phase 5: the cascade filter runs through query_tpop; status text
+      // and the pop/ap context join client-side
+      const [tpopsR, popsR, statusWerteR, apsR] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            status: number | null
+            wgs84_lat: number | null
+            wgs84_long: number | null
+            lv95_x: number | null
+            lv95_y: number | null
+            flurname: string | null
+            pop_id: string | null
+          }[]
+        >(
+          '/rpc/query_tpop?select=id,nr,status,wgs84_lat,wgs84_long,lv95_x,lv95_y,flurname,pop_id',
+          {
+            method: 'POST',
+            body: JSON.stringify({ p_filter: tpopFilter }),
+          },
+        ),
+        apiFetch<
+          {
+            id: string
+            nr: number | null
+            name: string | null
+            ap_id: string | null
+          }[]
+        >(`/q_pop?select=id,nr,name,ap_id`),
+        apiFetch<{ code: number; text: string | null }[]>(
+          `/pop_status_werte?select=code,text`,
+        ),
+        apiFetch<
+          {
+            id: string
+            ae_taxonomy_by_art_id: { artname: string | null } | null
+          }[]
+        >(`/v_ap?select=id,ae_taxonomy_by_art_id`),
+      ])
+      const statusWerte = new Map(
+        (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
+      )
+      const popById = new Map((popsR ?? []).map((p) => [p.id, p]))
+      const apById = new Map((apsR ?? []).map((a) => [a.id, a]))
+      const nodes = (tpopsR ?? []).map((t) => {
+        const pop = t.pop_id ? popById.get(t.pop_id) : undefined
+        const apBy = pop?.ap_id ? apById.get(pop.ap_id) : undefined
+        return {
+          id: t.id,
+          nr: t.nr,
+          status: t.status,
+          wgs84Lat: t.wgs84_lat,
+          wgs84Long: t.wgs84_long,
+          lv95X: t.lv95_x,
+          lv95Y: t.lv95_y,
+          flurname: t.flurname,
+          popStatusWerteByStatus:
+            t.status == null ?
+              null
+            : { id: t.status, text: statusWerte.get(t.status) ?? null },
+          popByPopId:
+            pop ?
+              {
+                id: pop.id,
+                nr: pop.nr,
+                name: pop.name,
+                apByApId:
+                  pop.ap_id ?
+                    {
+                      id: pop.ap_id,
+                      aeTaxonomyByArtId: apBy?.ae_taxonomy_by_art_id ?? null,
+                    }
+                  : null,
+              }
+            : null,
+        }
       })
-      if (result.error) throw result.error
-      return result.data
+      return { allTpops: { nodes } } as TpopQueryResult
     },
   })
 
@@ -160,12 +231,9 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
      * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
      */
     try {
-      await apolloClient.mutate({
-        mutation: updateTpopById,
-        variables: {
-          id: idOfTpopBeingLocalized,
-          geomPoint,
-        },
+      await apiUpdateByVariables('tpop', {
+        id: idOfTpopBeingLocalized,
+        geomPoint,
       })
       // refetch so it appears on map
       // need to also refetch pop in case it was new
@@ -198,10 +266,7 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
       // altering the maps css corrupted the map ui
       window.L.DomUtil.addClass(mapContainer, 'crosshair-cursor-enabled')
     } else {
-      window.L.DomUtil.removeClass(
-        mapContainer,
-        'crosshair-cursor-enabled',
-      )
+      window.L.DomUtil.removeClass(mapContainer, 'crosshair-cursor-enabled')
     }
   }, [idOfTpopBeingLocalized, mapContainer])
 

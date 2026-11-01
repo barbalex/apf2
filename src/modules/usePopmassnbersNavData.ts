@@ -1,16 +1,22 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getPopmassnberGqlFilterForTree } from './getPopmassnberGqlFilterForTree.ts'
 
-export const usePopmassnbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const usePopmassnbersNavData = (
+  props?:
+    | {
+        projId?: string | undefined
+        apId?: string | undefined
+        popId?: string | undefined
+      }
+    | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
-  const popId = (props?.popId ?? params.popId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
+  const popId = props?.popId ?? params.popId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId)
@@ -18,37 +24,36 @@ export const usePopmassnbersNavData = (props?: { projId?: string | undefined; ap
   const { data } = useSuspenseQuery({
     queryKey: ['treePopmassnber', popId, popmassnberGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreePopmassnbersQuery(
-            $popmassnbersFilter: PopmassnberFilter!
-            $popId: UUID!
-          ) {
-            popById(id: $popId) {
-              id
-              popmassnbersByPopId(
-                filter: $popmassnbersFilter
-                orderBy: LABEL_ASC
-              ) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: popmassnbersByPopId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          popmassnbersFilter: popmassnberGqlFilterForTree,
-          popId,
+      // phase 5: the former popmassnbersByPopId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...popmassnberGqlFilterForTree,
+        popByPopId: {
+          ...((popmassnberGqlFilterForTree as { popByPopId?: object })
+            .popByPopId ?? {}),
+          id: { equalTo: popId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_popmassnber?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [{ field: 'label', dir: 'asc' }],
+            }),
+          },
+        ),
+        apiCount(`/q_popmassnber?pop_id=eq.${popId}`),
+      ])
+      return {
+        popById: {
+          id: popId,
+          popmassnbersByPopId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 

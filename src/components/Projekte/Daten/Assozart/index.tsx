@@ -1,7 +1,7 @@
+import { apiFetch } from '../../../../modules/api.ts'
+import { assozartSelect } from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import {
   useQuery,
@@ -13,12 +13,9 @@ import { useAtomValue } from 'jotai'
 import { TextField } from '../../../shared/TextField.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { assozart } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
@@ -26,12 +23,7 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from './index.module.css'
-
-const fieldTypes: Record<string, string> = {
-  bemerkungen: 'String',
-  aeId: 'UUID',
-  apId: 'UUID',
-}
+import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface AssozartNode {
   id: AssozartId
@@ -59,32 +51,36 @@ interface AssozartQueryResult {
 
 // react-query v5 omitted suspense from the public useQuery options
 // although it is still honored at runtime
-type AssozartUseQueryOptions = UseQueryOptions<AssozartQueryResult | undefined, Error> & {
+type AssozartUseQueryOptions = UseQueryOptions<
+  { assozartById: NonNullable<AssozartQueryResult['assozartById']> | null },
+  Error
+> & {
   suspense: boolean
 }
+
+export const assozartQueryOptions = (id: string | undefined) => ({
+  queryKey: ['assozart', id],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<AssozartQueryResult['assozartById']>[]
+    >(
+      `/v_assozart?id=eq.${id}&select=${assozartSelect},aeTaxonomyByAeId:ae_taxonomy_by_ae_id,apByApId:ap_by_ap_id`,
+    )
+    return { assozartById: rows?.[0] ?? null }
+  },
+})
 
 export const Component = () => {
   const { assozartId: id } = useParams<{ assozartId: string }>()
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const queryOptions: AssozartUseQueryOptions = {
-    queryKey: ['assozart', id],
-    queryFn: async () => {
-      const result = await apolloClient.query<AssozartQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+    ...assozartQueryOptions(id),
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   }
@@ -119,43 +115,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-                mutation updateAssozart(
-                  $id: UUID!
-                  $${field}: ${fieldTypes[field]}
-                  $changedBy: String
-                ) {
-                  updateAssozartById(
-                    input: {
-                      id: $id
-                      assozartPatch: {
-                        ${field}: $${field}
-                        changedBy: $changedBy
-                      }
-                    }
-                  ) {
-                    assozart {
-                      ...AssozartFields
-                      aeTaxonomyByAeId {
-                        id
-                        artname
-                      }
-                      apByApId {
-                        artId
-                        assozartsByApId {
-                          nodes {
-                            ...AssozartFields
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                ${assozart}
-              `,
-        variables,
-      })
+      await apiUpdateByVariables('assozart', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -196,9 +156,7 @@ export const Component = () => {
             labelSize={12}
             label="Art"
             row={row}
-            query={queryAeTaxonomies}
             filter={aeTaxonomiesfilter}
-            queryNodesName="allAeTaxonomies"
             saveToDb={saveToDb}
             error={fieldErrors.aeId}
           />

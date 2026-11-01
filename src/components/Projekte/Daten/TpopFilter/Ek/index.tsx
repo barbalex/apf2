@@ -1,13 +1,12 @@
 import type { SaveToDbEvent } from '../../../../shared/types.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.tsx'
 import { Select } from '../../../../shared/Select.tsx'
 import { TextField } from '../../../../shared/TextField.tsx'
-import { query } from './query.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import type {
@@ -58,17 +57,32 @@ interface EkProps {
 
 export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
   const { apId } = useParams()
-  const apolloClient = useApolloClient()
 
   const tpopEkFilterQueryOptions: TpopEkFilterUseQueryOptions = {
     queryKey: ['tpopFilterEk', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopEkFilterQueryResult>({
-        query,
-        variables: { apId },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // the old usersByAdresseIdExist reverse relation becomes an
+      // id in-list of the users' adresse_ids
+      const usersWithAdresse = await apiFetch<{ adresse_id: string }[]>(
+        `/user?select=adresse_id&adresse_id=not.is.null`,
+      )
+      const adresseIds = [
+        ...new Set((usersWithAdresse ?? []).map((u) => u.adresse_id)),
+      ]
+      const [ekfrequenzs, adresses] = await Promise.all([
+        apiFetch<
+          NonNullable<TpopEkFilterQueryResult['allEkfrequenzs']>['nodes']
+        >(
+          `/q_ekfrequenz?ap_id=eq.${apId}&select=id,code,anwendungsfall&order=sort.asc`,
+        ),
+        apiFetch<NonNullable<TpopEkFilterQueryResult['allAdresses']>['nodes']>(
+          `/v_adresse?id=in.(${adresseIds.join(',')})&select=value:id,label:name&order=name.asc`,
+        ),
+      ])
+      return {
+        allEkfrequenzs: { nodes: ekfrequenzs ?? [] },
+        allAdresses: { nodes: adresses ?? [] },
+      } as TpopEkFilterQueryResult
     },
     suspense: true,
   }

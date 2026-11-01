@@ -1,22 +1,17 @@
 // TanStack Virtual is incompatible with React Compiler memoization
 'use no memo'
+import { apiFetch } from '../../../modules/api.ts'
 
 import { useState, Suspense, useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 
-import { queryAll } from './queryAll.ts'
 import type { EkPlanTpopFilter } from './tableTypes.ts'
-import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'
 import { getYears } from './getYears.ts'
-import {
-  exportRowFromTpop,
-  type ExportTpopNode,
-} from './exportRowFromTpop.ts'
+import { exportRowFromTpop, type ExportTpopNode } from './exportRowFromTpop.ts'
 import { exportModule } from '../../../modules/export.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
@@ -213,8 +208,6 @@ const getTpopFilter = ({
 
 export const EkPlanTable = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const apValues = useAtomValue(ekPlanApValuesAtom)
   const yearMenuAnchor = useAtomValue(ekPlanYearMenuAnchorAtom)
   const filterAp = useAtomValue(ekPlanFilterApAtom)
@@ -286,13 +279,14 @@ export const EkPlanTable = () => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['EkplanTpopQuery', tpopFilter],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: queryAll,
-        variables: { tpopFilter },
-      })
-
-      if (result.error) throw result.error
-      return result.data as EkplanTpopQueryResult
+      // phase 5: the former AP_NAME/POP_NR/NR ordering happens client-side
+      // via the pop/ap context that the row fetches anyway
+      const nodes =
+        (await apiFetch<{ id: string }[]>('/rpc/query_tpop?select=id', {
+          method: 'POST',
+          body: JSON.stringify({ p_filter: tpopFilter }),
+        })) ?? []
+      return { allTpops: { nodes } } as unknown as EkplanTpopQueryResult
     },
   })
 
@@ -300,11 +294,176 @@ export const EkPlanTable = () => {
   const years = getYears(pastYears)
 
   const onClickExport = async () => {
-    let result
+    // phase 5: the nested export document became REST calls + client joins
+    let tpops: ExportTpopNode[]
+    let ekfrequenzs: { id: string; code: string | null }[] = []
     try {
-      result = await apolloClient.query({
-        query: queryForExport,
-        variables: { tpopFilter, apIds: apValues },
+      const [tpopRows, ekfrequenzRows, popsR, apsR, statusWerteR, adressenR] =
+        await Promise.all([
+          apiFetch<Record<string, unknown>[]>('/rpc/query_tpop?select=*', {
+            method: 'POST',
+            body: JSON.stringify({ p_filter: tpopFilter }),
+          }),
+          apiFetch<{ id: string; code: string | null }[]>(
+            `/q_ekfrequenz?${apValues.length ? `ap_id=in.(${apValues.join(',')})&` : ''}select=id,code&order=sort.asc`,
+          ),
+          apiFetch('/q_pop?select=id,nr,name,status,ap_id'),
+          apiFetch('/v_ap?select=id,label,proj_id'),
+          apiFetch('/pop_status_werte?select=code,text'),
+          apiFetch('/v_adresse?select=id,name'),
+        ])
+      const tpopIds = ((tpopRows ?? []) as { id: string }[]).map((t) => t.id)
+      const [ekplansR, kontrsR, massnsR, massnTypWerteR] =
+        tpopIds.length ?
+          await Promise.all([
+            apiFetch<
+              { tpop_id: string; jahr: number | null; typ: string | null }[]
+            >(
+              `/ekplan?tpop_id=in.(${tpopIds.join(',')})&select=tpop_id,jahr,typ`,
+            ),
+            apiFetch<{ id: string; tpop_id: string; jahr: number | null }[]>(
+              `/q_tpopkontr?tpop_id=in.(${tpopIds.join(',')})&select=id,tpop_id,jahr`,
+            ),
+            apiFetch(
+              '/rpc/query_tpopmassn?select=id,tpop_id,jahr,typ,zieleinheit_anzahl',
+              {
+                method: 'POST',
+                body: JSON.stringify({
+                  p_filter: { tpopByTpopId: { id: { in: tpopIds } } },
+                }),
+              },
+            ),
+            apiFetch<
+              {
+                code: number
+                text: string | null
+                ansiedlung: boolean | null
+              }[]
+            >('/tpopmassn_typ_werte?select=code,text,ansiedlung'),
+          ])
+        : [[], [], [], []]
+      const popsById = new Map(
+        ((popsR ?? []) as { id: string }[]).map((p) => [p.id, p]),
+      )
+      const apsById = new Map(
+        ((apsR ?? []) as { id: string }[]).map((a) => [a.id, a]),
+      )
+      const statusText = new Map(
+        ((statusWerteR ?? []) as { code: number; text: string | null }[]).map(
+          (w) => [w.code, w.text ?? ''],
+        ),
+      )
+      const adressenById = new Map(
+        ((adressenR ?? []) as { id: string; name: string | null }[]).map(
+          (a) => [a.id, a.name],
+        ),
+      )
+      const ansiedlungTypes = new Set(
+        (
+          (massnTypWerteR ?? []) as {
+            ansiedlung: boolean | null
+            code: number
+          }[]
+        )
+          .filter((w) => w.ansiedlung === true)
+          .map((w) => w.code),
+      )
+      const ekplansByTpop = new Map<
+        string,
+        { jahr: number | null; typ: string | null }[]
+      >()
+      for (const e of (ekplansR ?? []) as {
+        tpop_id: string
+        jahr: number | null
+        typ: string | null
+      }[]) {
+        const list = ekplansByTpop.get(e.tpop_id) ?? []
+        list.push({ jahr: e.jahr, typ: e.typ })
+        ekplansByTpop.set(e.tpop_id, list)
+      }
+      const kontrsByTpop = new Map<string, unknown[]>()
+      for (const k of (kontrsR ?? []) as { tpop_id: string }[]) {
+        const list = kontrsByTpop.get(k.tpop_id) ?? []
+        list.push(k)
+        kontrsByTpop.set(k.tpop_id, list)
+      }
+      const massnsByTpop = new Map<string, unknown[]>()
+      for (const m of (massnsR ?? []) as {
+        tpop_id: string
+        typ: number | null
+      }[]) {
+        if (m.typ == null || !ansiedlungTypes.has(m.typ)) continue
+        const list = massnsByTpop.get(m.tpop_id) ?? []
+        list.push(m)
+        massnsByTpop.set(m.tpop_id, list)
+      }
+      ekfrequenzs = (ekfrequenzRows ?? []) as {
+        id: string
+        code: string | null
+      }[]
+      tpops = ((tpopRows ?? []) as Record<string, unknown>[]).map((t) => {
+        const tpopId = t.pop_id ? (t.id as string) : (t.id as string)
+        const pop = popsById.get(t.pop_id as string) as
+          | {
+              id: string
+              nr: number | null
+              name: string | null
+              status: number | null
+              ap_id: string | null
+            }
+          | undefined
+        const apBy =
+          pop?.ap_id ?
+            (apsById.get(pop.ap_id) as
+              | { id: string; label: string | null; proj_id: string | null }
+              | undefined)
+          : undefined
+        return {
+          id: tpopId,
+          nr: t.nr as number | null,
+          gemeinde: t.gemeinde as string | null,
+          flurname: t.flurname as string | null,
+          lv95X: t.lv95_x as number | null,
+          lv95Y: t.lv95_y as number | null,
+          ekfrequenz: t.ekfrequenz as string | null,
+          ekfrequenzStartjahr: t.ekfrequenz_startjahr as number | null,
+          ekfrequenzAbweichend: t.ekfrequenz_abweichend as boolean | null,
+          bekanntSeit: t.bekannt_seit as number | null,
+          ekfrequenzByEkfrequenz: null,
+          popStatusWerteByStatus:
+            t.status == null ?
+              null
+            : {
+                text: statusText.get(t.status as number) ?? null,
+              },
+          adresseByEkfKontrolleur:
+            t.ekf_kontrolleur == null ?
+              null
+            : {
+                name: adressenById.get(t.ekf_kontrolleur as string) ?? null,
+              },
+          popByPopId:
+            pop ?
+              {
+                id: pop.id,
+                nr: pop.nr,
+                name: pop.name,
+                popStatusWerteByStatus:
+                  pop.status == null ?
+                    null
+                  : {
+                      text: statusText.get(pop.status) ?? null,
+                    },
+                apByApId:
+                  apBy ?
+                    { id: apBy.id, projId: apBy.proj_id, label: apBy.label }
+                  : null,
+              }
+            : null,
+          ekplansByTpopId: { nodes: ekplansByTpop.get(tpopId) ?? [] },
+          tpopkontrsByTpopId: { nodes: kontrsByTpop.get(tpopId) ?? [] },
+          tpopmassnsByTpopId: { nodes: massnsByTpop.get(tpopId) ?? [] },
+        } as ExportTpopNode
       })
     } catch (error) {
       return addNotification({
@@ -314,14 +473,6 @@ export const EkPlanTable = () => {
         },
       })
     }
-    const tpops = (
-      (result?.data as { allTpops?: { nodes?: unknown[] } } | undefined)
-        ?.allTpops?.nodes ?? []
-    ) as ExportTpopNode[]
-    const ekfrequenzs = (
-      (result?.data as { allEkfrequenzs?: { nodes?: unknown[] } } | undefined)
-        ?.allEkfrequenzs?.nodes ?? []
-    ) as { id: string; code: string | null }[]
     const data = tpops.map((tpop) =>
       exportRowFromTpop({ tpop, years, ekfrequenzs }),
     )

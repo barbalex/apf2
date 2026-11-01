@@ -1,10 +1,9 @@
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import type { Feature, FeatureCollection } from 'geojson'
 import type { LatLng } from 'leaflet'
+import { apiFetch } from '../../../../modules/api.ts'
 
 interface MarkierungNode {
   id: number
@@ -41,30 +40,32 @@ const pointToLayer = (_feature: Feature, latlng: LatLng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
 export const Markierungen = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['markierungen'],
     queryFn: async () => {
-      const result = await apolloClient.query<MarkierungenQueryResult>({
-        query: graphql(`
-          query KarteMarkierungensQuery {
-            allMarkierungens {
-              nodes {
-                id: ogcFid
-                gebiet
-                pfostennum
-                markierung
-                wkbGeometry {
-                  geojson
-                }
-              }
-            }
-          }
-        `),
-      })
-      if (result.error) throw result.error
-      return result.data
+      const nodes =
+        (await apiFetch<
+          {
+            ogc_fid: number
+            gebiet: string | null
+            pfostennum: string | null
+            markierung: string | null
+            wkb_geometry: unknown
+          }[]
+        >(
+          `/markierungen?select=ogc_fid,gebiet,pfostennum,markierung,wkb_geometry`,
+        )) ?? []
+      return {
+        allMarkierungens: {
+          nodes: nodes.map((n) => ({
+            id: n.ogc_fid,
+            gebiet: n.gebiet,
+            pfostennum: n.pfostennum,
+            markierung: n.markierung,
+            wkbGeometry: { geojson: JSON.stringify(n.wkb_geometry) },
+          })),
+        },
+      } as MarkierungenQueryResult
     },
   })
 

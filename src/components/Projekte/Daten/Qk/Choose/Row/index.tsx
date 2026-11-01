@@ -1,10 +1,8 @@
+import { apiFetch, apiInsert } from '../../../../../../modules/api.ts'
 import Checkbox from '@mui/material/Checkbox'
-import { graphql } from '../../../../../../gql/index.ts'
 
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
-import { query } from './query.ts'
 import { Error } from '../../../../../shared/Error.tsx'
 
 import type {
@@ -37,18 +35,19 @@ interface RowProps {
 }
 
 export const Row = ({ apId, qk }: RowProps) => {
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { data, error } = useQuery({
     queryKey: ['apqkQueryForRow', apId, qk.name],
     queryFn: async () => {
-      const result = await apolloClient.query<ApqkQueryResult>({
-        query: query,
-        variables: { apId, qkName: qk.name },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const rows = (await apiFetch<
+        { ap_id: string; qk_name: string }[]
+      >(
+        `/apqk?ap_id=eq.${apId}&qk_name=eq.${encodeURIComponent(qk.name)}&select=ap_id,qk_name`,
+      )) ?? []
+      return {
+        apqkByApIdAndQkName: rows[0] ?? null,
+      } as unknown as ApqkQueryResult
     },
   })
   const apqk = data?.apqkByApIdAndQkName
@@ -60,29 +59,15 @@ export const Row = ({ apId, qk }: RowProps) => {
     // 2. else create apqk
     const variables = { apId, qkName: qk.name }
     if (checked) {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteApqk($apId: UUID!, $qkName: String!) {
-            deleteApqkByApIdAndQkName(input: { apId: $apId, qkName: $qkName }) {
-              deletedApqkId
-            }
-          }
-        `),
-        variables,
-      })
+      // apqk has a composite primary key (ap_id, qk_name)
+      await apiFetch(
+        `/apqk?ap_id=eq.${variables.apId}&qk_name=eq.${variables.qkName}`,
+        { method: 'DELETE' },
+      )
     } else {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation createApqk($apId: UUID!, $qkName: String!) {
-            createApqk(input: { apqk: { apId: $apId, qkName: $qkName } }) {
-              apqk {
-                apId
-                qkName
-              }
-            }
-          }
-        `),
-        variables,
+      await apiInsert('apqk', {
+        ap_id: variables.apId,
+        qk_name: variables.qkName,
       })
     }
     // 3. refetch data

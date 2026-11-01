@@ -1,15 +1,16 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, apiFetch } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
 
-export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
-  const apolloClient = useApolloClient()
+export const useEkzaehleinheitsNavData = (
+  props?:
+    { projId?: string | undefined; apId?: string | undefined } | undefined,
+) => {
   const params = useParams()
-  const projId = (props?.projId ?? params.projId ?? '')
-  const apId = (props?.apId ?? params.apId ?? '')
+  const projId = props?.projId ?? params.projId ?? ''
+  const apId = props?.apId ?? params.apId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
   const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
@@ -17,37 +18,39 @@ export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined;
   const { data } = useSuspenseQuery({
     queryKey: ['treeEkzaehleinheit', apId, ekzaehleinheitGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query TreeEkzaehleinheitsQuery(
-            $ekzaehleinheitsFilter: EkzaehleinheitFilter!
-            $apId: UUID!
-          ) {
-            apById(id: $apId) {
-              id
-              ekzaehleinheitsByApId(
-                filter: $ekzaehleinheitsFilter
-                orderBy: [SORT_ASC, LABEL_ASC]
-              ) {
-                nodes {
-                  id
-                  label
-                }
-              }
-              totalCount: ekzaehleinheitsByApId {
-                totalCount
-              }
-            }
-          }
-        `),
-        variables: {
-          ekzaehleinheitsFilter: ekzaehleinheitGqlFilterForTree,
-          apId,
+      // phase 5: the former ekzaehleinheitsByApId relation constraint merges into
+      // the cascade filter; sibling keys are ANDed by compile_filter
+      const filter = {
+        ...ekzaehleinheitGqlFilterForTree,
+        apByApId: {
+          ...((ekzaehleinheitGqlFilterForTree as { apByApId?: object })
+            .apByApId ?? {}),
+          id: { equalTo: apId },
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+      }
+      const [nodes, totalCount] = await Promise.all([
+        apiFetch<{ id: string; label: string | null }[]>(
+          `/rpc/query_ekzaehleinheit?select=id,label`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: filter,
+              p_order: [
+                { field: 'sort', dir: 'asc' },
+                { field: 'label', dir: 'asc' },
+              ],
+            }),
+          },
+        ),
+        apiCount(`/q_ekzaehleinheit?ap_id=eq.${apId}`),
+      ])
+      return {
+        apById: {
+          id: apId,
+          ekzaehleinheitsByApId: { nodes: nodes ?? [] },
+          totalCount: { totalCount },
+        },
+      }
     },
   })
 

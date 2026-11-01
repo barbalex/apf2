@@ -1,10 +1,9 @@
-import { graphql } from '../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import { useParams, useLocation } from 'react-router'
+import { apiFetch } from '../../../modules/api.ts'
 
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
@@ -42,30 +41,14 @@ export const TpopFromBeobPopList = ({
   const { projId, apId } = useParams()
   const { search } = useLocation()
 
-  const apolloClient = useApolloClient()
-
-  const query = graphql(`
-    query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
-      allPops(
-        filter: { apId: { equalTo: $apId } }
-        orderBy: [NR_ASC, NAME_ASC]
-      ) {
-        nodes {
-          id
-          label
-        }
-      }
-    }
-  `)
   const queryOptions: PopsForTpopFromBeobQueryOptions = {
     queryKey: ['popsForTpopFromBeob', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<AllPopsQueryResult>({
-        query,
-        variables: { apId: apId ?? '' },
-      })
-      if (result.error) throw result.error
-      return result.data
+      const nodes =
+        (await apiFetch<{ id: string; label: string | null }[]>(
+          `/q_pop?ap_id=eq.${apId ?? ''}&select=id,label&order=nr.asc,name.asc`,
+        )) ?? []
+      return { allPops: { nodes } } as AllPopsQueryResult
     },
     suspense: true,
   }

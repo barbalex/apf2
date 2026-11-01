@@ -1,6 +1,5 @@
+import { apiFetch } from '../../../../../modules/api.ts'
 import { useState, useRef, useEffect } from 'react'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import IconButton from '@mui/material/IconButton'
@@ -96,106 +95,41 @@ interface ApHistoriesQueryResult {
   }
 }
 
-const apHistoriesQuery = graphql(`
-  query apHistoryQuery($apId: UUID!) {
-    apById(id: $apId) {
-      id
-      label
-      artId
-      aeTaxonomyByArtId {
-        id
-        artname
-      }
-      bearbeitung
-      apBearbstandWerteByBearbeitung {
-        id
-        text
-      }
-      startJahr
-      umsetzung
-      apUmsetzungWerteByUmsetzung {
-        id
-        text
-      }
-      artId
-      bearbeiter
-      adresseByBearbeiter {
-        id
-        name
-      }
-      ekfBeobachtungszeitpunkt
-      projId
-      projektByProjId {
-        id
-        name
-      }
-      changedBy
-    }
-    allApHistories(filter: { id: { equalTo: $apId } }, orderBy: YEAR_DESC) {
-      totalCount
-      nodes {
-        id
-        year
-        artId
-        aeTaxonomyByArtId {
-          id
-          artname
-        }
-        bearbeitung
-        apBearbstandWerteByBearbeitung {
-          id
-          text
-        }
-        startJahr
-        umsetzung
-        apUmsetzungWerteByUmsetzung {
-          id
-          text
-        }
-        artId
-        bearbeiter
-        adresseByBearbeiter {
-          id
-          name
-        }
-        ekfBeobachtungszeitpunkt
-      }
-    }
-    allAdresses(orderBy: NAME_ASC) {
-      nodes {
-        value: id
-        label: name
-      }
-    }
-    allApBearbstandWertes(orderBy: SORT_ASC) {
-      nodes {
-        value: code
-        label: text
-      }
-    }
-    allApUmsetzungWertes(orderBy: SORT_ASC) {
-      nodes {
-        value: code
-        label: text
-      }
-    }
-  }
-`)
-
 export const Component = () => {
-  const apolloClient = useApolloClient()
-
   const { apId } = useParams<{ apId: string }>()
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['apHistories', apId],
     queryFn: async () => {
-      const result = await apolloClient.query<ApHistoriesQueryResult>({
-        query: apHistoriesQuery,
-        variables: { apId: apId ?? '' },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as ApHistoriesQueryResult
+      const commonSelect =
+        'id,artId:art_id,aeTaxonomyByArtId:ae_taxonomy_by_art_id,bearbeitung,apBearbstandWerteByBearbeitung:ap_bearbstand_werte_by_bearbeitung,startJahr:start_jahr,umsetzung,apUmsetzungWerteByUmsetzung:ap_umsetzung_werte_by_umsetzung,bearbeiter,adresseByBearbeiter:adresse_by_bearbeiter,ekfBeobachtungszeitpunkt:ekf_beobachtungszeitpunkt,changedBy:changed_by'
+      const [apRows, historyRows, adresses, bearbstandWerte, umsetzungWerte] =
+        await Promise.all([
+          apiFetch<NonNullable<ApHistoriesQueryResult['apById']>[]>(
+            `/v_ap?id=eq.${apId ?? ''}&select=${commonSelect},label,projId:proj_id,projektByProjId:projekt_by_proj_id`,
+          ),
+          apiFetch<ApHistoryNode[]>(
+            `/v_ap_history?id=eq.${apId ?? ''}&select=${commonSelect},year&order=year.desc`,
+          ),
+          apiFetch<{ value: string; label: string }[]>(
+            `/adresse?order=name.asc&select=value:id,label:name`,
+          ),
+          apiFetch<{ value: number; label: string }[]>(
+            `/ap_bearbstand_werte?order=sort.asc&select=value:code,label:text`,
+          ),
+          apiFetch<{ value: number; label: string }[]>(
+            `/ap_umsetzung_werte?order=sort.asc&select=value:code,label:text`,
+          ),
+        ])
+      return {
+        apById: apRows?.[0] ?? null,
+        allApHistories: {
+          nodes: historyRows ?? [],
+          totalCount: historyRows?.length ?? 0,
+        },
+        allAdresses: { nodes: adresses ?? [] },
+        allApBearbstandWertes: { nodes: bearbstandWerte ?? [] },
+        allApUmsetzungWertes: { nodes: umsetzungWerte ?? [] },
+      }
     },
   })
 

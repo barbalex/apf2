@@ -1,8 +1,7 @@
 import { useParams } from 'react-router'
-import { graphql } from '../../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { rpcCount } from '../../../../../modules/api.ts'
 
 import { Checkbox } from '../shared/Checkbox.tsx'
 import {
@@ -30,24 +29,13 @@ export const ShowForMultipleAps = () => {
   )
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
-  const apolloClient = useApolloClient()
   const { data } = useQuery({
     queryKey: ['apsCount', apGqlFilterForTree],
     queryFn: async () => {
-      const result = await apolloClient.query<ShowForMultipleApsQueryResult>({
-        query: graphql(`
-          query LayersControlLayersQuery($apsFilter: ApFilter!) {
-            allAps(filter: $apsFilter) {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          apsFilter: apGqlFilterForTree,
-        },
+      const totalCount = await rpcCount('query_ap', {
+        p_filter: apGqlFilterForTree,
       })
-      if (result.error) throw result.error
-      return result.data
+      return { allAps: { totalCount } } as ShowForMultipleApsQueryResult
     },
   })
 

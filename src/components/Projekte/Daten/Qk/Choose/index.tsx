@@ -2,11 +2,10 @@ import { useState, type ChangeEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { apiFetch } from '../../../../../modules/api.ts'
 
-import { query } from './query.ts'
 import { Row } from './Row/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
@@ -35,18 +34,25 @@ interface ChooseProps {
 
 export const Component = ({ refetchTab }: ChooseProps) => {
   const { apId } = useParams()
-  const apolloClient = useApolloClient()
 
   // options are kept in a variable because suspense is still honoured by
   // react-query at runtime but was removed from useQuery's types in v5
   const queryOptions = {
     queryKey: ['qkChoose'],
     queryFn: async () => {
-      const result = await apolloClient.query<QkChooseQueryResult>({
-        query,
-      })
-      if (result.error) throw result.error
-      return result.data
+      const qks =
+        (await apiFetch<
+          {
+            name: string
+            titel: string | null
+            beschreibung: string | null
+            sort: number | null
+          }[]
+        >(`/qk?select=name,titel,beschreibung,sort&order=sort.asc,name.asc`)) ??
+        []
+      return {
+        allQks: { nodes: qks, totalCount: qks.length },
+      } as unknown as QkChooseQueryResult
     },
     suspense: true,
   }

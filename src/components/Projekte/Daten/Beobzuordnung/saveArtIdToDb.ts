@@ -1,12 +1,9 @@
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 import { isEqual } from 'es-toolkit'
-import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
-import { graphql } from '../../../../gql/index.ts'
 
-import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
-  apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -31,7 +28,6 @@ export const saveArtIdToDb = async ({
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   // both clients are set during app startup
-  const apolloClient = store.get(apolloClientAtom) as ApolloClient
   const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
 
@@ -41,26 +37,13 @@ export const saveArtIdToDb = async ({
     id: row.id,
     artId: value,
   }
-  await apolloClient.mutate({
-    mutation: updateBeobById,
-    variables,
-  })
+  await apiUpdateByVariables('beob', variables)
 
-  const result = await apolloClient.query({
-    query: graphql(`
-      query saveArtIdToDbQuery($id: UUID!) {
-        aeTaxonomyById(id: $id) {
-          id
-          apByArtId {
-            id
-          }
-        }
-      }
-    `),
-    variables: { id: value },
-  })
+  // phase 5: the taxonomy's art belongs to an ap? (former apByArtId)
+  const aps =
+    (await apiFetch<{ id: string }[]>(`/ap?art_id=eq.${value}&select=id`)) ?? []
   // activeNodeArray is already loaded
-  const newApId = result?.data?.aeTaxonomyById?.apByArtId?.id
+  const newApId = aps[0]?.id
 
   // do not navigate if newApId is not found
   if (!newApId) return

@@ -1,8 +1,11 @@
+import {
+  tpopmassnSelect,
+  tpopmassnTypWerteSelect,
+  adresseSelect,
+  tpopkontrzaehlEinheitWerteSelect,
+} from '../../../../modules/selects.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -16,11 +19,9 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
@@ -106,23 +107,29 @@ interface TpopmassnQueryResult {
   }
 }
 
-interface TpopmassnZieleinheitQueryResult {
-  allTpopmassnTypWertes: {
-    nodes: {
-      id: string
-      anpflanzung: boolean | null
-    }[]
-  }
-  allEkzaehleinheits: {
-    nodes: {
-      id: string
-      tpopkontrzaehlEinheitWerteByZaehleinheitId: {
-        id: string
-        code: number | null
-        correspondsToMassnAnzTriebe: boolean | null
-        correspondsToMassnAnzPflanzen: boolean | null
-      } | null
-    }[]
+interface ZieleinheitWerte {
+  id: string
+  code: number | null
+  correspondsToMassnAnzTriebe: boolean | null
+  correspondsToMassnAnzPflanzen: boolean | null
+}
+
+/**
+ * anpflanzung flag of the massn type + the ap's zielrelevant
+ * zaehleinheit werte (former tpopmassnZieleinheitQuery)
+ */
+const fetchZieleinheit = async (apId: string | undefined, typ: number) => {
+  const [typWertes, ekzaehleinheits] = await Promise.all([
+    apiFetch<{ anpflanzung: boolean | null }[]>(
+      `/tpopmassn_typ_werte?code=eq.${typ}&select=anpflanzung`,
+    ),
+    apiFetch<{ werte: ZieleinheitWerte | null }[]>(
+      `/v_ekzaehleinheit?ap_id=eq.${apId ?? ''}&zielrelevant=eq.true&select=werte:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id&order=id.asc&limit=1`,
+    ),
+  ])
+  return {
+    isAnpflanzung: typWertes?.[0]?.anpflanzung,
+    zieleinheit: ekzaehleinheits?.[0]?.werte ?? null,
   }
 }
 
@@ -139,43 +146,44 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
   dataSource: { value: number; label: string; historic?: boolean | null }[]
   loading?: boolean
   value?: number | null | undefined
-  saveToDb: (
-    event: { target: { name?: string; value: string | number | null } },
-  ) => void
+  saveToDb: (event: {
+    target: { name?: string; value: string | number | null }
+  }) => void
   error?: string | undefined
 }>
 
 import styles from './Tpopmassn.module.css'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
-const fieldTypes: Record<string, string> = {
-  typ: 'Int',
-  beschreibung: 'String',
-  jahr: 'Int',
-  datum: 'Date',
-  bemerkungen: 'String',
-  planBezeichnung: 'String',
-  flaeche: 'Float',
-  markierung: 'String',
-  anzTriebe: 'Int',
-  anzPflanzen: 'Int',
-  anzPflanzstellen: 'Int',
-  zieleinheitEinheit: 'Int',
-  zieleinheitAnzahl: 'Int',
-  wirtspflanze: 'String',
-  herkunftPop: 'String',
-  sammeldatum: 'String',
-  vonAnzahlIndividuen: 'Int',
-  form: 'String',
-  pflanzanordnung: 'String',
-  tpopId: 'UUID',
-  bearbeiter: 'UUID',
-  planVorhanden: 'Boolean',
-}
+export const tpopmassnQueryOptions = (id: string | undefined) => ({
+  queryKey: ['tpopmassn', id],
+  queryFn: async () => {
+    const [rows, massnTypWerte, adresses, einheitWerte] = await Promise.all([
+      apiFetch<NonNullable<TpopmassnQueryResult['tpopmassnById']>[]>(
+        `/v_tpopmassn?id=eq.${id ?? ''}&select=${tpopmassnSelect},tpopmassnTypWerteByTyp:tpopmassn_typ_werte_by_typ,tpopByTpopId:tpop_by_tpop_id`,
+      ),
+      apiFetch<TpopmassnQueryResult['allTpopmassnTypWertes']['nodes']>(
+        `/tpopmassn_typ_werte?order=sort.asc&select=${tpopmassnTypWerteSelect}`,
+      ),
+      apiFetch<TpopmassnQueryResult['allAdresses']['nodes']>(
+        `/v_adresse?order=name.asc&select=${adresseSelect}`,
+      ),
+      apiFetch<TpopmassnQueryResult['allTpopkontrzaehlEinheitWertes']['nodes']>(
+        `/v_tpopkontrzaehl_einheit_werte?order=sort.asc&select=${tpopkontrzaehlEinheitWerteSelect}`,
+      ),
+    ])
+    return {
+      tpopmassnById: rows?.[0] ?? null,
+      allTpopmassnTypWertes: { nodes: massnTypWerte ?? [] },
+      allAdresses: { nodes: adresses ?? [] },
+      allTpopkontrzaehlEinheitWertes: { nodes: einheitWerte ?? [] },
+    }
+  },
+})
 
 export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -183,19 +191,11 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
   // suspense is still honoured by useQuery at runtime but is no longer part
   // of its option types; building the options outside the call keeps the
   // excess property check from complaining about it
-  const tpopmassnQueryOptions = {
-    queryKey: ['tpopmassn', tpopmassnId],
-    queryFn: async () => {
-      const result = await apolloClient.query<TpopmassnQueryResult>({
-        query,
-        variables: { id: tpopmassnId ?? '' },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
+  const tpopmassnOptions = {
+    ...tpopmassnQueryOptions(tpopmassnId),
     suspense: true,
   }
-  const { data } = useQuery(tpopmassnQueryOptions)
+  const { data } = useQuery(tpopmassnOptions)
 
   const notMassnCountUnit =
     data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
@@ -226,52 +226,19 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       // IF typ is anpflanzung
       // have to set zieleinheit_einheit to
       // ekzaehleinheit with zielrelevant = true
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-            query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    id
-                    code
-                    correspondsToMassnAnzTriebe
-                    correspondsToMassnAnzPflanzen
-                  }
-                }
-              }
-            }
-          `),
-            variables: { apId: apId ?? '', typ: (value ?? 1) as number },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          (value ?? 1) as number,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       const zieleinheitCode = zieleinheit?.code
       if (isAnpflanzung && zieleinheitCode) {
         variables.zieleinheitEinheit = zieleinheitCode
@@ -286,50 +253,19 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzTriebe') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzTriebe
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-            query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    id
-                    correspondsToMassnAnzTriebe
-                  }
-                }
-              }
-            }
-          `),
-            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          row.typ ?? 1,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzTriebe) {
         variables.zieleinheitAnzahl = exists(value) ? value : null
       }
@@ -337,127 +273,25 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     if (!notMassnCountUnit && field === 'anzPflanzen') {
       // IF zieleinheit corresponds to Anzahl Triebe
       // have to set zieleinheitAnzahl to anzPflanzen
-      let zieleinheitIdResult: {
-        data?: TpopmassnZieleinheitQueryResult | undefined
-      } | undefined
+      let isAnpflanzung: boolean | null | undefined
+      let zieleinheit: ZieleinheitWerte | null
       try {
-        zieleinheitIdResult =
-          await apolloClient.query<TpopmassnZieleinheitQueryResult>({
-            query: graphql(`
-            query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
-              allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                nodes {
-                  id
-                  anpflanzung
-                }
-              }
-              allEkzaehleinheits(
-                filter: {
-                  zielrelevant: { equalTo: true }
-                  apId: { equalTo: $apId }
-                }
-              ) {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    id
-                    correspondsToMassnAnzPflanzen
-                  }
-                }
-              }
-            }
-          `),
-            variables: { apId: apId ?? '', typ: row.typ ?? 1 },
-          })
+        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
+          apId,
+          row.typ ?? 1,
+        ))
       } catch (error) {
         return setFieldErrors((prev) => ({
           ...prev,
           [field]: (error as Error).message,
         }))
       }
-      const isAnpflanzung =
-        zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
-          ?.anpflanzung
-      const zieleinheit =
-        zieleinheitIdResult?.data?.allEkzaehleinheits?.nodes?.[0]
-          ?.tpopkontrzaehlEinheitWerteByZaehleinheitId
       if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzPflanzen) {
         variables.zieleinheitAnzahl = exists(value) ? value : null
       }
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateTpopmassn(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              ${field === 'jahr' ? '$datum: Date' : ''}
-              ${field === 'datum' ? '$jahr: Int' : ''}
-              ${field === 'typ' ? '$zieleinheitEinheit: Int' : ''}
-              ${
-                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
-                  '$zieleinheitAnzahl: Int'
-                : ''
-              }
-              $changedBy: String
-            ) {
-              updateTpopmassnById(
-                input: {
-                  id: $id
-                  tpopmassnPatch: {
-                    ${field}: $${field}
-                    ${field === 'jahr' ? 'datum: $datum' : ''}
-                    ${field === 'datum' ? 'jahr: $jahr' : ''}
-                    ${
-                      field === 'typ' ?
-                        'zieleinheitEinheit: $zieleinheitEinheit'
-                      : ''
-                    }
-                    ${
-                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
-                        'zieleinheitAnzahl: $zieleinheitAnzahl'
-                      : ''
-                    }
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                tpopmassn {
-                  id
-                  label
-                  typ
-                  tpopmassnTypWerteByTyp {
-                    id
-                    anpflanzung
-                  }
-                  beschreibung
-                  jahr
-                  datum
-                  bemerkungen
-                  planBezeichnung
-                  flaeche
-                  markierung
-                  anzTriebe
-                  anzPflanzen
-                  anzPflanzstellen
-                  zieleinheitEinheit
-                  zieleinheitAnzahl
-                  wirtspflanze
-                  herkunftPop
-                  sammeldatum
-                  vonAnzahlIndividuen
-                  form
-                  pflanzanordnung
-                  tpopId
-                  bearbeiter
-                  planVorhanden
-                  changedBy
-                }
-              }
-            }
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('tpopmassn', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
@@ -465,7 +299,9 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       }))
     }
     // invalidate tpopmassn query
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpopmassn', tpopmassnId] })
+    void tsQueryClient.invalidateQueries({
+      queryKey: ['tpopmassn', tpopmassnId],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -625,9 +461,9 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
               options={(data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
                 (node) => {
                   const { historic, ...nodeWithoutHistoric } = node
-                  return historic === null ?
-                      nodeWithoutHistoric
-                    : { ...nodeWithoutHistoric, historic }
+                  return historic === null ? nodeWithoutHistoric : (
+                      { ...nodeWithoutHistoric, historic }
+                    )
                 },
               )}
               loading={false}
@@ -652,8 +488,6 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
           key={`${tpopmassnId}${!!row.wirtspflanze}`}
           label="Wirtspflanze"
           row={row}
-          query={queryAeTaxonomies}
-          queryNodesName="allAeTaxonomies"
           saveToDb={saveToDb}
           error={fieldErrors.wirtspflanze}
         />

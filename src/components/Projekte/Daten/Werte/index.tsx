@@ -1,8 +1,8 @@
+import { apiFetch, apiUpdate } from '../../../../modules/api.ts'
+import { camelToSnake } from '../../../../modules/camelToSnake.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { upperFirst } from 'es-toolkit'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -23,8 +23,6 @@ interface WerteRow {
   sort: number | null
 }
 
-type WerteQueryResult = Record<string, WerteRow | undefined>
-
 import styles from './index.module.css'
 
 export const Component = () => {
@@ -40,41 +38,25 @@ export const Component = () => {
 
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const query = dynamicGql`
-    query werteByIdQuery($id: UUID!) {
-      ${table}ById(id: $id) {
-        id
-        code
-        text
-        sort
-      }
-    }
-  `
   const { data } = useSuspenseQuery({
     queryKey: ['werte', table, id],
     queryFn: async () => {
-      const result = await apolloClient.query<WerteQueryResult>({
-        query,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the werte tables are plain base tables — no v_ view needed
+      const rows = await apiFetch<WerteRow[]>(
+        `/${camelToSnake(table)}?id=eq.${id}&select=id,code,text,sort`,
+      )
+      return { [`${table}ById`]: rows?.[0] } as Record<string, WerteRow>
     },
   })
 
   const row: Partial<WerteRow> = data?.[`${table}ById`] ?? {}
 
-  let codeGqlType = 'Int'
   let codeFieldType = 'number'
   if (['ekAbrechnungstypWerte'].includes(table)) {
-    codeGqlType = 'String'
     codeFieldType = 'text'
   }
 
@@ -82,47 +64,11 @@ export const Component = () => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
-    const variables = {
-      id: row.id,
-      [field]: value,
-      changedBy: userName,
-    }
-
-    const typename = upperFirst(table)
     try {
-      const mutation = dynamicGql`
-          mutation updateWert(
-            $id: UUID!
-            $code: ${codeGqlType}
-            $text: String
-            $sort: Int
-            $changedBy: String
-          ) {
-            update${typename}ById(
-              input: {
-                id: $id
-                ${table}Patch: {
-                  id: $id
-                  code: $code
-                  text: $text
-                  sort: $sort
-                  changedBy: $changedBy
-                }
-              }
-            ) {
-              ${table} {
-                id
-                code
-                text
-                sort
-                changedBy
-              }
-            }
-          }
-        `
-      await apolloClient.mutate({
-        mutation,
-        variables,
+      if (!row.id) return
+      await apiUpdate(camelToSnake(table), row.id, {
+        [camelToSnake(field)]: value,
+        changed_by: userName,
       })
     } catch (error) {
       return setFieldErrors((prev) => ({

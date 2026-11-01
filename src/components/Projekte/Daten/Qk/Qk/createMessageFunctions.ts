@@ -147,9 +147,15 @@ export interface QkQueryData {
     artname: string | null
     zaehleinheit: string | null
   }>
-  zielOhneJahr?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
+  zielOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    zielsByApId: ViewNodes<ZielNode>
+  }>
   zielOhneTyp?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
-  zielOhneZiel?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
+  zielOhneZiel?: ApProjektWrapper<{
+    id: ApId
+    zielsByApId: ViewNodes<ZielNode>
+  }>
   erfkritOhneBeurteilung?: ApProjektWrapper<{
     id: ApId
     erfkritsByApId: ViewNodes<{ id: ErfkritId }>
@@ -1871,8 +1877,7 @@ export const createMessageFunctions = ({
   },
   tpopfeldkontrDatum: () => {
     const popNodes =
-      data?.tpopfeldkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
-      []
+      data?.tpopfeldkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
     const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     const tpopkontrNodes = tpopNodes
       .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
@@ -1904,8 +1909,8 @@ export const createMessageFunctions = ({
   },
   tpopfreiwkontrDatum: () => {
     const popNodes =
-      data?.tpopfreiwkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId
-        ?.nodes ?? []
+      data?.tpopfreiwkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
+      []
     const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     const tpopkontrNodes = tpopNodes
       .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])

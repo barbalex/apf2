@@ -4,10 +4,7 @@
  */
 import { nearestPoint } from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
-import { graphql } from '../gql/index.ts'
-import {
-  getApolloClientFromStore,
-} from '../store/index.ts'
+import { apiFetch } from './api.ts'
 
 export const getNearestTpop = async ({
   latLng,
@@ -16,41 +13,35 @@ export const getNearestTpop = async ({
   latLng: { lat: number; lng: number }
   apId?: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
-  const { data } = await apolloClient.query({
-    query: graphql(`
-      query getNearestTpopQuery($apId: UUID!) {
-        apById(id: $apId) {
-          id
-          popsByApId {
-            nodes {
-              id
-              tpopsByPopId(filter: { wgs84Lat: { isNull: false } }) {
-                nodes {
-                  id
-                  popId
-                  wgs84Lat
-                  wgs84Long
-                }
-              }
-            }
-          }
-        }
-      }
-    `),
-    variables: { apId: apId || '99999999-9999-9999-9999-999999999999' },
+  // phase 5: the old apById > popsByApId > tpopsByPopId chain is one
+  // query_tpop call with nested forward-relation filters
+  const tpops = await apiFetch<
+    {
+      id: string
+      pop_id: string | null
+      wgs84_lat: number
+      wgs84_long: number
+    }[]
+  >('/rpc/query_tpop?select=id,pop_id,wgs84_lat,wgs84_long', {
+    method: 'POST',
+    body: JSON.stringify({
+      p_filter: {
+        wgs84Lat: { isNull: false },
+        popByPopId: {
+          apByApId: {
+            id: { equalTo: apId || '99999999-9999-9999-9999-999999999999' },
+          },
+        },
+      },
+    }),
   })
-  const pops = data?.apById?.popsByApId?.nodes ?? []
-  const tpops = pops
-    .map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => !!t?.wgs84Lat))
-    .flat()
   const tpopPoints = featureCollection(
-    tpops.map((t) =>
-      point([t?.wgs84Lat ?? 0, t?.wgs84Long ?? 0], {
-        id: t?.id ?? '',
-        popId: t?.popId ?? null,
+    (tpops ?? []).map((t) =>
+      point([t.wgs84_lat, t.wgs84_long], {
+        id: t.id,
+        popId: t.pop_id,
       }),
     ),
   )

@@ -1,11 +1,9 @@
+import { apiFetch, apiInsert, apiUpdateByVariables } from '../api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
 
-import { queryBeob } from './queryBeob.ts'
-import { createPop } from './createPop.ts'
-import { createTpop } from './createTpop.ts'
-import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
   addNotificationAtom,
@@ -15,7 +13,6 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
-  getApolloClientFromStore,
   getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
@@ -33,18 +30,27 @@ export const createNewPopFromBeob = async ({
   projId?: string | undefined
   search: string
 }) => {
-  const apolloClient = getApolloClientFromStore()
   const tsQueryClient = getTsQueryClientFromStore()
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let beobResult
+  let beob:
+    | {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }
+    | undefined
   try {
-    beobResult = await apolloClient.query({
-      query: queryBeob,
-      variables: { id },
-    })
+    const beobs = await apiFetch<
+      {
+        datum: string | null
+        data: Record<string, string | null | undefined> | null
+        geom_point: { coordinates: number[] } | null
+      }[]
+    >(`/q_beob?id=eq.${id}&select=datum,data,geom_point`)
+    beob = beobs?.[0]
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -53,7 +59,6 @@ export const createNewPopFromBeob = async ({
       },
     })
   }
-  const beob = beobResult?.data?.beobById
   if (!beob) {
     return addNotification({
       message: 'Die Beobachtung wurde nicht gefunden',
@@ -62,7 +67,8 @@ export const createNewPopFromBeob = async ({
       },
     })
   }
-  const { geomPoint, datum, data } = beob
+
+  const { geom_point: geomPoint, datum, data } = beob
   // data is the raw InfoFlora/EVK JSON blob
   const beobData = (data ?? {}) as Record<string, string | null | undefined>
   // new Date(null) coerces to the epoch, like new Date(0)
@@ -70,32 +76,22 @@ export const createNewPopFromBeob = async ({
   const datumIsValid = isValid(datumDate)
   const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
 
-  const newGeomPoint =
-    geomPoint?.geojson ? JSON.parse(String(geomPoint.geojson)) : null
+  // geom_point arrives as GeoJSON (former geomPoint.geojson parse)
+  const newGeomPoint = geomPoint ?? null
 
   // create new pop for ap
-  let popResult
+  const newPopId = uuidv7()
+  const newTpopId = uuidv7()
   try {
-    popResult = await apolloClient.mutate({
-      mutation: createPop,
-      variables: {
-        apId,
-        geomPoint: newGeomPoint,
-        bekanntSeit,
-      },
+    await apiInsert('pop', {
+      id: newPopId,
+      ap_id: apId,
+      geom_point: newGeomPoint,
+      bekannt_seit: bekanntSeit,
     })
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
-  const pop = popResult?.data?.createPop?.pop
-  if (!pop) {
-    return addNotification({
-      message: 'Die neue Population wurde nicht erstellt',
       options: {
         variant: 'error',
       },
@@ -103,17 +99,14 @@ export const createNewPopFromBeob = async ({
   }
 
   // create new tpop for pop
-  let tpopResult
   try {
-    tpopResult = await apolloClient.mutate({
-      mutation: createTpop,
-      variables: {
-        popId: pop.id,
-        geomPoint: newGeomPoint,
-        bekannt_seit: bekanntSeit,
-        gemeinde: beobData.NOM_COMMUNE ? beobData.NOM_COMMUNE : null,
-        flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
-      },
+    await apiInsert('tpop', {
+      id: newTpopId,
+      pop_id: newPopId,
+      geom_point: newGeomPoint,
+      bekannt_seit: bekanntSeit,
+      gemeinde: beobData.NOM_COMMUNE ? beobData.NOM_COMMUNE : null,
+      flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
     })
   } catch (error) {
     return addNotification({
@@ -123,23 +116,11 @@ export const createNewPopFromBeob = async ({
       },
     })
   }
-  const tpop = tpopResult?.data?.createTpop?.tpop
-  if (!tpop?.popId) {
-    return addNotification({
-      message: 'Die neue Teil-Population wurde nicht erstellt',
-      options: {
-        variant: 'error',
-      },
-    })
-  }
 
   try {
-    await apolloClient.mutate({
-      mutation: updateBeobById,
-      variables: {
-        id,
-        tpopId: tpop.id,
-      },
+    await apiUpdateByVariables('beob', {
+      id,
+      tpopId: newTpopId,
     })
   } catch (error) {
     return addNotification({
@@ -157,9 +138,9 @@ export const createNewPopFromBeob = async ({
     `Arten`,
     apId,
     `Populationen`,
-    tpop.popId,
+    newPopId,
     `Teil-Populationen`,
-    tpop.id,
+    newTpopId,
     `Beobachtungen`,
     id,
   ]
@@ -168,14 +149,14 @@ export const createNewPopFromBeob = async ({
     ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],
-    [`Projekte`, projId, `Arten`, apId, `Populationen`, tpop.popId],
+    [`Projekte`, projId, `Arten`, apId, `Populationen`, newPopId],
     [
       `Projekte`,
       projId,
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      newPopId,
       `Teil-Populationen`,
     ],
     [
@@ -184,9 +165,9 @@ export const createNewPopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      newPopId,
       `Teil-Populationen`,
-      tpop.id,
+      newTpopId,
     ],
     [
       `Projekte`,
@@ -194,9 +175,9 @@ export const createNewPopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      newPopId,
       `Teil-Populationen`,
-      tpop.id,
+      newTpopId,
       `Beobachtungen`,
     ],
     [
@@ -205,9 +186,9 @@ export const createNewPopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      newPopId,
       `Teil-Populationen`,
-      tpop.id,
+      newTpopId,
       `Beobachtungen`,
       id,
     ],

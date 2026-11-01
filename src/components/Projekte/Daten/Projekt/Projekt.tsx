@@ -1,14 +1,11 @@
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
-import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { query } from './query.ts'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -16,6 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
+import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
 
 interface ProjektQueryResult {
   projektById?: {
@@ -25,7 +23,15 @@ interface ProjektQueryResult {
   }
 }
 
-const fieldTypes: Record<string, string> = { name: 'String' }
+export const projektQueryOptions = (projId: string | undefined) => ({
+  queryKey: ['projekt', projId],
+  queryFn: async () => {
+    const rows = await apiFetch<
+      NonNullable<ProjektQueryResult['projektById']>[]
+    >(`/v_projekt?id=eq.${projId}&select=id,name,changedBy:changed_by`)
+    return { projektById: rows?.[0] ?? null }
+  },
+})
 
 export const Component = () => {
   const { projId } = useParams()
@@ -33,21 +39,10 @@ export const Component = () => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['projekt', projId],
-    queryFn: async () => {
-      const result = await apolloClient.query<ProjektQueryResult>({
-        query,
-        variables: { id: projId },
-      })
-      if (result.error) throw result.error
-      return result.data
-    },
-  })
+  const { data } = useSuspenseQuery(projektQueryOptions(projId))
 
   const row: Partial<NonNullable<ProjektQueryResult['projektById']>> =
     data?.projektById ?? {}
@@ -63,32 +58,7 @@ export const Component = () => {
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation updateProjekt(
-              $id: UUID!
-              $${field}: ${fieldTypes[field]}
-              $changedBy: String
-            ) {
-              updateProjektById(
-                input: {
-                  id: $id
-                  projektPatch: { 
-                    ${field}: $${field}
-                    changedBy: $changedBy
-                  }
-                }
-              ) {
-                projekt {
-                  id
-                  name
-                  changedBy
-                }
-              }
-            }
-          `,
-        variables,
-      })
+      await apiUpdateByVariables('projekt', variables)
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,

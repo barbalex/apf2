@@ -1,10 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import Button from '@mui/material/Button'
+import { apiFetch } from '../../../modules/api.ts'
 
-import { query } from './query.ts'
 import { Menus } from './Menus.tsx'
 
 import styles from './index.module.css'
@@ -12,20 +11,17 @@ import styles from './index.module.css'
 export const EkfBar = () => {
   const { userId } = useParams()
   const { search } = useLocation()
-  const apolloClient = useApolloClient()
-
   // if no ekfAdresseId
   // need to fetch adresse.id for this user
   // and use that instead
   const { data: userData } = useSuspenseQuery({
     queryKey: ['ekfUser', userId],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query,
-        variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
-      })
-      if (result.error) throw result.error
-      return result.data ?? { userById: null }
+      const rows =
+        (await apiFetch<{ id: string; name: string | null }[]>(
+          `/q_user?id=eq.${userId ?? '99999999-9999-9999-9999-999999999999'}&select=id,name`,
+        )) ?? []
+      return { userById: rows[0] ?? null }
     },
   })
 

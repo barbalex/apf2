@@ -1,7 +1,7 @@
+import { apiInsert } from '../../../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -13,18 +13,6 @@ import Tooltip from '@mui/material/Tooltip'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
-
-import type { TpopmassnberId } from '../../../../models/apflora/Tpopmassnber.ts'
-import type { TpopId } from '../../../../models/apflora/Tpop.ts'
-
-interface CreateTpopmassnberResult {
-  createTpopmassnber: {
-    tpopmassnber: {
-      id: TpopmassnberId
-      tpopId: TpopId
-    }
-  }
-}
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
@@ -38,24 +26,14 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopmassnberId } = useParams()
 
-  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: { data?: CreateTpopmassnberResult | undefined } | undefined
+    const newId = uuidv7()
     try {
-      result = await apolloClient.mutate<CreateTpopmassnberResult>({
-        mutation: graphql(`
-          mutation createTpopmassnberForTpopmassnberForm($tpopId: UUID!) {
-            createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
-              tpopmassnber {
-                id
-                tpopId
-              }
-            }
-          }
-        `),
-        variables: { tpopId: tpopId ?? '' },
+      await apiInsert('tpopmassnber', {
+        id: newId,
+        tpop_id: tpopId ?? '',
       })
     } catch (error) {
       return addNotification({
@@ -71,7 +49,7 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    const id = result?.data?.createTpopmassnber?.tpopmassnber?.id
+    const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte/${id}${search}`,
     )

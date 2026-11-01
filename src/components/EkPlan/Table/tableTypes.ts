@@ -1,4 +1,4 @@
-import type { TpopFilter } from '../../../gql/graphql.ts'
+import type { TpopFilter } from '../../../modules/gqlFilterTypes.ts'
 
 import type { TpopId } from '../../../models/apflora/Tpop.ts'
 import type { PopId } from '../../../models/apflora/Pop.ts'

@@ -1,4 +1,4 @@
-import type { EkfrequenzFilter } from '../gql/graphql.ts'
+import type { EkfrequenzFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getEkfrequenzGqlFilterForTree = (_apId: string) => {

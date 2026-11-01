@@ -1,5 +1,4 @@
-import { graphql } from '../gql/index.ts'
-import { useApolloClient } from '@apollo/client/react'
+import { apiCount, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -11,8 +10,6 @@ import {
 } from '../store/index.ts'
 
 export const useWertesNavData = () => {
-  const apolloClient = useApolloClient()
-
   const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
     treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   )
@@ -33,58 +30,51 @@ export const useWertesNavData = () => {
       tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
-      const result = await apolloClient.query({
-        query: graphql(`
-          query NavWertesQuery(
-            $adressesFilter: AdresseFilter!
-            $tpopApberrelevantGrundWerteFilter: TpopApberrelevantGrundWerteFilter!
-            $ekAbrechnungstypWerteFilter: EkAbrechnungstypWerteFilter!
-            $tpopkontrzaehlEinheitWerteFilter: TpopkontrzaehlEinheitWerteFilter!
-          ) {
-            allAdresses {
-              totalCount
-            }
-            filteredAdresses: allAdresses(filter: $adressesFilter) {
-              totalCount
-            }
-            allTpopApberrelevantGrundWertes {
-              totalCount
-            }
-            filteredTpopApberrelevantGrundWertes: allTpopApberrelevantGrundWertes(
-              filter: $tpopApberrelevantGrundWerteFilter
-            ) {
-              totalCount
-            }
-            allEkAbrechnungstypWertes {
-              totalCount
-            }
-            filteredEkAbrechnungstypWertes: allEkAbrechnungstypWertes(
-              filter: $ekAbrechnungstypWerteFilter
-            ) {
-              totalCount
-            }
-            allTpopkontrzaehlEinheitWertes {
-              totalCount
-            }
-            filteredTpopkontrzaehlEinheitWertes: allTpopkontrzaehlEinheitWertes(
-              filter: $tpopkontrzaehlEinheitWerteFilter
-            ) {
-              totalCount
-            }
-          }
-        `),
-        variables: {
-          adressesFilter: adresseGqlFilterForTree,
-          tpopApberrelevantGrundWerteFilter:
-            tpopApberrelevantGrundWerteGqlFilterForTree,
-          ekAbrechnungstypWerteFilter: ekAbrechnungstypWerteGqlFilterForTree,
-          tpopkontrzaehlEinheitWerteFilter:
-            tpopkontrzaehlEinheitWerteGqlFilterForTree,
+      const [
+        adressesCount,
+        adressesFilteredCount,
+        tpopApberrelevantGrundWerteCount,
+        tpopApberrelevantGrundWerteFilteredCount,
+        ekAbrechnungstypWerteCount,
+        ekAbrechnungstypWerteFilteredCount,
+        tpopkontrzaehlEinheitWerteCount,
+        tpopkontrzaehlEinheitWerteFilteredCount,
+      ] = await Promise.all([
+        apiCount('/q_adresse'),
+        rpcCount('query_adresse', { p_filter: adresseGqlFilterForTree }),
+        apiCount('/q_tpop_apberrelevant_grund_werte'),
+        rpcCount('query_tpop_apberrelevant_grund_werte', {
+          p_filter: tpopApberrelevantGrundWerteGqlFilterForTree,
+        }),
+        apiCount('/q_ek_abrechnungstyp_werte'),
+        rpcCount('query_ek_abrechnungstyp_werte', {
+          p_filter: ekAbrechnungstypWerteGqlFilterForTree,
+        }),
+        apiCount('/q_tpopkontrzaehl_einheit_werte'),
+        rpcCount('query_tpopkontrzaehl_einheit_werte', {
+          p_filter: tpopkontrzaehlEinheitWerteGqlFilterForTree,
+        }),
+      ])
+      return {
+        allAdresses: { totalCount: adressesCount },
+        filteredAdresses: { totalCount: adressesFilteredCount },
+        allTpopApberrelevantGrundWertes: {
+          totalCount: tpopApberrelevantGrundWerteCount,
         },
-      })
-      if (result.error) throw result.error
-      // errors are thrown above, so data is defined
-      return result.data as NonNullable<typeof result.data>
+        filteredTpopApberrelevantGrundWertes: {
+          totalCount: tpopApberrelevantGrundWerteFilteredCount,
+        },
+        allEkAbrechnungstypWertes: { totalCount: ekAbrechnungstypWerteCount },
+        filteredEkAbrechnungstypWertes: {
+          totalCount: ekAbrechnungstypWerteFilteredCount,
+        },
+        allTpopkontrzaehlEinheitWertes: {
+          totalCount: tpopkontrzaehlEinheitWerteCount,
+        },
+        filteredTpopkontrzaehlEinheitWertes: {
+          totalCount: tpopkontrzaehlEinheitWerteFilteredCount,
+        },
+      }
     },
   })
 

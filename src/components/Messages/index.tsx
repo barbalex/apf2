@@ -1,13 +1,12 @@
+import { apiFetch, apiInsert } from '../../modules/api.ts'
+import { v7 as uuidv7 } from 'uuid'
 import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import { query } from './query.ts'
-import { createUsermessage } from './createUsermessage.ts'
 import { userNameAtom } from '../../store/index.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -41,14 +40,16 @@ interface UsermessagesQueryResult {
   }
 }
 
-const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  '& .MuiPaper-root': {
-    maxWidth: `${window.innerWidth * 0.8}px !important`,
-    minWidth: '80% !important',
-  },
-}))
+const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(
+  () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiPaper-root': {
+      maxWidth: `${window.innerWidth * 0.8}px !important`,
+      minWidth: '80% !important',
+    },
+  }),
+)
 
 const getAYearAgo = () => {
   const now = new Date()
@@ -61,20 +62,40 @@ const aYearAgo = getAYearAgo()
 export const Messages = () => {
   const userName = useAtomValue(userNameAtom)
 
-  const apolloClient = useApolloClient()
-
   // DO NOT use aYearAgo in queryKey, because it changes every second
   // this causes the query to refetch all the time!
   const { data, error, refetch } = useQuery({
     queryKey: ['UsermessagesQuery', userName],
     queryFn: async () => {
-      const result = await apolloClient.query<UsermessagesQueryResult>({
-        query,
-        variables: { name: userName, aYearAgo },
-        fetchPolicy: 'network-only',
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: read messages + the user's usermessages join client-side
+      const [messagesR, usermessagesR, usersR] = await Promise.all([
+        apiFetch<
+          {
+            id: string
+            message: string | null
+            time: string | null
+          }[]
+        >(
+          `/message?active=eq.true&time=gte.${aYearAgo}&select=id,message,time&order=time.asc`,
+        ),
+        apiFetch<{ message_id: string }[]>(
+          `/usermessage?user_name=eq.${encodeURIComponent(userName)}&select=message_id:message_id`,
+        ),
+        apiFetch<{ id: string; name: string | null }[]>('/user?select=id,name'),
+      ])
+      const readIds = new Set((usermessagesR ?? []).map((u) => u.message_id))
+      const nodes = (messagesR ?? []).map((m) => ({
+        id: m.id,
+        message: m.message,
+        time: m.time,
+        usermessagesByMessageId: {
+          totalCount: readIds.has(m.id) ? 1 : 0,
+        },
+      }))
+      return {
+        allMessages: { nodes },
+        allUsers: { nodes: usersR ?? [] },
+      } as unknown as UsermessagesQueryResult
     },
   })
   // ensure username exists
@@ -90,9 +111,10 @@ export const Messages = () => {
   const onClickReadAll = async () => {
     await Promise.all(
       unreadMessages.map(async (message) => {
-        await apolloClient.mutate({
-          mutation: createUsermessage,
-          variables: { userName, id: message.id },
+        await apiInsert('usermessage', {
+          id: uuidv7(),
+          user_name: userName,
+          message_id: message.id,
         })
       }),
     )

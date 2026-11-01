@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-import { useQuery } from '@apollo/client/react'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
-import { graphql } from '../../../gql/index.ts'
+import { useQuery as useTanstackQuery } from '@tanstack/react-query'
 
+import { apiFetch } from '../../../modules/api.ts'
 import { treeApFilterAtom } from '../../../store/index.ts'
 
 import type { ApId } from '../../../models/apflora/index.ts'
@@ -23,19 +23,18 @@ export const ApFilterWarning = () => {
   const { apId } = useParams()
   const apFilter = useAtomValue(treeApFilterAtom)
 
-  // same document as the former ApFilterController
-  // (kept identical so codegen knows it)
-  const { data, loading } = useQuery<ApFilterWarningQueryResult>(graphql(`
-    query apFilterControllerQuery($id: UUID!) {
-      apById(id: $id) {
-        id
-        bearbeitung
-      }
-    }
-  `), {
-    variables: { id: apId },
-    skip: !apFilter || !apId,
+  const { data, isLoading } = useTanstackQuery({
+    queryKey: ['apFilterWarning', apId],
+    enabled: !!apFilter && !!apId,
+    queryFn: async () => {
+      const rows =
+        (await apiFetch<{ id: ApId; bearbeitung: number | null }[]>(
+          `/q_ap?id=eq.${apId}&select=id,bearbeitung`,
+        )) ?? []
+      return { apById: rows[0] ?? null } as ApFilterWarningQueryResult
+    },
   })
+  const loading = isLoading
 
   // only warn once the ap is loaded and known to be no ap.
   // Otherwise the warning would flicker while the query loads.
@@ -46,9 +45,9 @@ export const ApFilterWarning = () => {
 
   // dismissal only counts for the ap it was dismissed for:
   // opening another ap is a new situation
-  const [dismissedForApId, setDismissedForApId] = useState<
-    string | undefined
-  >(undefined)
+  const [dismissedForApId, setDismissedForApId] = useState<string | undefined>(
+    undefined,
+  )
   const dismissed = dismissedForApId === apId
 
   if (!apFilter || !apId || !isNoAp || dismissed) return null

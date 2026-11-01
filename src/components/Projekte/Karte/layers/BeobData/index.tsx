@@ -3,20 +3,18 @@ import type { ReactNode } from 'react'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { useApolloClient } from '@apollo/client/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { apiFetch } from '../../../../../modules/api.ts'
 
 import { exists } from '../../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 import { Spinner } from '../../../../shared/Spinner.tsx'
 import { Field } from './Field.tsx'
-import { beob } from '../../../../shared/fragments.ts'
 import {
   sortedBeobFieldsAtom,
   setSortedBeobFieldsAtom,
@@ -31,7 +29,7 @@ import styles from './index.module.css'
 
 interface BeobRow {
   id: BeobId
-  data: string | null
+  data: Record<string, ReactNode> | null
   absenz: boolean | null
 }
 
@@ -52,8 +50,6 @@ const topFieldNames = [
 ]
 
 export const Data = ({ id }: DataProps) => {
-  const apolloClient = useApolloClient()
-
   const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
   const setSortedBeobFields = useSetAtom(setSortedBeobFieldsAtom)
 
@@ -86,26 +82,19 @@ export const Data = ({ id }: DataProps) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () => {
-      const result = await apolloClient.query<BeobByIdQueryResult>({
-        query: dynamicGql`
-          query beobByIdQueryForBeobLayer($id: UUID!) {
-            beobById(id: $id) {
-              ...BeobFields
-            }
-          }
-          ${beob}
-        `,
-        variables: {
-          id,
-        },
-      })
-      if (result.error) throw result.error
-      return result.data
+      // phase 5: the raw InfoFlora/EVK jsonb blob arrives as an object
+      const rows =
+        (await apiFetch<{ data: Record<string, ReactNode> | null }[]>(
+          `/beob?id=eq.${id}&select=data`,
+        )) ?? []
+      return {
+        beobById: rows[0] ?? null,
+      } as unknown as BeobByIdQueryResult
     },
   })
 
   const row = data?.beobById ?? null
-  const rowData: Record<string, ReactNode> = row?.data ? JSON.parse(row.data) : {}
+  const rowData: Record<string, ReactNode> = row?.data ?? {}
 
   const topFields = Object.entries(rowData)
     .filter(([, value]) => exists(value))

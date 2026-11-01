@@ -1,74 +1,35 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
-import { useApolloClient } from '@apollo/client/react'
 
+import { apiFetch } from '../../../../modules/api.ts'
 import { exportModule } from '../../../../modules/export.ts'
-
-import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
-interface TPopOhneapberichtrelevantQueryResult {
-  allVTpopOhneapberichtrelevants: {
-    nodes: {
-      artname: string | null
-      pop_nr: number | null
-      pop_name: string | null
-      id: TpopId
-      nr: number | null
-      gemeinde: string | null
-      flurname: string | null
-      apber_relevant: number | null
-      apber_relevant_grund: string | null
-      lv95X: number | null
-      lv95Y: number | null
-    }[]
-  }
-}
-
 export const TPopOhneApberRelevant = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const apolloClient = useApolloClient()
-
   const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPopOhneApberRelevant = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: TPopOhneapberichtrelevantQueryResult | undefined } | undefined
+    let rows: Record<string, unknown>[] = []
     try {
-      result = await apolloClient.query<TPopOhneapberichtrelevantQueryResult>({
-        query: graphql(`
-              query viewTpopOhneapberichtrelevants {
-                allVTpopOhneapberichtrelevants {
-                  nodes {
-                    artname
-                    pop_nr: popNr
-                    pop_name: popName
-                    id
-                    nr
-                    gemeinde
-                    flurname
-                    apber_relevant: apberRelevant
-                    apber_relevant_grund: apberRelevantGrund
-                    lv95X: x
-                    lv95Y: y
-                  }
-                }
-              }
-            `),
-      })
+      rows =
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_tpop_ohneapberichtrelevant?select=*`,
+        )) ?? []
     } catch (error) {
       addNotification({
         message: (error as Error).message,
-        options: { variant: 'error' },
+        options: {
+          variant: 'error',
+        },
       })
     }
     setQueryState('verarbeite...')
-    const rows = result?.data?.allVTpopOhneapberichtrelevants?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({

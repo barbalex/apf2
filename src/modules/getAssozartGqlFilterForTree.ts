@@ -1,4 +1,4 @@
-import type { AssozartFilter } from '../gql/graphql.ts'
+import type { AssozartFilter } from '../modules/gqlFilterTypes.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
 export const getAssozartGqlFilterForTree = (_apId: string) => {

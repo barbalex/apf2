@@ -3,15 +3,13 @@ import { test, expect } from '@playwright/test'
 test.describe('Aktionsplan form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(
-      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
+      '/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-735d-8197-b6db29e70db3',
     )
     await page.waitForLoadState('networkidle')
   })
 
-  test('has Title Aktionsplan', async ({ page }) => {
-    await expect(page.locator('[data-id=form-title]')).toContainText(
-      'Aktionsplan',
-    )
+  test('has Title Art', async ({ page }) => {
+    await expect(page.locator('[data-id=form-title]')).toContainText('Art')
   })
 
   // test('shows testdata-message', async ({ page }) => {
