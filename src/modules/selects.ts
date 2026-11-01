@@ -107,6 +107,6 @@ export const tpopkontrzaehlMethodeWerteSelect =
 export const tpopmassnErfbeurtWerteSelect =
   'id,code,text,sort,historic,changedBy:changed_by'
 export const tpopmassnTypWerteSelect =
-  'id,code,text,sort,ansiedlung,anpflanzung,historic,changedBy:changed_by'
+  'id,value:code,label:text,sort,ansiedlung,anpflanzung,historic,changedBy:changed_by'
 export const zielTypWerteSelect =
   'id,code,text,sort,historic,changedBy:changed_by'
