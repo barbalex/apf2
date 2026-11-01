@@ -17,8 +17,6 @@ Just say the word when you want the teardown started, or if anything else surfac
 
 ---
 
-vermehrung-style api-tests harness (mints HS256 JWTs per role, vitest) to test RLS through PostgREST directly.
-
 ---
 
 ---
