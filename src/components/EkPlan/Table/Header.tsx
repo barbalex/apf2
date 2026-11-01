@@ -85,6 +85,7 @@ export const EkplanTableHeader = ({
             key={`yearsColumn/${year}`}
             column={year}
             tpopFilter={tpopFilter}
+            firstYear={years[0] ?? year}
           />
         ))}
       </div>

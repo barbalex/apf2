@@ -3,9 +3,9 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { apiFetch } from '../../../modules/api.ts'
+import { useQueryClient } from '@tanstack/react-query'
 
+import { useEkPlanYearCounts } from './useEkPlanYearCounts.ts'
 import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredYearAtom,
@@ -28,9 +28,11 @@ const anchorOrigin = {
 export const CellHeaderYear = ({
   column,
   tpopFilter,
+  firstYear,
 }: {
   column: number
   tpopFilter: Record<string, unknown>
+  firstYear: number
 }) => {
   const tsQueryClient = useQueryClient()
 
@@ -44,104 +46,7 @@ export const CellHeaderYear = ({
   const filterEkplanYear = useAtomValue(ekPlanFilterEkplanYearAtom)
   const setFilterEkplanYear = useSetAtom(ekPlanSetFilterEkplanYearAtom)
 
-  const kontrFilter = {
-    ...tpopFilter,
-    tpopkontrsByTpopId: { some: { jahr: { equalTo: column } } },
-  }
-  const ansiedlungFilter = {
-    ...tpopFilter,
-    tpopmassnsByTpopId: {
-      some: {
-        tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
-        jahr: { equalTo: column },
-      },
-    },
-  }
-  const ekplanFilter = {
-    ...tpopFilter,
-    ekplansByTpopId: { some: { jahr: { equalTo: column } } },
-  }
-
-  interface TpopCountWithKontrInYear {
-    totalCount: number
-  }
-
-  interface TpopCountWithAnsiedlungsInYear {
-    totalCount: number
-  }
-
-  interface TpopCountWithEkplanInYear {
-    totalCount: number
-  }
-
-  interface TpopQueryForCellHeaderYearResult {
-    tpopCountWithKontrInYear: TpopCountWithKontrInYear
-    tpopCountWithAnsiedlungsInYear: TpopCountWithAnsiedlungsInYear
-    tpopCountWithEkplanInYear: TpopCountWithEkplanInYear
-  }
-
-  const { data } = useSuspenseQuery({
-    queryKey: [
-      'tpopCountsForYear',
-      column,
-      kontrFilter,
-      ansiedlungFilter,
-      ekplanFilter,
-    ],
-    queryFn: async () => {
-      // phase 5: three rpcCount calls; the reverse `some` semantics
-      // (tpop matches filter AND has a child in the year) become child
-      // queries with the tpop filter nested into tpopByTpopId
-      const tpopOf = (filter: object) => ({
-        ...filter,
-        tpopByTpopId: {
-          ...((filter as { tpopByTpopId?: object }).tpopByTpopId ?? {}),
-          ...tpopFilter,
-        },
-      })
-      const distinctTpops = async (url: string, p_filter: object) => {
-        const rows =
-          (await apiFetch<{ tpop_id: string }[]>(url, {
-            method: 'POST',
-            body: JSON.stringify({ p_filter }),
-          })) ?? []
-        return new Set(rows.map((r) => r.tpop_id)).size
-      }
-      const [kontrCount, ansiedlungCount, ekplanCount] = await Promise.all([
-        distinctTpops(
-          '/rpc/query_tpopkontr?select=tpop_id',
-          tpopOf({ jahr: { equalTo: column } }),
-        ),
-        distinctTpops(
-          '/rpc/query_tpopmassn?select=tpop_id',
-          tpopOf({
-            jahr: { equalTo: column },
-            tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
-          }),
-        ),
-        (async () => {
-          // ekplan has no query_ RPC — resolve tpop ids of the filter first
-          const tpops =
-            (await apiFetch<{ id: string }[]>('/rpc/query_tpop?select=id', {
-              method: 'POST',
-              body: JSON.stringify({ p_filter: tpopFilter }),
-            })) ?? []
-          if (!tpops.length) return 0
-          const ids = tpops.map((t) => t.id)
-          const plans =
-            (await apiFetch<{ tpop_id: string }[]>(
-              `/ekplan?jahr=eq.${column}&tpop_id=in.(${ids.join(',')})&select=tpop_id`,
-            )) ?? []
-          return new Set(plans.map((p) => p.tpop_id)).size
-        })(),
-      ])
-      return {
-        tpopCountWithKontrInYear: { totalCount: kontrCount },
-        tpopCountWithAnsiedlungsInYear: { totalCount: ansiedlungCount },
-        tpopCountWithEkplanInYear: { totalCount: ekplanCount },
-      } as TpopQueryForCellHeaderYearResult
-    },
-  })
+  const { data } = useEkPlanYearCounts(tpopFilter, firstYear)
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -153,17 +58,17 @@ export const CellHeaderYear = ({
   const yearHasKontrollen =
     filterKontrolleYear && filterKontrolleYear !== column ?
       false
-    : data.tpopCountWithKontrInYear.totalCount > 0
+    : (data.kontrTpopsByYear.get(column)?.size ?? 0) > 0
 
   const yearHasAnsiedlungen =
     filterAnsiedlungYear && filterAnsiedlungYear !== column ?
       false
-    : data.tpopCountWithAnsiedlungsInYear.totalCount > 0
+    : (data.ansiedlungTpopsByYear.get(column)?.size ?? 0) > 0
 
   const yearHasEkplan =
     filterEkplanYear && filterEkplanYear !== column ?
       false
-    : data.tpopCountWithEkplanInYear.totalCount > 0
+    : (data.ekplanTpopsByYear.get(column)?.size ?? 0) > 0
 
   const closeMenu = () => setAnchorEl(null)
   const onClickCell = (e: React.MouseEvent) =>
