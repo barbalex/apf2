@@ -192,6 +192,12 @@ Opened (31.10.2026):
 
 compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessThan/greaterThan), createGetGemeinde, createKarteHelpers, createApberForYear, createApberForApFromAp — all applied + NOTIFY; every new RPC verified 200 through production PostgREST with a minted manager JWT (query_ap lessThan, get_gemeinde \Zürich\, all 4 karte helpers, both print RPCs returning full trees, jber_abc, v_q views). Earlier applies: 31.10.2026 createComputedViews.sql + createQueryRpcs.sql + compileFilter.sql. Any future DDL on the VPS: `docker compose exec -T db psql -U postgres -d apflora < sql/...` then `NOTIFY pgrst, 'reload schema'` (PostgREST caches the schema).
 
+## Go-live readiness (01.11.2026, evening)
+
+- master + apflora branch pushed and in sync: all of today's fixes included (Jber print bulk RPC, dead-session logout, EkPlan enums/Art column/year filters, Ekfrequenz form radios, apber print flash, tree options menu, CodeQL fix).
+- **VPS SQL complete and verified through production PostgREST (01.11.2026 evening): compileFilter re-applied with reverse relations (`some`) + notIn + label-isNull; apber_charts_bulk live; regression probes all 200.** Nothing further pending on the DB side.
+- remaining: `npm run deploy` from master, then watch production. Rollback path unchanged: redeploy the previous build; apf_graphql is still running.
+
 ## Phase 6 — Cutover & cleanup (after the new frontend is deployed and verified in prod)
 
 - remove PostGraphile containers (`backend/`, `backend-dev/`), `graphql/` dir, `apollo.config.cjs`, `codegen.ts`, schema-dump script.
