@@ -21,6 +21,9 @@ import {
   ekPlanFilterLv95XAtom,
   ekPlanFilterLv95YAtom,
   ekPlanFilterEkfKontrolleurAtom,
+  ekPlanFilterEkfrequenzAtom,
+  ekPlanFilterEkfrequenzStartjahrAtom,
+  ekPlanFilterEkAbrechnungstypAtom,
   ekPlanSetFilterApAtom,
   ekPlanSetFilterPopNrAtom,
   ekPlanSetFilterPopNameAtom,
@@ -33,6 +36,9 @@ import {
   ekPlanSetFilterLv95XAtom,
   ekPlanSetFilterLv95YAtom,
   ekPlanSetFilterEkfKontrolleurAtom,
+  ekPlanSetFilterEkfrequenzAtom,
+  ekPlanSetFilterEkfrequenzStartjahrAtom,
+  ekPlanSetFilterEkAbrechnungstypAtom,
   ekPlanSetFilterEmptyEkfrequenzAtom,
   ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
 } from '../../../../store/index.ts'
@@ -50,6 +56,9 @@ const filterAtomMap = {
   lv95X: ekPlanFilterLv95XAtom,
   lv95Y: ekPlanFilterLv95YAtom,
   ekfKontrolleur: ekPlanFilterEkfKontrolleurAtom,
+  ekfrequenz: ekPlanFilterEkfrequenzAtom,
+  ekfrequenzStartjahr: ekPlanFilterEkfrequenzStartjahrAtom,
+  ekAbrechnungstyp: ekPlanFilterEkAbrechnungstypAtom,
 }
 
 const setFilterAtomMap = {
@@ -65,6 +74,9 @@ const setFilterAtomMap = {
   lv95X: ekPlanSetFilterLv95XAtom,
   lv95Y: ekPlanSetFilterLv95YAtom,
   ekfKontrolleur: ekPlanSetFilterEkfKontrolleurAtom,
+  ekfrequenz: ekPlanSetFilterEkfrequenzAtom,
+  ekfrequenzStartjahr: ekPlanSetFilterEkfrequenzStartjahrAtom,
+  ekAbrechnungstyp: ekPlanSetFilterEkAbrechnungstypAtom,
 }
 
 const valForStore = (valPassed: string): string | null => {
@@ -109,6 +121,9 @@ export const TextFilter = ({
 
   const filterAtom = filterAtomMap[name as keyof typeof filterAtomMap]
   const setFilterAtom = setFilterAtomMap[name as keyof typeof setFilterAtomMap]
+  // hooks must run unconditionally, so the fallback atoms keep them valid
+  // for unmapped columns - which render nothing below instead of silently
+  // writing another column's filter (the old fallback wrote the Art filter)
   const storeValue = useAtomValue(filterAtom ?? ekPlanFilterApAtom)
   const storeSetFunction = useSetAtom(setFilterAtom ?? ekPlanSetFilterApAtom)
 
@@ -164,6 +179,8 @@ export const TextFilter = ({
       onBlur({ target: { value: (event.target as HTMLInputElement).value } })
     }
   }
+
+  if (!filterAtom || !setFilterAtom) return null
 
   return (
     <FormControl>
