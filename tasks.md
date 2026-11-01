@@ -20,3 +20,7 @@ Just say the word when you want the teardown started, or if anything else surfac
 vermehrung-style api-tests harness (mints HS256 JWTs per role, vitest) to test RLS through PostgREST directly.
 
 ---
+
+**Deploy gotcha (01.11.2026 go-live):** after a Vercel rollback (promoting an old deployment), apflora.ch keeps its domain aliases pinned to that promoted deployment — subsequent `npm run deploy` runs build successfully (Ready, Production) but never reclaim the domain. Fix: `npx vercel promote <newest-deployment-url> --scope gabrielsoftware`. After any rollback, the next deploy must be promoted manually. Verified live: apflora.ch serves 1.137.19/postgrest after promoting.
+
+---
