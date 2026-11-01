@@ -175,9 +175,19 @@ BEGIN
             v_parts := v_parts || ARRAY[format(
               'apflora.%s(%s) IS NOT DISTINCT FROM %L', v_label_fn, p_alias, v_lit
             )];
+          WHEN 'isNull' THEN
+            IF v_lit = 'true' THEN
+              v_parts := v_parts || ARRAY[format(
+                'apflora.%s(%s) IS NULL', v_label_fn, p_alias
+              )];
+            ELSE
+              v_parts := v_parts || ARRAY[format(
+                'apflora.%s(%s) IS NOT NULL', v_label_fn, p_alias
+              )];
+            END IF;
           ELSE
             RAISE EXCEPTION
-              'compile_filter: unsupported operator "%" on label (supported: includes, includesInsensitive, equalTo, distinctFrom, notDistinctFrom)',
+              'compile_filter: unsupported operator "%" on label (supported: includes, includesInsensitive, equalTo, distinctFrom, notDistinctFrom, isNull)',
               v_op;
         END CASE;
       END LOOP;
@@ -282,6 +292,18 @@ BEGIN
                 '%s = ANY (array[%s]::%s[])',
                 v_expr, array_to_string(v_lits, ', '), v_col_type
               )];
+            WHEN 'notIn' THEN
+              IF jsonb_typeof(v_op_value) <> 'array' THEN
+                RAISE EXCEPTION 'compile_filter: "notIn" expects an array';
+              END IF;
+              v_lits := ARRAY(
+                SELECT format('%L', x)
+                FROM jsonb_array_elements_text(v_op_value) AS x
+              );
+              v_parts := v_parts || ARRAY[format(
+                'NOT (%s = ANY (array[%s]::%s[]))',
+                v_expr, array_to_string(v_lits, ', '), v_col_type
+              )];
             WHEN 'isNull' THEN
               IF v_lit = 'true' THEN
                 v_parts := v_parts || ARRAY[
@@ -320,7 +342,7 @@ BEGIN
               )];
             ELSE
               RAISE EXCEPTION
-                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThan, greaterThanOrEqualTo, lessThan, lessThanOrEqualTo, in, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
+                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThan, greaterThanOrEqualTo, lessThan, lessThanOrEqualTo, in, notIn, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
                 v_op, p_table, v_col;
           END CASE;
         END LOOP;

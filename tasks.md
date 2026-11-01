@@ -205,7 +205,8 @@ compileFilter (re-apply: computed columns, labelEk/labelEkf, distinctFrom, lessT
 
 ---
 
-Opening EK-Planung (http://localhost:5173/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/EK-Planung) fails. 1. error message in Art wählen field, see image. 2. Error in console log:
+- [x] **EK-Planung broken: ChooseAp's query_ap call 400 (01.11.2026, user-reported).** Two gaps in compile_filter, both fixed in `sql/postgrest/compileFilter.sql` (applied to dev; **compileFilter.sql changed again — re-apply on the VPS with the next deploy**): (a) the `notIn` operator (ChooseAp excludes already-chosen aps) did not exist — added as the mirrored `NOT (= ANY(...))` of `in`; (b) the label-function branch (ap.label is resolved via `apflora.ap_label()`) only knew the text operators — added `isNull`/`IS NOT NULL` (ChooseAp's no-input filter is `label isNull false`). Verified: both exact request shapes return option lists; EK-Planung page renders fully (753 tpops table), zero errors. Playwright 26/26, typecheck 0, lint 0.
+  - was reported as: Opening EK-Planung (http://localhost:5173/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/EK-Planung) fails. 1. error message in Art wählen field, see image. 2. Error in console log:
 
 POST http://localhost:3000/rpc/query_ap?select=value:id,label 400 (Bad Request)
 (anonymous) @ api.ts:94
@@ -227,4 +228,5 @@ await in (anonymous)
 
 ---
 
-apber loading (https://apflora.ch/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-7610-8d5d-2b343c4334f5): before the print loads, a message flashes (something like 'sorry, not enough data'). Should not happen
+- [x] **single-Art AP-Bericht print: "Sorry, es gibt nicht ausreichend Daten" flashed during load (01.11.2026, user-reported).** ApberForApFromAp renders ApberForAp before its query resolves — `node` undefined hits ApberForAp's no-data fallback. Gated with the Spinner while isLoading (same as ApberForYear). Verified live: print loads without the flash, "Jahresbericht 2025" renders.
+  - was reported as: apber loading (https://apflora.ch/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-7610-8d5d-2b343c4334f5): before the print loads, a message flashes (something like 'sorry, not enough data'). Should not happen

@@ -8,6 +8,7 @@ import type {
   ApberForApJberAbcNode,
 } from '../ApberForAp/types.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../shared/Spinner.tsx'
 
 // result type of the apByIdJahr query (apByIdJahr.ts)
 interface ApByIdJahrQueryResult {
@@ -19,7 +20,7 @@ interface ApByIdJahrQueryResult {
 export const Component = () => {
   const { apberId, apId } = useParams()
 
-  const { data, error } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
       const rows = await apiFetch<{ id: string; jahr: number | null }[]>(
@@ -44,6 +45,9 @@ export const Component = () => {
   const jahr = data?.jahr
 
   if (error) return `Fehler: ${error.message}`
+
+  // without this the no-data message flashes while the tree loads
+  if (isLoading) return <Spinner />
 
   return (
     <ErrorBoundary>
