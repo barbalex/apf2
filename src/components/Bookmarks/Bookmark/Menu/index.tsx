@@ -6,7 +6,6 @@ import MuiMenu, { type MenuProps as MuiMenuProps } from '@mui/material/Menu'
 import { styled } from '@mui/material/styles'
 import { BsCaretDown } from 'react-icons/bs'
 import { useResizeDetector } from 'react-resize-detector'
-import { motion } from 'framer-motion'
 
 import { Item } from './Item.tsx'
 import { Title } from './Title/index.tsx'
@@ -15,7 +14,6 @@ import {
   treeNodeLabelFilterAtom,
   store,
 } from '../../../../store/index.ts'
-import { usePrevious } from '../../../../modules/usePrevious.ts'
 
 import styles from './index.module.css'
 
@@ -45,7 +43,6 @@ export const Menu = ({ navData }: { navData: NavData }) => {
   const filterValue = activeFilterTable ? (nodeLabelFilter[activeFilterTable] ?? '') : ''
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const previousAnchorEl = usePrevious(anchorEl)
   const open = Boolean(anchorEl)
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorEl(event.currentTarget)
@@ -106,17 +103,13 @@ export const Menu = ({ navData }: { navData: NavData }) => {
           ref={filterInputRef ?? undefined}
           setTitleWidth={setTitleWidth}
         />
-        <motion.div
+        <div
           ref={ref}
-          style={{ minWidth: titleWidth ?? 'unset' }}
-          initial={{
-            marginTop:
-              previousAnchorEl === null ? 40
-              : filterInputIsVisible ? 40
-              : 100,
+          className={styles.items}
+          style={{
+            minWidth: titleWidth ?? 'unset',
+            marginTop: filterInputIsVisible ? 100 : 40,
           }}
-          animate={{ marginTop: filterInputIsVisible ? 100 : 40 }}
-          transition={{ duration: 0.2, delay: 0, ease: 'linear' }}
         >
           {navData.menus.map((menu) => (
             <Item
@@ -126,7 +119,7 @@ export const Menu = ({ navData }: { navData: NavData }) => {
               onClose={onClose}
             />
           ))}
-        </motion.div>
+        </div>
       </StyledMenu>
     </>
   )
