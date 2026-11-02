@@ -3,10 +3,22 @@ import type { ReactNode } from 'react'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import type { DragEndEvent } from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { useQuery } from '@tanstack/react-query'
-import { arrayMoveImmutable } from 'array-move'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { apiFetch } from '../../../../../modules/api.ts'
 
@@ -119,31 +131,23 @@ export const Data = ({ id }: DataProps) => {
     // console.log('Beob, useEffect, adding additional keys: ', additionalKeys)
   }, [keys, setSortedBeobFields, sortedBeobFields])
 
-  const moveField = (dragIndex: number, hoverIndex: number) => {
-    // get item from keys
-    const itemBeingDragged = keys[dragIndex]
-    const itemBeingHovered = keys[hoverIndex]
-    // move from dragIndex to hoverIndex
-    // in sortedBeobFields
-    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged ?? '')
-    const toIndex = sortedBeobFields.indexOf(itemBeingHovered ?? '')
-    // catch some edge cases
-    if (fromIndex === toIndex) return
-    if (fromIndex === -1) return
-    if (toIndex === -1) return
-    // move
-    const newArray = arrayMoveImmutable(sortedBeobFields, fromIndex, toIndex)
-    setSortedBeobFields(newArray)
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return
+    const fromIndex = sortedBeobFields.indexOf(String(active.id))
+    const toIndex = sortedBeobFields.indexOf(String(over.id))
+    if (fromIndex === -1 || toIndex === -1) return
+    setSortedBeobFields(arrayMove(sortedBeobFields, fromIndex, toIndex))
   }
 
-  const renderField = (field: [string, ReactNode], index: number) => (
-    <Field
-      key={field[0]}
-      label={field[0]}
-      value={field[1]}
-      index={index}
-      moveField={moveField}
-    />
+  // distance: 5 keeps links inside the values clickable — a plain click
+  // never starts a drag
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
 
   if (!row) return null
@@ -184,12 +188,25 @@ export const Data = ({ id }: DataProps) => {
             Daten
           </AccordionSummary>
           <AccordionDetails className={styles.dataDetails}>
-            <DndProvider
-              backend={HTML5Backend}
-              context={window}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={onDragEnd}
             >
-              {fields.map((field, i) => renderField(field, i))}
-            </DndProvider>
+              <SortableContext
+                items={keys}
+                strategy={verticalListSortingStrategy}
+              >
+                {fields.map(([key, value]) => (
+                  <Field
+                    key={key}
+                    id={key}
+                    label={key}
+                    value={value}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
           </AccordionDetails>
         </Accordion>
       </div>
