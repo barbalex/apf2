@@ -3,7 +3,6 @@
  * Stattdessen wird tabelle ch_administrative_units ausgewertet
  * Diese Methode behalten - könnte künftig nützlich sein
  */
-import axios from 'redaxios'
 
 import {
   store,
@@ -22,9 +21,10 @@ export const getGemeindeForKoord = async ({
   lv95Y: number
 }) => {
   const url = `https://api3.geo.admin.ch/rest/services/api/MapServer/identify?geometryType=esriGeometryPoint&geometry=${lv95X},${lv95Y}&imageDisplay=1391,1070,96&mapExtent=548945.5,147956,549402,148103.5&tolerance=0&layers=all:ch.swisstopo-vd.geometa-gemeinde&returnGeometry=false&sr=2056`
-  let result
+  let result: string | undefined
   try {
-    result = await axios.get(url)
+    const res = await fetch(url)
+    result = await res.text()
   } catch (error) {
     return addNotification({
       message: (error as Error).message,
@@ -33,10 +33,9 @@ export const getGemeindeForKoord = async ({
       },
     })
   }
-  const data = result?.data
   const gemeindename =
-    data ?
-      (JSON.parse(data)?.results?.[0]?.attributes?.gemeindename ?? null)
+    result ?
+      (JSON.parse(result)?.results?.[0]?.attributes?.gemeindename ?? null)
     : null
   return gemeindename
 }

@@ -6,8 +6,6 @@ import L from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
-import axios from 'redaxios'
-import type { Response } from 'redaxios'
 import { apiFetch } from '../../../../modules/api.ts'
 
 import { Popup } from '../layers/Popup.js'
@@ -15,7 +13,6 @@ import type { LayerData } from '../layers/Popup.js'
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
 import { overlays } from '../overlays.ts'
 import { fetchWmsData } from './fetchWmsData.ts'
-import type { RedaxiosError } from './fetchWmsData.ts'
 import { layersDataFromRequestData } from './layersDataFromRequestData.ts'
 
 import {
@@ -195,8 +192,7 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
-      let res: Response<string> | undefined
-      let failedToFetch = false
+      let wmsData: string | undefined
       try {
         const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
@@ -215,55 +211,30 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios<string>({
-          method: 'get',
-          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
-          params,
-        })
+        const query = new URLSearchParams(
+          Object.entries(params).map(([key, value]) => [key, String(value)]),
+        )
+        const res = await fetch(
+          `https://wms.prod.qgiscloud.com/FNS/${apId}?${query}`,
+        )
+        // 406: user clicked where no massn exists
+        if (res.status !== 406) {
+          if (!res.ok) throw new Error(`GIS-Server: Status ${res.status}`)
+          wmsData = await res.text()
+        }
       } catch (error) {
-        // redaxios rejections are response-like objects
-        // augmented with optional request and response fields
-        const axiosError = error as RedaxiosError
-        console.log({
-          error: axiosError,
-          errorToJSON: axiosError?.toJSON?.(),
-          res,
+        console.error('MassnahmenFlaechen:', error)
+        addNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+          options: {
+            variant: 'info',
+          },
         })
-        if (axiosError.status == 406) {
-          // user clicked where no massn exists
-        } else if (axiosError.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('error.response.data', axiosError.response.data)
-          console.error('error.response.status', axiosError.response.status)
-          console.error('error.response.headers', axiosError.response.headers)
-          failedToFetch = true
-        } else if (axiosError.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.error('error.request:', axiosError.request)
-          failedToFetch = true
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('error.message', axiosError.message)
-          failedToFetch = true
-        }
-        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
-          failedToFetch = true
-        }
-        if (failedToFetch)
-          addNotification({
-            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
-            options: {
-              variant: 'info',
-            },
-          })
       }
-      if (!failedToFetch && res?.data) {
+      if (wmsData) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
-          parser.parseFromString(res.data, 'text/html'),
+          parser.parseFromString(wmsData, 'text/html'),
         )
         // do not open empty popups
         if (dataArray.length) {
@@ -274,8 +245,7 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenLinien')) {
-      let res: Response<string> | undefined
-      let failedToFetch = false
+      let wmsData: string | undefined
       try {
         const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
@@ -294,55 +264,30 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios<string>({
-          method: 'get',
-          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
-          params,
-        })
+        const query = new URLSearchParams(
+          Object.entries(params).map(([key, value]) => [key, String(value)]),
+        )
+        const res = await fetch(
+          `https://wms.prod.qgiscloud.com/FNS/${apId}?${query}`,
+        )
+        // 406: user clicked where no massn exists
+        if (res.status !== 406) {
+          if (!res.ok) throw new Error(`GIS-Server: Status ${res.status}`)
+          wmsData = await res.text()
+        }
       } catch (error) {
-        // redaxios rejections are response-like objects
-        // augmented with optional request and response fields
-        const axiosError = error as RedaxiosError
-        console.log({
-          error: axiosError,
-          errorToJSON: axiosError?.toJSON?.(),
-          res,
+        console.error('MassnahmenLinien:', error)
+        addNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+          options: {
+            variant: 'info',
+          },
         })
-        if (axiosError.status == 406) {
-          // user clicked where no massn exists
-        } else if (axiosError.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('error.response.data', axiosError.response.data)
-          console.error('error.response.status', axiosError.response.status)
-          console.error('error.response.headers', axiosError.response.headers)
-          failedToFetch = true
-        } else if (axiosError.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.error('error.request:', axiosError.request)
-          failedToFetch = true
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('error.message', axiosError.message)
-          failedToFetch = true
-        }
-        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
-          failedToFetch = true
-        }
-        if (failedToFetch)
-          addNotification({
-            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
-            options: {
-              variant: 'info',
-            },
-          })
       }
-      if (!failedToFetch && res?.data) {
+      if (wmsData) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
-          parser.parseFromString(res.data, 'text/html'),
+          parser.parseFromString(wmsData, 'text/html'),
         )
         // do not open empty popups
         if (dataArray.length) {
@@ -353,8 +298,7 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenPunkte')) {
-      let res: Response<string> | undefined
-      let failedToFetch = false
+      let wmsData: string | undefined
       try {
         const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
         const params = {
@@ -373,55 +317,30 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox,
         }
-        res = await axios<string>({
-          method: 'get',
-          url: `https://wms.prod.qgiscloud.com/FNS/${apId}`,
-          params,
-        })
+        const query = new URLSearchParams(
+          Object.entries(params).map(([key, value]) => [key, String(value)]),
+        )
+        const res = await fetch(
+          `https://wms.prod.qgiscloud.com/FNS/${apId}?${query}`,
+        )
+        // 406: user clicked where no massn exists
+        if (res.status !== 406) {
+          if (!res.ok) throw new Error(`GIS-Server: Status ${res.status}`)
+          wmsData = await res.text()
+        }
       } catch (error) {
-        // redaxios rejections are response-like objects
-        // augmented with optional request and response fields
-        const axiosError = error as RedaxiosError
-        console.log({
-          error: axiosError,
-          errorToJSON: axiosError?.toJSON?.(),
-          res,
+        console.error('MassnahmenPunkte:', error)
+        addNotification({
+          message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
+          options: {
+            variant: 'info',
+          },
         })
-        if (axiosError.status == 406) {
-          // user clicked where no massn exists
-        } else if (axiosError.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('error.response.data', axiosError.response.data)
-          console.error('error.response.status', axiosError.response.status)
-          console.error('error.response.headers', axiosError.response.headers)
-          failedToFetch = true
-        } else if (axiosError.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.error('error.request:', axiosError.request)
-          failedToFetch = true
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('error.message', axiosError.message)
-          failedToFetch = true
-        }
-        if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
-          failedToFetch = true
-        }
-        if (failedToFetch)
-          addNotification({
-            message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
-            options: {
-              variant: 'info',
-            },
-          })
       }
-      if (!failedToFetch && res?.data) {
+      if (wmsData) {
         const parser = new window.DOMParser()
         const dataArray = xmlToLayersData(
-          parser.parseFromString(res.data, 'text/html'),
+          parser.parseFromString(wmsData, 'text/html'),
         )
         // do not open empty popups
         if (dataArray.length) {

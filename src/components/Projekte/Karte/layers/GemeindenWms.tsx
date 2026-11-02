@@ -5,8 +5,6 @@
 import { useMap, WMSTileLayer } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { useMapEvent } from 'react-leaflet'
-import axios from 'redaxios'
-import type { Response } from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
 import { useDebouncedCallback } from 'use-debounce'
 import type { Content, LeafletMouseEvent } from 'leaflet'
@@ -47,7 +45,7 @@ export const WMS = () => {
     if (layer.wms_queryable === 0) return
     const mapSize = map.getSize()
     const bounds = map.getBounds()
-    let res: Response<string> | undefined
+    let wmsData: string | undefined
     let failedToFetch = false
     try {
       const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
@@ -67,40 +65,19 @@ export const WMS = () => {
         height: mapSize.y,
         bbox,
       }
-      res = await axios<string>({
-        method: 'get',
-        url: layer.wms_base_url,
-        params,
-      })
-    } catch (error) {
-      // console.log(`error fetching ${row.label}`, error?.toJSON())
-      // redaxios rejections are Errors augmented with
-      // optional request and response fields
-      const axiosError = error as {
-        response?: { data?: unknown; status?: number; headers?: unknown }
-        request?: unknown
-        message?: string
-      }
-      if (axiosError.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('error.response.data', axiosError.response.data)
-        console.error('error.response.status', axiosError.response.status)
-        console.error('error.response.headers', axiosError.response.headers)
-      } else if (axiosError.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.error('error.request:', axiosError.request)
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('error.message', axiosError.message)
-      }
-      if (axiosError.message?.toLowerCase()?.includes('failed to fetch')) {
-        failedToFetch = true
-      } else {
+      const query = new URLSearchParams(
+        Object.entries(params).map(([key, value]) => [key, String(value)]),
+      )
+      const res = await fetch(`${layer.wms_base_url}?${query}`)
+      if (!res.ok) {
+        console.error('GemeindenWms: status', res.status)
         return
       }
+      wmsData = await res.text()
+    } catch (error) {
+      // fetch only rejects on network errors — the user may be offline
+      console.error('GemeindenWms:', error)
+      failedToFetch = true
     }
 
     // console.log({ mapSize, y: mapSize.y })
@@ -116,14 +93,14 @@ export const WMS = () => {
       )
     } else {
       // not reachable in practice: without failedToFetch the request succeeded
-      if (!res) return
+      if (!wmsData) return
       // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
       switch (layer.wms_info_format) {
         case 'application/vnd.ogc.gml':
         case 'application/vnd.ogc.gml/3.1.1': {
           const parser = new window.DOMParser()
           const layersData = xmlToLayersData(
-            parser.parseFromString(res.data, 'text/html'),
+            parser.parseFromString(wmsData, 'text/html'),
           )
 
           // do not open empty popups
@@ -141,7 +118,7 @@ export const WMS = () => {
         case 'text/html': {
           popupContent = (
             <PopupContainer maxheight={mapSize.y - 40}>
-              <div dangerouslySetInnerHTML={{ __html: res.data }} />
+              <div dangerouslySetInnerHTML={{ __html: wmsData }} />
             </PopupContainer>
           )
           break
@@ -150,13 +127,13 @@ export const WMS = () => {
         case 'application/json':
         case 'text/javascript': {
           // do not open empty popups
-          if (!res.data?.length) return
-          if (res.data.includes('no results')) return
+          if (!wmsData?.length) return
+          if (wmsData.includes('no results')) return
 
           popupContent = ReactDOMServer.renderToString(
             <PopupContainer maxheight={mapSize.y - 40}>
               <StyledPopupContent>
-                {JSON.stringify(res.data)}
+                {JSON.stringify(wmsData)}
               </StyledPopupContent>
             </PopupContainer>,
           )
@@ -165,12 +142,12 @@ export const WMS = () => {
         case 'text/plain':
         default: {
           // do not open empty popups
-          if (!res.data?.length) return
-          if (res.data.includes('no results')) return
+          if (!wmsData?.length) return
+          if (wmsData.includes('no results')) return
 
           popupContent = ReactDOMServer.renderToString(
             <PopupContainer maxheight={mapSize.y - 40}>
-              <StyledPopupContent>{res.data}</StyledPopupContent>
+              <StyledPopupContent>{wmsData}</StyledPopupContent>
             </PopupContainer>,
           )
           break
