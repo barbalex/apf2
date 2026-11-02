@@ -17,8 +17,6 @@
     "typecheck": "tsc --noEmit",
     "typecheck:ci": "node scripts/typecheck-baseline.mjs",
     "typecheck:update-baseline": "node scripts/typecheck-baseline.mjs --update",
-    "codegen": "graphql-codegen --config codegen.ts && node scripts/fix-codegen-type-imports.mjs",
-    "codegen:schema": "node scripts/dump-graphql-schema.mjs",
     "lint": "eslint src",
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=dev playwright test",
@@ -35,7 +33,6 @@
     "test:api": "vitest run --config vitest.config.api.ts"
   },
   "dependencies": {
-    "@apollo/client": "4.3.5",
     "@cyntler/react-doc-viewer": "1.17.1",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
@@ -58,7 +55,6 @@
     "es-toolkit": "1.53.0",
     "exceljs": "4.4.0",
     "file-saver": "2.0.5",
-    "graphql": "17.0.2",
     "jotai": "3.0.1",
     "jwt-decode": "4.0.0",
     "leaflet": "1.9.4",
@@ -90,15 +86,12 @@
     "react-split-pane": "3.2.0",
     "react-transition-group": "4.4.5",
     "recharts": "3.10.1",
-    "rxjs": "7.8.2",
     "screenfull": "6.0.2",
     "use-debounce": "10.1.1",
     "uuid": "14.0.3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@graphql-codegen/cli": "7.4.6",
-    "@graphql-codegen/client-preset": "6.2.3",
     "@playwright/test": "1.64.1",
     "@rolldown/plugin-babel": "0.2.4",
     "@types/file-saver": "2.0.7",
@@ -128,8 +121,6 @@
     "vitest": "5.0.5"
   },
   "dependenciesComments": {
-    "graphql": "peer dependency of @apollo/client",
-    "rxjs": "peer dependency of @apollo/client",
     "@emotion/react": "unfortunately needed by @mui/material",
     "@emotion/styled": "unfortunately needed by @mui/material",
     "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies",

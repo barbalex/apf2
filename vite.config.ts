@@ -31,8 +31,6 @@ export default defineConfig({
               return 'mui'
             if (id.includes('react-dom') || id.includes('/react/index'))
               return 'react-vendor'
-            if (id.includes('@apollo/client') || id.includes('graphql'))
-              return 'apollo'
             if (id.includes('@tanstack')) return 'tanstack'
           }
         },

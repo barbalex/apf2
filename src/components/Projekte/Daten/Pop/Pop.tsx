@@ -17,13 +17,31 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { PopFieldsFragment } from '../../../../gql/graphql.ts'
-
 import styles from './Pop.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
 
+// field list of the former PopFields graphql fragment; v_pop serves
+// these columns (selects.ts builds the keys)
+interface PopFields {
+  id: string
+  label: string | null
+  apId: string | null
+  nr: number | null
+  name: string | null
+  status: number | null
+  statusUnklar: boolean | null
+  statusUnklarBegruendung: string | null
+  bekanntSeit: number | null
+  lv95X: number | null
+  wgs84Lat: number | null
+  lv95Y: number | null
+  wgs84Long: number | null
+  changedBy: string | null
+  geomPoint: { geojson: unknown; x: number; y: number } | null
+}
+
 interface PopQueryResult {
-  popById?: PopFieldsFragment & {
+  popById?: PopFields & {
     apByApId?: {
       id: string
       startJahr: number | null

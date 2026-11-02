@@ -40,7 +40,7 @@ const header = `/**
 
 const out = [header]
 for (const chunk of chunks) {
-  const m = chunk.match(/^(\w+) = graphql\(`\n  fragment \w+ on (\w+) \{\n/)
+  const m = chunk.match(/^(\w+) = `\n  fragment \w+ on (\w+) \{\n/)
   if (!m) continue
   const fragName = m[1]
   const tableCc = m[2]

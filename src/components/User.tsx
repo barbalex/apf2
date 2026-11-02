@@ -226,7 +226,7 @@ export const User = () => {
         p_old_pass: oldPasswordRequired ? oldPass : null,
       })
     } catch (error) {
-      // Apollo Client 4 rejects with CombinedGraphQLErrors:
+      // the rpc throws an ApiError with the PostgREST error body:
       // the server message is on the error itself
       const message = (error as Error).message ?? ''
       if (message.includes('altes Passwort erforderlich')) {

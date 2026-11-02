@@ -5,7 +5,6 @@ import type { EkfrequenzId } from '../../../../models/apflora/Ekfrequenz.ts'
 import type { TpopRow } from '../tableTypes.ts'
 import {
   store,
-  apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
   userNameAtom,
@@ -24,9 +23,8 @@ export const processChange = async ({
   ekfrequenz: EkfrequenzId | null | undefined
   row: TpopRow
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
   const tsQueryClient = store.get(tsQueryClientAtom)
-  if (!apolloClient || !tsQueryClient) return
+  if (!tsQueryClient) return
   try {
     await apiUpdate('tpop', row.id, {
       ekfrequenz_startjahr: value,

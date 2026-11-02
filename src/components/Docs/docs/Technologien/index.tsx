@@ -63,19 +63,11 @@ export const Component = () => (
       </li>
       <li>
         <a
-          href="https://github.com/facebook/graphql"
+          href="https://postgrest.org"
           target="_blank"
           rel="noreferrer"
         >
-          GraphQL
-        </a>
-        &nbsp;in Form von&nbsp;
-        <a
-          href="https://github.com/graphile/crystal"
-          target="_blank"
-          rel="noreferrer"
-        >
-          PostGraphile
+          PostgREST
         </a>
         &nbsp; als API-Server (liefert die Daten vom Backend zur App)
       </li>
@@ -101,14 +93,14 @@ export const Component = () => (
       </li>
       <li>
         <a
-          href="https://www.apollodata.com"
+          href="https://tanstack.com/query/latest"
           target="_blank"
           rel="noreferrer"
         >
-          Apollo
+          TanStack Query
         </a>
-        . Komponenten definieren, welche Daten sie brauchen. Apollo holt sie von
-        PostGraphile und stellt sie bereit
+        . Komponenten definieren, welche Daten sie brauchen. TanStack Query
+        holt sie von PostgREST und stellt sie bereit
       </li>
       <li>
         <a
