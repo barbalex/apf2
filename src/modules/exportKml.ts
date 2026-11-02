@@ -1,4 +1,4 @@
-import fileDownload from 'js-file-download'
+import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 import { groupBy } from 'es-toolkit'
 
@@ -63,5 +63,8 @@ export const exportKml = ({
         .join('')}
     </Document>
   `
-  fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kml+xml')
+  fileSaver.saveAs(
+    new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' }),
+    `${file}.kml`,
+  )
 }

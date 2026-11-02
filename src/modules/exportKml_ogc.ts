@@ -1,6 +1,6 @@
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 // seems not in use
-import fileDownload from 'js-file-download'
+import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 import { groupBy } from 'es-toolkit'
 
@@ -53,5 +53,8 @@ export const exportKml_ogc = ({
       .join('')}
       </kml>
   `
-  fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kmz')
+  fileSaver.saveAs(
+    new Blob([kml], { type: 'application/vnd.google-earth.kml+xml' }),
+    `${file}.kml`,
+  )
 }
