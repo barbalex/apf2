@@ -31,6 +31,7 @@
     "ncu using cooldown": "ncu -c 5 -i",
     "models:generate": "node scripts/kanel-generate.mjs",
     "selects:generate": "node scripts/generate-selects.mjs",
+    "db:apply-sql": "scripts/apply-postgrest-sql.sh",
     "test:api": "vitest run --config vitest.config.api.ts"
   },
   "dependencies": {
