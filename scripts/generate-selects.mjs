@@ -2,6 +2,7 @@
 // src/components/shared/fragments.ts. Run after changing fragments:
 //   npm run selects:generate
 import { readFileSync, writeFileSync } from 'node:fs'
+import { format, resolveConfig } from 'prettier'
 
 const src = readFileSync('src/components/shared/fragments.ts', 'utf8')
 const chunks = src.split('export const ').slice(1)
@@ -22,6 +23,24 @@ const tableAlias = {
   currentIssue: 'currentissue',
   tpopfeldkontr: 'tpopkontr',
   tpopfreiwkontr: 'tpopkontr',
+}
+
+// hand-tuned key tweaks the field lists can't express: dropdown options
+// must be shaped { value, label }, so some columns are exposed under
+// those keys. Declared here rather than in fragments.ts — the manifest
+// stays a pure field list, and regeneration reproduces the committed
+// selects.ts byte-for-byte.
+const aliasTweaks = {
+  // adressen options key the id additionally as value
+  Adresse: { add: { id: 'value' } },
+  // zaehleinheit options: code/text become value/label; the separate
+  // label computed column is dropped (label:text provides the label key)
+  TpopkontrzaehlEinheitWerte: {
+    replace: { code: 'value', text: 'label' },
+    drop: ['label'],
+  },
+  // massn-typ options: code/text become value/label
+  TpopmassnTypWerte: { replace: { code: 'value', text: 'label' } },
 }
 
 const snake = (name) =>
@@ -65,6 +84,7 @@ for (const chunk of chunks) {
   }
   const selects = []
   const seen = new Set()
+  const tweak = aliasTweaks[tableCc] ?? {}
   for (const f of lines) {
     if (seen.has(f)) continue
     // skip PostGraphile relation fields (xByY naming) and the nested
@@ -72,6 +92,7 @@ for (const chunk of chunks) {
     // geomPoint:geom_point (a GeoJSON object)
     if (/^[a-z][a-zA-Z0-9]*By[A-Z]/.test(f)) continue
     if (['geojson', 'x', 'y'].includes(f)) continue
+    if (tweak.drop?.includes(f)) continue
     let entry
     if (f in computedMap) {
       entry = computedMap[f] === f ? f : `${f}:${computedMap[f]}`
@@ -81,9 +102,16 @@ for (const chunk of chunks) {
     } else {
       continue
     }
+    if (f in (tweak.replace ?? {})) {
+      entry = `${tweak.replace[f]}:${snake(f)}`
+    }
     if (!selects.includes(entry)) {
       selects.push(entry)
       seen.add(f)
+    }
+    if (f in (tweak.add ?? {})) {
+      const alias = `${tweak.add[f]}:${snake(f)}`
+      if (!selects.includes(alias)) selects.push(alias)
     }
   }
   // geometry columns
@@ -96,5 +124,12 @@ for (const chunk of chunks) {
   out.push(`export const ${varName} = '${selects.join(',')}'`)
 }
 
-writeFileSync('src/modules/selects.ts', out.join('\n') + '\n')
+// the committed file is prettier-formatted; format the output with the
+// repo config so regeneration is byte-identical
+const prettierConfig = await resolveConfig('src/modules/selects.ts')
+const formatted = await format(out.join('\n') + '\n', {
+  ...prettierConfig,
+  filepath: 'src/modules/selects.ts',
+})
+writeFileSync('src/modules/selects.ts', formatted)
 console.log(`selects.ts regenerated (${out.length - 1} tables)`)
