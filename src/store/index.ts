@@ -5,7 +5,6 @@ import queryString from 'query-string'
 import { isEqual, merge } from 'es-toolkit'
 import type { AdresseFilter, ApFilter, BeobFilter, EkAbrechnungstypWerteFilter, PopFilter, TpopApberrelevantGrundWerteFilter, TpopFilter, TpopkontrFilter, TpopkontrzaehlEinheitWerteFilter, TpopmassnFilter, UserFilter } from '../modules/gqlFilterTypes.ts'
 import { validate as isUuid } from 'uuid'
-import type { ApolloClient } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 
 import { constants } from '../modules/constants.ts'
@@ -2489,14 +2488,11 @@ export const navListFilterAtoms = {
 }
 
 export const tsQueryClientAtom = atom<QueryClient | null>(null)
-export const apolloClientAtom = atom<ApolloClient | null>(null)
 
 /**
- * both clients are set shortly after app start
- * modules using them only run after that
+ * set shortly after app start;
+ * modules using it only run after that
  */
-export const getApolloClientFromStore = () =>
-  store.get(apolloClientAtom) as ApolloClient
 export const getTsQueryClientFromStore = () =>
   store.get(tsQueryClientAtom) as QueryClient
 

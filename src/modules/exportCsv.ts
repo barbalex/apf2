@@ -1,5 +1,5 @@
 import { Parser } from '@json2csv/plainjs'
-import fileDownload from 'js-file-download'
+import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 
 export const exportCsv = ({
@@ -14,5 +14,8 @@ export const exportCsv = ({
   const parse = (data: Record<string, unknown>[]) => new Parser().parse(data)
   const csvData = parse(data)
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  fileDownload(csvData, `${file}.csv`)
+  fileSaver.saveAs(
+    new Blob([csvData], { type: 'text/csv' }),
+    `${file}.csv`,
+  )
 }

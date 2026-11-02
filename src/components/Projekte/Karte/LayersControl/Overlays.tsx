@@ -14,12 +14,12 @@ import {
 import type { Active, DragEndEvent, DragStartEvent, Over } from '@dnd-kit/core'
 import {
   SortableContext,
+  arrayMove,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { arrayMoveImmutable } from 'array-move'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { layerLegends } from './layerLegends.ts'
@@ -172,7 +172,7 @@ export const Overlays = (_props: OverlaysProps) => {
       const oldIndex = overlays.findIndex((e) => e.value === active.id)
       const newIndex = overlays.findIndex((e) => e.value === (over as Over).id)
 
-      return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
+      return setOverlays(arrayMove(overlays, oldIndex, newIndex))
     }
   }
 

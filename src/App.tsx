@@ -3,7 +3,6 @@ import { lazy, createRef, Suspense, useEffect } from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
-import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
@@ -14,8 +13,6 @@ import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { theme } from './utils/materialTheme.ts'
-
-import { buildApolloClient } from './apolloClient.ts'
 
 import { store, userTokenAtom, removeUserAtom } from './store/index.ts'
 
@@ -79,7 +76,6 @@ const queryClient = new QueryClient({
 })
 
 export const App = () => {
-  const apolloClient = buildApolloClient()
   const uploaderRef = createRef<UploadCtxProvider | null>()
 
   useEffect(() => {
@@ -105,38 +101,36 @@ export const App = () => {
 
   return (
     <JotaiProvider store={store}>
-      <ApolloProvider client={apolloClient}>
-        <QueryClientProvider client={queryClient}>
-          <StyledEngineProvider injectFirst>
-            <uc-upload-ctx-provider
-              id="uploaderctx"
-              ctx-name="uploadcare"
-              ref={uploaderRef}
-            ></uc-upload-ctx-provider>
-            <ThemeProvider theme={theme}>
-              <SnackbarProvider
-                maxSnack={3}
-                preventDuplicate
-                autoHideDuration={10000}
-                action={(key) => <NotificationDismisser nKey={key} />}
-              >
-                <UploaderContext value={uploaderRef}>
-                  {/* these are all lazy: give them a boundary so they
-                      don't suspend the whole app without a fallback */}
-                  <Suspense fallback={null}>
-                    <Router />
-                    <Notifier />
-                    <IsPrintSetter />
-                    <LastTouchedNodeSetter />
-                    <MouseWheelHandler />
-                    <LegacyBrowserInformer />
-                  </Suspense>
-                </UploaderContext>
-              </SnackbarProvider>
-            </ThemeProvider>
-          </StyledEngineProvider>
-        </QueryClientProvider>
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>
+        <StyledEngineProvider injectFirst>
+          <uc-upload-ctx-provider
+            id="uploaderctx"
+            ctx-name="uploadcare"
+            ref={uploaderRef}
+          ></uc-upload-ctx-provider>
+          <ThemeProvider theme={theme}>
+            <SnackbarProvider
+              maxSnack={3}
+              preventDuplicate
+              autoHideDuration={10000}
+              action={(key) => <NotificationDismisser nKey={key} />}
+            >
+              <UploaderContext value={uploaderRef}>
+                {/* these are all lazy: give them a boundary so they
+                    don't suspend the whole app without a fallback */}
+                <Suspense fallback={null}>
+                  <Router />
+                  <Notifier />
+                  <IsPrintSetter />
+                  <LastTouchedNodeSetter />
+                  <MouseWheelHandler />
+                  <LegacyBrowserInformer />
+                </Suspense>
+              </UploaderContext>
+            </SnackbarProvider>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </QueryClientProvider>
       <Analytics debug={false} />
     </JotaiProvider>
   )

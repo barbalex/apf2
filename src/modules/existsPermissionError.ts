@@ -6,8 +6,7 @@
  * client-side exp check does not catch it)
  *
  * All these mean the same thing: the user has to (re)authenticate.
- * The apollo error link then swallows the notification and the Error
- * component logs out, which opens the login dialog.
+ * The Error component logs out, which opens the login dialog.
  */
 export const existsPermissionError = (
   errors: { message?: string }[] | undefined,

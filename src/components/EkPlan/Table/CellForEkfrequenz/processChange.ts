@@ -5,7 +5,6 @@ import type { TpopRow } from '../tableTypes.ts'
 import {
   store,
   tsQueryClientAtom,
-  apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
   type Notification,
@@ -22,8 +21,7 @@ export const processChange = async ({
   row: TpopRow
 }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
-  const apolloClient = store.get(apolloClientAtom)
-  if (!tsQueryClient || !apolloClient) return
+  if (!tsQueryClient) return
   try {
     await apiUpdate('tpop', row.id, {
       ekfrequenz: value,

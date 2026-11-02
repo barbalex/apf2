@@ -1,3 +1,9 @@
 .iconButton {
   z-index: 2;
 }
+
+/* margin-top (set inline, 100px with the filter input open, 40px
+   without) slides when the filter input toggles */
+.items {
+  transition: margin-top 0.2s linear;
+}

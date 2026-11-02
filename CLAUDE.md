@@ -6,21 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **apflora.ch** — a German-language web app for managing *Aktionspläne Flora* (flora action plans) for the Fachstelle Naturschutz of the Canton of Zürich. The UI, route segments, and domain terms are German (e.g. *Projekte, Arten, Populationen, Teil-Populationen, Beobachtungen, Erfolgskontrollen*). Preserve German terms when editing UI/paths.
 
-It is a client-side SPA (Vite + React 19, **no SSR** — see [src/react-router.config.ts](src/react-router.config.ts)) talking to a **PostGraphile** GraphQL API over **PostgreSQL + PostGIS**. Frontend deploys to Vercel; the production API lives at `api.apflora.ch`. It is also packaged as an Electron app and a PWA (`vite-plugin-pwa`).
+It is a client-side SPA (Vite + React 19, **no SSR** — see [src/react-router.config.ts](src/react-router.config.ts)) talking to a **PostgREST** API over **PostgreSQL + PostGIS**. Frontend deploys to Vercel; the production API lives at `api.apflora.ch`. It is also packaged as an Electron app and a PWA (`vite-plugin-pwa`).
 
 ## Commands
 
 Frontend (run from repo root):
 
 ```bash
-npm run dev          # vite dev server on :5173 (talks to backend at localhost:5000 — see below)
+npm run dev          # vite dev server on :5173 (talks to PostgREST at localhost:3000 — see below)
 npm run build        # vite build -> dist/
 npm run preview      # serve the production build
 npm run typecheck    # tsc --noEmit (CI gates via type-baseline.json: npm run typecheck:ci fails only on NEW errors)
 npm run typecheck:update-baseline  # after intentionally accepted type changes
 npm run lint         # eslint src (flat config in eslint.config.mjs)
-npm run codegen      # regenerate src/gql from graphql/schema.graphql + the graphql() calls in src (CI verifies freshness)
-npm run codegen:schema  # re-dump graphql/schema.graphql from the local PostGraphile (needs the backend stack)
 npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser
@@ -45,10 +43,10 @@ cd backend
 # backend/.env must define: POSTGRES_USER, POSTGRES_PASSWORD, AUTHENTICATOR_PASSWORD,
 # JWT_SECRET, DATABASE_URL (it already exists in this checkout)
 docker compose up      # db on :5432, graphql (PostGraphile) on :5000,
-                       # postgrest on :3000 (PostgREST-migration dual-stack, see tasks.md)
+                       # postgrest on :3000
 ```
 
-The dev frontend (`graphQlUri()`) points at `http://localhost:5000/graphql`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack.)
+The dev frontend (`postgrestUri()` in [src/modules/api.ts](src/modules/api.ts)) points at `http://localhost:3000`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack; after recreating its db volume run `npm run db:apply-sql`.)
 
 ## Architecture
 
@@ -57,19 +55,17 @@ The dev frontend (`graphQlUri()`) points at `http://localhost:5000/graphql`, so 
 [src/store/index.ts](src/store/index.ts) is a large Jotai store and the central nervous system. Almost everything routes through atoms here:
 
 - **Navigation as data**: the current location is `treeActiveNodeArrayAtom` — an array of path/label segments like `['Projekte', <projId>, 'Arten', <apId>, 'Populationen', <popId>, ...]`. Derived atoms (`treeApIdInActiveNodeArrayAtom`, `treePopIdInActiveNodeArrayAtom`, …) extract UUIDs by index, and `treeSetActiveNodeArrayAtom` keeps `treeOpenNodesAtom` in sync. URL ↔ tree sync happens in [src/components/Router/ActiveNodeArraySetter.tsx](src/components/Router/ActiveNodeArraySetter.tsx) and [src/modules/navigateToLastActiveNodeArray.ts](src/modules/navigateToLastActiveNodeArray.ts).
-- **Filter cascade**: `tree*GqlFilterAtom` atoms build PostGraphile connection-filter objects from three sources — hierarchy (parent filters, e.g. population filter restricts the tpop query via `popByPopId`), the user's form data filter (`treeDataFilterAtom`, multi-"OR" tabs in [src/store/DataFilter/](src/store/DataFilter/)), and label/map filters. Parent filters compose into both an `all` variant (unfiltered children) and a `filtered` variant. When touching filter logic, read the whole `store/index.ts` filter section — the `...ForTree` variants and `all`/`filtered` split are easy to get wrong.
+- **Filter cascade**: `tree*GqlFilterAtom` atoms build jsonb filter objects (compiled server-side by `apflora.compile_filter` inside the `query_*` RPCs) from three sources — hierarchy (parent filters, e.g. population filter restricts the tpop query), the user's form data filter (`treeDataFilterAtom`, multi-"OR" tabs in [src/store/DataFilter/](src/store/DataFilter/)), and label/map filters. Parent filters compose into both an `all` variant (unfiltered children) and a `filtered` variant. When touching filter logic, read the whole `store/index.ts` filter section — the `...ForTree` variants and `all`/`filtered` split are easy to get wrong.
 - **Persistence**: many UI-preference atoms use `atomWithStorage` (localStorage). `unsubscribedStorage` disables cross-tab sync for atoms that must not propagate.
 
-Other global state: TanStack Query (`QueryClient` with `refetchOnWindowFocus:false`, set in [src/App.tsx](src/App.tsx)), and `apolloClientAtom`/`tsQueryClientAtom` exposing the clients to non-React code via `store.get(...)`.
+Other global state: TanStack Query (`QueryClient` with `refetchOnWindowFocus:false`, set in [src/App.tsx](src/App.tsx)), exposed to non-React code via `tsQueryClientAtom`/`store.get(...)`.
 
-### Apollo Client — read [src/apolloClient.ts](src/apolloClient.ts) before changing GraphQL behavior
+### PostgREST — read [src/modules/api.ts](src/modules/api.ts) before changing data fetching
 
-- **Two query tags**: statically written operations use the typed `graphql(...)` tag from [src/gql](src/gql) (generated by `npm run codegen` — schema types come from the committed [graphql/schema.graphql](graphql/schema.graphql)). Operations built dynamically (template interpolation, e.g. `${fields}` or fragment interpolation) use `dynamicGql` from [src/apolloGql.ts](src/apolloGql.ts) (Apollo's runtime `gql`) — keep that import path, it keeps graphql-codegen's static extraction from picking them up. New static queries: write `graphql(\`...\`)` (call syntax, not a tag) and run `npm run codegen`.
-- `fetchPolicy: 'no-cache'` for queries/watchQueries — the app re-fetches rather than reading cache.
-- **Auth**: a JWT from `userTokenAtom` is sent as `Authorization: Bearer …`. PostGraphile reads it as `jwt.claims.*`; Postgres RLS policies then key off `CURRENT_USER`/the role. See [sql/auth/](sql/auth/) for the `auth.jwt_token` type and login function.
-- **Permission errors are swallowed on purpose** — the `User` component (login dialog) opens instead of logging out, to avoid a reload loop. Don't "fix" this by logging out in the error link.
-- **`dataIdFromObject` gotcha**: history types are keyed `${id}/${year}`; a long allowlist of `VQ…`/view `__typename`s is forced to `defaultDataIdFromObject` because those rows reuse real ids and would otherwise overwrite cached models. If you add a new computed/view type that mirrors a base table, add its `__typename` to that allowlist or you'll get cache-clobbering bugs.
-- Requests are batched (`BatchHttpLink`).
+- All data flows through `apiFetch`/`apiInsert`/`apiUpdate`/`apiDelete`/`rpc` in [src/modules/api.ts](src/modules/api.ts), orchestrated by TanStack Query. Column select strings live in [src/modules/selects.ts](src/modules/selects.ts) (`npm run selects:generate` — derived from the field manifest in [src/components/shared/fragments.ts](src/components/shared/fragments.ts); regeneration is byte-identical. Dropdown `{ value, label }` key aliases are declared in the generator's `aliasTweaks`, not in the manifest).
+- Tree/filter queries go through the `query_<table>` RPC family (generated by [scripts/generate-query-rpcs.py](scripts/generate-query-rpcs.py) from [sql/postgrest/createQueryRpcs.sql](sql/postgrest/createQueryRpcs.sql)); filters compile server-side via `apflora.compile_filter` ([sql/postgrest/compileFilter.sql](sql/postgrest/compileFilter.sql)). After changing SQL: `npm run db:apply-sql` applies it to the local dev db.
+- **Auth**: a JWT from `userTokenAtom` is sent as `Authorization: Bearer …`. PostgREST reads it as `request.jwt.claims`; Postgres RLS policies then key off `CURRENT_USER`/the role (username via `apflora.current_user_name()`). See [sql/auth/](sql/auth/) and [sql/migration/0063-postgrest-login.sql](sql/migration/0063-postgrest-login.sql). An expired/malformed token or a 401 answer logs the session out (`logoutDeadSession`).
+- **Permission errors must not log the user out** in the `Error` component path — the login dialog opens instead, to avoid a reload loop. Don't "fix" this by logging out.
 
 ### Routing
 
@@ -85,20 +81,20 @@ The "second tree" (`tree2`) is the same app embedded in an iframe (see `tree2Src
 - [src/components/Print/](src/components/Print/) — printable reports (serverless; print state via `isPrintAtom`).
 - [src/modules/](src/modules/) — hooks (`use*NavData.ts` fetch nav data per node type) and pure helpers (coordinate conversions, exports CSV/KML/XLSX, GraphQL filter builders, `historize`).
 - [src/models/](src/models/) — per-table TS types, grouped by DB schema (`apflora`, `auth`, `public`, `request`).
-- [sql/](sql/) — the DB: [sql/apflora/createTables.sql](sql/apflora/createTables.sql), views/triggers/functions, [sql/migration/](sql/migration/) (numbered one-offs), [sql/auth/](sql/auth/) (JWT + login). PostGraphile exposes the `apflora` schema; views (`v_…`/`VQ…`) become queryable types.
+- [sql/](sql/) — the DB: [sql/apflora/createTables.sql](sql/apflora/createTables.sql), views/triggers/functions, [sql/migration/](sql/migration/) (numbered one-offs), [sql/auth/](sql/auth/) (JWT + login). PostgREST exposes the `apflora` schema; views (`v_…`/`VQ…`) become queryable tables/functions.
 
 ### Auth flow
 
-Login is a GraphQL mutation in [src/components/User.tsx](src/components/User.tsx); the returned JWT is stored in `userAtom` (`{ name, token, id }`). `apolloClient.ts`'s `authLink` injects and validates the token's `exp` on every request. Logout ([src/modules/logout.ts](src/modules/logout.ts)) reloads the window.
+Login calls the `login` rpc in [src/components/User.tsx](src/components/User.tsx) (signs the JWT in the database); the returned JWT is stored in `userAtom` (`{ name, token, id }`). `api.ts`'s `authHeaders` injects and validates the token's `exp` on every request. Logout ([src/modules/logout.ts](src/modules/logout.ts)) reloads the window.
 
-Uploadcare uploads are signed server-side: the `Uploader` component ([src/components/shared/Uploader/index.tsx](src/components/shared/Uploader/index.tsx)) resolves signatures via the `uploadSignature` GraphQL query, backed by `apflora.upload_signature()` — EXECUTE is granted only to the roles that may create file records (`apflora_freiwillig`, `apflora_ap_writer`, `apflora_manager`), not to readers or anon. The secret lives in the `app.uploadcare_secret` database setting — never compute signatures in the client.
+Uploadcare uploads are signed server-side: the `Uploader` component ([src/components/shared/Uploader/index.tsx](src/components/shared/Uploader/index.tsx)) resolves signatures via the `upload_signature` rpc, backed by `apflora.upload_signature()` — EXECUTE is granted only to the roles that may create file records (`apflora_freiwillig`, `apflora_ap_writer`, `apflora_manager`), not to readers or anon. The secret lives in the `app.uploadcare_secret` database setting — never compute signatures in the client.
 
 ## Conventions
 
 - **Always include file extensions in imports** (`.ts`/`.tsx`) — enforced by `eslint-plugin-import` (`import/extensions`) and used everywhere. MUI/Emotion is a dependency only because `@mui/material` needs it.
-- **Prettier config lives in the repo** ([.prettierrc.json](.prettierrc.json), previously only in VS Code user settings): single quotes, no semicolons, `experimentalTernaries`, `singleAttributePerLine`. Generated dirs (`src/gql/`, `src/models/`) are ignored via [.prettierignore](.prettierignore). Beware: prettier reformats the GraphQL template literals, and codegen matches documents by exact source text — so after formatting files containing `graphql(...)` calls, **run `npm run codegen`** or the `graphql()` calls resolve to `unknown` in typecheck.
+- **Prettier config lives in the repo** ([.prettierrc.json](.prettierrc.json), previously only in VS Code user settings): single quotes, no semicolons, `experimentalTernaries`, `singleAttributePerLine`. Generated dir `src/models/` is ignored via [.prettierignore](.prettierignore).
 - **React Compiler is on** (`babel-plugin-react-compiler` via `@rolldown/plugin-babel` in [vite.config.ts](vite.config.ts)); write compiler-friendly components (stable refs, no manual memoization hacks).
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.
-- **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `apollo`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.
+- **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.
 - **German UI**: keep labels, notifications, and route path segments in German unless explicitly asked to translate.
 - App version: `npm run deploy [patch|minor|major]` bumps `version` + `versionDate` in [package.json](package.json) automatically (default: patch) — don't bump manually. Deploys go through the `apflora` branch: the script merges master into apflora and pushes, which triggers the Vercel production deploy. The version is shown in the hamburger menu.

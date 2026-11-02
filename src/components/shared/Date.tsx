@@ -8,7 +8,10 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Tooltip from '@mui/material/Tooltip'
 import { MdCalendarToday } from 'react-icons/md'
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
+import { isValid } from 'date-fns/isValid'
+import { parse } from 'date-fns/parse'
+import { parseISO } from 'date-fns/parseISO'
 import DatePicker from 'react-datepicker'
 
 import styles from './Date.module.css'
@@ -25,8 +28,8 @@ export interface DateFieldProps {
 }
 
 const formatForDisplay = (value: string | null | undefined): string => {
-  const dt = value ? DateTime.fromSQL(value) : null
-  return dt?.isValid ? dt.toFormat('dd.MM.yyyy') : ''
+  const dt = value ? parseISO(value) : null
+  return dt && isValid(dt) ? format(dt, 'dd.MM.yyyy') : ''
 }
 
 export const DateField = ({
@@ -80,8 +83,8 @@ export const DateField = ({
       setInputValue('')
       saveDate(null)
     } else {
-      const newValue = DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
-      const displayValue = DateTime.fromJSDate(date).toFormat('dd.MM.yyyy')
+      const newValue = format(date, 'yyyy-MM-dd')
+      const displayValue = format(date, 'dd.MM.yyyy')
       setInputValue(displayValue)
       saveDate(newValue)
     }
@@ -102,9 +105,8 @@ export const DateField = ({
     }
 
     // Get current date
-    const now = DateTime.now()
-    const currentMonth = now.toFormat('MM')
-    const currentYear = now.toFormat('yyyy')
+    const currentMonth = format(new Date(), 'MM')
+    const currentYear = format(new Date(), 'yyyy')
     const centuryPrefix = currentYear.substring(0, 2) // "20" for 2026
 
     let completedDate = dateString
@@ -159,17 +161,17 @@ export const DateField = ({
     }
 
     // Parse and save the completed date
-    const parsedDate = DateTime.fromFormat(completedDate, 'dd.MM.yyyy')
-    if (parsedDate.isValid) {
-      const newValue = parsedDate.toFormat('yyyy-LL-dd')
+    const parsedDate = parse(completedDate, 'dd.MM.yyyy', new Date())
+    if (isValid(parsedDate)) {
+      const newValue = format(parsedDate, 'yyyy-MM-dd')
       setInputValue(completedDate)
       saveDate(newValue)
     } else {
       // If invalid, restore the previous value
       if (stateValue) {
-        const dt = DateTime.fromSQL(stateValue)
-        if (dt.isValid) {
-          setInputValue(dt.toFormat('dd.MM.yyyy'))
+        const dt = parseISO(stateValue)
+        if (isValid(dt)) {
+          setInputValue(format(dt, 'dd.MM.yyyy'))
         }
       } else {
         setInputValue('')
@@ -177,11 +179,10 @@ export const DateField = ({
     }
   }
 
-  const parsedStateValue =
-    stateValue ? DateTime.fromSQL(stateValue) : null
-  const isValid = parsedStateValue?.isValid ?? false
+  const parsedStateValue = stateValue ? parseISO(stateValue) : null
+  const stateValueIsValid = parsedStateValue ? isValid(parsedStateValue) : false
   const selected =
-    isValid && parsedStateValue ? new Date(parsedStateValue.toMillis()) : null
+    stateValueIsValid && parsedStateValue ? parsedStateValue : null
 
   return (
     <FormControl variant="standard" className={styles.formControl}>

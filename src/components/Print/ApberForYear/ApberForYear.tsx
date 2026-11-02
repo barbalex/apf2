@@ -1,5 +1,5 @@
 import { apiFetch } from '../../../modules/api.ts'
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
@@ -156,7 +156,7 @@ export const ApberForYear = (_props: ApberForYearProps) => {
             width="350"
           />
           <p className={styles.firstPageDate}>
-            {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
+            {format(new Date(), 'dd.MM.yyyy')}
           </p>
           <p className={styles.firstPageBearbeiter}>Karin Marti, topos</p>
           {!!apberuebersicht?.bemerkungen && (

@@ -3,7 +3,9 @@ import { v7 as uuidv7 } from 'uuid'
 import Button from '@mui/material/Button'
 import MarkdownIt from 'markdown-it'
 import { useQueryClient } from '@tanstack/react-query'
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
+import { isValid } from 'date-fns/isValid'
+import { parseISO } from 'date-fns/parseISO'
 import { useAtomValue } from 'jotai'
 
 import { userNameAtom } from '../../../store/index.ts'
@@ -45,7 +47,12 @@ export const Messages = ({
     <div className={styles.container}>
       {unreadMessages.map((m, index) => {
         const paddBottom = index === unreadMessages.length - 1
-        const date = DateTime.fromISO(m.time ?? '').toFormat('yyyy.LL.dd')
+        // m.time can be null and parseISO('') is an invalid date
+        const parsedTime = m.time ? parseISO(m.time) : null
+        const date =
+          parsedTime && isValid(parsedTime) ?
+            format(parsedTime, 'yyyy.MM.dd')
+          : ''
 
         return (
           <div

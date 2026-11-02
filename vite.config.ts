@@ -3,8 +3,6 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
 import babel from '@rolldown/plugin-babel'
-// activating the analyzer breaks the build on vercel
-// import { analyzer } from 'vite-bundle-analyzer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -33,8 +31,6 @@ export default defineConfig({
               return 'mui'
             if (id.includes('react-dom') || id.includes('/react/index'))
               return 'react-vendor'
-            if (id.includes('@apollo/client') || id.includes('graphql'))
-              return 'apollo'
             if (id.includes('@tanstack')) return 'tanstack'
           }
         },
@@ -104,7 +100,6 @@ export default defineConfig({
     babel({
       presets: [reactCompilerPreset()],
     }),
-    // analyzer(),
   ],
   css: {
     modules: {

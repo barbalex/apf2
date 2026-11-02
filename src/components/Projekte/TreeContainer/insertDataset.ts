@@ -5,7 +5,6 @@ import { upperFirst } from 'es-toolkit'
 import { tables } from '../../../modules/tables.ts'
 import {
   store,
-  apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
@@ -35,16 +34,7 @@ export const insertDataset = async ({
   search: string
   jahr?: string | null | undefined
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
   const tsQueryClient = store.get(tsQueryClientAtom)
-  if (!apolloClient) {
-    return addNotification({
-      message: 'no apollo client found in store',
-      options: {
-        variant: 'error',
-      },
-    })
-  }
   if (!tsQueryClient) {
     return addNotification({
       message: 'no query client found in store',

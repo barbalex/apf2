@@ -1,4 +1,5 @@
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
+import { parseISO } from 'date-fns/parseISO'
 
 import type { ApberForApTpopmassnNode } from './types.ts'
 
@@ -29,7 +30,7 @@ export const Massnahmen = ({ massns }: MassnahmenProps) => (
       </div>
     </div>
     {massns.map((m) => {
-      const mDatum = m.datum ? DateTime.fromSQL(m.datum).toFormat('dd.LL') : ''
+      const mDatum = m.datum ? format(parseISO(m.datum), 'dd.MM') : ''
 
       return (
         <div
