@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
 import TextField from '@mui/material/TextField'
 import { useAtomValue, useSetAtom } from 'jotai'
 
@@ -72,8 +72,9 @@ export const Deletions = () => {
               Object.keys(dataset).forEach(
                 (key) => dataset[key] == null && delete dataset[key],
               )
-              const time = DateTime.fromMillis(ds.time ?? 0).toFormat(
-                'yyyy.LL.dd HH:mm:ss',
+              const time = format(
+                new Date(ds.time ?? 0),
+                'yyyy.MM.dd HH:mm:ss',
               )
 
               return (

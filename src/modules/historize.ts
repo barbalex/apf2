@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
 
 import { rpc, apiUpdate } from './api.ts'
 import {
@@ -30,7 +30,7 @@ export const historize = async ({
   // 2. if it worked: mutate historyDate
   try {
     await apiUpdate('apberuebersicht', row?.id, {
-      history_date: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
+      history_date: format(new Date(), 'yyyy-MM-dd'),
     })
   } catch (error) {
     return addNotification({

@@ -5,7 +5,8 @@ import { useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
-import { DateTime } from 'luxon'
+import { format } from 'date-fns/format'
+import { parseISO } from 'date-fns/parseISO'
 
 import { apiFetch } from '../../../../modules/api.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -87,7 +88,7 @@ const MessageListBody = ({ rows }: { rows: MessageRowData[] }) => {
         {virtualizer.getVirtualItems().map((virtualRow) => {
           const m = rows[virtualRow.index]
           if (!m) return null
-          const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
+          const date = format(parseISO(m.time), 'yyyy.MM.dd')
 
           return (
             <div
