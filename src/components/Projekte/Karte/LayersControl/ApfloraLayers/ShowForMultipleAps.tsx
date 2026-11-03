@@ -7,6 +7,7 @@ import { Checkbox } from '../shared/Checkbox.tsx'
 import {
   mapShowApfLayersForMultipleApsAtom,
   setMapShowApfLayersForMultipleApsAtom,
+  setAssigningBeobAtom,
   treeApGqlFilterForTreeAtom,
 } from '../../../../../store/index.ts'
 
@@ -27,6 +28,7 @@ export const ShowForMultipleAps = () => {
   const setShowApfLayersForMultipleAps = useSetAtom(
     setMapShowApfLayersForMultipleApsAtom,
   )
+  const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
   const { data } = useQuery({
@@ -53,9 +55,12 @@ export const ShowForMultipleAps = () => {
         value={showApfLayersForMultipleAps}
         label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
         checked={showApfLayersForMultipleAps}
-        onChange={() =>
+        onChange={() => {
+          // enabling it shows beob of multiple aps; end any running
+          // assignment, beob could else be dropped onto foreign tpops
+          if (!showApfLayersForMultipleAps) setAssigningBeob(false)
           setShowApfLayersForMultipleAps(!showApfLayersForMultipleAps)
-        }
+        }}
       />
       {!apId && showApfLayersForMultipleAps && (
         <>

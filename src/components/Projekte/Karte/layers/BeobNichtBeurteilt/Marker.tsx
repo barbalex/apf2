@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { LeafletEvent } from 'leaflet'
 
 import {
+  addNotificationAtom,
   assigningBeobAtom,
   setTreeLastTouchedNodeAtom,
 } from '../../../../../store/index.ts'
@@ -54,6 +55,7 @@ export const Marker = ({ beob }: MarkerProps) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const setTreeLastTouchedNode = useSetAtom(setTreeLastTouchedNodeAtom)
+  const addNotification = useSetAtom(addNotificationAtom)
 
   const assigningBeob = useAtomValue(assigningBeobAtom)
 
@@ -92,7 +94,24 @@ export const Marker = ({ beob }: MarkerProps) => {
     const nearestTpop = await getNearestTpop({
       ...(apId ? { apId } : {}),
       latLng: event.target._latlng,
+      ...(beob.aeTaxonomyByArtId?.id ?
+        { artId: beob.aeTaxonomyByArtId.id }
+      : {}),
     })
+    if (!nearestTpop?.id) {
+      addNotification({
+        message:
+          'Die Beobachtung wurde nicht zugeordnet: Das Taxon der Beobachtung gehört nicht zu den Taxa dieser Art oder die Art hat keine Teil-Population mit Koordinaten',
+        options: {
+          variant: 'error',
+        },
+      })
+      // move the marker back to the beob's coordinates
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`BeobNichtBeurteiltForMapQuery`],
+      })
+      return
+    }
     await apiUpdateByVariables('beob', {
       id: beob.id,
       tpopId: nearestTpop.id,

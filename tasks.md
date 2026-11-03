@@ -50,4 +50,8 @@ Just say the word when you want the teardown started, or if anything else surfac
 
 ---
 
+Something I noticed when looking at this example (may not be part of this issue): it seems Zuordnungs-Linien are not always drawn: I saw the line right after assigning the beob to the tpop. but then it disappeared. Actually: I can see a pink/yellow (when beob is active) point. clicking on it opens a zuordnung window. but instead of a line connecting the beob to the tpop I only see a point at the position of the beob
+
 ---
+
+Maybe we should query for beob assigned to tpops that do not belong to the same species. Remember: Same AP can have multiple taxa (species) it deals with. So beob of multiple taxa can belong to the ap but they have to be listed on the 'Taxa' node in the nav tree.
