@@ -49,6 +49,28 @@
       content="#fffde7"
     />
     <title>apflora</title>
+    <script>
+      // Home's hero image is the LCP element of "/" (every hard load of
+      // "/" renders Home – also for logged-in users, because the redirect
+      // to the last active node needs the navigate function, which is
+      // only set inside /Daten routes). Deep urls render other pages,
+      // so only preload it on "/". Blocking inline script: runs before
+      // the entry bundle starts downloading, so the image fetch
+      // parallels the JS boot chain.
+      if (window.location.pathname === '/') {
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.type = 'image/avif'
+        link.setAttribute(
+          'imagesrcset',
+          '/home_700.avif 700w, /home_1000.avif 1000w, /home_1400.avif 1400w, /home_2000.avif 2000w, /home_2500.avif 2500w',
+        )
+        link.setAttribute('imagesizes', '100vw')
+        link.setAttribute('fetchpriority', 'high')
+        document.head.appendChild(link)
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
