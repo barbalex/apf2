@@ -15,6 +15,8 @@ cd "$(dirname "$0")/.."
 
 FILES=(
   sql/migration/0063-postgrest-login.sql
+  sql/migration/0064-views-security-invoker.sql
+  sql/migration/0065-rpc-hardening.sql
   sql/postgrest/createComputedViews.sql
   sql/postgrest/compileFilter.sql
   sql/postgrest/createQueryRpcs.sql
