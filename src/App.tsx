@@ -1,8 +1,6 @@
 import { lazy, createRef, Suspense, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import { registerLocale, setDefaultLocale } from 'react-datepicker'
-import { de } from 'date-fns/locale/de'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
@@ -10,7 +8,6 @@ import { Analytics } from '@vercel/analytics/react'
 import { version as appVersion } from '../package.json'
 
 import 'react-leaflet-markercluster/styles'
-import 'react-datepicker/dist/react-datepicker.css'
 
 import { theme } from './utils/materialTheme.ts'
 
@@ -50,8 +47,6 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.tsx'))
     .LegacyBrowserInformer,
 }))
-registerLocale('de', de)
-setDefaultLocale('de')
 
 // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
 // If true (standard): leads to entire tree refetching every time window is focused

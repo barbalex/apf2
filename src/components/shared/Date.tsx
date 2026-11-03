@@ -13,8 +13,18 @@ import { isValid } from 'date-fns/isValid'
 import { parse } from 'date-fns/parse'
 import { parseISO } from 'date-fns/parseISO'
 import DatePicker from 'react-datepicker'
+import { registerLocale, setDefaultLocale } from 'react-datepicker'
+import { de } from 'date-fns/locale/de'
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 import styles from './Date.module.css'
+
+// every date picker of the app is German – registered here (not in the
+// eager App) so react-datepicker, its css and the German locale load
+// with the first date field instead of weighing down the entry chunk
+registerLocale('de', de)
+setDefaultLocale('de')
 
 export interface DateFieldProps {
   value?: string | null | undefined
