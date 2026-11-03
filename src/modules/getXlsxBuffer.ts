@@ -1,9 +1,9 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-import { Workbook } from 'exceljs'
+import type { Sheet } from 'write-excel-file/browser'
 
-//import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.ts'
+import { autoFilterFeature } from './autoFilterFeature.ts'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
 
 import {
@@ -33,52 +33,30 @@ export const getXlsxBuffer = async ({
   //   )
   const dataArray = getDataArrayFromExportObjects(data)
 
-  const numberOfColumns =
-    dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
-  const workbook = new Workbook()
-  const worksheet = workbook.addWorksheet('Daten', {
-    views: [
-      {
-        state: 'frozen',
-        xSplit: 0,
-        ySplit: 1,
-      },
-    ],
-    // autoFilter is applied below — exceljs' option typing misses it here
-    ...({
-      autoFilter: {
-        from: {
-          row: 1,
-          column: 1,
-        },
-        to: {
-          row: 1,
-          column: numberOfColumns,
-        },
-      },
-    } as unknown as Record<string, unknown>),
-  })
-  worksheet.addRows(dataArray)
-  worksheet.getRow(1).fill = {
-    type: 'gradient',
-    gradient: 'angle',
-    degree: 0,
-    stops: [
-      { position: 0, color: { argb: 'FFD3D3D3' } },
-      { position: 1, color: { argb: 'FFD3D3D3' } },
-    ],
-  }
-  worksheet.getRow(1).font = {
-    bold: true,
-  }
-  worksheet.getRow(1).border = {
-    bottom: {
-      style: 'thin',
+  const sheets: Sheet<Blob>[] = [
+    {
+      sheet: 'Daten',
+      stickyRowsCount: 1,
+      data: dataArray.map((row, rowIndex) =>
+        rowIndex === 0 ?
+          row.map((cell) => ({
+            value: cell,
+            fontWeight: 'bold',
+            backgroundColor: '#D3D3D3',
+            bottomBorderStyle: 'thin',
+          }))
+        : row,
+      ) as Sheet<Blob>['data'],
     },
-  }
+  ]
+
   let buffer: ArrayBuffer | undefined
   try {
-    buffer = await workbook.xlsx.writeBuffer()
+    const { default: writeXlsxFile } = await import('write-excel-file/browser')
+    const blob = await writeXlsxFile(sheets, {
+      features: [autoFilterFeature],
+    }).toBlob()
+    buffer = await blob.arrayBuffer()
   } catch (error) {
     console.log(error)
     return addNotification({

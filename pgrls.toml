@@ -1,0 +1,87 @@
+#:schema https://raw.githubusercontent.com/pgrls/pgrls/main/pgrls.schema.json
+# pgrls — Postgres RLS static analysis. Local tool like test:api:
+# needs the dev db (backend-dev, container apf_db) running.
+#
+#   pip install pgrls            # python >= 3.11; pin the version in CI
+#   DATABASE_URL=postgres://postgres:<pass>@localhost:5432/apflora pgrls lint
+#
+# Rule reference: https://github.com/pgrls/pgrls/blob/main/docs/RULES.md
+
+[database]
+# RLS lives in the apflora schema (default would lint only public).
+schemas = ["apflora"]
+
+[lint]
+# apflora differs from the Supabase model pgrls assumes: policies are
+# TO public with role checks inside USING, and the GRANT layer is the
+# first gate (anon holds no table grants — asserted by
+# api-tests/grants.test.ts). These rules fire on that design:
+disable = [
+  "SEC003", # policy TO public: unreachable for anon via missing grants
+  "SEC005", # session-state-only policies: intended for the global
+            # roles (apflora_reader/manager see every row)
+  "SEC008", # USING (true) on werte/writer policies: reads are public
+            # to every granted role (dropdown data), writes are
+            # restricted by WITH CHECK
+  "SEC038", # Z3 anon leak: same root cause as SEC003
+]
+# Long-term hardening (not holes today): scope policies TO the actual
+# roles instead of role checks in USING, then re-enable SEC003/SEC038.
+
+[lint.rules.SEC001]
+# Shared reference/map layers, granted to every app role (anon holds
+# no grants). Consistency follow-up: enable RLS with a permissive
+# reader policy like the *_werte tables, then remove from this list.
+allowlist = ["apflora.ch_administrative_unit", "apflora.detailplaene"]
+
+[lint.rules.SEC002]
+# FORCE ROW LEVEL SECURITY is a no-op while the tables are owned by
+# postgres (superuser bypasses RLS regardless). Revisit — promote to
+# error — if table ownership moves to a non-privileged role.
+severity = "info"
+
+[lint.rules.SEC013]
+# Triggers on RLS tables are mechanical changed_by/mutations setters
+# reading request.jwt.claim.username. Audited 2026-11; re-enable when
+# adding new triggers.
+severity = "info"
+
+[lint.rules.VIEW002]
+# security_barrier on the legacy views: backlog hardening. The real
+# hole (owner-privileged views bypassing RLS) was fixed in migration
+# 0064 via security_invoker.
+severity = "info"
+
+# Left at default severity on purpose (review backlog):
+# - SEC007  per-row current_user_name() calls (perf hint)
+
+[lint.rules.SEC042]
+# set_password stays SECURITY DEFINER (owned by postgres) and executable
+# by anon: pre-provisioned accounts without a password cannot log in
+# (auth.user_role never matches NULL pass), so this rpc as anon is their
+# only onboarding path. Risk accepted: whoever knows the username of a
+# passless account can claim it — migrate to invite tokens if that
+# becomes a concern. Migration 0065 revoked PUBLIC's default EXECUTE on
+# historize, historize_for_ap, correct_vornach_beginnap_stati and
+# encrypt_pass (trigger-only), leaving only the intended grantees.
+allowlist = ["apflora.set_password"]
+
+[lint.rules.SEC014]
+# Audited 2026-11 (migration 0065): all bodies are schema-qualified,
+# search_paths are pinned with pg_temp last, and EXECUTE grants are
+# limited to the intended roles. historize/historize_for_ap/
+# correct_vornach_beginnap_stati are deliberately SECURITY DEFINER —
+# they snapshot/correct data across all rows regardless of the caller's
+# RLS scope, callable only by apflora_manager/apflora_ap_writer.
+# compile_filter/resolve_* implement the query_ RPC filtering.
+# encrypt_pass is a trigger on apflora."user".
+allowlist = [
+  "apflora.compile_filter",
+  "apflora.correct_vornach_beginnap_stati",
+  "apflora.encrypt_pass",
+  "apflora.historize",
+  "apflora.historize_for_ap",
+  "apflora.resolve_forward_relation",
+  "apflora.resolve_reverse_relation",
+  "apflora.set_password",
+]

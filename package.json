@@ -2,8 +2,8 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.137.23",
-  "versionDate": "02.11.2026",
+  "version": "1.137.24",
+  "versionDate": "03.11.2026",
   "type": "module",
   "repository": {
     "type": "git",
@@ -53,7 +53,6 @@
     "date-fns": "4.4.0",
     "diff": "9.0.0",
     "es-toolkit": "1.53.0",
-    "exceljs": "4.4.0",
     "file-saver": "2.0.5",
     "jotai": "3.0.1",
     "jwt-decode": "4.0.0",
@@ -88,7 +87,8 @@
     "recharts": "3.10.1",
     "screenfull": "6.0.2",
     "use-debounce": "10.1.1",
-    "uuid": "14.0.3"
+    "uuid": "14.0.3",
+    "write-excel-file": "4.1.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

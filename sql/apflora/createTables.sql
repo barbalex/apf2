@@ -639,8 +639,8 @@ CREATE TABLE apflora.user(
   -- so names and roles can be set beforehand by topos
   email text UNIQUE DEFAULT NULL,
   -- enforce role to prevent errors when no role is set
-  role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512(length(ROLE) < 512),
-  pass text DEFAULT NULL CHECK pass_length_minimum_6(length(pass) > 5),
+  role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK (length(ROLE) < 512),
+  pass text DEFAULT NULL CHECK (length(pass) > 5),
   -- false until the forced password change is activated
   -- (sql/apflora/migrations/04_set_allrequire.sql)
   require_new_password_on_next_login boolean DEFAULT false,

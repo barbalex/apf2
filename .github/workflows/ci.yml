@@ -23,7 +23,7 @@ jobs:
         run: npm run lint
       - name: Typecheck (baseline — fails on new errors only)
         run: npm run typecheck:ci
-      - name: Generated GraphQL code is fresh
+      - name: Generated selects are fresh
         run: |
-          npm run codegen
-          git diff --exit-code src/gql || (echo "src/gql is stale — run: npm run codegen" && exit 1)
+          npm run selects:generate
+          git diff --exit-code src/modules/selects.ts || (echo "src/modules/selects.ts is stale — run: npm run selects:generate" && exit 1)
