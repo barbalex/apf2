@@ -63,9 +63,11 @@ const Polylines = () => {
               pop_id: string | null
               nr: number | null
               flurname: string | null
+              wgs84_lat: number | null
+              wgs84_long: number | null
             }[]
           >(
-            `/q_tpop?id=in.(${tpopIds.join(',')})&select=id,pop_id,nr,flurname`,
+            `/q_tpop?id=in.(${tpopIds.join(',')})&select=id,pop_id,nr,flurname,wgs84_lat,wgs84_long`,
           )) ?? [])
         : []
       const popIds = [...new Set(tpops.map((t) => t.pop_id).filter(Boolean))]
@@ -111,6 +113,8 @@ const Polylines = () => {
             popId: t.pop_id,
             nr: t.nr,
             flurname: t.flurname,
+            wgs84Lat: t.wgs84_lat,
+            wgs84Long: t.wgs84_long,
             popByPopId: pop ? { id: pop.id, label: pop.label } : null,
           }
         })(),
@@ -146,13 +150,15 @@ export const BeobZugeordnetAssignPolylines = () => {
   // Problem: gqlFilter updates AFTER apId
   // if navigating from ap to pop, apId is set before gqlFilter
   // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId =
-    !!beobZugeordnetGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId?.some
-      ?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+  // Solution: do not return lines while gqlFilter does not contain
+  // the route's apId. Comparing (instead of only checking presence) also
+  // hides the previous ap's lines while navigating between aps
+  const gqlFilterApIds =
+    beobZugeordnetGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId?.some
+      ?.apId?.in ?? []
+  const apIdDoesNotMatchGqlFilter = !!apId && !gqlFilterApIds.includes(apId)
 
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+  if (apIdDoesNotMatchGqlFilter) return null
 
   return <Polylines />
 }
