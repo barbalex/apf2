@@ -23,6 +23,7 @@ import {
   setMapBoundsAtom,
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
+  mapShowApfLayersForMultipleApsAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../../store/index.ts'
 import { PopIcon } from './PopIcon.tsx'
@@ -93,6 +94,9 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
   const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
+  const showApfLayersForMultipleAps = useAtomValue(
+    mapShowApfLayersForMultipleApsAtom,
+  )
   const setMapBounds = useSetAtom(setMapBoundsAtom)
   const beobNichtBeurteiltGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('nichtBeurteilt'),
@@ -265,7 +269,14 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
     },
   })
 
+  // assigning needs the route's apId: without it the nearest tpop
+  // cannot be determined and the assignment would be refused anyway.
+  // It is also disabled while layers are shown for multiple aps:
+  // beob of other aps are visible then and could be dropped onto
+  // tpops they do not belong to
   const assigningispossible =
+    !!apId &&
+    !showApfLayersForMultipleAps &&
     activeApfloraLayers.includes('tpop') &&
     ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
       apfloraLayer.value === 'beobNichtBeurteilt') ||
@@ -275,6 +286,8 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
   const zuordnenTitle =
     assigningBeob ? 'Zuordnung beenden'
     : assigningispossible ? 'Teil-Populationen zuordnen'
+    : showApfLayersForMultipleAps ?
+      'Zuordnen ist deaktiviert, weil "Layer auch anzeigen, wenn mehr als eine Art aktiv ist" aktiv ist'
     : 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
 
   // for each layer there must exist a path in data!
@@ -294,7 +307,11 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
     : setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
 
   const onClickZuordnen = () => {
-    if (activeApfloraLayers.includes('tpop')) {
+    if (
+      apId &&
+      !showApfLayersForMultipleAps &&
+      activeApfloraLayers.includes('tpop')
+    ) {
       setAssigningBeob(!assigningBeob)
     }
   }

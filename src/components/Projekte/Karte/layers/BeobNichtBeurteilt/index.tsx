@@ -158,13 +158,15 @@ export const BeobNichtBeurteilt = ({ clustered }: { clustered: boolean }) => {
   // Problem: gqlFilter updates AFTER apId
   // if navigating from ap to pop, apId is set before gqlFilter
   // thus query fetches data for all aps
-  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-  const gqlFilterHasApId =
-    !!beobNichtBeurteiltGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId
-  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+  // Solution: do not return beobs while gqlFilter does not contain
+  // the route's apId. Comparing (instead of only checking presence) also
+  // hides the previous ap's beobs while navigating between aps
+  const gqlFilterApIds =
+    beobNichtBeurteiltGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId?.in ?? []
+  const apIdDoesNotMatchGqlFilter = !!apId && !gqlFilterApIds.includes(apId)
 
-  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+  if (apIdDoesNotMatchGqlFilter) return null
 
   return <BeobNichtBeurteiltMarker clustered={clustered} />
 }
