@@ -29,6 +29,9 @@ export default defineConfig({
               id.includes('@emotion/styled')
             )
               return 'mui'
+            // react-dom/server is only used by the map popups and would
+            // otherwise land in the boot-loaded react-vendor chunk
+            if (id.includes('react-dom/server')) return 'react-dom-server'
             if (id.includes('react-dom') || id.includes('/react/index'))
               return 'react-vendor'
             if (id.includes('@tanstack')) return 'tanstack'
