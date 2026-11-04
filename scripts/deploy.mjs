@@ -34,8 +34,9 @@ if (branch !== 'master') {
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 console.log(run('node', [path.join(root, 'scripts/bumpVersion.mjs'), type]))
 
-// commit the version bump
-run('git', ['add', 'package.json'])
+// commit the version bump. the lock goes along: dependency updates in
+// package.json without their lock make npm ci (CI, Vercel) refuse to install
+run('git', ['add', 'package.json', 'package-lock.json'])
 if (run('git', ['diff', '--cached', '--name-only'])) {
   run('git', ['commit', '-m', 'up version'])
   console.log(`committed: ${run('git', ['log', '-1', '--format=%h %s'])}`)

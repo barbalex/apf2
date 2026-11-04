@@ -10,6 +10,7 @@ import { apiFetch, apiInsert } from '../../../modules/api.ts'
 import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.ts'
 import { Menu } from './Menu/index.tsx'
+import { List } from './Files/List.tsx'
 import type { FileNode, FileParent } from './types.ts'
 import type {
   FileUploadSuccessEvent,
@@ -25,11 +26,18 @@ import { addNotificationAtom } from '../../../store/index.ts'
 export interface FilesRouterProps {
   parentId?: string | undefined
   parent: FileParent
+  /**
+   * render the file list in place instead of through child routes
+   * (route-based preview navigation is skipped), for use inside forms
+   * like the EKF, where no Dateien child routes exist
+   */
+  embedded?: boolean
 }
 
 export const FilesRouter = ({
   parentId = '99999999-9999-9999-9999-999999999999',
   parent,
+  embedded = false,
 }: FilesRouterProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
@@ -91,8 +99,8 @@ export const FilesRouter = ({
           },
         })
       }
-      // navigate to the new file
-      void navigate(`${info.uuid}/Vorschau${search}`)
+      // navigate to the new file - only possible where preview routes exist
+      if (!embedded) void navigate(`${info.uuid}/Vorschau${search}`)
     }
   }
 
@@ -136,14 +144,23 @@ export const FilesRouter = ({
           files={files}
           refetch={() => void refetch()}
           containerRef={containerRef}
+          embedded={embedded}
         />
-        <div className={styles.outletContainer}>
-          <Suspense fallback={<Spinner />}>
-            <Outlet
-              context={{ files, parent, refetch: () => void refetch() }}
+        {embedded ?
+          <div className={styles.outletContainer}>
+            <List
+              files={files}
+              parent={parent}
+              refetch={() => void refetch()}
             />
-          </Suspense>
-        </div>
+          </div>
+        : <div className={styles.outletContainer}>
+            <Suspense fallback={<Spinner />}>
+              <Outlet
+                context={{ files, parent, refetch: () => void refetch() }}
+              />
+            </Suspense>
+          </div>}
       </div>
     </ErrorBoundary>
   )

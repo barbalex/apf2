@@ -8,7 +8,14 @@ import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { UploaderContext } from '../../../../UploaderContext.ts'
 import type { FileNode } from '../types.ts'
 
-export const ListMenus = ({ files }: { files: FileNode[] }) => {
+export const ListMenus = ({
+  files,
+  embedded = false,
+}: {
+  files: FileNode[]
+  /** hide route-based actions (preview) where no Dateien child routes exist */
+  embedded?: boolean
+}) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const uploaderCtx = useContext(UploaderContext)
@@ -20,19 +27,21 @@ export const ListMenus = ({ files }: { files: FileNode[] }) => {
 
   return (
     <ErrorBoundary>
-      <Tooltip
-        key="vorschau_oeffnen"
-        title="Vorschau öffnen"
-      >
-        <span>
-          <IconButton
-            onClick={onClickPreview}
-            disabled={!firstFileId}
-          >
-            <FaEye />
-          </IconButton>
-        </span>
-      </Tooltip>
+      {!embedded && (
+        <Tooltip
+          key="vorschau_oeffnen"
+          title="Vorschau öffnen"
+        >
+          <span>
+            <IconButton
+              onClick={onClickPreview}
+              disabled={!firstFileId}
+            >
+              <FaEye />
+            </IconButton>
+          </span>
+        </Tooltip>
+      )}
       <Tooltip
         key="dateien_hochladen"
         title="Dateien hochladen"

@@ -4,18 +4,20 @@ import styles from './Files.module.css'
 
 interface FilesProps {
   row: {
-    id: TpopkontrId
+    id?: TpopkontrId
   }
 }
 
-export const Files = ({ row }: FilesProps) => (
-  <div className={styles.container}>
-    <div className={styles.label}>Dateien</div>
-    <div className={styles.val}>
-      <FilesRouter
-        parentId={row.id}
-        parent="tpopkontr"
-      />
+export const Files = ({ row }: FilesProps) =>
+  row.id ? (
+    <div className={styles.container}>
+      <div className={styles.label}>Dateien</div>
+      <div className={styles.val}>
+        <FilesRouter
+          parentId={row.id}
+          parent="tpopkontr"
+          embedded
+        />
+      </div>
     </div>
-  </div>
-)
+  ) : null
