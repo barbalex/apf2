@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Collapse from '@mui/material/Collapse'
 import { MdFilterAlt } from 'react-icons/md'
 import { validate as isUuid } from 'uuid'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementSize } from '../../../../../modules/useElementSize.ts'
 import { FilterInput } from './FilterInput.tsx'
 import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.tsx'
 
@@ -32,11 +32,9 @@ export const Title = ({
   // if is Aps, need to add ApFilter
   const isAps = navData.id === 'Arten'
 
-  const { width: titleWidth, ref } = useResizeDetector({
+  const { width: titleWidth, ref } = useElementSize({
     handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { leading: false, trailing: true },
+    debounceMs: 300,
   })
   useEffect(() => {
     setTitleWidth(

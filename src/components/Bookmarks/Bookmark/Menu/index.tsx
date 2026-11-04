@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu, { type MenuProps as MuiMenuProps } from '@mui/material/Menu'
 import { styled } from '@mui/material/styles'
 import { BsCaretDown } from 'react-icons/bs'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementSize } from '../../../../modules/useElementSize.ts'
 
 import { Item } from './Item.tsx'
 import { Title } from './Title/index.tsx'
@@ -51,11 +51,9 @@ export const Menu = ({ navData }: { navData: NavData }) => {
   const iconId = `${navData.id}/MenuIcon`
   const menuId = `${navData.id}/Menu`
 
-  const { width, ref } = useResizeDetector({
+  const { width, ref } = useElementSize({
     handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { leading: false, trailing: true },
+    debounceMs: 300,
   })
 
   const [filterInputIsVisible, setFilterInputIsVisible] =

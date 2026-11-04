@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import type { CSSProperties } from 'react'
 import { useOutletContext, useParams } from 'react-router'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementSize } from '../../../../modules/useElementSize.ts'
 
 import { SuspenseImage } from '../../SuspenseImage.tsx'
 import type { FileNode, FilesOutletContext } from '../types.ts'
@@ -28,11 +28,8 @@ export const Component = () => {
     fileMimeType: null,
   }
 
-  const { width, height, ref } = useResizeDetector({
-    // handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { leading: false, trailing: true },
+  const { width, height, ref } = useElementSize({
+    debounceMs: 300,
   })
 
   const isImage = row.fileMimeType?.includes?.('image')

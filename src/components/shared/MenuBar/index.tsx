@@ -176,7 +176,6 @@ export const MenuBar = ({
         }
 
         // only go on if the width has changed enough (prevent unnecessary rerenders)
-        // this is the reason for not using react-resize-detector
         previousMeasurementTimeRef.current = currentTime
         // before the first measurement there is no previous width:
         // treat it as 0 so the first event counts as a 100% change
