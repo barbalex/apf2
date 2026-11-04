@@ -20,6 +20,7 @@ import { Danger } from './Danger.tsx'
 import { Remarks } from './Remarks.tsx'
 import { EkfRemarks } from './EkfRemarks.tsx'
 import { Count } from './Count/index.tsx'
+import { Files } from './Files.tsx'
 import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
@@ -386,8 +387,7 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
             errors={errors}
           />
         )}
-        {/* Files section is disabled:
-            {!isPrint && <Files row={row} />} */}
+        {!isPrint && <Files row={row} />}
         {!isPrint && !isFreiwillig && (
           <Verification
             saveToDb={saveToDb}
