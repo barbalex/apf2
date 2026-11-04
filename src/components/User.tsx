@@ -132,6 +132,14 @@ export const User = () => {
       })
     } catch (error) {
       const message = (error as Error).message
+      // the server refuses a token until a new password was set (#835).
+      // This catches what the precheck above missed - it fails open
+      // when its request errors
+      if (message?.includes('neues Passwort erforderlich')) {
+        setName(nameToUse)
+        setNeedsPasswordSetup(true)
+        return
+      }
       const isNamePassError =
         message?.includes('invalid user or password') ||
         message?.includes('permission denied for relation user')
