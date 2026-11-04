@@ -130,11 +130,22 @@ CREATE TYPE auth.jwt_token AS (
 -- APIs during the dual-stack migration. The signing secret is no longer
 -- exposed as a "token" claim — it used to be, which let any logged-in
 -- user forge tokens for arbitrary roles.
+-- A flagged account (require_new_password_on_next_login) gets no token:
+-- the rotation is enforced here, not only by the frontend precheck
+-- (#835). Credentials are verified first so the refusal never leaks
+-- whether an account exists or is flagged.
+-- SECURITY DEFINER (like set_password): the flag read must not depend
+-- on the caller's column grants (anon's flag grant has a history,
+-- see 0065-rpc-hardening + the 2026-10-12 re-grant).
 CREATE OR REPLACE FUNCTION apflora.login (username text, pass text)
   RETURNS auth.jwt_token
+  LANGUAGE plpgsql
+  SECURITY DEFINER
+  SET search_path = pg_catalog, public, pg_temp
   AS $$
 DECLARE
   _role name;
+  _needs_new_password boolean;
 BEGIN
   -- check username and password
   SELECT
@@ -142,6 +153,17 @@ BEGIN
   IF _role IS NULL THEN
     RAISE invalid_password
     USING message = 'invalid user or password';
+  END IF;
+  -- forced password rotation: no token until a new password is set
+  SELECT
+    require_new_password_on_next_login INTO _needs_new_password
+  FROM
+    apflora.user
+  WHERE
+    name = $1;
+  IF COALESCE(_needs_new_password, false) THEN
+    RAISE EXCEPTION
+      USING message = 'neues Passwort erforderlich';
   END IF;
   RETURN (
     _role,
@@ -160,8 +182,7 @@ BEGIN
     )
   )::auth.jwt_token;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
 -- permissions that allow anonymous users to create accounts
 -- and attempt to log in

@@ -119,6 +119,11 @@ export const Component = () => {
       await apiUpdateByVariables('user', {
         id: row.id,
         [field]: value,
+        // a pass saved here was chosen by someone else: the account
+        // must set its own on next login (#835). Only managers may
+        // update the flag - for other roles the whole PATCH is
+        // denied, like name and role already are
+        ...(field === 'pass' && { requireNewPasswordOnNextLogin: true }),
       })
     } catch (error) {
       return setErrors({ [field]: (error as Error).message })
