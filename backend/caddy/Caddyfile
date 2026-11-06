@@ -10,11 +10,11 @@ api.apflora.ch {
   handle_path /postgrest/* {
     reverse_proxy apf_postgrest:3000
   }
-  # everything else stays on PostGraphile during the migration
+  # the graphql → postgrest migration is complete: anything else is a
+  # stale client or a stray crawler — answer 404 instead of keeping the
+  # PostGraphile container alive for it
   handle {
-    reverse_proxy apf_graphql:5000 {
-      header_down Access-Control-Allow-Origin *
-    }
+    respond 404
   }
 }
 
