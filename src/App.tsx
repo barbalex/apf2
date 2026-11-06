@@ -20,6 +20,8 @@ import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNod
 
 import { ApiError, isTokenExpired } from './modules/api.ts'
 
+import { VersionCheck } from './components/VersionCheck/index.tsx'
+
 import './app.css'
 
 const Notifier = lazy(async () => ({
@@ -120,6 +122,7 @@ export const App = () => {
                   <LastTouchedNodeSetter />
                   <MouseWheelHandler />
                   <LegacyBrowserInformer />
+                  <VersionCheck />
                 </Suspense>
               </UploaderContext>
             </SnackbarProvider>

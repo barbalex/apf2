@@ -9,7 +9,6 @@ import { useLocation } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useRef } from 'react'
 import type { Ref } from 'react'
-import type { TransitionStatus } from 'react-transition-group'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.ts'
@@ -32,22 +31,12 @@ import type { TreeNodeData } from './types.ts'
 
 import styles from './Row.module.css'
 
-const transitionStyles: Partial<
-  Record<TransitionStatus, { opacity: number }>
-> = {
-  entering: { opacity: 1 },
-  entered: { opacity: 1 },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 },
-}
-
 interface RowProps {
   node: TreeNodeData
-  transitionState?: TransitionStatus | undefined
   ref?: Ref<HTMLDivElement> | undefined
 }
 
-export const Row = ({ node, transitionState, ref }: RowProps) => {
+export const Row = ({ node, ref }: RowProps) => {
   const { search } = useLocation()
 
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
@@ -148,7 +137,6 @@ export const Row = ({ node, transitionState, ref }: RowProps) => {
   const labelFilter = nodeLabelFilter?.[node.menuType]
 
   const nodeStyle = {
-    ...(transitionState ? transitionStyles[transitionState] : {}),
     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
     paddingLeft: `${Number(level) * 17 - 10}px`,
   }

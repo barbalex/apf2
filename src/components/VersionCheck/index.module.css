@@ -1,0 +1,35 @@
+/* sits above notistack's bottom snacks only while they briefly overlap;
+   the banner itself must not be missed, but toasts may cover it */
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: #fff;
+}
+
+.text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.button {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    border-color: #fff;
+  }
+}
