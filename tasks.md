@@ -52,4 +52,13 @@ Just say the word when you want the teardown started, or if anything else surfac
 
 ---
 
+use react-leaflet v2?
+https://github.com/KristjanESPERANTO/Leaflet.markercluster?
+react-leaflet?
+
+leaflet-measure seems no more upkept
+leaflet-easyprint same
+
+> build ourselves?
+
 ---
