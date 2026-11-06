@@ -120,12 +120,10 @@ GRANT ALL ON apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl T
 -- lost roles: \du
 -- check privileges on table: \z apflora.user
 -- secure pass and role in apflora.user:
--- This section mirrors the production grants (see
--- sql/apflora/migrations/03_grant_require_new_password_permissions.sql).
--- Every column must be granted to every app role: postgraphile passes
--- whole rows (e.g. to the user_label computed function), which
--- requires SELECT on ALL columns - one missing column logs every
--- non-manager out right after login (#825).
+-- The authenticated roles get TABLE-level SELECT: q_user/v_user/
+-- query_user and the user_label computed function take the whole row,
+-- so a column list breaks on every new user column - one missing
+-- column kills the whole /Daten tree for non-managers (#825, #836).
 -- anon additionally gets neither email nor pass: the pre-auth login
 -- flow (checkUserPassword) needs id, name and
 -- require_new_password_on_next_login only.
@@ -134,9 +132,13 @@ REVOKE ALL ON apflora.user FROM public, apflora_reader, apflora_ap_reader, apflo
 REVOKE ALL ON apflora.user FROM anon;
 GRANT SELECT (id, name, require_new_password_on_next_login) ON apflora.user TO anon;
 
-GRANT SELECT (id, name, email, pass, ROLE, adresse_id, require_new_password_on_next_login), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
+GRANT SELECT ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
-GRANT SELECT (id, name, email, pass, ROLE, adresse_id, require_new_password_on_next_login), UPDATE (id, name, email, ROLE, pass, adresse_id, require_new_password_on_next_login) ON apflora.user TO apflora_manager;
+GRANT UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
+
+GRANT SELECT ON apflora.user TO apflora_manager;
+
+GRANT UPDATE (id, name, email, ROLE, pass, adresse_id, require_new_password_on_next_login) ON apflora.user TO apflora_manager;
 
 -- even pure readers need to write to usermessage:
 GRANT ALL ON apflora.usermessage TO apflora_reader, apflora_ap_reader, apflora_freiwillig;
