@@ -12,7 +12,9 @@ import styles from './FullscreenControl.module.css'
 
 // first-party replacement for leaflet-measure (unmaintained since 2018,
 // Leaflet-1-only). Measures distances and — with three or more points —
-// the enclosed area, like the old control did
+// the enclosed area, like the old control did. One measurement per
+// activation: the mode ends when a measurement is completed (double
+// click); to measure again, the button is clicked again
 const ACTIVE_COLOR = '#f45942'
 const COMPLETED_COLOR = '#b22c25'
 
@@ -193,6 +195,9 @@ export const MeasureControl = () => {
         interactive: false,
       }).addTo(layerGroupRef.current!)
       completed.openTooltip()
+      // one measurement per activation: leave the measuring mode, the
+      // result stays until the next measurement is started via the button
+      setMeasuring(false)
     }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
