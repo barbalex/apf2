@@ -3,10 +3,13 @@ import type { ReactElement } from 'react'
 
 /**
  * Above this many markers in a layer ("Layer auch anzeigen, wenn mehr als
- * eine Art aktiv ist"), the permanent label tooltips become hover
- * tooltips: every permanent tooltip positions itself when its marker is
- * added to the map, and tens of thousands of them block the UI for
- * minutes (quadratic layout, see Tooltip._setPosition).
+ * eine Art aktiv ist"), the markers get no React-rendered tooltips: every
+ * permanent tooltip positions itself when its marker is added to the map,
+ * and tens of thousands of them block the UI for minutes (quadratic
+ * layout, see Tooltip._setPosition). Such layers bind permanent labels
+ * imperatively, only for the markers actually displayed, once zoomed in
+ * enough that at most this many of their markers remain in view — see the
+ * label management in the Pop and Tpop layers.
  */
 export const LABELS_MAX_MARKERS = 300
 

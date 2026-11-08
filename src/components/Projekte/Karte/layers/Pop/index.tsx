@@ -1,19 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 import { DivIcon, Point } from 'leaflet'
+import type { Marker as LeafletMarkerType } from 'leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useDisplayedLabels } from '../../useDisplayedLabels.ts'
 import {
   LABELS_MAX_MARKERS,
   useProgressiveElements,
 } from '../../useProgressiveCount.ts'
-import type { MarkerCluster } from 'leaflet.markercluster'
+import type {
+  MarkerCluster,
+  MarkerClusterGroup,
+} from 'leaflet.markercluster'
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
+
+import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 
 import type {
   PopId,
@@ -168,15 +175,28 @@ const ObservedPop = () => {
 
   const nodes = data?.allPops?.nodes ?? []
   // > 20 000 markers with "Layer auch anzeigen...": mount them in chunks
-  // so the UI stays responsive; labels become hover tooltips at that scale
+  // so the UI stays responsive. Markers get React-rendered permanent
+  // labels only in small layers; big layers label their displayed
+  // markers imperatively once zoomed in (useDisplayedLabels)
   const labeled = nodes.length <= LABELS_MAX_MARKERS
-  const popMarkers = useProgressiveElements(
-    nodes,
-    (pop) => <Marker key={pop.id} pop={pop} labeled={labeled} />,
-  )
+  const groupRef = useRef<MarkerClusterGroup<LeafletMarkerType> | null>(null)
+  const popMarkers = useProgressiveElements(nodes, (pop) => (
+    <Marker key={pop.id} pop={pop} labeled={labeled} />
+  ))
+  useDisplayedLabels({
+    map,
+    group: groupRef,
+    nodes: labeled ? [] : nodes,
+    tooltipClassName: markerStyles.tooltip!,
+    mountedCount: labeled ? 0 : popMarkers.length,
+  })
 
   return (
-    <ClusterGroup maxClusterRadius={66} iconCreateFunction={iconCreateFunction}>
+    <ClusterGroup
+      ref={groupRef}
+      maxClusterRadius={66}
+      iconCreateFunction={iconCreateFunction}
+    >
       {popMarkers}
     </ClusterGroup>
   )

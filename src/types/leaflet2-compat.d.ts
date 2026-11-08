@@ -60,6 +60,13 @@ declare module 'leaflet' {
     export import WMS = WMSTileLayer
   }
 
+  // the map layers pass the marker label text through the marker options
+  // so it is available to the imperative label management in the layer
+  // components (Pop, Tpop)
+  interface MarkerOptions {
+    label?: string
+  }
+
   /**
    * Part 2: minimal typings for the vendored
    * @geoman-io/leaflet-geoman-free fork (vendor/, see README there). The

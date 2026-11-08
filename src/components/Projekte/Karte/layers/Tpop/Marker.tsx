@@ -142,6 +142,9 @@ export const Marker = ({
       icon={icon}
       // flurname can be null; leaflet treats falsy titles alike
       title={title as string}
+      // consumed by the imperative label management in the layer
+      // component for big layers (see useDisplayedLabels)
+      label={title ?? ''}
     >
       <Popup>
         <>
@@ -193,17 +196,16 @@ export const Marker = ({
           </Button>
         </>
       </Popup>
-      <Tooltip
-        direction="bottom"
-        opacity={1}
-        // permanent tooltips position themselves when the marker is added
-        // to the map — with many thousands of markers that blocks the UI
-        // for minutes, so labels become hover tooltips then
-        permanent={labeled}
-        className={styles.tooltip!}
-      >
-        <span className="mapTooltip">{title}</span>
-      </Tooltip>
+      {labeled && (
+        <Tooltip
+          direction="bottom"
+          opacity={1}
+          permanent
+          className={styles.tooltip!}
+        >
+          <span className="mapTooltip">{title}</span>
+        </Tooltip>
+      )}
     </LeafletMarker>
   )
 }

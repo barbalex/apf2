@@ -135,6 +135,9 @@ export const Marker = ({ pop, labeled = true }: { pop: PopNode; labeled?: boolea
       icon={icon}
       title={title}
       zIndexOffset={zIndexOffset}
+      // consumed by the imperative label management in the layer
+      // component for big layers (see useDisplayedLabels)
+      label={title}
     >
       <Popup>
         <>
@@ -178,17 +181,16 @@ export const Marker = ({ pop, labeled = true }: { pop: PopNode; labeled?: boolea
           </Button>
         </>
       </Popup>
-      <Tooltip
-        direction="bottom"
-        opacity={1}
-        // permanent tooltips position themselves when the marker is added
-        // to the map — with many thousands of markers that blocks the UI
-        // for minutes, so labels become hover tooltips then
-        permanent={labeled}
-        className={styles.tooltip!}
-      >
-        <span className="mapTooltip">{title}</span>
-      </Tooltip>
+      {labeled && (
+        <Tooltip
+          direction="bottom"
+          opacity={1}
+          permanent
+          className={styles.tooltip!}
+        >
+          <span className="mapTooltip">{title}</span>
+        </Tooltip>
+      )}
     </LeafletMarker>
   )
 }
