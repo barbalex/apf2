@@ -177,7 +177,9 @@ html {
 
   .leaflet-control-container:not(.first) {
     .leaflet-top.leaflet-right {
-      top: calc(var(--map-control-height) - 6px) !important;
+      /* sit as far below the self-built controls (measure/png/print
+         buttons) as they sit from each other */
+      top: calc(var(--map-control-height) + 5px) !important;
     }
   }
 }
