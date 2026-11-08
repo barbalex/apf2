@@ -20,6 +20,10 @@ const COMPLETED_COLOR = '#b22c25'
 // ignore map clicks (see geoman-active for the same pattern)
 const MEASURE_ACTIVE_CLASS = 'measure-active'
 
+// vertices closer than this (pixels) are treated as one: the two clicks
+// preceding a double click land on (nearly) the same spot
+const VERTEX_MERGE_DISTANCE_PX = 6
+
 const formatLength = (meters: number) => {
   if (meters < 1000) return `${meters.toLocaleString('de-CH')} m`
   const km = meters / 1000
@@ -53,13 +57,45 @@ const pathArea = (latlngs: LatLng[]) => {
 export const MeasureControl = () => {
   const map = useMap()
   const [measuring, setMeasuring] = useState(false)
-  // LatLngs of the fixed vertices while measuring
+  // LatLngs of the fixed vertices of the measurement being taken
   const latlngsRef = useRef<LatLng[]>([])
   // all measure layers: the path being measured plus the last completed one
   const layerGroupRef = useRef<LayerGroup | null>(null)
   const pathRef = useRef<Polyline | null>(null)
   const rubberRef = useRef<Polyline | null>(null)
   const cursorRef = useRef<CircleMarker | null>(null)
+
+  // (re)create the in-progress layers. They are dropped when a measurement
+  // completes (or is cancelled) and recreated when the next one starts —
+  // that way every measurement in a measuring session is visible, not
+  // just the first
+  const ensureInProgressLayers = () => {
+    if (!layerGroupRef.current) {
+      layerGroupRef.current = new LayerGroup().addTo(map)
+    }
+    if (!pathRef.current) {
+      pathRef.current = new Polyline([], {
+        color: ACTIVE_COLOR,
+        weight: 2,
+      }).addTo(layerGroupRef.current)
+    }
+    if (!rubberRef.current) {
+      rubberRef.current = new Polyline([], {
+        color: ACTIVE_COLOR,
+        weight: 1,
+        dashArray: '4,4',
+      }).addTo(layerGroupRef.current)
+    }
+    if (!cursorRef.current) {
+      // invisible marker following the cursor; carries the live tooltip
+      cursorRef.current = new CircleMarker(map.getCenter(), {
+        radius: 0,
+        interactive: false,
+      })
+        .bindTooltip('', { permanent: true, direction: 'top', opacity: 1 })
+        .addTo(layerGroupRef.current)
+    }
+  }
 
   const removeInProgressLayers = () => {
     latlngsRef.current = []
@@ -74,44 +110,36 @@ export const MeasureControl = () => {
   useEffect(() => {
     if (!measuring) return
 
-    const layerGroup = new LayerGroup()
-    layerGroup.addTo(map)
-    layerGroupRef.current = layerGroup
-
-    pathRef.current = new Polyline([], {
-      color: ACTIVE_COLOR,
-      weight: 2,
-    }).addTo(layerGroup)
-    rubberRef.current = new Polyline([], {
-      color: ACTIVE_COLOR,
-      weight: 1,
-      dashArray: '4,4',
-    }).addTo(layerGroup)
-    // invisible marker following the cursor; carries the live tooltip
-    cursorRef.current = new CircleMarker(map.getCenter(), {
-      radius: 0,
-      interactive: false,
-    })
-      .bindTooltip('', { permanent: true, direction: 'top', opacity: 1 })
-      .addTo(layerGroup)
+    map.getContainer()?.classList.add(MEASURE_ACTIVE_CLASS)
 
     const redraw = (cursor?: LatLng) => {
+      ensureInProgressLayers()
       const latlngs = latlngsRef.current
       pathRef.current?.setLatLngs(latlngs)
       const base = pathLength(latlngs)
       const live =
         cursor ? base + pathLength([...latlngs.slice(-1), cursor]) : base
-      const hint = latlngs.length ?
-        'Doppelklick beendet die Messung'
-      : 'Klicken, um die Messung zu beginnen'
-      cursorRef.current?.setLatLng(
-        cursor ?? latlngs[latlngs.length - 1] ?? map.getCenter(),
-      )
-      cursorRef.current
-        ?.getTooltip()
-        ?.setContent(
-          latlngs.length ? `${formatLength(live)}<br />${hint}` : hint,
+      const hint =
+        latlngs.length ?
+          'Doppelklick beendet die Messung'
+        : 'Klicken, um die Messung zu beginnen'
+      if (cursor || latlngs.length) {
+        cursorRef.current?.setLatLng(
+          cursor ?? latlngs[latlngs.length - 1] ?? map.getCenter(),
         )
+        // the tooltip starts closed (see below); open it once there is
+        // something to show
+        cursorRef.current?.openTooltip()
+        cursorRef.current
+          ?.getTooltip()
+          ?.setContent(
+            latlngs.length ? `${formatLength(live)}<br />${hint}` : hint,
+          )
+      } else {
+        // before the first pointer position there is nothing to attach
+        // the tooltip to — don't show it at the map center
+        cursorRef.current?.closeTooltip()
+      }
     }
 
     const onClick = (e: LeafletMouseEvent) => {
@@ -120,56 +148,63 @@ export const MeasureControl = () => {
     }
     const onPointerMove = (e: LeafletMouseEvent) => {
       const latlngs = latlngsRef.current
+      redraw(e.latlng)
       if (!latlngs.length) return
       rubberRef.current?.setLatLngs([latlngs[latlngs.length - 1]!, e.latlng])
-      redraw(e.latlng)
     }
     const finish = () => {
       const latlngs = latlngsRef.current
-      // the double click fires two clicks first, which added the same
-      // vertex twice
-      while (
-        latlngs.length > 1 &&
-        latlngs[latlngs.length - 1]!.equals(latlngs[latlngs.length - 2]!)
-      ) {
-        latlngs.pop()
-      }
-      if (latlngs.length < 2) return
+      // the double click fires two clicks first, which added (nearly) the
+      // same vertex twice: merge vertices that are pixels apart
+      const deduped = latlngs.filter((ll, i) => {
+        if (i === 0) return true
+        const prev = latlngs[i - 1]!
+        return (
+          map.latLngToContainerPoint(ll).distanceTo(
+            map.latLngToContainerPoint(prev),
+          ) > VERTEX_MERGE_DISTANCE_PX
+        )
+      })
+      if (deduped.length < 2) return
 
-      // replace the in-progress layers with a completed measurement
-      // (the previous completed one goes with them)
-      removeInProgressLayers()
-      const completed = new Polyline(latlngs, {
+      // replace everything on the map with the completed measurement
+      layerGroupRef.current?.clearLayers()
+      pathRef.current = null
+      rubberRef.current = null
+      cursorRef.current = null
+      latlngsRef.current = []
+      const completed = new Polyline(deduped, {
         color: COMPLETED_COLOR,
         weight: 2,
       }).addTo(layerGroupRef.current!)
-      const area = pathArea(latlngs)
+      const area = pathArea(deduped)
       const content =
         area ?
-          `${formatLength(pathLength(latlngs))}<br />${formatArea(area)}`
-        : formatLength(pathLength(latlngs))
+          `${formatLength(pathLength(deduped))}<br />${formatArea(area)}`
+        : formatLength(pathLength(deduped))
       completed.bindTooltip(content, {
         permanent: true,
         direction: 'top',
         opacity: 1,
       })
-      new CircleMarker(latlngs[0]!, {
+      new CircleMarker(deduped[0]!, {
         radius: 3,
         color: COMPLETED_COLOR,
         interactive: false,
       }).addTo(layerGroupRef.current!)
       completed.openTooltip()
-      redraw()
     }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        removeInProgressLayers()
+        // cancel the current measurement, keep the measuring mode
+        pathRef.current?.setLatLngs([])
+        rubberRef.current?.setLatLngs([])
+        latlngsRef.current = []
         redraw()
       }
       if (e.key === 'Enter') finish()
     }
 
-    map.getContainer()?.classList.add(MEASURE_ACTIVE_CLASS)
     map.on('click', onClick)
     map.on('dblclick', finish)
     map.on('pointermove', onPointerMove)
@@ -199,7 +234,7 @@ export const MeasureControl = () => {
 
   const toggleMeasuring = () => {
     if (!measuring) {
-      // a new measurement discards the previous result
+      // a new measuring session discards the previous result
       layerGroupRef.current?.remove()
       layerGroupRef.current = null
     }
