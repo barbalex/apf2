@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import L from 'leaflet'
+import { Popup as LeafletPopup } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
@@ -43,6 +43,10 @@ export const ClickListener = () => {
 
   const onClick = async (event: LeafletMouseEvent) => {
     if (justClosedPopup.current) return
+    // while a filter polygon is drawn/edited/deleted or a measurement is
+    // being taken, clicks belong to that tool, not to feature-info queries
+    if (map.getContainer()?.classList.contains('geoman-active')) return
+    if (map.getContainer()?.classList.contains('measure-active')) return
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
     const mapSize = map.getSize()
@@ -400,7 +404,10 @@ export const ClickListener = () => {
         mapSize={map.getSize()}
       />,
     )
-    L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
+    new LeafletPopup()
+      .setLatLng(event.latlng)
+      .setContent(popupContent)
+      .openOn(map)
   }
 
   useMapEvent('click', (event) => void onClick(event))

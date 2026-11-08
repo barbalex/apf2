@@ -177,7 +177,9 @@ html {
 
   .leaflet-control-container:not(.first) {
     .leaflet-top.leaflet-right {
-      top: calc(var(--map-control-height) - 6px) !important;
+      /* sit as far below the self-built controls (measure/png/print
+         buttons) as they sit from each other */
+      top: calc(var(--map-control-height) + 5px) !important;
     }
   }
 }
@@ -231,19 +233,72 @@ html {
   }
 
   /**
-  * leaflet-measure
-  */
-
-  .leaflet-control-measure {
-    color: black;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-clip: padding-box;
-    box-shadow: none;
-  }
-
-  /**
   * leaflet maps
   */
+
+  /* markercluster base styles, previously imported from
+     leaflet.markercluster/dist/MarkerCluster.css — the v2 package
+     no longer ships them (only the default skin) */
+  .leaflet-cluster-anim .leaflet-marker-icon,
+  .leaflet-cluster-anim .leaflet-marker-shadow {
+    transition:
+      transform 0.3s ease-out,
+      opacity 0.3s ease-in;
+  }
+
+  .leaflet-cluster-spider-leg {
+    /* stroke-dashoffset (duration and function) should match
+       leaflet-marker-icon transform in order to track it exactly */
+    transition:
+      stroke-dashoffset 0.3s ease-out,
+      stroke-opacity 0.3s ease-in;
+  }
+
+  /* toggled by DrawControl while a geoman draw/edit/removal mode is
+     active (drawing a filter polygon) */
+  /* toggled by MeasureControl while a measurement is being taken */
+  /* both classes are set on this very .map-container element */
+  &.geoman-active,
+  &.measure-active {
+    cursor: crosshair;
+  }
+
+  /* the filter-draw toolbar behaves like leaflet-draw's two toolbars:
+     only the draw button while no filter shape exists ("Umriss zeichnen,
+     um räumlich zu filtern"), only edit/delete once one exists.
+     filter-shape-drawn is set on this very .map-container element */
+  .leaflet-geoman-button-container:has(.leaflet-geoman-icon-edit),
+  .leaflet-geoman-button-container:has(.leaflet-geoman-icon-delete) {
+    display: none;
+  }
+
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-polygon) {
+    display: none;
+  }
+
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-edit),
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-delete) {
+    display: revert;
+  }
+
+  /* the remove icon in the tooltip of a completed measurement */
+  .measure-tooltip .measure-remove {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 6px;
+    padding: 1px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .measure-tooltip .measure-remove:hover {
+    color: #b22c25;
+  }
 
   .popCluster {
     width: 40px;

@@ -24,8 +24,8 @@ correct_vornach_beginnap_stati (anon could call them as rpc!), revoked
 all EXECUTE on encrypt_pass (trigger-only), dropped duplicate qk writer
 policy, hid require_new_password_on_next_login from anon. set_password
 stays anon-executable: passless pre-provisioned accounts (18/91) cannot
-log in, so it is their only onboarding path — meaning anyone knowing a
-passless username can claim the account. If that worries us, move
+log in, so it is their only onboarding path — meaning **anyone knowing a
+passless username can claim the account**. If that worries us, move
 onboarding to invite tokens (design decision pending).
 
 ---
@@ -40,25 +40,20 @@ I see there are still a few useCallback and useMemo (and others?) usages. Are th
 
 ---
 
-We need to finisch the graphql > postgrest migration. you once said:
+---
 
-"When you're confident it's settled in with real users — a few days of normal traffic is the usual bar — the remaining work is the phase-6 teardown in tasks.md: removing the PostGraphile container and backend/ dirs, the graphql/ dir, apollo.config.cjs, codegen.ts, the @apollo/client/graphql/rxjs deps, src/apolloClient.ts/apolloGql.ts/src/gql//fragments.ts, and the /graphql Caddy route. Until then PostGraphile stays up as the rollback path, which is exactly where you want it right now.
-
-Just say the word when you want the teardown started, or if anything else surfaces in the meantime."
-
-(some of this has probably already been done)
+---
 
 ---
 
 ---
 
-use react-leaflet v2?
-https://github.com/KristjanESPERANTO/Leaflet.markercluster?
-react-leaflet?
-
-leaflet-measure seems no more upkept
-leaflet-easyprint same
-
-> build ourselves?
+---
 
 ---
+
+---
+
+---
+
+When react-leaflet v6 (actively developed against beta.2 on the next branch) is published, you can drop the override, the patch script, and the shim in one go.

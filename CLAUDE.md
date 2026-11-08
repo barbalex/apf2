@@ -36,14 +36,13 @@ Playwright tests require a running dev server and a credentials file at `playwri
 
 > There is **no unit-test runner in active use** — `vitest`/`jsdom` are installed but the suite is Playwright E2E only.
 
-Local backend stack (Postgres + PostGraphile + Caddy) lives in [backend/](backend/):
+Local backend stack (Postgres + PostgREST + Caddy) lives in [backend/](backend/):
 
 ```bash
 cd backend
 # backend/.env must define: POSTGRES_USER, POSTGRES_PASSWORD, AUTHENTICATOR_PASSWORD,
 # JWT_SECRET, DATABASE_URL (it already exists in this checkout)
-docker compose up      # db on :5432, graphql (PostGraphile) on :5000,
-                       # postgrest on :3000
+docker compose up      # db on :5432, postgrest on :3000
 ```
 
 The dev frontend (`postgrestUri()` in [src/modules/api.ts](src/modules/api.ts)) points at `http://localhost:3000`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack; after recreating its db volume run `npm run db:apply-sql`.)
@@ -79,7 +78,7 @@ The "second tree" (`tree2`) is the same app embedded in an iframe (see `tree2Src
 - [src/components/Ekf/](src/components/Ekf/) — "Erfolgs-Kontrollen Freiwillige" volunteer mode.
 - [src/components/EkPlan/](src/components/EkPlan/) — success-control planning.
 - [src/components/Print/](src/components/Print/) — printable reports (serverless; print state via `isPrintAtom`).
-- [src/modules/](src/modules/) — hooks (`use*NavData.ts` fetch nav data per node type) and pure helpers (coordinate conversions, exports CSV/KML/XLSX, GraphQL filter builders, `historize`).
+- [src/modules/](src/modules/) — hooks (`use*NavData.ts` fetch nav data per node type) and pure helpers (coordinate conversions, exports CSV/KML/XLSX, gql-shaped jsonb filter builders consumed by the `query_*` RPCs, `historize`).
 - [src/models/](src/models/) — per-table TS types, grouped by DB schema (`apflora`, `auth`, `public`, `request`).
 - [sql/](sql/) — the DB: [sql/apflora/createTables.sql](sql/apflora/createTables.sql), views/triggers/functions, [sql/migration/](sql/migration/) (numbered one-offs), [sql/auth/](sql/auth/) (JWT + login). PostgREST exposes the `apflora` schema; views (`v_…`/`VQ…`) become queryable tables/functions.
 
@@ -96,5 +95,6 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 - **React Compiler is on** (`babel-plugin-react-compiler` via `@rolldown/plugin-babel` in [vite.config.ts](vite.config.ts)); write compiler-friendly components (stable refs, no manual memoization hacks).
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.
 - **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.
+- **`overrides` pins `next` to a patched release**: `next` enters the lockfile as an (unused) peer dependency of `@uploadcare/react-uploader`/`@vercel/analytics` but is never imported or bundled. Unpinned it kept a vulnerable version in the lockfile, which lit up ~44 Dependabot alerts (incl. critical Next.js RCEs that can't apply — this is not a Next.js app). Keep the pin at or above the patched range; remove it entirely once the uploaders drop the peer dep.
 - **German UI**: keep labels, notifications, and route path segments in German unless explicitly asked to translate.
 - App version: `npm run deploy [patch|minor|major]` bumps `version` + `versionDate` in [package.json](package.json) automatically (default: patch) — don't bump manually. Deploys go through the `apflora` branch: the script merges master into apflora and pushes, which triggers the Vercel production deploy. The version is shown in the hamburger menu. `npm run build` also emits `version.json` (never cached — excluded from the sw precache in [vite.config.ts](vite.config.ts), `no-cache` header in [vercel.json](vercel.json)); `src/components/VersionCheck/` compares it against the running bundle and offers a cache-clearing reload so stale PWA clients surface instead of failing silently.

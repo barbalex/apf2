@@ -1,13 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
+import { DivIcon, Point } from 'leaflet'
+import type { Marker as LeafletMarkerType } from 'leaflet'
 
+import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useDisplayedLabels } from '../../useDisplayedLabels.ts'
+import {
+  LABELS_MAX_MARKERS,
+  useProgressiveElements,
+} from '../../useProgressiveCount.ts'
+import type {
+  MarkerCluster,
+  MarkerClusterGroup,
+} from 'leaflet.markercluster'
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
+
+import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 
 import type {
   PopId,
@@ -48,27 +61,18 @@ interface PopQueryResult {
   }
 }
 
-// leaflet.markercluster ships no type declarations;
-// this models the narrow cluster API used by the cluster icon callback
-interface MarkerCluster {
-  getAllChildMarkers(): {
-    options: {
-      icon: { options: { className?: string } }
-    }
-  }[]
-}
-
 const iconCreateFunction = function (cluster: MarkerCluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(
-    (m) => m.options.icon.options.className === 'popIconHighlighted',
+    (m) =>
+      (m.options.icon as DivIcon).options.className === 'popIconHighlighted',
   )
   const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
 
-  return window.L.divIcon({
+  return new DivIcon({
     html: String(markers.length),
     className,
-    iconSize: window.L.point(40, 40),
+    iconSize: new Point(40, 40),
   })
 }
 
@@ -169,19 +173,32 @@ const ObservedPop = () => {
     })
   }
 
+  const nodes = data?.allPops?.nodes ?? []
+  // > 20 000 markers with "Layer auch anzeigen...": mount them in chunks
+  // so the UI stays responsive. Markers get React-rendered permanent
+  // labels only in small layers; big layers label their displayed
+  // markers imperatively once zoomed in (useDisplayedLabels)
+  const labeled = nodes.length <= LABELS_MAX_MARKERS
+  const groupRef = useRef<MarkerClusterGroup<LeafletMarkerType> | null>(null)
+  const popMarkers = useProgressiveElements(nodes, (pop) => (
+    <Marker key={pop.id} pop={pop} labeled={labeled} />
+  ))
+  useDisplayedLabels({
+    map,
+    group: groupRef,
+    nodes: labeled ? [] : nodes,
+    tooltipClassName: markerStyles.tooltip!,
+    mountedCount: labeled ? 0 : popMarkers.length,
+  })
+
   return (
-    <MarkerClusterGroup
-      key={data?.allPops?.nodes.map((p) => p.id).toString()} // to force rerendering when data changes, see
+    <ClusterGroup
+      ref={groupRef}
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
     >
-      {(data?.allPops?.nodes ?? []).map((pop) => (
-        <Marker
-          key={pop.id}
-          pop={pop}
-        />
-      ))}
-    </MarkerClusterGroup>
+      {popMarkers}
+    </ClusterGroup>
   )
 }
 

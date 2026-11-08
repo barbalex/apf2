@@ -26,24 +26,37 @@ export const tpopFolder = async ({
       `/q_tpop?pop_id=eq.${popId}&select=id,pop_id`,
     )) ?? []
   const tpopIds = tpops.map((t) => t.id)
+  // with no tpops there is nothing to fetch — skip the requests
+  // (a former 'id=eq.null' "fetch nothing" filter errors on PostgREST
+  //  12: it passes the string "null" to the uuid cast)
   const tpopFilter =
-    tpopIds.length ? `tpop_id=in.(${tpopIds.join(',')})` : 'id=eq.null'
+    tpopIds.length ? `tpop_id=in.(${tpopIds.join(',')})` : null
   const results = await Promise.all([
-    apiFetch<{ id: string; tpop_id: string }[]>(
-      `/q_tpopmassn?${tpopFilter}&select=id,tpop_id`,
-    ),
-    apiFetch<{ id: string; tpop_id: string }[]>(
-      `/q_tpopmassnber?${tpopFilter}&select=id,tpop_id`,
-    ),
-    apiFetch<{ id: string; tpop_id: string; typ: string }[]>(
-      `/q_tpopkontr?${tpopFilter}&select=id,tpop_id,typ`,
-    ),
-    apiFetch<{ id: string; tpop_id: string }[]>(
-      `/q_tpopber?${tpopFilter}&select=id,tpop_id`,
-    ),
-    apiFetch<{ id: string; tpop_id: string }[]>(
-      `/q_beob?${tpopFilter}&select=id,tpop_id`,
-    ),
+    tpopFilter ?
+      apiFetch<{ id: string; tpop_id: string }[]>(
+        `/q_tpopmassn?${tpopFilter}&select=id,tpop_id`,
+      )
+    : [],
+    tpopFilter ?
+      apiFetch<{ id: string; tpop_id: string }[]>(
+        `/q_tpopmassnber?${tpopFilter}&select=id,tpop_id`,
+      )
+    : [],
+    tpopFilter ?
+      apiFetch<{ id: string; tpop_id: string; typ: string }[]>(
+        `/q_tpopkontr?${tpopFilter}&select=id,tpop_id,typ`,
+      )
+    : [],
+    tpopFilter ?
+      apiFetch<{ id: string; tpop_id: string }[]>(
+        `/q_tpopber?${tpopFilter}&select=id,tpop_id`,
+      )
+    : [],
+    tpopFilter ?
+      apiFetch<{ id: string; tpop_id: string }[]>(
+        `/q_beob?${tpopFilter}&select=id,tpop_id`,
+      )
+    : [],
   ])
   const tpopmassnsAll = results[0] ?? []
   const tpopmassnbersAll = results[1] ?? []

@@ -6,7 +6,8 @@ import { isValid } from 'date-fns/isValid'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import type { LeafletEvent } from 'leaflet'
+import { DivIcon, LatLng } from 'leaflet'
+import type { LeafletEvent, Marker as LeafletMarkerType } from 'leaflet'
 
 import {
   addNotificationAtom,
@@ -63,8 +64,8 @@ export const Marker = ({ beob }: MarkerProps) => {
 
   const isHighlighted = beobId === beob.id
   const isAbsenz = beob.absenz
-  const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
-  const icon = window.L.divIcon({
+  const latLng = new LatLng(beob.wgs84Lat, beob.wgs84Long)
+  const icon = new DivIcon({
     html:
       isHighlighted ?
         isAbsenz ? beobIconHighlightedAbsenzString
@@ -93,7 +94,7 @@ export const Marker = ({ beob }: MarkerProps) => {
      */
     const nearestTpop = await getNearestTpop({
       ...(apId ? { apId } : {}),
-      latLng: event.target._latlng,
+      latLng: (event.target as LeafletMarkerType).getLatLng(),
       ...(beob.aeTaxonomyByArtId?.id ?
         { artId: beob.aeTaxonomyByArtId.id }
       : {}),

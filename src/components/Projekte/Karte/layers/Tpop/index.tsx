@@ -1,16 +1,28 @@
 import { apiUpdateByVariables } from '../../../../../modules/api.ts'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
-import type { LeafletMouseEvent } from 'leaflet'
+import { DivIcon, DomEvent, Point } from 'leaflet'
+import type { LeafletMouseEvent, Marker as LeafletMarkerType } from 'leaflet'
 
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useDisplayedLabels } from '../../useDisplayedLabels.ts'
+import {
+  LABELS_MAX_MARKERS,
+  useProgressiveElements,
+} from '../../useProgressiveCount.ts'
+import type {
+  MarkerCluster,
+  MarkerClusterGroup,
+} from 'leaflet.markercluster'
 
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
+
+import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 
 import type {
   TpopId,
@@ -60,29 +72,17 @@ interface TpopQueryResult {
   }
 }
 
-// leaflet.markercluster ships no type declarations;
-// this models the narrow cluster API used by the cluster icon callback
-interface MarkerCluster {
-  getAllChildMarkers(): {
-    options: {
-      // markers may carry custom flags on their icon options
-      icon: { options: { isHighlighted?: boolean } }
-    }
-  }[]
-  getChildCount(): number
-}
-
 const iconCreateFunction = (cluster: MarkerCluster) => {
   const hasHighlightedTpop = cluster
     .getAllChildMarkers()
-    .some((m) => m.options.icon.options.isHighlighted)
+    .some((m) => (m.options.icon.options as { isHighlighted?: boolean }).isHighlighted)
   const className =
     hasHighlightedTpop ? 'tpopClusterHighlighted' : 'tpopCluster'
 
-  return window.L.divIcon({
+  return new DivIcon({
     html: String(cluster.getChildCount()),
     className,
-    iconSize: window.L.point(40, 40),
+    iconSize: new Point(40, 40),
   })
 }
 
@@ -225,7 +225,7 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     // the crazy thing is:
     // in some areas (not all) the second event
     // has wrong coordinates!!!!
-    window.L.DomEvent.stopPropagation(event)
+    DomEvent.stopPropagation(event)
     /**
      * how to update a geometry value?
      * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
@@ -264,9 +264,9 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     if (idOfTpopBeingLocalized) {
       // see: https://stackoverflow.com/a/28724847/712005
       // altering the maps css corrupted the map ui
-      window.L.DomUtil.addClass(mapContainer, 'crosshair-cursor-enabled')
+      mapContainer.classList.add('crosshair-cursor-enabled')
     } else {
-      window.L.DomUtil.removeClass(mapContainer, 'crosshair-cursor-enabled')
+      mapContainer.classList.remove('crosshair-cursor-enabled')
     }
   }, [idOfTpopBeingLocalized, mapContainer])
 
@@ -279,23 +279,34 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     })
   }
 
-  const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
-    <Marker
-      key={tpop.id}
-      tpop={tpop}
-    />
+  const nodes = data?.allTpops?.nodes ?? []
+  // > 20 000 markers with "Layer auch anzeigen...": mount them in chunks
+  // so the UI stays responsive. Markers get React-rendered permanent
+  // labels only in small layers; big layers label their displayed
+  // markers imperatively once zoomed in (useDisplayedLabels)
+  const labeled = nodes.length <= LABELS_MAX_MARKERS
+  const groupRef = useRef<MarkerClusterGroup<LeafletMarkerType> | null>(null)
+  const tpopMarkers = useProgressiveElements(nodes, (tpop) => (
+    <Marker key={tpop.id} tpop={tpop} labeled={labeled} />
   ))
+  useDisplayedLabels({
+    map: leafletMap,
+    group: groupRef,
+    nodes: labeled || !clustered ? [] : nodes,
+    tooltipClassName: markerStyles.tooltip!,
+    mountedCount: labeled || !clustered ? 0 : tpopMarkers.length,
+  })
 
   if (clustered) {
     return (
-      <MarkerClusterGroup
-        key={tpopMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
+      <ClusterGroup
+        ref={groupRef}
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
         chunkedLoading
       >
         {tpopMarkers}
-      </MarkerClusterGroup>
+      </ClusterGroup>
     )
   }
 

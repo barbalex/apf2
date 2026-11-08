@@ -1,4 +1,5 @@
 import { Polyline as LeafletPolyline, Popup } from 'react-leaflet'
+import { LatLng } from 'leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import Button from '@mui/material/Button'
@@ -49,11 +50,11 @@ export const Polyline = ({ beob }: PolylineProps) => {
   const { search } = useLocation()
 
   const isHighlighted = beobId === beob.id
-  const beobLatLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
+  const beobLatLng = new LatLng(beob.wgs84Lat, beob.wgs84Long)
   const tpopLong = beob?.tpopByTpopId?.wgs84Long
   const tpopLat = beob?.tpopByTpopId?.wgs84Lat
   const tpopLatLng =
-    tpopLong && tpopLat ? new window.L.LatLng(tpopLat, tpopLong) : beobLatLng
+    tpopLong && tpopLat ? new LatLng(tpopLat, tpopLong) : beobLatLng
   // some dates are not valid
   // need to account for that
   let datum = '(kein Datum)'

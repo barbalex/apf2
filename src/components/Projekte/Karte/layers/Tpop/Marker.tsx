@@ -1,4 +1,5 @@
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
+import { DivIcon, LatLng } from 'leaflet'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -77,7 +78,13 @@ const getIconHtml = ({
   return html
 }
 
-export const Marker = ({ tpop }: { tpop: TpopNode }) => {
+export const Marker = ({
+  tpop,
+  labeled = true,
+}: {
+  tpop: TpopNode
+  labeled?: boolean
+}) => {
   const { apId, projId, tpopId } = useParams()
   const { search } = useLocation()
 
@@ -122,8 +129,8 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
     window.open(url)
   }
 
-  const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
-  const icon = window.L.divIcon({ html: iconHtml })
+  const latLng = new LatLng(tpop.wgs84Lat, tpop.wgs84Long)
+  const icon = new DivIcon({ html: iconHtml })
   let title: string | null = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
   if (tpopLabelName === 'none') title = ''
@@ -135,6 +142,9 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
       icon={icon}
       // flurname can be null; leaflet treats falsy titles alike
       title={title as string}
+      // consumed by the imperative label management in the layer
+      // component for big layers (see useDisplayedLabels)
+      label={title ?? ''}
     >
       <Popup>
         <>
@@ -186,14 +196,16 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
           </Button>
         </>
       </Popup>
-      <Tooltip
-        direction="bottom"
-        opacity={1}
-        permanent
-        className={styles.tooltip}
-      >
-        <span className="mapTooltip">{title}</span>
-      </Tooltip>
+      {labeled && (
+        <Tooltip
+          direction="bottom"
+          opacity={1}
+          permanent
+          className={styles.tooltip!}
+        >
+          <span className="mapTooltip">{title}</span>
+        </Tooltip>
+      )}
     </LeafletMarker>
   )
 }

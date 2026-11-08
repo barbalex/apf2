@@ -1,11 +1,13 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQuery } from '@tanstack/react-query'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
-import type { Marker as LeafletMarkerType } from 'leaflet'
+import { DivIcon, Point } from 'leaflet'
 import { apiFetch } from '../../../../../modules/api.ts'
 // import { useMap } from 'react-leaflet'
 
+import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useProgressiveElements } from '../../useProgressiveCount.ts'
+import type { MarkerCluster } from 'leaflet.markercluster'
 import { Marker } from './Marker.tsx'
 import type { BeobNichtBeurteiltNode } from './Marker.tsx'
 
@@ -20,20 +22,18 @@ interface BeobNichtBeurteiltQueryResult {
   }
 }
 
-const iconCreateFunction = (cluster: {
-  getAllChildMarkers: () => LeafletMarkerType[]
-}) => {
+const iconCreateFunction = (cluster: MarkerCluster) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedBeob = markers.some(
-    (m) => m.options.icon?.options.className === 'beobIconHighlighted',
+    (m) => (m.options.icon as DivIcon | undefined)?.options.className === 'beobIconHighlighted',
   )
   const className =
     hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
 
-  return window.L.divIcon({
+  return new DivIcon({
     html: String(markers.length),
     className,
-    iconSize: window.L.point(40, 40),
+    iconSize: new Point(40, 40),
   })
 }
 
@@ -127,22 +127,21 @@ const BeobNichtBeurteiltMarker = ({ clustered }: { clustered: boolean }) => {
     })
   }
 
-  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Marker
-      key={beob.id}
-      beob={beob}
-    />
-  ))
+  // thousands of markers with "Layer auch anzeigen...": mount in chunks
+  // so the UI stays responsive
+  const beobMarkers = useProgressiveElements(
+    data?.allBeobs?.nodes ?? [],
+    (beob) => <Marker key={beob.id} beob={beob} />,
+  )
 
   if (clustered) {
     return (
-      <MarkerClusterGroup
-        key={beobMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
+      <ClusterGroup
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
       >
         {beobMarkers}
-      </MarkerClusterGroup>
+      </ClusterGroup>
     )
   }
   return beobMarkers

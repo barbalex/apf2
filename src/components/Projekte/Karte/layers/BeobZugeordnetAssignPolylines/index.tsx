@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { apiFetch } from '../../../../../modules/api.ts'
 
+import { useProgressiveElements } from '../../useProgressiveCount.ts'
+
 import { Polyline } from './Polyline.tsx'
 import type { BeobAssignLinesNode } from './Polyline.tsx'
 
@@ -132,12 +134,12 @@ const Polylines = () => {
     })
   }
 
-  return (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Polyline
-      key={beob.id}
-      beob={beob}
-    />
-  ))
+  // thousands of lines with "Layer auch anzeigen...": mount in chunks
+  // so the UI stays responsive
+  return useProgressiveElements(
+    data?.allBeobs?.nodes ?? [],
+    (beob) => <Polyline key={beob.id} beob={beob} />,
+  )
 }
 
 export const BeobZugeordnetAssignPolylines = () => {
