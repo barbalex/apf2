@@ -282,6 +282,22 @@ html {
     display: revert;
   }
 
+  /* the remove icon in the tooltip of a completed measurement */
+  .measure-tooltip .measure-remove {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 6px;
+    padding: 1px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .measure-tooltip .measure-remove:hover {
+    color: #b22c25;
+  }
+
   .popCluster {
     width: 40px;
     height: 40px;

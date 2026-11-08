@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMap } from 'react-leaflet'
-import { CircleMarker, LayerGroup, Polyline } from 'leaflet'
+import { CircleMarker, DomEvent, LayerGroup, Polyline } from 'leaflet'
 import { MdStraighten } from 'react-icons/md'
 import { length as turfLength } from '@turf/length'
 import { area as turfArea } from '@turf/area'
@@ -14,7 +14,9 @@ import styles from './FullscreenControl.module.css'
 // Leaflet-1-only). Measures distances and — with three or more points —
 // the enclosed area, like the old control did. One measurement per
 // activation: the mode ends when a measurement is completed (double
-// click); to measure again, the button is clicked again
+// click); to measure again, the button is clicked again. A completed
+// measurement is removed with the remove icon in its tooltip (like
+// leaflet-measure) or by starting the next measurement
 const ACTIVE_COLOR = '#f45942'
 const COMPLETED_COLOR = '#b22c25'
 
@@ -56,16 +58,30 @@ const pathArea = (latlngs: LatLng[]) => {
   return turfArea(turfPolygon([ring]) as Feature<PolygonGeometry>)
 }
 
+// the remove icon inside the tooltip of a completed measurement
+const removeButtonHtml =
+  '<button type="button" class="measure-remove" title="Messung entfernen">' +
+  '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">' +
+  '<path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>' +
+  '</svg></button>'
+
 export const MeasureControl = () => {
   const map = useMap()
   const [measuring, setMeasuring] = useState(false)
   // LatLngs of the fixed vertices of the measurement being taken
   const latlngsRef = useRef<LatLng[]>([])
-  // all measure layers: the path being measured plus the last completed one
+  // the layers of the measurement being taken
   const layerGroupRef = useRef<LayerGroup | null>(null)
+  // the layers of the last completed measurement
+  const completedGroupRef = useRef<LayerGroup | null>(null)
   const pathRef = useRef<Polyline | null>(null)
   const rubberRef = useRef<Polyline | null>(null)
   const cursorRef = useRef<CircleMarker | null>(null)
+
+  const removeCompleted = () => {
+    completedGroupRef.current?.remove()
+    completedGroupRef.current = null
+  }
 
   // (re)create the in-progress layers. They are dropped when a measurement
   // completes (or is cancelled) and recreated when the next one starts —
@@ -101,9 +117,8 @@ export const MeasureControl = () => {
 
   const removeInProgressLayers = () => {
     latlngsRef.current = []
-    pathRef.current?.remove()
-    rubberRef.current?.remove()
-    cursorRef.current?.remove()
+    layerGroupRef.current?.remove()
+    layerGroupRef.current = null
     pathRef.current = null
     rubberRef.current = null
     cursorRef.current = null
@@ -169,34 +184,47 @@ export const MeasureControl = () => {
       })
       if (deduped.length < 2) return
 
-      // replace everything on the map with the completed measurement
-      layerGroupRef.current?.clearLayers()
-      pathRef.current = null
-      rubberRef.current = null
-      cursorRef.current = null
-      latlngsRef.current = []
+      // the completed measurement replaces everything: the previous
+      // result and the in-progress layers
+      removeCompleted()
+      removeInProgressLayers()
+      const completedGroup = new LayerGroup()
+      completedGroup.addTo(map)
+      completedGroupRef.current = completedGroup
       const completed = new Polyline(deduped, {
         color: COMPLETED_COLOR,
         weight: 2,
-      }).addTo(layerGroupRef.current!)
+      }).addTo(completedGroup)
       const area = pathArea(deduped)
       const content =
         area ?
           `${formatLength(pathLength(deduped))}<br />${formatArea(area)}`
         : formatLength(pathLength(deduped))
-      completed.bindTooltip(content, {
+      completed.bindTooltip(`${content}${removeButtonHtml}`, {
         permanent: true,
         direction: 'top',
         opacity: 1,
+        interactive: true,
+        className: 'measure-tooltip',
       })
       new CircleMarker(deduped[0]!, {
         radius: 3,
         color: COMPLETED_COLOR,
         interactive: false,
-      }).addTo(layerGroupRef.current!)
+      }).addTo(completedGroup)
       completed.openTooltip()
+      // the remove icon only exists once the tooltip is open
+      const removeButton = completed
+        .getTooltip()
+        ?.getElement()
+        ?.querySelector<HTMLElement>('.measure-remove')
+      if (removeButton) {
+        // keep the click from reaching the map
+        DomEvent.disableClickPropagation(removeButton)
+        removeButton.addEventListener('click', () => removeCompleted())
+      }
       // one measurement per activation: leave the measuring mode, the
-      // result stays until the next measurement is started via the button
+      // result stays until it is removed or a new measurement is started
       setMeasuring(false)
     }
     const onKeyDown = (e: KeyboardEvent) => {
@@ -222,8 +250,8 @@ export const MeasureControl = () => {
       map.off('dblclick', finish)
       map.off('pointermove', onPointerMove)
       window.removeEventListener('keydown', onKeyDown)
-      // the in-progress path is discarded, the last completed
-      // measurement stays until a new one starts
+      // the in-progress path is discarded, the completed measurement
+      // stays until it is removed or a new one is started
       removeInProgressLayers()
     }
   }, [map, measuring])
@@ -233,6 +261,7 @@ export const MeasureControl = () => {
       // remove everything when the Karte unmounts
       layerGroupRef.current?.remove()
       layerGroupRef.current = null
+      removeCompleted()
     },
     [],
   )
@@ -240,8 +269,7 @@ export const MeasureControl = () => {
   const toggleMeasuring = () => {
     if (!measuring) {
       // a new measuring session discards the previous result
-      layerGroupRef.current?.remove()
-      layerGroupRef.current = null
+      removeCompleted()
     }
     setMeasuring(!measuring)
   }
