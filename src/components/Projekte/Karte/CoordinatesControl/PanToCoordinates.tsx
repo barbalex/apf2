@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { ChangeEvent, FocusEvent } from 'react'
-import 'leaflet'
+import { Icon, LatLng, Marker } from 'leaflet'
 import type { Map as LeafletMap, Marker as LeafletMarker } from 'leaflet'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -79,11 +79,11 @@ export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps)
   const onClickGoto = () => {
     if (x && y && !xError && !yError) {
       const [lat = 0, lng = 0] = epsg2056to4326(x, y)
-      const latLng = new window.L.LatLng(lat, lng)
+      const latLng = new LatLng(lat, lng)
       map.flyTo(latLng)
-      const newMarker = window.L.marker(latLng, {
+      const newMarker = new Marker(latLng, {
         title: `${x}/${y}`,
-        icon: window.L.icon({
+        icon: new Icon({
           iconUrl: panCentreIcon,
           iconSize: [36, 36],
         }),

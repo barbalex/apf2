@@ -7,8 +7,6 @@ import { Provider as JotaiProvider } from 'jotai'
 import { Analytics } from '@vercel/analytics/react'
 import { version as appVersion } from '../package.json'
 
-import 'react-leaflet-markercluster/styles'
-
 import { theme } from './utils/materialTheme.ts'
 
 import { store, userTokenAtom, removeUserAtom } from './store/index.ts'

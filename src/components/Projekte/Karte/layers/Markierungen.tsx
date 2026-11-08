@@ -1,5 +1,5 @@
 import { GeoJSON } from 'react-leaflet'
-import 'leaflet'
+import { CircleMarker } from 'leaflet'
 import { useQuery } from '@tanstack/react-query'
 import type { Feature, FeatureCollection } from 'geojson'
 import type { LatLng } from 'leaflet'
@@ -37,7 +37,7 @@ const pTLOptions = {
   fillOpacity: 0.8,
 }
 const pointToLayer = (_feature: Feature, latlng: LatLng) =>
-  window.L.circleMarker(latlng, pTLOptions)
+  new CircleMarker(latlng, pTLOptions)
 
 export const Markierungen = () => {
   const { data } = useQuery({

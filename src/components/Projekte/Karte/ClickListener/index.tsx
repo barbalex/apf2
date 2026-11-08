@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import L from 'leaflet'
+import { Popup as LeafletPopup } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
@@ -400,7 +400,10 @@ export const ClickListener = () => {
         mapSize={map.getSize()}
       />,
     )
-    L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
+    new LeafletPopup()
+      .setLatLng(event.latlng)
+      .setContent(popupContent)
+      .openOn(map)
   }
 
   useMapEvent('click', (event) => void onClick(event))

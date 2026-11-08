@@ -12,6 +12,7 @@
   "author": "Alexander Gabriel",
   "license": "ISC",
   "overrides": {
+    "leaflet": "$leaflet",
     "next": "16.4.5"
   },
   "scripts": {
@@ -30,6 +31,7 @@
     "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i",
+    "postinstall": "node scripts/patch-leaflet2.mjs",
     "models:generate": "node scripts/kanel-generate.mjs",
     "selects:generate": "node scripts/generate-selects.mjs",
     "db:apply-sql": "scripts/apply-postgrest-sql.sh",
@@ -59,18 +61,14 @@
     "file-saver": "2.0.5",
     "jotai": "3.0.1",
     "jwt-decode": "4.0.0",
-    "leaflet": "1.9.4",
-    "leaflet-draw": "1.0.4",
-    "leaflet-easyprint": "2.1.9",
-    "leaflet-measure": "3.1.0",
-    "leaflet.markercluster": "1.5.3",
+    "leaflet": "2.0.0-beta.2",
+    "leaflet.markercluster": "2.0.0-beta.1",
     "linkify-react": "4.4.0",
     "linkifyjs": "4.4.0",
     "localforage": "1.10.0",
     "markdown-it": "15.0.3",
     "notistack": "3.0.2",
     "proj4": "2.22.0",
-    "proj4leaflet": "1.0.2",
     "query-string": "10.0.0",
     "react": "19.3.1",
     "react-aria": "3.53.1",
@@ -80,7 +78,6 @@
     "react-highlight-words": "1.0.0",
     "react-icons": "5.7.0",
     "react-leaflet": "5.0.0",
-    "react-leaflet-markercluster": "5.0.0-rc.0",
     "react-markdown-editor-lite": "1.3.4",
     "react-router": "8.5.1",
     "react-select": "5.10.2",
@@ -97,10 +94,7 @@
     "@playwright/test": "1.64.1",
     "@rolldown/plugin-babel": "0.3.0",
     "@types/file-saver": "2.0.7",
-    "@types/leaflet": "1.9.22",
-    "@types/leaflet-draw": "1.0.13",
     "@types/node": "26.6.6",
-    "@types/proj4leaflet": "1.0.12",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript-eslint/eslint-plugin": "6.15.0",
@@ -126,6 +120,7 @@
     "@emotion/react": "unfortunately needed by @mui/material",
     "@emotion/styled": "unfortunately needed by @mui/material",
     "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies",
+    "leaflet": "2.0.0-beta.2: react-leaflet 5.0.0 still pins peer leaflet ^1.9.0, hence the override forcing our leaflet everywhere plus scripts/patch-leaflet2.mjs (DomUtil.addClass/removeClass and TileLayer.WMS were removed in Leaflet 2; markercluster's MarkerPatches.d.ts breaks other leaflet type augmentations under TS 6) and src/types/leaflet-v1-type-compat.d.ts for react-leaflet's @types/leaflet-based d.ts. Drop all three once react-leaflet ships Leaflet 2 support",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup"
   }
 }

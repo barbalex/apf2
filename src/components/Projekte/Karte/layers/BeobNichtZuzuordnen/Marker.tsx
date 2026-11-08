@@ -1,4 +1,5 @@
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
+import { DivIcon, LatLng } from 'leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import Button from '@mui/material/Button'
@@ -45,9 +46,9 @@ export const Marker = ({ beob }: MarkerProps) => {
 
   const isHighlighted = beobId === beob.id
   const isAbsenz = beob.absenz
-  const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
+  const latLng = new LatLng(beob.wgs84Lat, beob.wgs84Long)
   // use divIcon instead? https://leafletjs.com/reference.html#divicon
-  const icon = window.L.divIcon({
+  const icon = new DivIcon({
     html:
       isHighlighted ?
         isAbsenz ? beobIconHighlightedAbsenzString

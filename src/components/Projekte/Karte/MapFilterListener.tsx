@@ -10,7 +10,7 @@ export const MapFilterListener = () => {
 
   useEffect(() => {
     if (!mapFilter) {
-      map.fireEvent('draw:deletedFromOutside')
+      map.fire('draw:deletedFromOutside')
     }
   }, [map, mapFilter])
 

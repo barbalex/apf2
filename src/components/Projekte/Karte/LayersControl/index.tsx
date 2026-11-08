@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import type { MouseEvent } from 'react'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { useAtomValue } from 'jotai'
+import { DomEvent } from 'leaflet'
 
 import { Overlays } from './Overlays.tsx'
 import { ApfloraLayers } from './ApfloraLayers/index.tsx'
@@ -70,8 +71,8 @@ export const LayersControl = () => {
   const ref = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     if (!ref.current) return
-    window.L.DomEvent.disableClickPropagation(ref.current)
-    window.L.DomEvent.disableScrollPropagation(ref.current)
+    DomEvent.disableClickPropagation(ref.current)
+    DomEvent.disableScrollPropagation(ref.current)
   }, [])
 
   return (

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
+import { DivIcon, Point } from 'leaflet'
 
+import { ClusterGroup } from '../../ClusterGroup.tsx'
+import type { MarkerCluster } from 'leaflet.markercluster'
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
 
@@ -48,27 +50,18 @@ interface PopQueryResult {
   }
 }
 
-// leaflet.markercluster ships no type declarations;
-// this models the narrow cluster API used by the cluster icon callback
-interface MarkerCluster {
-  getAllChildMarkers(): {
-    options: {
-      icon: { options: { className?: string } }
-    }
-  }[]
-}
-
 const iconCreateFunction = function (cluster: MarkerCluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(
-    (m) => m.options.icon.options.className === 'popIconHighlighted',
+    (m) =>
+      (m.options.icon as DivIcon).options.className === 'popIconHighlighted',
   )
   const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
 
-  return window.L.divIcon({
+  return new DivIcon({
     html: String(markers.length),
     className,
-    iconSize: window.L.point(40, 40),
+    iconSize: new Point(40, 40),
   })
 }
 
@@ -170,18 +163,14 @@ const ObservedPop = () => {
   }
 
   return (
-    <MarkerClusterGroup
-      key={data?.allPops?.nodes.map((p) => p.id).toString()} // to force rerendering when data changes, see
-      maxClusterRadius={66}
-      iconCreateFunction={iconCreateFunction}
-    >
+    <ClusterGroup maxClusterRadius={66} iconCreateFunction={iconCreateFunction}>
       {(data?.allPops?.nodes ?? []).map((pop) => (
         <Marker
           key={pop.id}
           pop={pop}
         />
       ))}
-    </MarkerClusterGroup>
+    </ClusterGroup>
   )
 }
 

@@ -1,4 +1,5 @@
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
+import { DivIcon, LatLng } from 'leaflet'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -121,8 +122,8 @@ export const Marker = ({ pop }: { pop: PopNode }) => {
     window.open(url)
   }
 
-  const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
-  const icon = window.L.divIcon({ html: iconHtml })
+  const latLng = new LatLng(pop.wgs84Lat, pop.wgs84Long)
+  const icon = new DivIcon({ html: iconHtml })
   const zIndexOffset = -apfloraLayers.findIndex(
     (apfloraLayer) => apfloraLayer.value === 'pop',
   )
@@ -181,7 +182,7 @@ export const Marker = ({ pop }: { pop: PopNode }) => {
         direction="bottom"
         opacity={1}
         permanent
-        className={styles.tooltip}
+        className={styles.tooltip!}
       >
         <span className="mapTooltip">{title}</span>
       </Tooltip>

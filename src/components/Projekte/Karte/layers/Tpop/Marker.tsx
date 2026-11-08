@@ -1,4 +1,5 @@
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
+import { DivIcon, LatLng } from 'leaflet'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -122,8 +123,8 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
     window.open(url)
   }
 
-  const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
-  const icon = window.L.divIcon({ html: iconHtml })
+  const latLng = new LatLng(tpop.wgs84Lat, tpop.wgs84Long)
+  const icon = new DivIcon({ html: iconHtml })
   let title: string | null = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
   if (tpopLabelName === 'none') title = ''
@@ -190,7 +191,7 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
         direction="bottom"
         opacity={1}
         permanent
-        className={styles.tooltip}
+        className={styles.tooltip!}
       >
         <span className="mapTooltip">{title}</span>
       </Tooltip>

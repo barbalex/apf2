@@ -1,11 +1,8 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 import { useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
-import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
+import { MapContainer } from 'react-leaflet'
 import type { MapContainerProps } from 'react-leaflet'
-import 'leaflet'
-import 'proj4'
-import 'proj4leaflet'
 import { useParams } from 'react-router'
 import type { LatLngBoundsExpression } from 'leaflet'
 import type { Geometry, GeometryCollection } from 'geojson'
@@ -14,6 +11,7 @@ import type { PrimitiveAtom } from 'jotai'
 import { MapResizer } from './MapResizer.tsx'
 import { SafePane } from './SafePane.tsx'
 import { Control } from './Control.tsx'
+import { ZoomControl, ScaleControl } from './LeafletControls.tsx'
 import { OsmColor } from './layers/OsmColor.tsx'
 import { OsmBw } from './layers/OsmBw.tsx'
 import { SwisstopoPixelFarbe } from './layers/SwisstopoPixelFarbe.tsx'
@@ -50,9 +48,8 @@ import { BeobNichtBeurteilt } from './layers/BeobNichtBeurteilt/index.tsx'
 import { BeobNichtZuzuordnen } from './layers/BeobNichtZuzuordnen/index.tsx'
 import { BeobZugeordnet } from './layers/BeobZugeordnet/index.tsx'
 import { BeobZugeordnetAssignPolylines } from './layers/BeobZugeordnetAssignPolylines/index.tsx'
-import { MeasureControl } from './MeasureControl.tsx'
-import { DrawControl } from './DrawControl.tsx'
-import { PrintControl } from './PrintControl.tsx'
+// MeasureControl, PrintControl, PngControl and DrawControl are being rebuilt
+// for Leaflet 2 in follow-up commits on this branch
 import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
@@ -61,9 +58,9 @@ import { MapPersister } from './MapPersister.tsx'
 import { ClickListener } from './ClickListener/index.tsx'
 
 import 'leaflet/dist/leaflet.css'
-import 'leaflet-measure/dist/leaflet-measure.css'
-import 'leaflet-draw/dist/leaflet.draw.css'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
+// markercluster v2 no longer ships a base stylesheet (only the default skin,
+// which this app doesn't use — it has custom cluster icons);
+// the base animation rules live in app.css instead
 
 import {
   assigningBeobAtom,
@@ -80,18 +77,6 @@ import {
 } from '../../../store/index.ts'
 
 import styles from './index.module.css'
-
-// this does not work
-// see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
-/*
-const crs = new window.L.Proj.CRS(
-  'EPSG:2056',
-  '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',
-  {
-    resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
-    bounds,
-  }
-)*/
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
@@ -343,10 +328,10 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
               mapRef={mapRef}
             />
           </Control>
-          <PrintControl />
+          {/* PrintControl: rebuilt for Leaflet 2 in a follow-up commit */}
           <ZoomControl position="topright" />
-          <MeasureControl />
-          <DrawControl />
+          <ScaleControl imperial={false} />
+          {/* MeasureControl and DrawControl: rebuilt for Leaflet 2 in follow-up commits */}
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>

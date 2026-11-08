@@ -1,4 +1,3 @@
-import 'leaflet'
 import { useAtomValue } from 'jotai'
 
 import { mapMouseCoordinatesAtom } from '../../../../store/index.ts'

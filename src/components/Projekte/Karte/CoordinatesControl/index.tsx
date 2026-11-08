@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import { debounce } from 'es-toolkit'
@@ -35,7 +34,8 @@ export const CoordinatesControl = () => {
   const onMouseMove = debounce(setMouseCoords, 50)
 
   const map = useMapEvents({
-    mousemove(e) {
+    // Leaflet 2 renamed the mouse events to pointer events
+    pointermove(e) {
       onMouseMove(e)
     },
   })

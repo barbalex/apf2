@@ -5,9 +5,11 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
+import { DivIcon, DomEvent, Point } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { ClusterGroup } from '../../ClusterGroup.tsx'
+import type { MarkerCluster } from 'leaflet.markercluster'
 
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
@@ -60,29 +62,17 @@ interface TpopQueryResult {
   }
 }
 
-// leaflet.markercluster ships no type declarations;
-// this models the narrow cluster API used by the cluster icon callback
-interface MarkerCluster {
-  getAllChildMarkers(): {
-    options: {
-      // markers may carry custom flags on their icon options
-      icon: { options: { isHighlighted?: boolean } }
-    }
-  }[]
-  getChildCount(): number
-}
-
 const iconCreateFunction = (cluster: MarkerCluster) => {
   const hasHighlightedTpop = cluster
     .getAllChildMarkers()
-    .some((m) => m.options.icon.options.isHighlighted)
+    .some((m) => (m.options.icon.options as { isHighlighted?: boolean }).isHighlighted)
   const className =
     hasHighlightedTpop ? 'tpopClusterHighlighted' : 'tpopCluster'
 
-  return window.L.divIcon({
+  return new DivIcon({
     html: String(cluster.getChildCount()),
     className,
-    iconSize: window.L.point(40, 40),
+    iconSize: new Point(40, 40),
   })
 }
 
@@ -225,7 +215,7 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     // the crazy thing is:
     // in some areas (not all) the second event
     // has wrong coordinates!!!!
-    window.L.DomEvent.stopPropagation(event)
+    DomEvent.stopPropagation(event)
     /**
      * how to update a geometry value?
      * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
@@ -264,9 +254,9 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     if (idOfTpopBeingLocalized) {
       // see: https://stackoverflow.com/a/28724847/712005
       // altering the maps css corrupted the map ui
-      window.L.DomUtil.addClass(mapContainer, 'crosshair-cursor-enabled')
+      mapContainer.classList.add('crosshair-cursor-enabled')
     } else {
-      window.L.DomUtil.removeClass(mapContainer, 'crosshair-cursor-enabled')
+      mapContainer.classList.remove('crosshair-cursor-enabled')
     }
   }, [idOfTpopBeingLocalized, mapContainer])
 
@@ -288,14 +278,13 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
 
   if (clustered) {
     return (
-      <MarkerClusterGroup
-        key={tpopMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
+      <ClusterGroup
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
         chunkedLoading
       >
         {tpopMarkers}
-      </MarkerClusterGroup>
+      </ClusterGroup>
     )
   }
 
