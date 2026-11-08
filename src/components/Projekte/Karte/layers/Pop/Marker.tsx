@@ -75,7 +75,7 @@ const getIconHtml = ({ isHighlighted, pop, popIconName }: GetIconHtmlProps) => {
   return iconHtml
 }
 
-export const Marker = ({ pop }: { pop: PopNode }) => {
+export const Marker = ({ pop, labeled = true }: { pop: PopNode; labeled?: boolean }) => {
   const { apId, projId, popId } = useParams()
   const { search } = useLocation()
 
@@ -181,7 +181,10 @@ export const Marker = ({ pop }: { pop: PopNode }) => {
       <Tooltip
         direction="bottom"
         opacity={1}
-        permanent
+        // permanent tooltips position themselves when the marker is added
+        // to the map — with many thousands of markers that blocks the UI
+        // for minutes, so labels become hover tooltips then
+        permanent={labeled}
         className={styles.tooltip!}
       >
         <span className="mapTooltip">{title}</span>

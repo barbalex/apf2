@@ -78,7 +78,13 @@ const getIconHtml = ({
   return html
 }
 
-export const Marker = ({ tpop }: { tpop: TpopNode }) => {
+export const Marker = ({
+  tpop,
+  labeled = true,
+}: {
+  tpop: TpopNode
+  labeled?: boolean
+}) => {
   const { apId, projId, tpopId } = useParams()
   const { search } = useLocation()
 
@@ -190,7 +196,10 @@ export const Marker = ({ tpop }: { tpop: TpopNode }) => {
       <Tooltip
         direction="bottom"
         opacity={1}
-        permanent
+        // permanent tooltips position themselves when the marker is added
+        // to the map — with many thousands of markers that blocks the UI
+        // for minutes, so labels become hover tooltips then
+        permanent={labeled}
         className={styles.tooltip!}
       >
         <span className="mapTooltip">{title}</span>

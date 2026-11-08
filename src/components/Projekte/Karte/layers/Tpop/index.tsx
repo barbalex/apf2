@@ -9,6 +9,10 @@ import { DivIcon, DomEvent, Point } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
+import {
+  LABELS_MAX_MARKERS,
+  useProgressiveElements,
+} from '../../useProgressiveCount.ts'
 import type { MarkerCluster } from 'leaflet.markercluster'
 
 import { apiFetch } from '../../../../../modules/api.ts'
@@ -269,12 +273,14 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
     })
   }
 
-  const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
-    <Marker
-      key={tpop.id}
-      tpop={tpop}
-    />
-  ))
+  const nodes = data?.allTpops?.nodes ?? []
+  // > 20 000 markers with "Layer auch anzeigen...": mount them in chunks
+  // so the UI stays responsive; labels become hover tooltips at that scale
+  const labeled = nodes.length <= LABELS_MAX_MARKERS
+  const tpopMarkers = useProgressiveElements(
+    nodes,
+    (tpop) => <Marker key={tpop.id} tpop={tpop} labeled={labeled} />,
+  )
 
   if (clustered) {
     return (

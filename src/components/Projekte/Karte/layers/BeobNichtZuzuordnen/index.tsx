@@ -6,6 +6,7 @@ import { apiFetch } from '../../../../../modules/api.ts'
 // import { useMap } from 'react-leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useProgressiveElements } from '../../useProgressiveCount.ts'
 import type { MarkerCluster } from 'leaflet.markercluster'
 import { Marker } from './Marker.tsx'
 import type { BeobNichtZuzuordnenNode } from './Marker.tsx'
@@ -128,12 +129,12 @@ const BeobNichtZuzuordnenMarker = ({ clustered }: { clustered: boolean }) => {
     })
   }
 
-  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
-    <Marker
-      key={beob.id}
-      beob={beob}
-    />
-  ))
+  // thousands of markers with "Layer auch anzeigen...": mount in chunks
+  // so the UI stays responsive
+  const beobMarkers = useProgressiveElements(
+    data?.allBeobs?.nodes ?? [],
+    (beob) => <Marker key={beob.id} beob={beob} />,
+  )
 
   if (clustered) {
     return (

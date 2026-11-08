@@ -7,6 +7,10 @@ import { useParams } from 'react-router'
 import { DivIcon, Point } from 'leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
+import {
+  LABELS_MAX_MARKERS,
+  useProgressiveElements,
+} from '../../useProgressiveCount.ts'
 import type { MarkerCluster } from 'leaflet.markercluster'
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
@@ -162,14 +166,18 @@ const ObservedPop = () => {
     })
   }
 
+  const nodes = data?.allPops?.nodes ?? []
+  // > 20 000 markers with "Layer auch anzeigen...": mount them in chunks
+  // so the UI stays responsive; labels become hover tooltips at that scale
+  const labeled = nodes.length <= LABELS_MAX_MARKERS
+  const popMarkers = useProgressiveElements(
+    nodes,
+    (pop) => <Marker key={pop.id} pop={pop} labeled={labeled} />,
+  )
+
   return (
     <ClusterGroup maxClusterRadius={66} iconCreateFunction={iconCreateFunction}>
-      {(data?.allPops?.nodes ?? []).map((pop) => (
-        <Marker
-          key={pop.id}
-          pop={pop}
-        />
-      ))}
+      {popMarkers}
     </ClusterGroup>
   )
 }
