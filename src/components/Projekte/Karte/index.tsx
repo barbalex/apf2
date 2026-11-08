@@ -327,7 +327,6 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
             />
           </Control>
           <ZoomControl position="topright" />
-          <ScaleControl imperial={false} />
           <DrawControl />
           <Control position="bottomright">
             <CoordinatesControl />
