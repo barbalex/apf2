@@ -4,11 +4,9 @@
 // compiles with TypeScript 7+.
 import type {
   ControlPosition,
-  InteractiveLayerEventMap,
   LeafletEvent,
   LeafletPointerEvent,
   Layer,
-  MapEventMap,
   TileLayerEventMap,
   TileLayerOptions,
   WMSTileLayer,

@@ -1,0 +1,1 @@
+Ab Version 1.137.35: Neue Generation der Karten-Werkzeuge implementiert. Funktion 'Layer auch anzeigen, wenn mehr als eine Art aktiv ist' optimiert: Die Karte bleibt während des Ladens aller Daten interaktiv. Beschriftungen werden erst angezeigt, wenn weniger als 300 Objekte im Ausschnitt vorkommen.

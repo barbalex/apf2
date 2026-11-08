@@ -81,13 +81,14 @@ export const useDisplayedLabels = ({
 
     applyLabels()
     map.on('moveend', applyLabels)
+    const labeled = labeledRef.current
     return () => {
       map.off('moveend', applyLabels)
-      for (const marker of labeledRef.current) {
+      for (const marker of labeled) {
         marker.closeTooltip()
         marker.unbindTooltip()
       }
-      labeledRef.current.clear()
+      labeled.clear()
     }
   }, [map, group, nodes, tooltipClassName, mountedCount])
 }
