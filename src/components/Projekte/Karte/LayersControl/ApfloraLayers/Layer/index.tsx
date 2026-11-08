@@ -144,16 +144,15 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
     queryKey: ['apfloraLayer', layer, variables],
     queryFn: async () => {
       // phase 5: the former @include-driven one-shot document became
-      // conditionally-fetched REST calls per active layer
-      const apFilter =
-        variables.ap.length ?
-          `ap_id=in.(${variables.ap.join(',')})`
-        : 'id=eq.null'
+      // conditionally-fetched REST calls per active layer.
+      // with no active ap there is nothing to count — skip the fetches
+      // (a former 'id=eq.null' "fetch nothing" filter errors on PostgREST
+      // 12: it passes the string "null" to the uuid cast)
       const popOrTpop = variables.pop || variables.tpop
       const popsWithCoordsRR =
-        popOrTpop ?
+        popOrTpop && variables.ap.length ?
           apiFetch(
-            `/q_pop?${apFilter}${variables.pop ? '&wgs84_lat=not.is.null' : ''}&select=id,wgs84_lat,wgs84_long`,
+            `/q_pop?ap_id=in.(${variables.ap.join(',')})${variables.pop ? '&wgs84_lat=not.is.null' : ''}&select=id,wgs84_lat,wgs84_long`,
           )
         : Promise.resolve(null)
       // tpops of the ap's pops, grouped client-side (former tpopsByPopId)
