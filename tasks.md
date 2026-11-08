@@ -44,24 +44,17 @@ I see there are still a few useCallback and useMemo (and others?) usages. Are th
 
 ---
 
-use react-leaflet v2 (2.0.0-beta.2)? https://leafletjs.com/reference.html
-We are using it in ps, migrated a few days ago. So far without hickups.
-Biggest issue are bound to be the plugins:
-
-- markercluster: move to https://github.com/KristjanESPERANTO/Leaflet.markercluster?
-- react-leaflet: seemed to work well in ps
-- leaflet-measure: no one touched it in years. Do we need to build our own version?
-- leaflet-easyprint: same as measure?
+---
 
 ---
 
-Manual tests:
+---
 
-- Vertex-editing a drawn filter polygon
-- cluster highlight states
-- the unclustered assign-beob mode
-- tpop-localization double-click
-- and the non-OSM base layers/WMS overlays
+---
+
+---
+
+map, when choosing 'Layer auch anzeigen, wenn mehr als eine Art aktive ist': loading takes a while, of course. can that be done without blocking the ui - or blocking less?
 
 ---
 
