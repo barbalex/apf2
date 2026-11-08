@@ -54,8 +54,6 @@ I see there are still a few useCallback and useMemo (and others?) usages. Are th
 
 ---
 
-map, when choosing 'Layer auch anzeigen, wenn mehr als eine Art aktive ist': loading takes a while, of course. can that be done without blocking the ui - or blocking less?
-
 ---
 
 When react-leaflet v6 (actively developed against beta.2 on the next branch) is published, you can drop the override, the patch script, and the shim in one go.
