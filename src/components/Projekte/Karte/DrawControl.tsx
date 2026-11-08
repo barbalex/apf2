@@ -77,7 +77,15 @@ export const DrawControl = () => {
       layer.on('geoman:update', () => persistRef.current())
     }
 
-    geoman.setLang('de')
+    // leaflet-draw's German UI, restored: the draw button explains its
+    // purpose, edit/delete say what they do to the filter shape
+    geoman.setLang('de', {
+      buttonTitles: {
+        drawPolyButton: 'Umriss zeichnen, um räumlich zu filtern',
+        editButton: 'Filter-Umriss ändern',
+        deleteButton: 'Filter-Umriss löschen',
+      },
+    })
 
     geoman.addControls({
       position: 'topleft',
@@ -163,6 +171,7 @@ export const DrawControl = () => {
       map.off('geoman:globalremovalmodetoggled', onRemovalToggled)
       map.off('geoman:globalremovalmodetoggled', setActive)
       map.getContainer()?.classList.remove(GEOMAN_ACTIVE_CLASS)
+      map.getContainer()?.classList.remove('filter-shape-drawn')
     }
     // setMapFilter is a stable jotai setter
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -175,12 +184,24 @@ export const DrawControl = () => {
     const drawLayer = drawLayerRef.current
     if (!drawLayer) return
 
+    // like leaflet-draw's two toolbars: while no filter shape exists only
+    // the draw button is shown, otherwise only edit/delete (see app.css)
+    const syncToolbarVisibility = () => {
+      map
+        .getContainer()
+        ?.classList.toggle(
+          'filter-shape-drawn',
+          drawLayer.getLayers().length > 0,
+        )
+    }
+
     const drawnGeometry = (drawLayer.toGeoJSON() as FeatureCollection)
       .features[0]?.geometry as Exclude<Geometry, GeometryCollection> | undefined
 
     if (!mapFilter) {
       // filter was cleared from outside the map
       if (drawnGeometry) drawLayer.clearLayers()
+      syncToolbarVisibility()
       return
     }
     if (
@@ -188,6 +209,7 @@ export const DrawControl = () => {
       JSON.stringify(drawnGeometry) === JSON.stringify(mapFilter)
     ) {
       // the change originated here
+      syncToolbarVisibility()
       return
     }
     // restore: on mount, or a filter set from outside ("Kanton Zürich
@@ -203,7 +225,8 @@ export const DrawControl = () => {
       }
       drawLayer.addLayer(layer)
     })
-  }, [mapFilter, setMapFilter])
+    syncToolbarVisibility()
+  }, [mapFilter, setMapFilter, map])
 
   return null
 }

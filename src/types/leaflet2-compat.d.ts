@@ -90,7 +90,9 @@ declare module 'leaflet' {
   export interface GeomanMapApi {
     addControls(options?: GeomanToolbarOptions): void
     removeControls(): void
-    setLang(lang: string): void
+    // customTranslations is deep-merged over the fallback locale
+    // (see the fork's buttonTitles)
+    setLang(lang: string, customTranslations?: object, fallback?: string): void
     globalDrawModeEnabled(): boolean
     globalEditModeEnabled(): boolean
     globalRemovalModeEnabled(): boolean

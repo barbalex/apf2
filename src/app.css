@@ -254,10 +254,32 @@ html {
 
   /* toggled by DrawControl while a geoman draw/edit/removal mode is
      active (drawing a filter polygon) */
-  .geoman-active,
   /* toggled by MeasureControl while a measurement is being taken */
-  .measure-active {
+  /* both classes are set on this very .map-container element */
+  &.geoman-active,
+  &.measure-active {
     cursor: crosshair;
+  }
+
+  /* the filter-draw toolbar behaves like leaflet-draw's two toolbars:
+     only the draw button while no filter shape exists ("Umriss zeichnen,
+     um räumlich zu filtern"), only edit/delete once one exists.
+     filter-shape-drawn is set on this very .map-container element */
+  .leaflet-geoman-button-container:has(.leaflet-geoman-icon-edit),
+  .leaflet-geoman-button-container:has(.leaflet-geoman-icon-delete) {
+    display: none;
+  }
+
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-polygon) {
+    display: none;
+  }
+
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-edit),
+  &.filter-shape-drawn
+    .leaflet-geoman-button-container:has(.leaflet-geoman-icon-delete) {
+    display: revert;
   }
 
   .popCluster {
