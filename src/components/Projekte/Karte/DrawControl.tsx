@@ -43,9 +43,9 @@ export const DrawControl = () => {
   const map = useMap()
   const [mapFilter, setMapFilter] = useAtom(mapFilterAtom)
   const drawLayerRef = useRef<L.FeatureGroup | null>(null)
-  const persistRef = useRef<() => void>(() => {})
+  const persistRef = useRef<(() => void) | null>(null)
   const removalModeRef = useRef(false)
-  const removeShapeRef = useRef<() => void>(() => {})
+  const removeShapeRef = useRef<(() => void) | null>(null)
 
   // geoman toolbar and the map -> atom direction
   useEffect(() => {
@@ -74,7 +74,7 @@ export const DrawControl = () => {
     // geoman:edit fires on every vertex move; persist only when a layer's
     // edit session ends (geoman:update)
     const wireLayerEvents = (layer: L.Layer) => {
-      layer.on('geoman:update', () => persistRef.current())
+      layer.on('geoman:update', () => persistRef.current?.())
     }
 
     // leaflet-draw's German UI, restored: the draw button explains its
@@ -219,9 +219,9 @@ export const DrawControl = () => {
     const geojsonArg =
       mapFilter as unknown as ConstructorParameters<typeof L.GeoJSON>[0]
     new L.GeoJSON(geojsonArg).eachLayer((layer) => {
-      layer.on('geoman:update', () => persistRef.current())
+      layer.on('geoman:update', () => persistRef.current?.())
       if (removalModeRef.current) {
-        layer.on('click', () => removeShapeRef.current())
+        layer.on('click', () => removeShapeRef.current?.())
       }
       drawLayer.addLayer(layer)
     })

@@ -69,6 +69,10 @@ export const useProgressiveElements = <T,>(
   const elementsRef = useRef<ReactElement[]>([])
   const itemsRef = useRef(items)
 
+  /* eslint-disable react-hooks/refs -- the element cache is grown during
+     render on purpose: the children of this render must include the new
+     elements, and re-creating the elements of already mounted markers on
+     every chunk would be quadratic */
   if (itemsRef.current !== items) {
     itemsRef.current = items
     elementsRef.current = []
@@ -78,6 +82,7 @@ export const useProgressiveElements = <T,>(
       items.slice(elementsRef.current.length, visibleCount).map(createElement),
     )
   }
+  /* eslint-enable react-hooks/refs */
 
   return elementsRef.current
 }
