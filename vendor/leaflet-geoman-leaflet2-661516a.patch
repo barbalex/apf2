@@ -1,0 +1,388 @@
+diff --git a/package-lock.json b/package-lock.json
+index 8f61040..1160109 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -33,7 +33,7 @@
+         "typescript": "^5.9.3"
+       },
+       "peerDependencies": {
+-        "leaflet": "^1.2.0"
++        "leaflet": "^2.0.0-alpha.1"
+       }
+     },
+     "node_modules/@cypress/request": {
+diff --git a/src/js/Draw/Draw.Circle.js b/src/js/Draw/Draw.Circle.js
+index 9599273..eaf2300 100644
+--- a/src/js/Draw/Draw.Circle.js
++++ b/src/js/Draw/Draw.Circle.js
+@@ -2,7 +2,7 @@ import { Circle } from 'leaflet';
+ import GeomanDrawCircleMarker from './Draw.CircleMarker';
+ 
+ export default class GeomanDrawCircle extends GeomanDrawCircleMarker {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Circle';
+     this.toolbarButtonName = 'drawCircle';
+diff --git a/src/js/Draw/Draw.CircleMarker.js b/src/js/Draw/Draw.CircleMarker.js
+index a31faa9..b26e24b 100644
+--- a/src/js/Draw/Draw.CircleMarker.js
++++ b/src/js/Draw/Draw.CircleMarker.js
+@@ -13,7 +13,7 @@ import Draw from './Draw';
+ import Utils from '../GeomanUtils';
+ 
+ export default class GeomanDrawCircleMarker extends Draw {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'CircleMarker';
+     this.toolbarButtonName = 'drawCircleMarker';
+diff --git a/src/js/Draw/Draw.Cut.js b/src/js/Draw/Draw.Cut.js
+index 2aa9f0f..71ea21e 100644
+--- a/src/js/Draw/Draw.Cut.js
++++ b/src/js/Draw/Draw.Cut.js
+@@ -15,7 +15,7 @@ import Utils from '../GeomanUtils';
+ import GeomanDrawPolygon from './Draw.Polygon';
+ 
+ export default class GeomanCut extends GeomanDrawPolygon {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Cut';
+     this.toolbarButtonName = 'cutPolygon';
+diff --git a/src/js/Draw/Draw.Marker.js b/src/js/Draw/Draw.Marker.js
+index 6d20267..0d516e3 100644
+--- a/src/js/Draw/Draw.Marker.js
++++ b/src/js/Draw/Draw.Marker.js
+@@ -3,7 +3,7 @@ import { getTranslation } from '../helpers';
+ import Draw from './Draw';
+ 
+ export default class GeomanDrawMarker extends Draw {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Marker';
+     this.toolbarButtonName = 'drawMarker';
+diff --git a/src/js/Draw/Draw.Polygon.js b/src/js/Draw/Draw.Polygon.js
+index f0a0012..4c9c0c1 100644
+--- a/src/js/Draw/Draw.Polygon.js
++++ b/src/js/Draw/Draw.Polygon.js
+@@ -4,7 +4,7 @@ import Draw from './Draw';
+ import GeomanDrawLine from './Draw.Polyline';
+ 
+ export default class GeomanDrawPolygon extends GeomanDrawLine {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Polygon';
+     this.toolbarButtonName = 'drawPolygon';
+diff --git a/src/js/Draw/Draw.Polyline.js b/src/js/Draw/Draw.Polyline.js
+index c47aa90..eb051ed 100644
+--- a/src/js/Draw/Draw.Polyline.js
++++ b/src/js/Draw/Draw.Polyline.js
+@@ -6,7 +6,7 @@ import { getTranslation } from '../helpers';
+ import Utils from '../GeomanUtils';
+ 
+ export default class GeomanDrawPolyline extends Draw {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Polyline';
+     this.toolbarButtonName = 'drawPolyline';
+diff --git a/src/js/Draw/Draw.Rectangle.js b/src/js/Draw/Draw.Rectangle.js
+index 6dfcfc4..91d7be2 100644
+--- a/src/js/Draw/Draw.Rectangle.js
++++ b/src/js/Draw/Draw.Rectangle.js
+@@ -4,7 +4,7 @@ import Draw from './Draw';
+ import Utils from '../GeomanUtils';
+ 
+ export default class GeomanDrawRectangle extends Draw {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Rectangle';
+     this.toolbarButtonName = 'drawRectangle';
+diff --git a/src/js/Draw/Draw.Text.js b/src/js/Draw/Draw.Text.js
+index d7f3e04..3df1756 100644
+--- a/src/js/Draw/Draw.Text.js
++++ b/src/js/Draw/Draw.Text.js
+@@ -3,7 +3,7 @@ import { getTranslation } from '../helpers';
+ import Draw from './Draw';
+ 
+ export default class GeomanDrawText extends Draw {
+-  initialize(map) {
++  _init(map) {
+     this._map = map;
+     this._shape = 'Text';
+     this.toolbarButtonName = 'drawText';
+diff --git a/src/js/Draw/Draw.js b/src/js/Draw/Draw.js
+index 24d6ead..af5b7c5 100644
+--- a/src/js/Draw/Draw.js
++++ b/src/js/Draw/Draw.js
+@@ -3,6 +3,7 @@ import {
+   CircleMarker,
+   Class,
+   Icon,
++  DefaultIcon,
+   ImageOverlay,
+   Marker,
+   Polyline,
+@@ -68,10 +69,15 @@ export default class Draw extends Class {
+     return this.options;
+   }
+ 
+-  initialize(map) {
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init(map) {
+     // Overwriting the default tooltipAnchor of the default Marker Icon, because the tooltip functionality was updated but not the anchor in the Icon
+     // Issue https://github.com/Leaflet/Leaflet/issues/7302 - Leaflet v1.7.1
+-    const defaultIcon = new Icon.Default();
++    const defaultIcon = new DefaultIcon();
+     defaultIcon.options.tooltipAnchor = [0, 0];
+     this.options.markerStyle.icon = defaultIcon;
+ 
+diff --git a/src/js/Edit/Edit.Circle.js b/src/js/Edit/Edit.Circle.js
+index e96d31f..ce5d0f7 100644
+--- a/src/js/Edit/Edit.Circle.js
++++ b/src/js/Edit/Edit.Circle.js
+@@ -4,7 +4,7 @@ import GeomanEditCircleMarker from './Edit.CircleMarker';
+ export default class GeomanEditCircle extends GeomanEditCircleMarker {
+   _shape = 'Circle';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     this._layer = layer;
+     this._enabled = false;
+ 
+diff --git a/src/js/Edit/Edit.CircleMarker.js b/src/js/Edit/Edit.CircleMarker.js
+index de418df..f19401a 100644
+--- a/src/js/Edit/Edit.CircleMarker.js
++++ b/src/js/Edit/Edit.CircleMarker.js
+@@ -14,7 +14,7 @@ import Utils from '../GeomanUtils';
+ export default class GeomanEditCircleMarker extends Edit {
+   _shape = 'CircleMarker';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     this._layer = layer;
+     this._enabled = false;
+ 
+diff --git a/src/js/Edit/Edit.ImageOverlay.js b/src/js/Edit/Edit.ImageOverlay.js
+index dab4b01..ddc8a3e 100644
+--- a/src/js/Edit/Edit.ImageOverlay.js
++++ b/src/js/Edit/Edit.ImageOverlay.js
+@@ -4,7 +4,7 @@ import Edit from './Edit';
+ export default class GeomanEditImageOverlay extends Edit {
+   _shape = 'ImageOverlay';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     this._layer = layer;
+     this._enabled = false;
+   }
+diff --git a/src/js/Edit/Edit.LayerGroup.js b/src/js/Edit/Edit.LayerGroup.js
+index aae0c12..3f00688 100644
+--- a/src/js/Edit/Edit.LayerGroup.js
++++ b/src/js/Edit/Edit.LayerGroup.js
+@@ -5,7 +5,12 @@ import Geoman from '../Geoman';
+ // (which inherits from Geoman.Edit) for each layer,
+ // so it's not really a parent class
+ export default class GeomanEditLayerGroup extends Class {
+-  initialize(layerGroup) {
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init(layerGroup) {
+     this._layerGroup = layerGroup;
+     this._layers = this.getLayers();
+     this._getMap();
+diff --git a/src/js/Edit/Edit.Marker.js b/src/js/Edit/Edit.Marker.js
+index 4a474a4..3976ab8 100644
+--- a/src/js/Edit/Edit.Marker.js
++++ b/src/js/Edit/Edit.Marker.js
+@@ -4,7 +4,7 @@ import Edit from './Edit';
+ export default class GeomanEditMarker extends Edit {
+   _shape = 'Marker';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     // layer is a marker in this case :-)
+     this._layer = layer;
+     this._enabled = false;
+diff --git a/src/js/Edit/Edit.Polyline.js b/src/js/Edit/Edit.Polyline.js
+index bb4a103..b7991ec 100644
+--- a/src/js/Edit/Edit.Polyline.js
++++ b/src/js/Edit/Edit.Polyline.js
+@@ -30,7 +30,7 @@ export default class GeomanEditPolyline extends Edit {
+ 
+   _shape = 'Polyline';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     this._layer = layer;
+     this._enabled = false;
+   }
+diff --git a/src/js/Edit/Edit.Text.js b/src/js/Edit/Edit.Text.js
+index 66e293f..13594cc 100644
+--- a/src/js/Edit/Edit.Text.js
++++ b/src/js/Edit/Edit.Text.js
+@@ -5,7 +5,7 @@ import Draw from '../Draw/Draw';
+ export default class GeomanEditCircleText extends Edit {
+   _shape = 'Text';
+ 
+-  initialize(layer) {
++  _init(layer) {
+     this._layer = layer;
+     this._enabled = false;
+   }
+diff --git a/src/js/Edit/Edit.js b/src/js/Edit/Edit.js
+index 482340e..773c51d 100644
+--- a/src/js/Edit/Edit.js
++++ b/src/js/Edit/Edit.js
+@@ -38,6 +38,13 @@ export default class Edit extends Class {
+       snapVertex: true,
+     });
+   }
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init() {}
++
+ 
+   setOptions(options) {
+     Util.setOptions(this, options);
+diff --git a/src/js/GeomanMap.js b/src/js/GeomanMap.js
+index 46b73b6..48fcc88 100644
+--- a/src/js/GeomanMap.js
++++ b/src/js/GeomanMap.js
+@@ -1,4 +1,4 @@
+-import { Class, CRS, DomEvent, FeatureGroup, LayerGroup } from 'leaflet';
++import { Class, DomEvent, FeatureGroup, LayerGroup, SimpleCRS } from 'leaflet';
+ import merge from 'lodash/merge';
+ import translations from '../assets/translations';
+ import EventMixin from './Mixins/Events';
+@@ -22,7 +22,12 @@ export default class GeomanMap extends Class {
+     this.include(EventMixin);
+   }
+ 
+-  initialize(map) {
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init(map) {
+     this._map = map;
+     this.Draw = new Draw(map);
+     this.Toolbar = new Toolbar(map);
+@@ -250,6 +255,7 @@ export default class GeomanMap extends Class {
+   }
+ 
+   _isCRSSimple() {
+-    return this._map.options.crs === CRS.Simple;
++    // Leaflet 2 CRS are classes with static methods used directly
++    return this._map.options.crs === SimpleCRS;
+   }
+ }
+diff --git a/src/js/Toolbar/GeomanControl.js b/src/js/Toolbar/GeomanControl.js
+index ffc0f74..4c5ba66 100644
+--- a/src/js/Toolbar/GeomanControl.js
++++ b/src/js/Toolbar/GeomanControl.js
+@@ -13,7 +13,12 @@ export default class GeomanControl extends Control {
+   }
+ 
+   // TODO: clean up variable names like _button should be _options and that domNodeVariable stuff
+-  initialize(options) {
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init(options) {
+     this._button = {};
+     for (const i in this.options) {
+       this._button[i] = this.options[i];
+diff --git a/src/js/Toolbar/GeomanToolbar.js b/src/js/Toolbar/GeomanToolbar.js
+index 2f2da06..057054d 100644
+--- a/src/js/Toolbar/GeomanToolbar.js
++++ b/src/js/Toolbar/GeomanToolbar.js
+@@ -36,7 +36,12 @@ export default class Toolbar extends Class {
+ 
+   customButtons = [];
+ 
+-  initialize(map) {
++  constructor(...args) {
++    super();
++    this._init(...args);
++  }
++
++  _init(map) {
+     // For some reason there is an reference between multiple maps instances
+     this.customButtons = [];
+     this.options.positions = {
+diff --git a/src/js/helpers/index.js b/src/js/helpers/index.js
+index d4947bd..e7adb9b 100644
+--- a/src/js/helpers/index.js
++++ b/src/js/helpers/index.js
+@@ -2,6 +2,7 @@ import {
+   Circle,
+   CircleMarker,
+   CRS,
++  EarthCRS,
+   LatLng,
+   Marker,
+   Polygon,
+@@ -55,7 +56,7 @@ export function removeEmptyCoordRings(arr) {
+ function destinationVincenty(lonlat, brng, dist) {
+   // rewritten to work with leaflet
+   const VincentyConstants = {
+-    a: CRS.Earth.R,
++    a: EarthCRS.R,
+     b: 6356752.3142,
+     f: 1 / 298.257223563,
+   };
+@@ -160,7 +161,7 @@ function destination(latlng, heading, distance) {
+   heading = (heading + 360) % 360;
+   const rad = Math.PI / 180;
+   const radInv = 180 / Math.PI;
+-  const { R } = CRS.Earth; // approximation of Earth's radius
++  const { R } = EarthCRS; // approximation of Earth's radius
+   const lon1 = latlng.lng * rad;
+   const lat1 = latlng.lat * rad;
+   const rheading = heading * rad;
+@@ -284,12 +285,19 @@ export function fixLatOffset(latlng, map) {
+ }
+ 
+ export function getRenderer(layer) {
+-  return (
+-    layer.options.renderer ||
+-    (layer._map &&
+-      (layer._map._getPaneRenderer(layer.options.pane) ||
+-        layer._map.options.renderer ||
+-        layer._map._renderer)) ||
+-    layer._renderer
+-  );
++  if (layer.options.renderer) {
++    return layer.options.renderer;
++  }
++  if (!layer._map) {
++    return layer._renderer;
++  }
++  // Leaflet 2's map.getRenderer(layer) requires renderer-capable layers:
++  // for custom panes it falls back to layer._createRenderer, which only
++  // exists on Path. Markers/ImageOverlays in other panes get the map's
++  // default renderer (Leaflet 1 created an SVG renderer for any pane).
++  const pane = layer.options.pane;
++  if (typeof layer._createRenderer === 'function' || pane === undefined || pane === 'overlayPane') {
++    return layer._map.getRenderer(layer);
++  }
++  return layer._map._renderer;
+ }

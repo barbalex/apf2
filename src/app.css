@@ -231,17 +231,6 @@ html {
   }
 
   /**
-  * leaflet-measure
-  */
-
-  .leaflet-control-measure {
-    color: black;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-clip: padding-box;
-    box-shadow: none;
-  }
-
-  /**
   * leaflet maps
   */
 
@@ -261,6 +250,14 @@ html {
     transition:
       stroke-dashoffset 0.3s ease-out,
       stroke-opacity 0.3s ease-in;
+  }
+
+  /* toggled by DrawControl while a geoman draw/edit/removal mode is
+     active (drawing a filter polygon) */
+  .geoman-active,
+  /* toggled by MeasureControl while a measurement is being taken */
+  .measure-active {
+    cursor: crosshair;
   }
 
   .popCluster {

@@ -43,6 +43,10 @@ export const ClickListener = () => {
 
   const onClick = async (event: LeafletMouseEvent) => {
     if (justClosedPopup.current) return
+    // while a filter polygon is drawn/edited/deleted or a measurement is
+    // being taken, clicks belong to that tool, not to feature-info queries
+    if (map.getContainer()?.classList.contains('geoman-active')) return
+    if (map.getContainer()?.classList.contains('measure-active')) return
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
     const mapSize = map.getSize()

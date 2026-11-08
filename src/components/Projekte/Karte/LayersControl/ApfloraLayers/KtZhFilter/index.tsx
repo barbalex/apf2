@@ -1,16 +1,10 @@
 import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
-import {
-  treeMapFilterAtom,
-  treeIncrementMapFilterResetterAtom,
-} from '../../../../../../store/index.ts'
+import { treeMapFilterAtom } from '../../../../../../store/index.ts'
 import styles from './index.module.css'
 
 export const KtZhFilter = () => {
-  const incrementMapFilterResetter = useSetAtom(
-    treeIncrementMapFilterResetterAtom,
-  )
   // the store atom is typed as undefined
   // but geojson filters are passed into it
   const setMapFilter = useSetAtom(treeMapFilterAtom) as (
@@ -23,7 +17,6 @@ export const KtZhFilter = () => {
   const onClickFilterZh = () =>
     import('./ktZh.json').then((module) => {
       const ktZh = module.default
-      incrementMapFilterResetter()
       setMapFilter(ktZh)
     })
 

@@ -11,11 +11,16 @@
 // 3. leaflet.markercluster's MarkerPatches.d.ts merges an interface onto
 //    Leaflet 2's Marker class. Under TypeScript 6 this merge fails in a way
 //    that silently drops ALL other 'leaflet' module augmentations from the
-//    program — including src/types/leaflet-v1-type-compat.d.ts, which
+//    program — including src/types/leaflet2-compat.d.ts, which
 //    react-leaflet 5's typings need. Replace the file with an empty module;
 //    it only adds clusterHide/clusterShow/refreshIconOptions to Marker,
 //    which this app never calls. Remove once typescript (or markercluster
 //    types) behaves.
+// 4. The vendored geoman fork's dist/leaflet-geoman.d.ts has the same
+//    problem (interface merges onto Leaflet's Map/Layer/Path classes).
+//    Disable it entirely; the geoman surface this app uses is declared in
+//    src/types/leaflet2-compat.d.ts instead. Remove once the app compiles
+//    with TypeScript 7+.
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -98,6 +103,33 @@ try {
   }
 } catch {
   console.warn(`patch-leaflet2: ${markerPatchesFile} not found, skipping`)
+}
+
+const geomanDtsFile = join(
+  nodeModules,
+  '@geoman-io',
+  'leaflet-geoman-free',
+  'dist',
+  'leaflet-geoman.d.ts',
+)
+const geomanDtsReplacement = `// patched by scripts/patch-leaflet2.mjs:
+// these interface merges onto Leaflet classes break other 'leaflet' module
+// augmentations under TypeScript 6; the geoman surface this app uses is
+// declared in src/types/leaflet2-compat.d.ts instead
+export {}
+`
+
+try {
+  const geomanDts = readFileSync(geomanDtsFile, 'utf8')
+  if (geomanDts.includes('declare module')) {
+    writeFileSync(geomanDtsFile, geomanDtsReplacement)
+    totalPatched++
+    console.log(
+      `patch-leaflet2: ${geomanDtsFile.replace(root + '/', '')}: disabled (breaks TS 6 leaflet augmentations)`,
+    )
+  }
+} catch {
+  console.warn(`patch-leaflet2: ${geomanDtsFile} not found, skipping`)
 }
 
 if (totalPatched === 0) {

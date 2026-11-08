@@ -48,12 +48,10 @@ import { BeobNichtBeurteilt } from './layers/BeobNichtBeurteilt/index.tsx'
 import { BeobNichtZuzuordnen } from './layers/BeobNichtZuzuordnen/index.tsx'
 import { BeobZugeordnet } from './layers/BeobZugeordnet/index.tsx'
 import { BeobZugeordnetAssignPolylines } from './layers/BeobZugeordnetAssignPolylines/index.tsx'
-// MeasureControl, PrintControl, PngControl and DrawControl are being rebuilt
-// for Leaflet 2 in follow-up commits on this branch
+import { DrawControl } from './DrawControl.tsx'
 import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
-import { MapFilterListener } from './MapFilterListener.tsx'
 import { MapPersister } from './MapPersister.tsx'
 import { ClickListener } from './ClickListener/index.tsx'
 
@@ -328,14 +326,12 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
               mapRef={mapRef}
             />
           </Control>
-          {/* PrintControl: rebuilt for Leaflet 2 in a follow-up commit */}
           <ZoomControl position="topright" />
           <ScaleControl imperial={false} />
-          {/* MeasureControl and DrawControl: rebuilt for Leaflet 2 in follow-up commits */}
+          <DrawControl />
           <Control position="bottomright">
             <CoordinatesControl />
           </Control>
-          <MapFilterListener />
         </MapContainer>
       </ErrorBoundary>
     </div>

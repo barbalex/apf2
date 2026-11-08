@@ -3,7 +3,9 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { LayersControl } from './LayersControl/index.tsx'
 import { FullscreenControl } from './FullscreenControl.tsx'
-// PngControl is being rebuilt for Leaflet 2 in a follow-up commit
+import { MeasureControl } from './MeasureControl.tsx'
+import { PngControl } from './PngControl.tsx'
+import { PrintControl } from './PrintControl.tsx'
 
 import styles from './OwnControls.module.css'
 
@@ -53,6 +55,9 @@ export const OwnControls = ({ mapRef }: OwnControlsProps) => {
     >
       <LayersControl />
       <FullscreenControl mapRef={mapRef} />
+      <MeasureControl />
+      <PngControl />
+      <PrintControl />
     </div>
   )
 }

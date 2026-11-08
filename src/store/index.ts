@@ -1622,11 +1622,6 @@ export const treeEmptyMapFilterAtom = atom(null, (_get, set) => {
   set(treeMapFilterAtom, undefined)
 })
 
-export const treeMapFilterResetterAtom = atom(0)
-export const treeIncrementMapFilterResetterAtom = atom(null, (get, set) => {
-  set(treeMapFilterResetterAtom, get(treeMapFilterResetterAtom) + 1)
-})
-
 // dataFilter atoms
 export const treeDataFilterAtom = atom(initialDataFilterValues)
 
