@@ -47,7 +47,12 @@ export const captureMap = async (map: LeafletMap): Promise<string> => {
 
 /**
  * Prints the captured map in a popup window, sized for the given @page
- * size ('' = current size) — easyprint's print flow
+ * size ('' = current size) — easyprint's print flow.
+ *
+ * The image is constrained to one page: percentage max-heights only work
+ * against a definite height, so html/body get height 100% (easyprint's
+ * "max-height: 98%" without it was dead CSS — a map taller than the page
+ * was sliced across pages, preceded by an empty page).
  */
 export const printMap = async (map: LeafletMap, pageSize: string) => {
   const dataUrl = await captureMap(map)
@@ -58,16 +63,30 @@ export const printMap = async (map: LeafletMap, pageSize: string) => {
       'Das Druckfenster wurde vom Browser blockiert. Bitte Popups für diese Seite erlauben.',
     )
   }
+  const pageRule = pageSize ? `size: ${pageSize}; margin: 0;` : 'margin: 0;'
   printWindow.document.write(`<!DOCTYPE html><html><head>
     <title>AP-Flora</title>
     <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
       @media print {
-        img { max-width: 98% !important; max-height: 98% !important; }
-        @page { size: ${pageSize}; }
+        @page { ${pageRule} }
       }
     </style>
   </head><body>
-    <img src="${dataUrl}" style="display:block; margin:auto;"
+    <img src="${dataUrl}"
       onload="setTimeout(() => { window.print(); window.close() }, 100)">
   </body></html>`)
   printWindow.document.close()
