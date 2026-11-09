@@ -76,11 +76,6 @@ interface BeobzuordnungAp {
   } | null
 }
 
-interface BeobzuordnungQueryResult {
-  beobById: BeobzuordnungBeob | null
-  apById: BeobzuordnungAp | null
-}
-
 const nichtZuordnenPopover = (
   <div className={styles.popoverContainer}>
     <div className={styles.labelPopoverTitleRow}>Legende</div>
@@ -158,7 +153,7 @@ export const Component = () => {
     queryKey: ['beobzuordnung', id, apId],
     queryFn: async () => {
       // phase 5: beob + its taxa; the ap's tpops with coordinates
-      const [beobs, taxaR, tpopsR, popsR, statusWerteR] = await Promise.all([
+      const [beobs, taxaR, popsR, statusWerteR] = await Promise.all([
         apiFetch<Record<string, unknown>[]>(
           `/q_beob?id=eq.${id}&select=id,art_id:art_id,art_id_original:art_id_original,tpop_id:tpop_id,nicht_zuordnen:nicht_zuordnen,bemerkungen,quelle,data,lv95_x,lv95_y,infoflora_informiert_datum`,
         ).then(async (rows: Record<string, unknown>[] | null) => {
@@ -186,24 +181,28 @@ export const Component = () => {
         apiFetch<
           {
             id: string
-            pop_id: string | null
             nr: number | null
-            lv95_x: number | null
-            lv95_y: number | null
-            status: number | null
+            tpop:
+              | {
+                  id: string
+                  nr: number | null
+                  lv95_x: number | null
+                  lv95_y: number | null
+                  status: number | null
+                }[]
+              | null
           }[]
         >(
-          `/q_tpop?pop_id.in.(select id from apflora.pop where ap_id eq.${apId})&select=id,pop_id,nr,lv95_x,lv95_y,status`,
-        ),
-        apiFetch<{ id: string; nr: number | null }[]>(
-          `/q_pop?ap_id=eq.${apId}&select=id,nr`,
+          // tpops are embedded through their pop: scoping them with a
+          // pop_id.in.(select…) filter is not PostgREST syntax — PostgREST
+          // drops the unparsable param and answers with EVERY tpop (#838)
+          `/q_pop?ap_id=eq.${apId}&select=id,nr,tpop(id,nr,lv95_x,lv95_y,status)`,
         ),
         apiFetch<{ code: number; text: string | null }[]>(
           `/pop_status_werte?select=code,text`,
         ),
       ])
       const taxa = new Map((taxaR ?? []).map((t) => [t.id, t]))
-      const pops = new Map((popsR ?? []).map((p) => [p.id, p]))
       const statusText = new Map(
         (statusWerteR ?? []).map((w) => [w.code, w.text ?? '']),
       )
@@ -216,34 +215,28 @@ export const Component = () => {
         ).aeTaxonomyByArtIdOriginal =
           beob.artIdOriginal ? taxa.get(beob.artIdOriginal) : null
       }
-      const tpopNodes = (tpopsR ?? []).map((t) => ({
-        id: t.id,
-        nr: t.nr,
-        lv95X: t.lv95_x,
-        lv95Y: t.lv95_y,
-        popStatusWerteByStatus:
-          t.status == null ? null : { text: statusText.get(t.status) ?? null },
-        popByPopId: t.pop_id ? { nr: pops.get(t.pop_id)?.nr ?? null } : null,
-      }))
-      // group tpops by their pop for the popList shape
-      const byPop = new Map<string, typeof tpopNodes>()
-      for (const t of tpopNodes) {
-        const popId = (tpopsR ?? []).find((r) => r.id === t.id)?.pop_id ?? ''
-        const list = byPop.get(popId ?? '') ?? []
-        list.push(t)
-        byPop.set(popId ?? '', list)
-      }
-      return {
-        beobById: beob,
-        apById: {
-          popsByApId: {
-            nodes: [...byPop.entries()].map(([id, nodes]) => ({
-              id,
-              tpopsByPopId: { nodes },
-            })),
-          },
+      // rebuild the popsByApId/tpopsByPopId graph from the embedded tpops
+      const apById: BeobzuordnungAp = {
+        popsByApId: {
+          nodes: (popsR ?? []).map((p) => ({
+            id: p.id,
+            tpopsByPopId: {
+              nodes: (p.tpop ?? []).map((t) => ({
+                id: t.id as TpopId,
+                nr: t.nr,
+                lv95X: t.lv95_x,
+                lv95Y: t.lv95_y,
+                popStatusWerteByStatus:
+                  t.status == null ?
+                    null
+                  : { text: statusText.get(t.status) ?? null },
+                popByPopId: { nr: p.nr },
+              })),
+            },
+          })),
         },
-      } as unknown as BeobzuordnungQueryResult
+      }
+      return { beobById: beob, apById }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
