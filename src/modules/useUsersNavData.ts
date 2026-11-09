@@ -3,6 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
+import { PasswortFehlt } from '../components/NavElements/PasswortFehlt.tsx'
 
 export const useUsersNavData = () => {
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
@@ -10,7 +11,7 @@ export const useUsersNavData = () => {
   const { data } = useSuspenseQuery({
     queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
-      const [nodes, totalCount] = await Promise.all([
+      const [nodes, totalCount, passlessUsers] = await Promise.all([
         apiFetch<{ id: string; label: string | null }[]>(
           '/rpc/query_user?select=id,label',
           {
@@ -22,10 +23,13 @@ export const useUsersNavData = () => {
           },
         ),
         apiCount('/q_user'),
+        // ids only: the pass column never reaches the client
+        apiFetch<{ id: string }[]>('/q_user?pass=is.null&select=id'),
       ])
       return {
         allUsers: { nodes: nodes ?? [] },
         totalCount: { totalCount },
+        passlessIds: new Set((passlessUsers ?? []).map((u) => u.id)),
       }
     },
   })
@@ -54,6 +58,9 @@ export const useUsersNavData = () => {
       treeTableId: p?.id,
       treeUrl: ['Benutzer', p?.id],
       hasChildren: false,
+      labelRightElements: data.passlessIds.has(p?.id ?? '')
+        ? [PasswortFehlt]
+        : undefined,
     })),
   }
 
