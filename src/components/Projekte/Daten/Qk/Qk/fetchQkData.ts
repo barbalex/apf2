@@ -1186,7 +1186,17 @@ export const fetchQkData = async ({
     .map(([name]) => name)
     .filter((name) => name in fetchers)
   const results = await Promise.all(
-    active.map(async (name) => [name, await fetchers[name]!()]),
+    active.map(async (name) => {
+      try {
+        return [name, await fetchers[name]!()]
+      } catch (error) {
+        // one failed check must surface as an error naming it — the UI
+        // shows this instead of pretending there is nothing to
+        // complain about (#836)
+        ;(error as Error & { checkName?: string }).checkName = name
+        throw error
+      }
+    }),
   )
   return Object.fromEntries(results) as QkQueryData
 }

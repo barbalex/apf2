@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import Badge from '@mui/material/Badge'
 import Paper from '@mui/material/Paper'
+import Alert from '@mui/material/Alert'
 import { useQuery } from '@tanstack/react-query'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -57,7 +58,7 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   )
     .toISOString()
     .split('T')[0]
-  const { data, refetch, isFetching } = useQuery({
+  const { data, refetch, isFetching, error } = useQuery({
     queryKey: ['qk', apId, projId, berichtjahr, qkNameQueries],
     queryFn: async () => {
       // phase 5: only the active checks are fetched (former @include doc)
@@ -97,6 +98,9 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
     }
     return true
   })
+
+  // a failed check must never read as "nothing to complain about" (#836)
+  const checkError = error as (Error & { checkName?: string }) | null
 
   return (
     <ErrorBoundary>
@@ -155,7 +159,14 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
             </Badge>
           </div>
         }
-        {isFetching ?
+        {checkError ?
+          <Alert
+            severity="error"
+            className={styles.styledFormControl}
+          >{`Die Qualitätskontrollen konnten nicht geladen werden${
+            checkError.checkName ? ` (Prüfung: ${checkError.checkName})` : ''
+          }: ${checkError.message}. Bitte melden Sie diesen Fehler.`}</Alert>
+        : isFetching ?
           null
         : messageGroups.length > 0 ?
           <div className={styles.scrollContainer}>
