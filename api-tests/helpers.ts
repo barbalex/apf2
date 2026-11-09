@@ -196,3 +196,18 @@ export const assertBackendAvailable = async (): Promise<void> => {
   }).catch(() => null)
   if (!pgrstRes) throw new Error(message)
 }
+
+// password of the dev manager account (gabriel): either from the env
+// or from the playwright storage state
+export const getDevPassword = (): string | undefined => {
+  const env = process.env.APF2_TEST_PASSWORD
+  if (env) return env
+  try {
+    const auth = JSON.parse(
+      readFileSync(path.resolve(__dirname, '../playwright/.auth/user.json'), 'utf8'),
+    ) as { password?: string }
+    return auth.password
+  } catch {
+    return undefined
+  }
+}

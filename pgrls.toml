@@ -57,13 +57,13 @@ severity = "info"
 
 [lint.rules.SEC042]
 # set_password stays SECURITY DEFINER (owned by postgres) and executable
-# by anon: pre-provisioned accounts without a password cannot log in
-# (auth.user_role never matches NULL pass), so this rpc as anon is their
-# only onboarding path. Risk accepted: whoever knows the username of a
-# passless account can claim it — migrate to invite tokens if that
-# becomes a concern. Migration 0065 revoked PUBLIC's default EXECUTE on
-# historize, historize_for_ap, correct_vornach_beginnap_stati and
-# encrypt_pass (trigger-only), leaving only the intended grantees.
+# by anon: the forced rotation (#835) needs it pre-login. Every call
+# must prove the current password; passless accounts are refused
+# (topos assigns their initial password via the Benutzer form) — see
+# 2026-11-09_set-password-no-passless-claiming. Migration 0065 revoked
+# PUBLIC's default EXECUTE on historize, historize_for_ap,
+# correct_vornach_beginnap_stati and encrypt_pass (trigger-only),
+# leaving only the intended grantees.
 allowlist = ["apflora.set_password"]
 
 [lint.rules.SEC014]
