@@ -59,6 +59,12 @@ services:
       # v12 otherwise tries to read its config from the db
       PGRST_DB_CONFIG: "false"
       PGRST_SERVER_CORS_ENABLED: "true"
+      # burst headroom: the default pool of 10 504s under the EkPlan/
+      # print fan-outs on this 2-vCPU box.
+      # #836: Qualitätskontrollen fire dozens of parallel requests; give
+      # queued requests longer to acquire a slot (default is 10 s)
+      PGRST_DB_POOL: "20"
+      PGRST_DB_POOL_ACQUISITION_TIMEOUT: "30"
   caddy:
     build:
       context: ./caddy

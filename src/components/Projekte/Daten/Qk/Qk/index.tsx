@@ -79,14 +79,20 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const onChangeFilter = (event: ChangeEvent<HTMLInputElement>) =>
     setFilter(event.target.value)
 
+  // checks that failed individually — their results are missing, the
+  // other checks' results still show (#836)
+  const failedChecks = data?.errors ?? []
+
   const messageFunctions = createMessageFunctions({
-    data,
+    data: data?.data,
     projId,
     apId,
   })
   const messageGroups = qks
     .filter((qk) => !!messageFunctions[qk.name])
     .map((qk) => ({
+      // name is the primary key of apflora.qk; titel is not unique
+      name: qk.name,
       title: qk.titel,
       messages: messageFunctions[qk.name]?.() ?? [],
     }))
@@ -99,8 +105,8 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
     return true
   })
 
-  // a failed check must never read as "nothing to complain about" (#836)
-  const checkError = error as (Error & { checkName?: string }) | null
+  // a failed run must never read as "nothing to complain about" (#836)
+  const runError = error as Error | null
 
   return (
     <ErrorBoundary>
@@ -159,69 +165,81 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
             </Badge>
           </div>
         }
-        {checkError ?
+        {runError ?
           <Alert
             severity="error"
             className={styles.styledFormControl}
-          >{`Die Qualitätskontrollen konnten nicht geladen werden${
-            checkError.checkName ? ` (Prüfung: ${checkError.checkName})` : ''
-          }: ${checkError.message}. Bitte melden Sie diesen Fehler.`}</Alert>
+          >{`Die Qualitätskontrollen konnten nicht geladen werden: ${runError.message}. Bitte melden Sie diesen Fehler.`}</Alert>
         : isFetching ?
           null
-        : messageGroups.length > 0 ?
-          <div className={styles.scrollContainer}>
-            {messageGroupsFiltered.map((messageGroup) => (
-              <Paper
-                key={messageGroup.title}
-                elevation={2}
-                className={styles.styledPaper}
-              >
-                <div className={styles.title}>{messageGroup.title}</div>
-                {messageGroup.messages.map((m, i) => (
-                  <div
-                    className={styles.row}
-                    key={`${m.text}Index${i}`}
-                  >
-                    <p
-                      className={styles.styledA}
-                      onClick={() =>
-                        openTree2WithActiveNodeArray({
-                          // message urls are built from existing db rows
-                          activeNodeArray: m.url as (string | number)[],
-                          search,
-                          projekteTabs,
-                          setProjekteTabs,
-                          onlyShowActivePath: true,
-                        })
-                      }
-                      title="in Navigationsbaum 2 öffnen"
-                    >
-                      {m.text}
-                    </p>
-                    <div
-                      className={styles.outsideLink}
-                      onClick={() => {
-                        const url = `${appBaseUrl()}Daten/${m.url.join(
-                          '/',
-                        )}?onlyShowActivePath=true`
-                        if (
-                          window.matchMedia('(display-mode: standalone)')
-                            .matches
-                        ) {
-                          return window.open(url, '_blank', 'toolbar=no')
-                        }
-                        window.open(url)
-                      }}
-                      title="in neuem Fenster öffnen"
-                    >
-                      <FaExternalLinkAlt />
-                    </div>
-                  </div>
-                ))}
-              </Paper>
+        : <>
+            {failedChecks.map((failedCheck) => (
+              <Alert
+                key={failedCheck.checkName}
+                severity="error"
+                className={styles.styledFormControl}
+              >{`Eine Prüfung konnte nicht geladen werden (Prüfung: ${
+                  qks.find((qk) => qk.name === failedCheck.checkName)
+                    ?.titel ?? failedCheck.checkName
+                }): ${failedCheck.message}. Bitte melden Sie diesen Fehler.`}</Alert>
             ))}
-          </div>
-        : <div>Juhui. Offenbar gibt es nichts zu meckern!</div>}
+            {messageGroups.length > 0 ?
+              <div className={styles.scrollContainer}>
+                {messageGroupsFiltered.map((messageGroup) => (
+                  <Paper
+                    key={messageGroup.name}
+                    elevation={2}
+                    className={styles.styledPaper}
+                  >
+                    <div className={styles.title}>{messageGroup.title}</div>
+                    {messageGroup.messages.map((m, i) => (
+                      <div
+                        className={styles.row}
+                        key={`${m.text}Index${i}`}
+                      >
+                        <p
+                          className={styles.styledA}
+                          onClick={() =>
+                            openTree2WithActiveNodeArray({
+                              // message urls are built from existing db rows
+                              activeNodeArray: m.url as (string | number)[],
+                              search,
+                              projekteTabs,
+                              setProjekteTabs,
+                              onlyShowActivePath: true,
+                            })
+                          }
+                          title="in Navigationsbaum 2 öffnen"
+                        >
+                          {m.text}
+                        </p>
+                        <div
+                          className={styles.outsideLink}
+                          onClick={() => {
+                            const url = `${appBaseUrl()}Daten/${m.url.join(
+                              '/',
+                            )}?onlyShowActivePath=true`
+                            if (
+                              window.matchMedia('(display-mode: standalone)')
+                                .matches
+                            ) {
+                              return window.open(url, '_blank', 'toolbar=no')
+                            }
+                            window.open(url)
+                          }}
+                          title="in neuem Fenster öffnen"
+                        >
+                          <FaExternalLinkAlt />
+                        </div>
+                      </div>
+                    ))}
+                  </Paper>
+                ))}
+              </div>
+            : failedChecks.length === 0 &&
+              <div>Juhui. Offenbar gibt es nichts zu meckern!</div>}
+          </>
+        }
       </div>
     </ErrorBoundary>
   )
