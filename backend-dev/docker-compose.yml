@@ -61,6 +61,9 @@ services:
       # v12 otherwise tries to read its config from the db
       PGRST_DB_CONFIG: 'false'
       PGRST_SERVER_CORS_ENABLED: 'true'
+      # keep in sync with backend/docker-compose.yml (#836)
+      PGRST_DB_POOL: '20'
+      PGRST_DB_POOL_ACQUISITION_TIMEOUT: '30'
 volumes:
   db_data:
   sik_data:

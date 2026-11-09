@@ -23,6 +23,28 @@ interface FetchQkDataArgs {
   maxDatum: string
 }
 
+/** a failed check, surfaced per name so the UI can show it next to the
+ * results of the checks that succeeded (#836) */
+export interface QkCheckError {
+  checkName: string
+  message: string
+}
+
+export interface FetchQkDataResult {
+  data: QkQueryData
+  errors: QkCheckError[]
+}
+
+/**
+ * PostgREST's pool holds 10 connections by default; firing every active
+ * check at once (100+ requests on a big AP) exhausts it and requests
+ * fail with "Timed out acquiring connection from connection pool"
+ * (#836). Six concurrent checks keep the waits short — a check runs at
+ * most a handful of requests itself and most share the cached
+ * pops/tpops/einheit fetches.
+ */
+const MAX_CONCURRENT_CHECKS = 6
+
 // ── shared context ────────────────────────────────────────────────────
 interface PopCtx {
   id: string
@@ -46,7 +68,7 @@ export const fetchQkData = async ({
   activeChecks,
   minDatum,
   maxDatum,
-}: FetchQkDataArgs): Promise<QkQueryData> => {
+}: FetchQkDataArgs): Promise<FetchQkDataResult> => {
   popsCache = null
   tpopsCache = null
   einheitWerteCache = null
@@ -1185,18 +1207,31 @@ export const fetchQkData = async ({
     .filter(([, isActive]) => isActive)
     .map(([name]) => name)
     .filter((name) => name in fetchers)
-  const results = await Promise.all(
-    active.map(async (name) => {
+  const results = new Map<string, unknown>()
+  const errors: QkCheckError[] = []
+  // a failed check must surface as an error naming it — but it must not
+  // discard the results of the checks that succeeded (#836)
+  let next = 0
+  const worker = async () => {
+    while (next < active.length) {
+      const name = active[next++]
+      const fetcher = name === undefined ? undefined : fetchers[name]
+      if (!name || !fetcher) continue
       try {
-        return [name, await fetchers[name]!()]
+        results.set(name, await fetcher())
       } catch (error) {
-        // one failed check must surface as an error naming it — the UI
-        // shows this instead of pretending there is nothing to
-        // complain about (#836)
-        ;(error as Error & { checkName?: string }).checkName = name
-        throw error
+        errors.push({
+          checkName: name,
+          message: (error as Error).message,
+        })
       }
-    }),
+    }
+  }
+  await Promise.all(
+    Array.from(
+      { length: Math.min(MAX_CONCURRENT_CHECKS, active.length) },
+      worker,
+    ),
   )
-  return Object.fromEntries(results) as QkQueryData
+  return { data: Object.fromEntries(results) as QkQueryData, errors }
 }
