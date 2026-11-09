@@ -58,10 +58,9 @@ export const User = () => {
   // the account must set a new password before logging in
   // (require_new_password_on_next_login)
   const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
-  // anon cannot read whether the account has a password - and nearly
-  // every flagged account has one. So the field is always shown; the
-  // server ignores the old password for accounts without one
-  const [oldPasswordRequired, setOldPasswordRequired] = useState(true)
+  // the account has no password yet: onboarding runs through topos,
+  // not self service
+  const [needsToposPassword, setNeedsToposPassword] = useState(false)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
@@ -138,6 +137,12 @@ export const User = () => {
       if (message?.includes('neues Passwort erforderlich')) {
         setName(nameToUse)
         setNeedsPasswordSetup(true)
+        return
+      }
+      // passless account: topos assigns the initial password
+      if (message?.includes('noch kein Passwort gesetzt')) {
+        setName(nameToUse)
+        setNeedsToposPassword(true)
         return
       }
       const isNamePassError =
@@ -231,15 +236,17 @@ export const User = () => {
       await rpc('set_password', {
         p_username: name,
         p_new_pass: value,
-        p_old_pass: oldPasswordRequired ? oldPass : null,
+        p_old_pass: oldPass ?? null,
       })
     } catch (error) {
       // the rpc throws an ApiError with the PostgREST error body:
       // the server message is on the error itself
       const message = (error as Error).message ?? ''
-      if (message.includes('altes Passwort erforderlich')) {
-        // the account has a password already: ask for it, then retry
-        setOldPasswordRequired(true)
+      // passless account: onboarding runs through topos
+      if (message.includes('noch kein Passwort gesetzt')) {
+        setNeedsPasswordSetup(false)
+        setNeedsToposPassword(true)
+        return
       }
       // Password displays the error message
       throw error
@@ -256,6 +263,37 @@ export const User = () => {
 
   const { token, fetchingToken } = tokenState
 
+  if (needsToposPassword) {
+    return (
+      <ErrorBoundary>
+        <Dialog
+          aria-labelledby="dialog-title"
+          open={true}
+          fullWidth
+          maxWidth="xs"
+        >
+          <DialogTitle id="dialog-title">Noch kein Passwort gesetzt</DialogTitle>
+          <div className={styles.setupDiv}>
+            <p className={styles.setupMessage}>
+              Für den Benutzer «{name}» wurde noch kein Passwort gesetzt.
+              Wenden Sie sich an topos: Es setzt für Sie ein initiales Passwort
+              und teilt es Ihnen mit. Ersetzen Sie es beim ersten Anmelden durch
+              Ihr eigenes.
+            </p>
+          </div>
+          <DialogActions>
+            <Button
+              color="primary"
+              onClick={() => setNeedsToposPassword(false)}
+            >
+              zurück zur Anmeldung
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </ErrorBoundary>
+    )
+  }
+
   if (needsPasswordSetup) {
     return (
       <ErrorBoundary>
@@ -269,28 +307,24 @@ export const User = () => {
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
               Sie müssen ein neues Passwort setzen. Bestätigen Sie es mit dem
-              aktuellen (falls vorhanden).
+              aktuellen.
             </p>
-            {oldPasswordRequired && (
-              <FormControl
-                fullWidth
-                variant="standard"
-                className={styles.oldPasswordField}
-              >
-                <InputLabel htmlFor="altes-passwort">
-                  Aktuelles Passwort
-                </InputLabel>
-                <Input
-                  id="altes-passwort"
-                  inputRef={oldPasswordInput}
-                  type="password"
-                  autoComplete="current-password"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  className={`user-altes-passwort ${styles.input}`}
-                />
-              </FormControl>
-            )}
+            <FormControl
+              fullWidth
+              variant="standard"
+              className={styles.oldPasswordField}
+            >
+              <InputLabel htmlFor="altes-passwort">Aktuelles Passwort</InputLabel>
+              <Input
+                id="altes-passwort"
+                inputRef={oldPasswordInput}
+                type="password"
+                autoComplete="current-password"
+                autoCorrect="off"
+                spellCheck="false"
+                className={`user-altes-passwort ${styles.input}`}
+              />
+            </FormControl>
             <Password
               errors={{}}
               saveToDb={savePassword}
@@ -322,6 +356,8 @@ export const User = () => {
             <Input
               id="name"
               inputRef={nameInput}
+              // survives the switch back from the setup/topos dialogs
+              defaultValue={name || undefined}
               onBlur={(e) => void onBlurName(e)}
               autoFocus
               onKeyDown={onKeyDownName}

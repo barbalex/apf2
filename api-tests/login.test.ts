@@ -1,25 +1,12 @@
-import { readFileSync } from 'node:fs'
-import path from 'node:path'
 import { beforeAll, describe, expect, it } from 'vitest'
 
-import { assertBackendAvailable, pgrst, psql } from './helpers.ts'
+import { assertBackendAvailable, getDevPassword, pgrst, psql } from './helpers.ts'
 
 // the login RPC is the one anonymous entry point: it must be executable
 // without a token and return the jwt_token composite (role, username,
 // token) that the app stores
 
-const devPassword = (() => {
-  const env = process.env.APF2_TEST_PASSWORD
-  if (env) return env
-  try {
-    const auth = JSON.parse(
-      readFileSync(path.resolve(__dirname, '../playwright/.auth/user.json'), 'utf8'),
-    ) as { password?: string }
-    return auth.password
-  } catch {
-    return undefined
-  }
-})()
+const devPassword = getDevPassword()
 
 describe('login rpc', () => {
   beforeAll(async () => {
