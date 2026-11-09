@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import Alert from '@mui/material/Alert'
 import { apiFetch } from '../../../../modules/api.ts'
 
 import { Qk } from './Qk/index.tsx'
@@ -37,7 +38,7 @@ interface QkQueryResult {
 export const Component = () => {
   const { apId } = useParams()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['qk', apId],
     queryFn: async () => {
       const [qks, apqks] = await Promise.all([
@@ -80,6 +81,16 @@ export const Component = () => {
 
   if (isLoading) {
     return <div>Lade Daten...</div>
+  }
+
+  // a failed check-list query must never read as "nothing to complain
+  // about" (#836)
+  if (error) {
+    return (
+      <ErrorBoundary>
+        <Alert severity="error">{`Die Qualitätskontrollen konnten nicht geladen werden: ${error.message}. Bitte melden Sie diesen Fehler.`}</Alert>
+      </ErrorBoundary>
+    )
   }
 
   return (
