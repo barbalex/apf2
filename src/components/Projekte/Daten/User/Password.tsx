@@ -17,6 +17,7 @@ interface PasswordProps {
   errors: Record<string, string>
   saveToDb: (event: ChangeEvent<HTMLInputElement>) => Promise<void>
   showChangePasswordButton?: boolean
+  passIsNull?: boolean
 }
 
 // checklist labels: darker than MUI's disabled grey (matches the tip
@@ -33,6 +34,7 @@ export const Password = ({
   errors,
   saveToDb,
   showChangePasswordButton = true,
+  passIsNull = false,
 }: PasswordProps) => {
   const [editPassword, setEditPassword] = useState(!showChangePasswordButton)
   const [passwordMessage, setPasswordMessage] = useState('')
@@ -49,6 +51,10 @@ export const Password = ({
     hasNumbers: false,
     hasSpecialChars: false,
   })
+
+  const passwordButtonLabel = passIsNull
+    ? 'Passwort setzen'
+    : 'Passwort ändern'
 
   // Reset password fields when editPassword becomes false
   useEffect(() => {
@@ -164,13 +170,16 @@ export const Password = ({
       {showChangePasswordButton && !passwordMessage && (
         <Button
           variant="outlined"
+          color={passIsNull ? 'error' : 'primary'}
           onClick={() => {
             setEditPassword(!editPassword)
             setPasswordMessage('')
           }}
           className={styles.button}
         >
-          {editPassword ? 'Passwort ändern abbrechen' : 'Passwort ändern'}
+          {editPassword
+            ? `${passwordButtonLabel} abbrechen`
+            : passwordButtonLabel}
         </Button>
       )}
       {!!passwordMessage && (
