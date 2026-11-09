@@ -192,6 +192,7 @@ export const Component = () => {
           <Password
             errors={errors}
             saveToDb={saveToDb}
+            passIsNull={row.pass === null}
           />
         </div>
       </div>
