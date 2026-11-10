@@ -25,6 +25,14 @@
   flex-shrink: 0;
 }
 
+/* replaces the buttons while an update is in flight: signals that
+   the click worked even though the reload may still be seconds away */
+.progress {
+  flex-shrink: 0;
+  width: 120px;
+  color: #fff;
+}
+
 .button {
   color: #fff;
   border-color: rgba(255, 255, 255, 0.5);
