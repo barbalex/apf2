@@ -59,9 +59,6 @@ export const Menu = ({ row, table }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`tree${typename}`],
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeWerteFolders`],
-    })
     const id = newId
     void navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
   }

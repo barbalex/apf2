@@ -57,9 +57,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       queryKey: [`treeZielsOfJahr`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = newId

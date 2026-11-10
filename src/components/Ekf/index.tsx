@@ -40,55 +40,85 @@ export const Component = () => {
         )) ?? []
       const adresseId = users[0]?.adresse_id ?? null
       if (!adresseId) return { userById: null }
-      const [kontrs, tpops, pops, aps] = await Promise.all([
-        apiFetch<
-          {
-            id: string
-            datum: string | null
-            tpop_id: string | null
-          }[]
-        >('/rpc/query_tpopkontr?select=id,datum,tpop_id', {
-          method: 'POST',
-          body: JSON.stringify({
-            p_filter: {
-              bearbeiter: adresseId,
-              typ: { equalTo: 'Freiwilligen-Kontrolle' },
-              ...(acceptNullJahr ?
+      // only the kontrs of this bearbeiter — then the tpop/pop/ap context
+      // is fetched scoped to them, not as full tables (#837: the full
+      // q_tpop/q_pop/v_ap pulls were ~5 MB per EKF entry)
+      const kontrs = await apiFetch<
+        {
+          id: string
+          datum: string | null
+          tpop_id: string | null
+        }[]
+      >('/rpc/query_tpopkontr?select=id,datum,tpop_id', {
+        method: 'POST',
+        body: JSON.stringify({
+          p_filter: {
+            bearbeiter: adresseId,
+            typ: { equalTo: 'Freiwilligen-Kontrolle' },
+            ...(acceptNullJahr ?
                 {
                   or: [{ jahr: { equalTo: jahr } }, { jahr: { isNull: true } }],
                 }
               : { jahr: { equalTo: jahr } }),
-            },
-          }),
+          },
         }),
-        apiFetch<
-          {
-            id: string
-            nr: number | null
-            flurname: string | null
-            gemeinde: string | null
-            pop_id: string | null
-          }[]
-        >(`/q_tpop?select=id,nr,flurname,gemeinde,pop_id`),
-        apiFetch<
-          {
-            id: string
-            nr: number | null
-            name: string | null
-            ap_id: string | null
-          }[]
-        >(`/q_pop?select=id,nr,name,ap_id`),
-        apiFetch<
-          {
-            id: string
-            ae_taxonomy_by_art_id: { artname: string | null } | null
-            projekt_by_proj_id: {
-              id: string | null
+      })
+      const tpopIds = [
+        ...new Set((kontrs ?? []).map((k) => k.tpop_id).filter((t): t is string => !!t)),
+      ]
+      const tpops = tpopIds.length ?
+          await apiFetch<
+            {
+              id: string
+              nr: number | null
+              flurname: string | null
+              gemeinde: string | null
+              pop_id: string | null
+            }[]
+          >('/rpc/query_tpop?select=id,nr,flurname,gemeinde,pop_id', {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: { id: { in: tpopIds } },
+            }),
+          })
+        : []
+      const popIds = [
+        ...new Set((tpops ?? []).map((t) => t.pop_id).filter((p): p is string => !!p)),
+      ]
+      const pops = popIds.length ?
+          await apiFetch<
+            {
+              id: string
+              nr: number | null
               name: string | null
-            } | null
-          }[]
-        >(`/v_ap?select=id,ae_taxonomy_by_art_id,projekt_by_proj_id`),
-      ])
+              ap_id: string | null
+            }[]
+          >('/rpc/query_pop?select=id,nr,name,ap_id', {
+            method: 'POST',
+            body: JSON.stringify({
+              p_filter: { id: { in: popIds } },
+            }),
+          })
+        : []
+      const apIds = [
+        ...new Set((pops ?? []).map((p) => p.ap_id).filter((a): a is string => !!a)),
+      ]
+      const aps = apIds.length ?
+          await apiFetch<
+            {
+              id: string
+              ae_taxonomy_by_art_id: { artname: string | null } | null
+              projekt_by_proj_id: {
+                id: string | null
+                name: string | null
+              } | null
+            }[]
+          >(
+            // ae_taxonomy_by_art_id/projekt_by_proj_id are computed jsonb
+            // columns of v_ap — no column sub-selection possible
+            `/v_ap?id=in.(${apIds.join(',')})&select=id,ae_taxonomy_by_art_id,projekt_by_proj_id`,
+          )
+        : []
       const tpopById = new Map((tpops ?? []).map((t) => [t.id, t]))
       const popById = new Map((pops ?? []).map((p) => [p.id, p]))
       const apById = new Map((aps ?? []).map((a) => [a.id, a]))

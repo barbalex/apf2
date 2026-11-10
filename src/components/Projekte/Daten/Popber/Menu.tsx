@@ -47,9 +47,6 @@ export const Menu = () => {
       queryKey: [`treePopber`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
     const id = newId

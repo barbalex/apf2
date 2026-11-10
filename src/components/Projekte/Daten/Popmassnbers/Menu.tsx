@@ -45,9 +45,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePopmassnber`],
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
-    })
     const id = newId
     void navigate(`./${id}${search}`)
   }

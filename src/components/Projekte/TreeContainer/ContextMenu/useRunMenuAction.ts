@@ -144,9 +144,6 @@ export const useRunMenuAction = () => {
             })
             // also invalidate parent queries for folder counts
             void tsQueryClient.invalidateQueries({
-              queryKey: [`treeApFolders`],
-            })
-            void tsQueryClient.invalidateQueries({
               queryKey: [`treeAp`],
             })
           },

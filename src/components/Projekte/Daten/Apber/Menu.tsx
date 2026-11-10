@@ -51,9 +51,6 @@ export const Menu = () => {
       queryKey: [`treeApber`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = newId

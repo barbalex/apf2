@@ -101,9 +101,6 @@ export const saveArtIdToDb = async ({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
   void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   void tsQueryClient.invalidateQueries({
