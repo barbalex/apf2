@@ -6,6 +6,7 @@ import { useAtomValue } from 'jotai'
 import { Select } from '../../../../../shared/Select.tsx'
 import { userNameAtom } from '../../../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
+import { updateTpopkontrzaehlInCaches } from '../../../../../../modules/updateTpopkontrzaehlInCaches.ts'
 import type { TpopkontrzaehlRow } from './index.tsx'
 
 import styles from './Einheit.module.css'
@@ -13,14 +14,12 @@ import styles from './Einheit.module.css'
 interface EinheitProps {
   nr: string
   row: Partial<TpopkontrzaehlRow>
-  refetch: () => void
   zaehleinheitWerte: { value: number; label: string }[]
 }
 
 export const Einheit = ({
   nr,
   row,
-  refetch,
   zaehleinheitWerte,
 }: EinheitProps) => {
   const userName = useAtomValue(userNameAtom)
@@ -35,20 +34,29 @@ export const Einheit = ({
       value: string | number | boolean | number[] | null
     }
   }) => {
+    if (!row.id) return
+    // options carry numeric codes; anything else clears the field
     const val = ifIsNumericAsNumber(event.target.value)
-    const variables = {
-      id: row.id,
-      anzahl: row.anzahl,
-      methode: row.methode,
-      einheit: val,
-      changedBy: userName,
-    }
+    const einheit = typeof val === 'number' ? val : null
+    const anzahl = row.anzahl ?? null
+    const methode = row.methode ?? null
     try {
-      await apiUpdateByVariables('tpopkontrzaehl', variables)
+      await apiUpdateByVariables('tpopkontrzaehl', {
+        id: row.id,
+        anzahl,
+        methode,
+        einheit,
+        changedBy: userName,
+      })
     } catch (error) {
       return setErrors((error as Error).message)
     }
-    refetch()
+    setErrors(null)
+    // the patch is the row's new state — update the caches, no refetch (#837)
+    updateTpopkontrzaehlInCaches({
+      tsQueryClient,
+      row: { id: row.id, anzahl, methode, einheit },
+    })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontrzaehl`],
     })
