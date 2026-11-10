@@ -11,6 +11,7 @@ import { Menu } from './Menu.tsx'
 import { ChildLoader } from './ChildLoader.tsx'
 import { RootProviders } from './RootProviders.tsx'
 import { FocusPathLoader } from './FocusPathLoader.tsx'
+import { DeepLinkPrefetcher } from './DeepLinkPrefetcher.tsx'
 import { checkIfIsOpen } from './checkIfIsOpen.ts'
 import { useVisibleTreeRows } from './useVisibleTreeRows.ts'
 import type { TreeRowData } from './useVisibleTreeRows.ts'
@@ -166,6 +167,9 @@ export const TreeComponent = () => {
       ref={scrollElementRef}
     >
       <RootProviders />
+      {/* loads all levels of the deep-linked path in parallel (the cascade
+          below would walk them sequentially) */}
+      <DeepLinkPrefetcher />
       {/* loads ancestors of the focus target even when their rows are
           outside the virtualized window (scroll-into-view deadlock) */}
       <FocusPathLoader
