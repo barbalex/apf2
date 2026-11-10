@@ -31,24 +31,14 @@ export const invalidateTreeQueries = ({
     queryKey: [queryKeyTable],
   })
 
-  const queryKeyFolders =
-    ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZiel'
-    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
-    : (
-      [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ) ?
-      'treeWerteFolders'
-    : `tree${upperFirst(parentTable ?? '')}Folders`
-  void tsQueryClient.invalidateQueries({
-    queryKey: [queryKeyFolders],
-  })
+  // folder labels and counts live in the list queries themselves —
+  // only these two tables have folder queries of their own
+  if (['apberuebersicht'].includes(table)) {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+  if (table === 'ziel') {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeZiel'] })
+  }
 
   // the parent's data query holds the counts shown in its label,
   // e.g. the ap node shows "Populationen (12/34)"

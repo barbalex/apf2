@@ -155,32 +155,14 @@ export const insertDataset = async ({
   //   menuType,
   //   queryKeyTable,
   // })
-  const queryKeyFolder =
-    ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZiel'
-    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
-    : (
-      [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ) ?
-      'treeWerteFolders'
-    : `tree${upperFirst(parentTable ?? '')}Folders`
-  // console.log('insertDataset', {
-  //   table,
-  //   parentTable,
-  //   menuType,
-  //   queryKeyFoldersTable: queryKeyFolder,
-  //   queryKeyTable,
-  //   queryKeyFolder,
-  // })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [queryKeyFolder],
-  })
+  // folder labels and counts live in the list queries themselves —
+  // only these two tables have folder queries of their own
+  if (['apberuebersicht'].includes(table)) {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+  if (table === 'ziel') {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeZiel'] })
+  }
   // ap-level lists and counts live in the per-ap tree queries — each of
   // them fires ~10 requests, so refetching them for every insert anywhere
   // storms the api (#837). Only inserts that can change them count:

@@ -121,9 +121,6 @@ export const Marker = ({ beob }: MarkerProps) => {
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${nearestTpop.popId}/Teil-Populationen/${nearestTpop.id}/Beobachtungen/${beob.id}${search}`,
     )
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeQuery`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`BeobZugeordnetForMapQuery`],
     })
     void tsQueryClient.invalidateQueries({

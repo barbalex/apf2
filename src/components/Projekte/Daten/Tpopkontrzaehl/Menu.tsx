@@ -48,9 +48,6 @@ export const Menu = () => {
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontrzaehlFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
     const id = newId
@@ -75,9 +72,6 @@ export const Menu = () => {
         afterDeletionHook: () => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfeldkontrzaehl`],
-          })
-          void tsQueryClient.invalidateQueries({
-            queryKey: [`treeTpopfeldkontrzaehlFolders`],
           })
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfeldkontr`],

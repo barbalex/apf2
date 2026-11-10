@@ -46,9 +46,6 @@ export const Menu = () => {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treePopmassnber`],
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
-    })
     const id = newId
     void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte/${id}${search}`,

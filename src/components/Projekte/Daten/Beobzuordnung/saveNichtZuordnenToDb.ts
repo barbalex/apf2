@@ -48,9 +48,6 @@ export const saveNichtZuordnenToDb = async ({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
   void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   // need to update activeNodeArray and openNodes

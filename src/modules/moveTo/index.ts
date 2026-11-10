@@ -102,18 +102,12 @@ export const moveTo = async ({
       queryKey: [`treePop`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['treePopFolders'],
     })
     void tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
@@ -133,9 +127,6 @@ export const moveTo = async ({
     })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopFolders`],
     })
   }
   if (table === 'tpopfreiwkontr') {

@@ -212,9 +212,6 @@ export const createNewPopFromBeob = async ({
     queryKey: [`BeobAssignLinesQuery`],
   })
   void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  void tsQueryClient.invalidateQueries({
     queryKey: ['treeAp'],
   })
   void tsQueryClient.invalidateQueries({

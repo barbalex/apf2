@@ -146,9 +146,6 @@ export const Count = ({
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
       })
-      void tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
-      })
     })
   }
 
@@ -167,9 +164,6 @@ export const Count = ({
       refetch()
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
-      })
-      void tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
       })
     }
     setToDelete({

@@ -42,9 +42,6 @@ export const Menu = () => {
       })
     }
     void tsQueryClient.invalidateQueries({
-      queryKey: ['treeWerteFolders'],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: ['treeAdresse'],
     })
     const id = newId
