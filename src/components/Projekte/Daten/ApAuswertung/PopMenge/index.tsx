@@ -284,7 +284,18 @@ const PopMengeChart = ({
                 )
               })}
               {!isSubReport && (
-                <Tooltip content={<CustomTooltip popsData={popsData} />} />
+                <Tooltip
+                  content={
+                    <CustomTooltip
+                      popsData={popsData}
+                      zielEinheit={zielEinheit}
+                      // let the rows use (almost) the full plot height
+                      rowsMaxHeight={height - 100}
+                    />
+                  }
+                  // make the popup (f.i. its export button) clickable
+                  wrapperStyle={{ pointerEvents: 'auto' }}
+                />
               )}
               <CartesianGrid
                 strokeDasharray="3 3"

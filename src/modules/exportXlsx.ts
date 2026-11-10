@@ -1,6 +1,8 @@
 import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 
+import type { XlsxCellStyle } from './getXlsxBuffer.ts'
+
 import {
   store,
   addNotificationAtom,
@@ -13,14 +15,20 @@ const addNotification = (notification: Omit<Notification, 'key'>) =>
 export const exportXlsx = async ({
   fileName,
   data,
+  getCellStyle,
 }: {
   fileName: string
   data: Record<string, unknown>[]
+  getCellStyle?: ((params: {
+    row: Record<string, unknown>
+    header: string
+  }) => XlsxCellStyle | undefined) | undefined
 }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.ts')
   let buffer: ArrayBuffer | undefined
   try {
-    buffer = (await getXlsxBuffer({ data })) ?? undefined
+    buffer =
+      (await getXlsxBuffer({ data, getCellStyle: getCellStyle })) ?? undefined
   } catch (error) {
     return addNotification({
       message: (error as Error).message,

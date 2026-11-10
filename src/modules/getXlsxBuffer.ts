@@ -1,7 +1,7 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-import type { Sheet } from 'write-excel-file/browser'
+import type { CellObject, Sheet } from 'write-excel-file/browser'
 
 import { autoFilterFeature } from './autoFilterFeature.ts'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
@@ -15,10 +15,25 @@ import {
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
+export interface XlsxCellStyle {
+  textColor?: string
+  backgroundColor?: string
+  fontWeight?: 'bold'
+}
+
 export const getXlsxBuffer = async ({
   data,
+  getCellStyle,
 }: {
   data: Record<string, unknown>[]
+  /**
+   * styles data rows (f.i. colored text) based on the row's values.
+   * The header (the property name) allows styling single columns
+   */
+  getCellStyle?: ((params: {
+    row: Record<string, unknown>
+    header: string
+  }) => XlsxCellStyle | undefined) | undefined
 }) => {
   /**
    * using this worker may make the ui more responsive
@@ -32,6 +47,7 @@ export const getXlsxBuffer = async ({
   //     data,
   //   )
   const dataArray = getDataArrayFromExportObjects(data)
+  const headers = dataArray[0]?.map((header) => String(header)) ?? []
 
   const sheets: Sheet<Blob>[] = [
     {
@@ -45,6 +61,16 @@ export const getXlsxBuffer = async ({
             backgroundColor: '#D3D3D3',
             bottomBorderStyle: 'thin',
           }))
+        : getCellStyle ?
+          row.map(
+            (cell, columnIndex): CellObject => ({
+              value: cell as Exclude<CellObject['value'], undefined>,
+              ...getCellStyle({
+                row: data[rowIndex - 1] ?? {},
+                header: headers[columnIndex] ?? '',
+              }),
+            }),
+          )
         : row,
       ) as Sheet<Blob>['data'],
     },

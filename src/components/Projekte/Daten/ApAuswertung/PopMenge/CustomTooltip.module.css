@@ -3,11 +3,46 @@
   border: 1px solid #2e7d32;
   opacity: 0.8;
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .title {
   font-size: 1em;
   font-weight: 700;
+}
+
+.exportButton {
+  padding: 2px;
+}
+
+/*
+ * keep the popup within the chart so the tooltip stays active
+ * while the user moves to the export button.
+ * maxHeight is set inline, adapted to the chart height
+ */
+.rows {
+  max-height: 220px;
+  overflow-y: auto;
+  /* scrolling the list should not scroll the page behind it */
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.rows::-webkit-scrollbar {
+  width: 5px;
+}
+
+.rows::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 2.5px;
 }
 
 .row {
