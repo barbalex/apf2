@@ -25,6 +25,8 @@ I see there are still a few useCallback and useMemo (and others?) usages. Are th
 
 ---
 
+Is there a way to check RAM usage of the server? Linode shows me CPU, Disk I/O, Network. But no RAM.
+
 ---
 
 ---

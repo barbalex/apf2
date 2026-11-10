@@ -64,10 +64,15 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
     } catch (error) {
       return setErrors((error as Error).message)
     }
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['tpopkontrByIdQueryForEkf'],
-    })
     setErrors(null)
+    // bearbeiter feeds adresseByBearbeiter (its user count), which only a
+    // refetch knows — scoped to this kontr's query; the former key
+    // ('tpopkontrByIdQueryForEkf') matched no query at all
+    if (row.id) {
+      void tsQueryClient.invalidateQueries({
+        queryKey: ['TpopkontrQuery', row.id],
+      })
+    }
   }
 
   const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0

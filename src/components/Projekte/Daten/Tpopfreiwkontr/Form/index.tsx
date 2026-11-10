@@ -235,12 +235,28 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
       return setErrors({ [field]: (error as Error).message })
     }
     setErrors({})
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfreiwkontr`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`TpopkontrQuery`],
-    })
+    // the patch is the row's new state — write it into the open forms
+    // instead of refetching the whole kontr (#837). The tree label only
+    // shows jahr/datum/typ, so only those invalidate the tree queries.
+    if (row.id) {
+      const cachePatch = { [field]: value } as Partial<TpopkontrRow>
+      if (field2 === 'jahr') cachePatch.jahr = value2 as number | null
+      tsQueryClient.setQueriesData<{ tpopkontrById: TpopkontrRow | null }>(
+        { queryKey: ['TpopkontrQuery', row.id] },
+        (old) =>
+          old?.tpopkontrById ?
+            {
+              ...old,
+              tpopkontrById: { ...old.tpopkontrById, ...cachePatch },
+            }
+          : old,
+      )
+    }
+    if (['jahr', 'datum', 'typ'].includes(field)) {
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfreiwkontr`],
+      })
+    }
   }
 
   return (
