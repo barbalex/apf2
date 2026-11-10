@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Aktionsplan form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(
-      '/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-735d-8197-b6db29e70db3',
+      '/Daten/Projekte/017d3474-6b07-7c56-86ef-84b0af1de903/Arten/017d3472-d75d-7c7c-888e-feff5b39a605',
     )
     await page.waitForLoadState('networkidle')
   })
