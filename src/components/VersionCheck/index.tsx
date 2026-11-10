@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 
@@ -17,43 +17,22 @@ const RECHECK_INTERVAL_MS = 15 * 60 * 1000
  * by vite.config.ts, never cached by sw or Vercel) and offers a
  * cache-clearing reload. Stale clients otherwise fail silently, e.g.
  * calls to long-removed api endpoints (#836).
+ *
+ * A dismissed banner only hides it for as long as this bundle runs —
+ * stale clients also degrade the shared api for everyone (#836, #837),
+ * so the update is forced as soon as the user leaves the app: hiding
+ * the tab blurs (and thereby saves) the focused field, nothing typed
+ * is lost in the reload.
  */
 export const VersionCheck = () => {
   const isPrint = useAtomValue(isPrintAtom)
   const [availableVersion, setAvailableVersion] = useState<string | null>(null)
+  const pendingVersionRef = useRef<string | null>(null)
   // "später" hides the banner for as long as this bundle runs; the next
   // version starts fresh
   const [dismissed, setDismissed] = useState(
     () => localStorage.getItem(DISMISSED_KEY) === appVersion,
   )
-
-  useEffect(() => {
-    let active = true
-    const check = async () => {
-      try {
-        const res = await fetch('/version.json', { cache: 'no-store' })
-        if (!res.ok || !active) return
-        const data = (await res.json()) as { version?: string | undefined }
-        if (data.version && data.version !== appVersion) {
-          setAvailableVersion(data.version)
-        }
-      } catch {
-        // dev server has no version.json, electron/offline fetches fail:
-        // nothing to compare
-      }
-    }
-    void check()
-    const interval = setInterval(() => void check(), RECHECK_INTERVAL_MS)
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') void check()
-    }
-    document.addEventListener('visibilitychange', onVisible)
-    return () => {
-      active = false
-      clearInterval(interval)
-      document.removeEventListener('visibilitychange', onVisible)
-    }
-  }, [])
 
   const update = async () => {
     // drop the precache so the reload cannot serve the stale bundle again
@@ -71,6 +50,39 @@ export const VersionCheck = () => {
     }
     window.location.reload()
   }
+
+  useEffect(() => {
+    let active = true
+    const check = async () => {
+      try {
+        const res = await fetch('/version.json', { cache: 'no-store' })
+        if (!res.ok || !active) return
+        const data = (await res.json()) as { version?: string | undefined }
+        if (data.version && data.version !== appVersion) {
+          pendingVersionRef.current = data.version
+          setAvailableVersion(data.version)
+        }
+      } catch {
+        // dev server has no version.json, electron/offline fetches fail:
+        // nothing to compare
+      }
+    }
+    void check()
+    const interval = setInterval(() => void check(), RECHECK_INTERVAL_MS)
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        void check()
+      } else if (pendingVersionRef.current) {
+        void update()
+      }
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      active = false
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [])
 
   if (!availableVersion || dismissed || isPrint) return null
 

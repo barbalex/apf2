@@ -21,6 +21,8 @@ I see there are still a few useCallback and useMemo (and others?) usages. Are th
 
 ---
 
+"note ~12 other dead treeApFolders invalidations exist across the Menus, left untouched"
+
 ---
 
 ---

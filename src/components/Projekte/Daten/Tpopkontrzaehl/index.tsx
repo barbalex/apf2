@@ -14,6 +14,8 @@ import { Select } from '../../../shared/Select.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
+import { updateTpopkontrzaehlInCaches } from '../../../../modules/updateTpopkontrzaehlInCaches.ts'
+import type { TpopkontrzaehlPatch } from '../../../../modules/updateTpopkontrzaehlInCaches.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 
@@ -151,14 +153,20 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // invalidate tpopkontrzaehl query
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
-    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // the patch is the row's new state — update the caches, no refetch (#837).
+    // an einheit change also updates the sibling rows other forms filter by
+    if (row.id) {
+      const numericValue = typeof value === 'number' ? value : null
+      const patch: TpopkontrzaehlPatch = { id: row.id }
+      if (field === 'einheit') patch.einheit = numericValue
+      if (field === 'anzahl') patch.anzahl = numericValue
+      if (field === 'methode') patch.methode = numericValue
+      updateTpopkontrzaehlInCaches({ tsQueryClient, row: patch })
+    }
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })

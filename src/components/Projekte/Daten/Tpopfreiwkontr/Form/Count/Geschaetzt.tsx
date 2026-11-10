@@ -6,19 +6,19 @@ import { useAtomValue } from 'jotai'
 import { TextField } from '../../../../../shared/TextField.tsx'
 import { userNameAtom } from '../../../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
+import { updateTpopkontrzaehlInCaches } from '../../../../../../modules/updateTpopkontrzaehlInCaches.ts'
 import type { TpopkontrzaehlRow } from './index.tsx'
 
 interface GeschaetztProps {
   row: Partial<TpopkontrzaehlRow>
-  refetch: () => void
 }
 
-export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
+export const Geschaetzt = ({ row }: GeschaetztProps) => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
 
-  const [, setErrors] = useState<Record<string, string>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const onChange = async (event: {
     target: {
@@ -26,27 +26,30 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
       value: string | number | boolean | null
     }
   }) => {
+    if (!row.id) return
     const val = ifIsNumericAsNumber(event.target.value)
-    /*console.log('Geschaetzt, onChange:', {
-        row,
-        val,
-        targetValue: event.target.value,
-      })*/
-    if (val === null && row.methode === 2) return
-    if (row.anzahl === val && row.methode === 1) return
-    const variables = {
-      id: row.id,
-      anzahl: val,
-      methode: 1,
-      einheit: row.einheit,
-      changedBy: userName,
-    }
+    const anzahl = typeof val === 'number' ? val : null
+    if (anzahl === null && row.methode === 2) return
+    if (row.anzahl === anzahl && row.methode === 1) return
+    const einheit = row.einheit ?? null
     try {
-      await apiUpdateByVariables('tpopkontrzaehl', variables)
+      await apiUpdateByVariables('tpopkontrzaehl', {
+        id: row.id,
+        anzahl,
+        methode: 1,
+        einheit,
+        changedBy: userName,
+      })
     } catch (error) {
+      // #837: a failed save must show, not silently keep the typed value
       return setErrors({ anzahl: (error as Error).message })
     }
-    refetch()
+    setErrors({})
+    // the patch is the row's new state — update the caches, no refetch (#837)
+    updateTpopkontrzaehlInCaches({
+      tsQueryClient,
+      row: { id: row.id, anzahl, methode: 1, einheit },
+    })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontrzaehl`],
     })
@@ -56,7 +59,7 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
     <TextField
       value={row.methode === 1 ? row.anzahl : null}
       label=""
-      error={undefined}
+      error={errors.anzahl}
       name="anzahl"
       type="number"
       saveToDb={onChange}

@@ -181,13 +181,35 @@ export const insertDataset = async ({
   void tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
-  // also invalidate parent queries for folder counts
-  void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [`treeAp`],
-  })
+  // ap-level lists and counts live in the per-ap tree queries — each of
+  // them fires ~10 requests, so refetching them for every insert anywhere
+  // storms the api (#837). Only inserts that can change them count:
+  // a new ap changes the projekt's ap list, children of an ap (pop, ziel,
+  // erfkrit, …) change that ap's folder counts.
+  const apChildTables = [
+    'pop',
+    'ziel',
+    'erfkrit',
+    'apber',
+    'idealbiotop',
+    'assozart',
+    'ekzaehleinheit',
+    'ekfrequenz',
+    'apart',
+    'beobNichtZuzuordnen',
+    'beobNichtBeurteilt',
+  ]
+  if (table === 'ap') {
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
+  } else if (apChildTables.includes(table) && parentId) {
+    // useApNavData keys are ['treeAp', projId, apId, …filters]
+    const projId = url[1]
+    if (typeof projId === 'string') {
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeAp`, projId, parentId],
+      })
+    }
+  }
   if (table === 'ziel') {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
