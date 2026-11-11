@@ -2654,6 +2654,92 @@ ORDER BY
   pop.nr,
   tpop.nr;
 
+DROP VIEW IF EXISTS apflora.v_q_tpopmassn_datum_jahr CASCADE;
+
+CREATE OR REPLACE VIEW apflora.v_q_tpopmassn_datum_jahr AS
+SELECT
+  ap.proj_id,
+  ap.id AS ap_id,
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
+  massn.id,
+  massn.jahr,
+  massn.datum,
+  'Jahr: ' || massn.jahr || ', Datum: ' || to_char(massn.datum, 'DD.MM.YYYY') AS bemerkung
+FROM
+  apflora.ap ap
+  INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
+  INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id
+  INNER JOIN apflora.tpopmassn massn ON massn.tpop_id = tpop.id
+WHERE
+  massn.jahr IS NOT NULL
+  AND massn.datum IS NOT NULL
+  AND extract(year FROM massn.datum) <> massn.jahr
+ORDER BY
+  pop.nr,
+  tpop.nr,
+  massn.jahr;
+
+DROP VIEW IF EXISTS apflora.v_q_tpopfeldkontr_datum_jahr CASCADE;
+
+CREATE OR REPLACE VIEW apflora.v_q_tpopfeldkontr_datum_jahr AS
+SELECT
+  ap.proj_id,
+  ap.id AS ap_id,
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
+  kontr.id,
+  kontr.jahr,
+  kontr.datum,
+  'Jahr: ' || kontr.jahr || ', Datum: ' || to_char(kontr.datum, 'DD.MM.YYYY') AS bemerkung
+FROM
+  apflora.ap ap
+  INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
+  INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id
+  INNER JOIN apflora.tpopkontr kontr ON kontr.tpop_id = tpop.id
+WHERE
+  kontr.typ <> 'Freiwilligen-Kontrolle'
+  AND kontr.jahr IS NOT NULL
+  AND kontr.datum IS NOT NULL
+  AND extract(year FROM kontr.datum) <> kontr.jahr
+ORDER BY
+  pop.nr,
+  tpop.nr,
+  kontr.jahr;
+
+DROP VIEW IF EXISTS apflora.v_q_tpopfreiwkontr_datum_jahr CASCADE;
+
+CREATE OR REPLACE VIEW apflora.v_q_tpopfreiwkontr_datum_jahr AS
+SELECT
+  ap.proj_id,
+  ap.id AS ap_id,
+  pop.id AS pop_id,
+  pop.nr AS pop_nr,
+  tpop.id AS tpop_id,
+  tpop.nr AS tpop_nr,
+  kontr.id,
+  kontr.jahr,
+  kontr.datum,
+  'Jahr: ' || kontr.jahr || ', Datum: ' || to_char(kontr.datum, 'DD.MM.YYYY') AS bemerkung
+FROM
+  apflora.ap ap
+  INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
+  INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id
+  INNER JOIN apflora.tpopkontr kontr ON kontr.tpop_id = tpop.id
+WHERE
+  kontr.typ = 'Freiwilligen-Kontrolle'
+  AND kontr.jahr IS NOT NULL
+  AND kontr.datum IS NOT NULL
+  AND extract(year FROM kontr.datum) <> kontr.jahr
+ORDER BY
+  pop.nr,
+  tpop.nr,
+  kontr.jahr;
+
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS
