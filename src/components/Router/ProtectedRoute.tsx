@@ -33,6 +33,9 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
   default: (await import('./ChooseApToCopyErfkritsFrom.tsx'))
     .ChooseApToCopyErfkritsFrom,
 }))
+const UrlGuard = lazy(async () => ({
+  default: (await import('./UrlGuard.tsx')).UrlGuard,
+}))
 
 import { Spinner } from '../shared/Spinner.tsx'
 import styles from './ProtectedRoute.module.css'
@@ -87,6 +90,7 @@ export const Component = () => {
             <ChooseApToCopyEkfrequenzsFrom />
             <ChooseApToCopyErfkritsFrom />
             <ApfLayerNotifier />
+            <UrlGuard />
           </Suspense>
         </>
       )}
