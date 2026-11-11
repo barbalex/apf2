@@ -28,11 +28,12 @@ const tpopRow = { id: 'tpop-1', nr: 1, pop_id: 'pop-1' }
 const runCheck = async (
   check: string,
   extraRoutes: Record<string, unknown[]> = {},
+  berichtjahr: number = 2026,
 ) => {
   const { data } = await fetchQkData({
     projId,
     apId,
-    berichtjahr: 2026,
+    berichtjahr,
     activeChecks: { [check]: true },
     minDatum: '1926-11-11',
     maxDatum: '2126-11-11',
@@ -91,6 +92,91 @@ describe('QK for missing/suspicious dates (#840)', () => {
     })
     const messages = await runCheck('tpopfreiwkontrDatum')
     expect(messages.length).toBe(1)
+  })
+})
+
+// the filtering itself happens server-side (compile_filter / view), so these
+// tests assert the filters the checks send
+describe('QK only evaluate the berichtjahr (#841)', () => {
+  /** the rpc call to fn (its "?select=" suffix disambiguates the prefixes) */
+  const findRpcCall = (prefix: string) => {
+    const call = apiFetchMock.mock.calls.find(
+      ([url]) => typeof url === 'string' && url.startsWith(prefix),
+    ) as [string, { body: string }]
+    return { url: call[0], body: JSON.parse(call[1].body) }
+  }
+
+  it('tpopmassnDatum only lists records of the berichtjahr', async () => {
+    await runCheck('tpopmassnDatum')
+    const { p_filter } = findRpcCall('/rpc/query_tpopmassn?').body
+    // records of the berichtjahr with missing/suspicious datum …
+    expect(p_filter.or[0].and).toEqual([
+      { jahr: { equalTo: 2026 } },
+      {
+        or: [
+          { datum: { isNull: true } },
+          { datum: { lessThan: '1926-11-11' } },
+          { datum: { greaterThan: '2126-11-11' } },
+        ],
+      },
+    ])
+    // … and records without jahr whose datum lies within the berichtjahr
+    expect(p_filter.or[1].and).toEqual([
+      { jahr: { isNull: true } },
+      { datum: { greaterThanOrEqualTo: '2026-01-01' } },
+      { datum: { lessThanOrEqualTo: '2026-12-31' } },
+    ])
+  })
+
+  it('tpopfeldkontrDatum keeps its typ condition besides the berichtjahr scope', async () => {
+    await runCheck('tpopfeldkontrDatum')
+    const { p_filter } = findRpcCall('/rpc/query_tpopkontr?').body
+    expect(p_filter.typ).toEqual({ notEqualTo: 'Freiwilligen-Kontrolle' })
+    expect(p_filter.or[0].and[0]).toEqual({ jahr: { equalTo: 2026 } })
+  })
+
+  it('tpopfreiwkontrDatum keeps its typ condition besides the berichtjahr scope', async () => {
+    await runCheck('tpopfreiwkontrDatum')
+    const { p_filter } = findRpcCall('/rpc/query_tpopkontr?').body
+    expect(p_filter.typ).toEqual({ equalTo: 'Freiwilligen-Kontrolle' })
+    expect(p_filter.or[0].and[0]).toEqual({ jahr: { equalTo: 2026 } })
+  })
+
+  it('anpflanzungOhneZielrelevanteEinheit filters the view by berichtjahr', async () => {
+    mockRoutes({
+      '/v_q_anpflanzung_ohne_zielrelevante_einheit': [
+        {
+          projId,
+          apId,
+          popId: 'pop-1',
+          popNr: 1,
+          tpopId: 'tpop-1',
+          tpopNr: 1,
+          id: 'massn-1',
+          jahr: 2026,
+        },
+      ],
+    })
+    const messages = await runCheck('anpflanzungOhneZielrelevanteEinheit')
+    const call = apiFetchMock.mock.calls.find(
+      ([url]) =>
+        typeof url === 'string' &&
+        url.startsWith('/v_q_anpflanzung_ohne_zielrelevante_einheit?'),
+    ) as [string]
+    expect(call[0]).toContain('&jahr=eq.2026')
+    expect(messages.length).toBe(1)
+    expect(messages[0]?.text).toContain('Massnahme: 2026')
+  })
+
+  it('sends no invalid date range when the Berichtjahr field is cleared', async () => {
+    // a cleared field yields 0; "0-01-01" is not a valid date and would
+    // make the rpc fail. Like the other berichtjahr-scoped checks, these
+    // must simply match nothing.
+    await runCheck('tpopmassnDatum', {}, 0)
+    const { p_filter } = findRpcCall('/rpc/query_tpopmassn?').body
+    expect(p_filter.or).toHaveLength(1)
+    expect(p_filter.or[0].and[0]).toEqual({ jahr: { equalTo: 0 } })
+    expect(JSON.stringify(p_filter)).not.toContain('-01-01')
   })
 })
 

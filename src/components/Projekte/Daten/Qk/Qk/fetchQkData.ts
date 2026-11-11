@@ -447,6 +447,45 @@ export const fetchQkData = async ({
     )
   }
 
+  /**
+   * #841: the datum checks used to report missing years/dates of ALL
+   * years' records, burying the berichtjahr's problems in historical
+   * noise. They now only list records of the berichtjahr: those with
+   * jahr = berichtjahr and a missing/suspicious datum, and those without
+   * jahr whose datum lies within the berichtjahr ("ohne Jahr" — the
+   * datum places them in the year). The datum-range branch is dropped
+   * when berichtjahr is empty: "0-01-01" is not a valid date, and like
+   * every other berichtjahr-scoped check the check then matches nothing.
+   */
+  const datumMangelImBerichtjahr = (typCond: object = {}) => ({
+    ...typCond,
+    or: [
+      {
+        and: [
+          { jahr: { equalTo: berichtjahr } },
+          {
+            or: [
+              { datum: { isNull: true } },
+              { datum: { lessThan: minDatum } },
+              { datum: { greaterThan: maxDatum } },
+            ],
+          },
+        ],
+      },
+      ...(berichtjahr ?
+        [
+          {
+            and: [
+              { jahr: { isNull: true } },
+              { datum: { greaterThanOrEqualTo: `${berichtjahr}-01-01` } },
+              { datum: { lessThanOrEqualTo: `${berichtjahr}-12-31` } },
+            ],
+          },
+        ]
+      : []),
+    ],
+  })
+
   // ── the check fetchers ─────────────────────────────────────────────
   const fetchers: Record<string, () => Promise<unknown>> = {
     tpopsOutsideZh: async () => ({
@@ -846,7 +885,8 @@ export const fetchQkData = async ({
     anpflanzungOhneZielrelevanteEinheit: async () => ({
       nodes:
         (await apiFetch<Record<string, unknown>[]>(
-          `/v_q_anpflanzung_ohne_zielrelevante_einheit?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr`,
+          // #841: only records of the berichtjahr, not all years
+          `/v_q_anpflanzung_ohne_zielrelevante_einheit?ap_id=eq.${apId}&proj_id=eq.${projId}&jahr=eq.${berichtjahr}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr`,
         )) ?? [],
     }),
     anpflanzungZielrelevanteEinheitFalsch: async () => ({
@@ -1176,14 +1216,7 @@ export const fetchQkData = async ({
     tpopmassnDatum: async () =>
       tpopChildCheck(
         'query_tpopmassn',
-        {
-          or: [
-            { jahr: { isNull: true } },
-            { datum: { isNull: true } },
-            { datum: { lessThan: minDatum } },
-            { datum: { greaterThan: maxDatum } },
-          ],
-        },
+        datumMangelImBerichtjahr(),
         [{ field: 'id', dir: 'asc' }],
         'tpopmassnsByTpopId',
       ),
@@ -1218,30 +1251,18 @@ export const fetchQkData = async ({
     tpopfeldkontrDatum: async () =>
       tpopChildCheck(
         'query_tpopkontr',
-        {
+        datumMangelImBerichtjahr({
           typ: { notEqualTo: 'Freiwilligen-Kontrolle' },
-          or: [
-            { jahr: { isNull: true } },
-            { datum: { isNull: true } },
-            { datum: { lessThan: minDatum } },
-            { datum: { greaterThan: maxDatum } },
-          ],
-        },
+        }),
         [{ field: 'id', dir: 'asc' }],
         'tpopkontrsByTpopId',
       ),
     tpopfreiwkontrDatum: async () =>
       tpopChildCheck(
         'query_tpopkontr',
-        {
+        datumMangelImBerichtjahr({
           typ: { equalTo: 'Freiwilligen-Kontrolle' },
-          or: [
-            { jahr: { isNull: true } },
-            { datum: { isNull: true } },
-            { datum: { lessThan: minDatum } },
-            { datum: { greaterThan: maxDatum } },
-          ],
-        },
+        }),
         [{ field: 'id', dir: 'asc' }],
         'tpopkontrsByTpopId',
       ),
