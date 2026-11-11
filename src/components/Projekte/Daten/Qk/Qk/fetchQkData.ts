@@ -176,10 +176,23 @@ export const fetchQkData = async ({
       })),
     )
   }
-  /** child rows (with tpop_id) grouped tpop → pop */
+  /**
+   * child rows (with tpop_id) grouped tpop → pop, nested under relKey —
+   * the PostGraphile collection name the message functions read
+   * (e.g. "tpopmassnsByTpopId"); extra receives the built tpopByTpopId
+   * chain so it can nest it under child rows (zaehlung checks)
+   */
   const tpopChildWrapFromRows = (
     rows: { id: string; jahr: number | null; tpop_id: string }[],
-    extra?: (r: Record<string, unknown>) => object,
+    relKey: string,
+    extra?: (
+      r: Record<string, unknown>,
+      tpopByTpopId: {
+        id: string
+        nr: number | null
+        popByPopId: { id: string | null; nr: number | null }
+      },
+    ) => object,
   ) => {
     const childByTpop = new Map<string, unknown[]>()
     for (const r of rows as Record<string, unknown>[]) {
@@ -187,19 +200,20 @@ export const fetchQkData = async ({
       const tpop = (tpopsCache ?? []).find((t) => t.id === tpopId)
       const pop =
         tpop ? (popsCache ?? []).find((p) => p.id === tpop.pop_id) : undefined
+      const tpopByTpopId = {
+        id: tpopId,
+        nr: tpop?.nr ?? null,
+        popByPopId: {
+          id: tpop?.pop_id ?? null,
+          nr: pop?.nr ?? null,
+        },
+      }
       const list = childByTpop.get(tpopId) ?? []
       list.push({
         id: r.id,
         jahr: r.jahr,
-        ...(extra ? extra(r) : {}),
-        tpopByTpopId: {
-          id: tpopId,
-          nr: tpop?.nr ?? null,
-          popByPopId: {
-            id: tpop?.pop_id ?? null,
-            nr: pop?.nr ?? null,
-          },
-        },
+        ...(extra ? extra(r, tpopByTpopId) : {}),
+        tpopByTpopId,
       })
       childByTpop.set(tpopId, list)
     }
@@ -211,7 +225,7 @@ export const fetchQkData = async ({
           id: tpopId,
           nr: tpop?.nr ?? null,
           popByPopId: { id: tpop?.pop_id ?? null, nr: null },
-          tpopChildRel: { nodes: children },
+          [relKey]: { nodes: children },
         }
       },
     )
@@ -267,6 +281,7 @@ export const fetchQkData = async ({
     cond: object,
     order: object[],
     select: string,
+    relKey: string,
   ) => {
     await Promise.all([allPops(), allTpops()])
     const rows = (await rpc(fn, select, popChildOf(cond), order)) ?? []
@@ -284,7 +299,7 @@ export const fetchQkData = async ({
     return popWrap(
       [...childByPop.entries()].map(([popId, nodes]) => ({
         id: popId,
-        popChildRel: { nodes },
+        [relKey]: { nodes },
       })),
     )
   }
@@ -296,12 +311,18 @@ export const fetchQkData = async ({
       rows as { id: string; nr: number | null; pop_id: string }[],
     )
   }
-  const tpopChildCheck = async (fn: string, cond: object, order: object[]) => {
+  const tpopChildCheck = async (
+    fn: string,
+    cond: object,
+    order: object[],
+    relKey: string,
+  ) => {
     await Promise.all([allPops(), allTpops()])
     const rows =
       (await rpc(fn, 'id,jahr,tpop_id', tpopChildOf(cond), order)) ?? []
     return tpopChildWrapFromRows(
       rows as { id: string; jahr: number | null; tpop_id: string }[],
+      relKey,
     )
   }
   const kontrWithoutZaehlung = async (typOp: 'equalTo' | 'notEqualTo') => {
@@ -327,14 +348,17 @@ export const fetchQkData = async ({
     const matching = kontrs.filter(
       (k) => !withZaehl.has((k as { id: string }).id),
     ) as { id: string; jahr: number | null; tpop_id: string }[]
-    return tpopChildWrapFromRows(matching, () => ({
+    return tpopChildWrapFromRows(matching, 'tpopkontrsByTpopId', () => ({
       tpopkontrzaehlsByTpopkontrId: { totalCount: 0 },
     }))
   }
   /**
-   * zaehlung checks: kontrs of the year with two zaehlung lists each —
-   * "ohne X" (X missing AND einheit needs anzahl/methode) and "mit X" —
-   * the messages compare the two lists' lengths
+   * zaehlung checks: kontrs of the year with their zaehlungen, shaped per
+   * check family like the former GraphQL document:
+   * - freiwkontr methode/anzahl: two aliased id-lists
+   *   ("zaehlungenOhneX"/"zaehlungenMitX") whose lengths the messages compare
+   * - everything else: "tpopkontrzaehlsByTpopkontrId" holds the matching
+   *   zaehlungen, each carrying its tpopkontrByTpopkontrId chain
    */
   const zaehlungCheck = async (
     typOp: 'equalTo' | 'notEqualTo',
@@ -379,27 +403,44 @@ export const fetchQkData = async ({
       // needsNoMethodeAnzahl true → the field is optional
       return !needs
     }
+    const fieldCap =
+      field === 'einheit' ? 'Einheit'
+      : field === 'methode' ? 'Methode'
+      : 'Anzahl'
+    const useAliasedLists = typOp === 'equalTo' && field !== 'einheit'
     return tpopChildWrapFromRows(
       (kontrs ?? []) as { id: string; jahr: number | null; tpop_id: string }[],
-      (r) => {
-        const kontrId = r.id as string
-        const list = zaehlsByKontr.get(kontrId) ?? []
-        const ohnes = list.filter((z) => z[field] == null && needsCheck(z))
-        const mits = list.filter((z) => z[field] != null || !needsCheck(z))
+      'tpopkontrsByTpopId',
+      (r, tpopByTpopId) => {
+        const list = zaehlsByKontr.get(r.id as string) ?? []
+        if (useAliasedLists) {
+          const ohnes = list.filter((z) => z[field] == null && needsCheck(z))
+          const mits = list.filter((z) => z[field] != null || !needsCheck(z))
+          return {
+            [`zaehlungenOhne${fieldCap}`]: {
+              nodes: ohnes.map((z) => ({ id: z.id })),
+            },
+            [`zaehlungenMit${fieldCap}`]: {
+              nodes: mits.map((z) => ({ id: z.id })),
+            },
+          }
+        }
+        // "ohne einheit" never depended on the einheit-werte; methode/anzahl
+        // only count a missing value when the einheit requires one
+        const ohnes =
+          field === 'einheit' ?
+            list.filter((z) => z.einheit == null)
+          : list.filter((z) => z[field] == null && needsCheck(z))
         return {
-          [`zaehlungenOhne${
-            field === 'einheit' ? 'Einheit'
-            : field === 'methode' ? 'Methode'
-            : 'Anzahl'
-          }`]: {
-            nodes: ohnes.map((z) => ({ id: z.id })),
-          },
-          [`zaehlungenMit${
-            field === 'einheit' ? 'Einheit'
-            : field === 'methode' ? 'Methode'
-            : 'Anzahl'
-          }`]: {
-            nodes: mits.map((z) => ({ id: z.id })),
+          tpopkontrzaehlsByTpopkontrId: {
+            nodes: ohnes.map((z) => ({
+              id: z.id,
+              tpopkontrByTpopkontrId: {
+                id: r.id as string,
+                jahr: r.jahr as number | null,
+                tpopByTpopId,
+              },
+            })),
           },
         }
       },
@@ -756,6 +797,24 @@ export const fetchQkData = async ({
           `/v_q_tpop_erste_massn_vor_bekannt_seit?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,id:id,nr:nr,bemerkung:bemerkung`,
         )) ?? [],
     }),
+    tpopmassnDatumJahr: async () => ({
+      nodes:
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_q_tpopmassn_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+        )) ?? [],
+    }),
+    tpopfeldkontrDatumJahr: async () => ({
+      nodes:
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_q_tpopfeldkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+        )) ?? [],
+    }),
+    tpopfreiwkontrDatumJahr: async () => ({
+      nodes:
+        (await apiFetch<Record<string, unknown>[]>(
+          `/v_q_tpopfreiwkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+        )) ?? [],
+    }),
     tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: async () => ({
       nodes:
         (await apiFetch<Record<string, unknown>[]>(
@@ -967,6 +1026,7 @@ export const fetchQkData = async ({
         { jahr: { isNull: true } },
         [{ field: 'id', dir: 'asc' }],
         'id,jahr,pop_id',
+        'popbersByPopId',
       ),
     popberOhneEntwicklung: async () =>
       popChildCheck(
@@ -974,6 +1034,7 @@ export const fetchQkData = async ({
         { entwicklung: { isNull: true }, jahr: { equalTo: berichtjahr } },
         [{ field: 'jahr', dir: 'asc' }],
         'id,jahr,pop_id',
+        'popbersByPopId',
       ),
     popmassnberOhneJahr: async () =>
       popChildCheck(
@@ -981,6 +1042,7 @@ export const fetchQkData = async ({
         { jahr: { isNull: true } },
         [{ field: 'id', dir: 'asc' }],
         'id,jahr,pop_id',
+        'popmassnbersByPopId',
       ),
     popmassnberOhneEntwicklung: async () =>
       popChildCheck(
@@ -988,6 +1050,7 @@ export const fetchQkData = async ({
         { beurteilung: { isNull: true }, jahr: { equalTo: berichtjahr } },
         [{ field: 'jahr', dir: 'asc' }],
         'id,jahr,pop_id',
+        'popmassnbersByPopId',
       ),
     tpopOhneNr: async () =>
       tpopCheck({ nr: { isNull: true } }, [{ field: 'id', dir: 'asc' }]),
@@ -1097,13 +1160,19 @@ export const fetchQkData = async ({
       return tpopWrapFromRows(tpops.filter((t) => withAnpflanzung.has(t.id)))
     },
     tpopberOhneJahr: async () =>
-      tpopChildCheck('query_tpopber', { jahr: { isNull: true } }, [
-        { field: 'id', dir: 'asc' },
-      ]),
+      tpopChildCheck(
+        'query_tpopber',
+        { jahr: { isNull: true } },
+        [{ field: 'id', dir: 'asc' }],
+        'tpopbersByTpopId',
+      ),
     tpopberOhneEntwicklung: async () =>
-      tpopChildCheck('query_tpopber', { entwicklung: { isNull: true } }, [
-        { field: 'jahr', dir: 'asc' },
-      ]),
+      tpopChildCheck(
+        'query_tpopber',
+        { entwicklung: { isNull: true } },
+        [{ field: 'jahr', dir: 'asc' }],
+        'tpopbersByTpopId',
+      ),
     tpopmassnDatum: async () =>
       tpopChildCheck(
         'query_tpopmassn',
@@ -1116,28 +1185,35 @@ export const fetchQkData = async ({
           ],
         },
         [{ field: 'id', dir: 'asc' }],
+        'tpopmassnsByTpopId',
       ),
     tpopmassnOhneBearb: async () =>
       tpopChildCheck(
         'query_tpopmassn',
         { bearbeiter: { isNull: true }, jahr: { equalTo: berichtjahr } },
         [{ field: 'jahr', dir: 'asc' }],
+        'tpopmassnsByTpopId',
       ),
     tpopmassnOhneTyp: async () =>
       tpopChildCheck(
         'query_tpopmassn',
         { typ: { isNull: true }, jahr: { equalTo: berichtjahr } },
         [{ field: 'jahr', dir: 'asc' }],
+        'tpopmassnsByTpopId',
       ),
     tpopmassnberOhneJahr: async () =>
-      tpopChildCheck('query_tpopmassnber', { jahr: { isNull: true } }, [
-        { field: 'id', dir: 'asc' },
-      ]),
+      tpopChildCheck(
+        'query_tpopmassnber',
+        { jahr: { isNull: true } },
+        [{ field: 'id', dir: 'asc' }],
+        'tpopmassnbersByTpopId',
+      ),
     tpopmassnberOhneBeurteilung: async () =>
       tpopChildCheck(
         'query_tpopmassnber',
         { beurteilung: { isNull: true }, jahr: { equalTo: berichtjahr } },
         [{ field: 'jahr', dir: 'asc' }],
+        'tpopmassnbersByTpopId',
       ),
     tpopfeldkontrDatum: async () =>
       tpopChildCheck(
@@ -1152,6 +1228,7 @@ export const fetchQkData = async ({
           ],
         },
         [{ field: 'id', dir: 'asc' }],
+        'tpopkontrsByTpopId',
       ),
     tpopfreiwkontrDatum: async () =>
       tpopChildCheck(
@@ -1166,6 +1243,7 @@ export const fetchQkData = async ({
           ],
         },
         [{ field: 'id', dir: 'asc' }],
+        'tpopkontrsByTpopId',
       ),
     tpopfeldkontrOhneBearb: async () =>
       tpopChildCheck(
@@ -1176,6 +1254,7 @@ export const fetchQkData = async ({
           jahr: { equalTo: berichtjahr },
         },
         [{ field: 'jahr', dir: 'asc' }],
+        'tpopkontrsByTpopId',
       ),
     tpopfreiwkontrOhneBearb: async () =>
       tpopChildCheck(
@@ -1186,6 +1265,7 @@ export const fetchQkData = async ({
           jahr: { equalTo: berichtjahr },
         },
         [{ field: 'jahr', dir: 'asc' }],
+        'tpopkontrsByTpopId',
       ),
     tpopfeldkontrOhneZaehlung: async () => kontrWithoutZaehlung('notEqualTo'),
     tpopfreiwkontrOhneZaehlung: async () => kontrWithoutZaehlung('equalTo'),
