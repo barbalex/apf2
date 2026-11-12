@@ -839,19 +839,22 @@ export const fetchQkData = async ({
     tpopmassnDatumJahr: async () => ({
       nodes:
         (await apiFetch<Record<string, unknown>[]>(
-          `/v_q_tpopmassn_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+          // #841: only records of the berichtjahr, not all years
+          `/v_q_tpopmassn_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&jahr=eq.${berichtjahr}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
         )) ?? [],
     }),
     tpopfeldkontrDatumJahr: async () => ({
       nodes:
         (await apiFetch<Record<string, unknown>[]>(
-          `/v_q_tpopfeldkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+          // #841: only records of the berichtjahr, not all years
+          `/v_q_tpopfeldkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&jahr=eq.${berichtjahr}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
         )) ?? [],
     }),
     tpopfreiwkontrDatumJahr: async () => ({
       nodes:
         (await apiFetch<Record<string, unknown>[]>(
-          `/v_q_tpopfreiwkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
+          // #841: only records of the berichtjahr, not all years
+          `/v_q_tpopfreiwkontr_datum_jahr?ap_id=eq.${apId}&proj_id=eq.${projId}&jahr=eq.${berichtjahr}&select=projId:proj_id,apId:ap_id,popId:pop_id,popNr:pop_nr,tpopId:tpop_id,tpopNr:tpop_nr,id:id,jahr:jahr,bemerkung:bemerkung`,
         )) ?? [],
     }),
     tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: async () => ({
