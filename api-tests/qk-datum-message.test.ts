@@ -168,6 +168,34 @@ describe('QK only evaluate the berichtjahr (#841)', () => {
     expect(messages[0]?.text).toContain('Massnahme: 2026')
   })
 
+  it('the DatumJahr checks filter their views by berichtjahr', async () => {
+    apiFetchMock.mockReset()
+    apiFetchMock.mockImplementation(async () => [])
+    await Promise.all(
+      [
+        'tpopmassnDatumJahr',
+        'tpopfeldkontrDatumJahr',
+        'tpopfreiwkontrDatumJahr',
+      ].map((check) =>
+        fetchQkData({
+          projId,
+          apId,
+          berichtjahr: 2026,
+          activeChecks: { [check]: true },
+          minDatum: '1926-11-11',
+          maxDatum: '2126-11-11',
+        }),
+      ),
+    )
+    const viewUrls = apiFetchMock.mock.calls
+      .map(([url]) => String(url))
+      .filter((url) => url.includes('/v_q_'))
+    expect(viewUrls).toHaveLength(3)
+    for (const url of viewUrls) {
+      expect(url).toContain('&jahr=eq.2026')
+    }
+  })
+
   it('sends no invalid date range when the Berichtjahr field is cleared', async () => {
     // a cleared field yields 0; "0-01-01" is not a valid date and would
     // make the rpc fail. Like the other berichtjahr-scoped checks, these
