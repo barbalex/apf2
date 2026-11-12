@@ -6,7 +6,8 @@ export const Component = () => (
     <h1>Art: Auswertung Population Mengen 📈</h1>
     <p className={desktopStyles.dokuDate}>
       27.03.2020 (Ebene Population ergänzt am 31.3.2023, Rechen-Regeln
-      überarbeitet am 1.10.2026)
+      überarbeitet am 1.10.2026, Darstellung erloschener TPop und Verzicht auf
+      Pop-Historien am 12.11.2026)
     </p>
     <p>
       Die vollständigen und verbindlichen Rechen-Regeln sind im{' '}
@@ -29,13 +30,14 @@ export const Component = () => (
     <ul>
       <li>
         <p>
-          Ap, Pop und TPop aus den jährlich historisierten Daten:{' '}
-          <code>ap_history</code>, <code>pop_history</code> und{' '}
-          <code>tpop_history</code>
+          TPop aus den jährlich historisierten Daten:{' '}
+          <code>tpop_history</code>. Es gelten nur die Stati und Attribute der
+          TPop - Historien und Stati von Art und Population haben keinen
+          Einfluss auf die Auswertung
         </p>
         <ul>
           <li>
-            nur Pop und TPop mit den Stati 100 (ursprünglich, aktuell), 101
+            nur TPop mit den Stati 100 (ursprünglich, aktuell), 101
             (ursprünglich, erloschen), 200 (angesiedelt, aktuell), 202
             (angesiedelt, erloschen)
           </li>
@@ -43,8 +45,8 @@ export const Component = () => (
         </ul>
       </li>
       Dies führt dazu, dass nur Ergebnisse aus den Jahren angezeigt werden
-      können, für die Historisierungen vorliegen. Daten aus Jahren ohne
-      Historie werden nie berücksichtigt – auch nicht als übernommene
+      können, für die Historisierungen der TPop vorliegen. Daten aus Jahren
+      ohne Historie werden nie berücksichtigt – auch nicht als übernommene
       Vorjahreswerte.
       <br />
       Mehr zu der Historisierung von Art, Pop und TPop{' '}
@@ -100,11 +102,28 @@ export const Component = () => (
         </ul>
       </li>
     </ul>
+    <h3>Darstellung erloschener Teil-Populationen</h3>
+    <p>
+      Erloschene TPop werden weiterhin berechnet (mit der Anzahl 0, siehe
+      oben). In der Darstellung interessieren sie aber nur im Jahr des
+      Erlöschens und in Jahren, bevor allenfalls wieder angesiedelt wurde (um
+      Löcher in den Grafiken zu verhindern). In allen anderen Jahren werden
+      sie nicht dargestellt: Sie lenken nur von den interessanten Daten ab.
+    </p>
+    <p>
+      Das gilt auch für die Populations-Ebene: Eine Population, deren TPop
+      alle erloschen und nicht mehr dargestellt sind, verschwindet aus der
+      Grafik. Populationen mit aktiven TPop bleiben unverändert dargestellt.
+      Das betrifft die Grafik, die Popups und die aus ihnen exportierten
+      Excel-Listen gleichermassen.
+    </p>
     <h3>Population: Auswertung Teil-Population Mengen</h3>
     <p>
       In Populationen gibt es eine analoge Auswertung wie auf Ebene Art. Es
       gelten dieselben Rechen-Regeln, dargestellt wird auf Ebene der
-      Teil-Populationen.
+      Teil-Populationen. Die Regel zur Darstellung erloschener TPop (siehe
+      oben) ist dort noch nicht umgesetzt: Erloschene TPop werden dort
+      weiterhin in allen Jahren dargestellt.
     </p>
   </>
 )
