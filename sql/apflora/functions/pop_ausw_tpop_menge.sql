@@ -6,6 +6,27 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
   BEGIN
     RETURN QUERY
     WITH
+    -- the qualifying TPop histories of the pop:
+    -- rules 1 and 2: only TPop histories decide, Pop histories and Pop stati have no influence
+    -- rule 3: only TPops relevant for the AP-Bericht
+    tpop_historien AS(
+      SELECT
+        ap.id AS ap_id,
+        pop.id AS pop_id,
+        th.id AS tpop_id,
+        th.year,
+        th.status
+      FROM apflora.tpop_history th
+      -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
+      INNER JOIN apflora.tpop tpop ON tpop.id = th.id
+      INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
+      INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
+      WHERE
+        th.status IN(100, 101, 200, 202)
+        AND th.apber_relevant = TRUE
+        AND th.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+        AND tpop.pop_id = $1
+    ),
     zaehlungen_alle_kandidaten AS(
       SELECT
         kontr.tpop_id,
@@ -18,24 +39,15 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
         zaehl.anzahl
       FROM apflora.tpopkontrzaehl zaehl
       INNER JOIN apflora.tpopkontr kontr ON kontr.id = zaehl.tpopkontr_id
-      INNER JOIN apflora.tpop_history th ON th.id = kontr.tpop_id AND th.year = kontr.jahr
-      -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
-      INNER JOIN apflora.tpop tpop ON tpop.id = th.id
-      INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
-      INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
-      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
+      INNER JOIN tpop_historien th ON th.tpop_id = kontr.tpop_id
+        AND th.year = kontr.jahr
+      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = th.ap_id
         AND ekze.zielrelevant = TRUE
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
         AND ze.code = zaehl.einheit
       WHERE
         zaehl.anzahl IS NOT NULL
-        AND kontr.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
-        -- we want false or null, but not true
-        -- https://stackoverflow.com/a/46474204/712005
         AND kontr.apber_nicht_relevant IS NOT TRUE
-        AND th.status IN(100, 101, 200, 202)
-        AND th.apber_relevant = TRUE
-        AND tpop.pop_id = $1
     ),
     -- with several qualifying counts per year the latest wins
     -- if the date does not decide, one is picked deterministically:
@@ -64,36 +76,56 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
       ) t
       WHERE t.rn = 1
     ),
+    -- rule 17: extinct TPops are only displayed in the year of extinction
+    -- and in years before a later re-settlement (to prevent holes in the charts)
+    -- re-settlement includes rediscovery: any later qualifying year with status 100 or 200
+    tpop_darstellung AS(
+      SELECT
+        s.tpop_id,
+        s.year AS jahr,
+        (
+          s.status IN(101, 202)
+          AND(s.prev_status IS NULL OR s.prev_status IN(100, 200))
+        ) AS erloschen_start,
+        (
+          s.status NOT IN(101, 202)
+          -- year of extinction: first year of an erloschen phase
+          OR s.prev_status IS NULL
+          OR s.prev_status IN(100, 200)
+          -- a later re-settlement follows: bridge the years up to it
+          OR EXISTS(
+            SELECT 1
+            FROM tpop_historien h
+            WHERE
+              h.tpop_id = s.tpop_id
+              AND h.year > s.year
+              AND h.status IN(100, 200)
+          )
+        ) AS darstellen
+      FROM(
+        SELECT
+          h.tpop_id,
+          h.year,
+          h.status,
+          lag(h.status) OVER(PARTITION BY h.tpop_id ORDER BY h.year) AS prev_status
+        FROM tpop_historien h
+      ) s
+    ),
     -- extinct TPops are counted as 0, beginning with the first year of each erloschen phase
     -- this 0 replaces older counts until a newer count occurs
     erloschen_start_ohne_zaehlung AS(
       SELECT
-        s.id AS tpop_id,
-        s.year AS jahr
-      FROM(
-        SELECT
-          th.id,
-          th.year,
-          th.status,
-          lag(th.status) OVER(PARTITION BY th.id ORDER BY th.year) AS prev_status
-        FROM apflora.tpop_history th
-        INNER JOIN apflora.tpop tpop ON tpop.id = th.id
-        INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
-        WHERE
-          th.status IN(100, 101, 200, 202)
-          AND th.apber_relevant = TRUE
-          AND th.year <= EXTRACT(YEAR FROM CURRENT_DATE)
-          AND tpop.pop_id = $1
-      ) s
+        d.tpop_id,
+        d.jahr
+      FROM tpop_darstellung d
       WHERE
-        s.status IN(101, 202)
-        AND (s.prev_status IS NULL OR s.prev_status IN(100, 200))
+        d.erloschen_start
         AND NOT EXISTS(
           SELECT 1
           FROM zaehlungen_juengste_pro_jahr z
           WHERE
-            z.tpop_id = s.id
-            AND z.jahr = s.year
+            z.tpop_id = d.tpop_id
+            AND z.jahr = d.jahr
         )
     ),
     zaehlungen AS(
@@ -110,12 +142,9 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
         m.datum,
         m.zieleinheit_anzahl AS anzahl
       FROM apflora.tpopmassn m
-      INNER JOIN apflora.tpop_history th ON th.id = m.tpop_id AND th.year = m.jahr
-      -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
-      INNER JOIN apflora.tpop tpop ON tpop.id = th.id
-      INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
-      INNER JOIN apflora.ap ap ON ap.id = pop.ap_id
-      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
+      INNER JOIN tpop_historien th ON th.tpop_id = m.tpop_id
+        AND th.year = m.jahr
+      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = th.ap_id
         AND ekze.zielrelevant = TRUE
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
         AND ze.code = m.zieleinheit_einheit
@@ -123,24 +152,19 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
         AND mtw.anpflanzung = TRUE
       WHERE
         m.zieleinheit_anzahl IS NOT NULL
-        AND m.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
-        AND th.status IN(100, 101, 200, 202)
-        AND th.apber_relevant = TRUE
-        AND tpop.pop_id = $1
     ),
     tpop_werte AS(
       SELECT
-        th.id AS tpop_id,
+        th.pop_id,
+        th.tpop_id,
         th.year AS jahr,
         COALESCE(zaehlungen.anzahl, 0) + COALESCE(massnahmen.sum, 0) AS anzahl
-      FROM apflora.tpop_history th
-      -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
-      INNER JOIN apflora.tpop tpop ON tpop.id = th.id
-      INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
-      -- only pops with qualifying status in the year in question
-      INNER JOIN apflora.pop_history ph ON ph.id = pop.id
-        AND ph.year = th.year
-        AND ph.status IN(100, 101, 200, 202)
+      FROM tpop_historien th
+      -- rule 17: only displayed TPop values are returned
+      INNER JOIN tpop_darstellung d ON
+        d.tpop_id = th.tpop_id
+        AND d.jahr = th.year
+        AND d.darstellen
       LEFT JOIN LATERAL(
         SELECT
           z.tpop_id,
@@ -150,7 +174,7 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
           z.virtuell
         FROM zaehlungen z
         WHERE
-          z.tpop_id = th.id
+          z.tpop_id = th.tpop_id
           AND z.jahr <= th.year
         ORDER BY
           z.jahr DESC,
@@ -161,7 +185,7 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
         SELECT sum(m.anzahl) AS sum
         FROM massnahmen m
         WHERE
-          m.tpop_id = th.id
+          m.tpop_id = th.tpop_id
           AND m.jahr <= th.year
           AND(
             -- no count at all: add all previous plantings
@@ -183,11 +207,6 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
             )
           )
       ) AS massnahmen ON true
-      WHERE
-        tpop.pop_id = $1
-        AND th.apber_relevant = TRUE
-        AND th.status IN(100, 101, 200, 202)
-        AND th.year <= EXTRACT(YEAR FROM CURRENT_DATE)
     )
     SELECT
       jahr,

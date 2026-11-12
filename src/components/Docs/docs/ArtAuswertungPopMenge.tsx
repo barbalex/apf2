@@ -121,9 +121,8 @@ export const Component = () => (
     <p>
       In Populationen gibt es eine analoge Auswertung wie auf Ebene Art. Es
       gelten dieselben Rechen-Regeln, dargestellt wird auf Ebene der
-      Teil-Populationen. Die Regel zur Darstellung erloschener TPop (siehe
-      oben) ist dort noch nicht umgesetzt: Erloschene TPop werden dort
-      weiterhin in allen Jahren dargestellt.
+      Teil-Populationen - einschliesslich der Regel zur Darstellung
+      erloschener TPop (siehe oben).
     </p>
   </>
 )
