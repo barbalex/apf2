@@ -10,7 +10,6 @@
 import { atom, createStore } from 'jotai'
 
 import { store as rootStore } from './store.ts'
-import { treeActiveNodeArrayAtom } from './tree.ts'
 import { tsQueryClientAtom } from './ui.ts'
 import {
   addNotificationAtom,
@@ -89,7 +88,11 @@ export const setTree2PathByActiveNodeArrayAtom = atom(
       // pane is open: navigate it in place — no remount, no reload
       navigate(path)
     } else {
-      tree2Store.set(treeActiveNodeArrayAtom, activeNodeArray)
+      // do NOT pre-set treeActiveNodeArrayAtom: the pane's
+      // ActiveNodeArraySetter derives it from the pane router's pathname
+      // on mount, and that write seeds openNodes with every path prefix
+      // (the tree's expand-to-node mechanism). Pre-setting it here
+      // suppressed the seeding and the pane's tree stayed collapsed
       rootStore.set(tree2PathAtom, path)
     }
   },

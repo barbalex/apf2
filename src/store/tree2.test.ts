@@ -68,7 +68,7 @@ describe('buildTree2Path', () => {
 })
 
 describe('setTree2PathByActiveNodeArrayAtom', () => {
-  it('sets the pane start path and node when the pane is closed', () => {
+  it('sets the pane start path when the pane is closed, without pre-setting the active node array', () => {
     openExplicitly({
       activeNodeArray: [
         'Projekte',
@@ -84,14 +84,11 @@ describe('setTree2PathByActiveNodeArrayAtom', () => {
     expect(rootStore.get(tree2PathAtom)).toBe(
       '/Daten/Projekte/p1/Arten/a1/Populationen/pop1?projekteTabs=tree',
     )
-    expect(tree2Store.get(treeActiveNodeArrayAtom)).toEqual([
-      'Projekte',
-      'p1',
-      'Arten',
-      'a1',
-      'Populationen',
-      'pop1',
-    ])
+    // the pane's ActiveNodeArraySetter derives the active node array from
+    // the pane router's pathname on mount — and only that write seeds
+    // openNodes with the path prefixes (the tree's expand-to-node
+    // mechanism). Pre-setting it here suppressed the seeding
+    expect(tree2Store.get(treeActiveNodeArrayAtom)).toEqual([])
   })
 
   it('ignores a stale navigate left over from an earlier open/close cycle', () => {

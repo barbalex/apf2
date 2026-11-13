@@ -143,6 +143,11 @@ test.describe('tree2', () => {
     await expect(pane2.getByText('Arten').first()).toBeVisible({
       timeout: 30_000,
     })
+    // and its tree is expanded down to the node (the pane's
+    // ActiveNodeArraySetter seeds the open nodes on mount)
+    await expect
+      .poll(async () => pane2.locator('[data-url]').count())
+      .toBeGreaterThan(1)
   })
 
   test('a QK message opens tree2 at its node after warm navigation (no reload)', async ({
@@ -206,6 +211,13 @@ test.describe('tree2', () => {
     const pane2 = page.locator('[data-id="tree2-pane"]')
     await expect(pane2).toBeVisible({ timeout: 30_000 })
     await expect(pane2.locator('p[class*="styledA"]')).toHaveCount(0)
+    // and its tree is expanded down to the node — the pane's
+    // ActiveNodeArraySetter derives the node from the pane router's
+    // pathname on mount, seeding the open nodes (regression: the open
+    // action used to pre-set the node, suppressing the seeding)
+    await expect
+      .poll(async () => pane2.locator('[data-url]').count())
+      .toBeGreaterThan(1)
     // the appbar tabs survive the pane opening
     await expect(page.locator('button[data-id="nav-daten2"]')).toBeVisible()
   })
