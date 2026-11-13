@@ -43,7 +43,7 @@ const virtualFields = new Set([
 // views (their former zaehl filter fields were removed). New drift between
 // gqlFilterTypes and the schema fails the test below — after intentional
 // changes, update this list.
-const knownDrift = []
+const knownDrift: string[] = []
 
 // scalar filter types (as opposed to relation filters like
 // AdresseToManyApFilter and structural fields like and/or/not/*Exist)
