@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
+import { useLocation, useNavigation } from 'react-router'
 import { SplitPane, Pane } from 'react-split-pane'
 import { useAtomValue } from 'jotai'
 
-import { isPrintAtom } from '../../store/index.ts'
-import { tree2PathAtom } from '../../store/tree2.ts'
+import { isPrintAtom, store } from '../../store/index.ts'
+import { tree2PathAtom, buildTree2Path } from '../../store/tree2.ts'
 import { ProjektContainer } from './ProjektContainer.tsx'
 import { Tree2 } from './Tree2/index.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
@@ -14,15 +16,39 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 export const Component = () => {
   const isPrint = useAtomValue(isPrintAtom)
   const tree2Path = useAtomValue(tree2PathAtom)
+  const { pathname, search } = useLocation()
+  // pending while a router navigation is in flight — the pane must not
+  // open on a location that is about to change
+  const navigation = useNavigation()
 
   const [projekteTabs] = useProjekteTabs()
   const tree2Tabs = [
     ...new Set(tree2TabValues).intersection(new Set(projekteTabs)),
   ]
+  // tree2Path is set by the effect below (or an explicit open action)
+  // before the pane mounts
+  const paneIsOpen = tree2Tabs.length > 0 && !isPrint && !!tree2Path
+
+  useEffect(() => {
+    // opening the pane without an explicit target (the app-bar button)
+    // starts it at pane 1's current location — the former iframe-src
+    // default. Explicit targets (map popups, Qk) set the atom beforehand.
+    // Closing resets it so the next open re-derives.
+    if (tree2Tabs.length > 0 && !isPrint) {
+      // derive only once pane 1's router is idle: tree clicks open nodes
+      // (and can make new rows visible) before the navigation commits, so
+      // anything read earlier may be a location about to change
+      if (!tree2Path && navigation.state === 'idle') {
+        store.set(tree2PathAtom, buildTree2Path(pathname, search))
+      }
+    } else if (tree2Path) {
+      store.set(tree2PathAtom, '')
+    }
+  }, [tree2Tabs.length, isPrint, tree2Path, pathname, search, navigation.state])
 
   return (
     <div className={styles.container}>
-      {tree2Tabs.length === 0 || isPrint ?
+      {!paneIsOpen ?
         <ProjektContainer />
       : <SplitPane direction="horizontal">
           <Pane defaultSize="50%">
@@ -30,7 +56,7 @@ export const Component = () => {
           </Pane>
           <Pane>
             {/* the second tree is the same workspace against its own store
-                and MemoryRouter — no iframe, no app reload when pane 1
+                and memory router — no iframe, no app reload when pane 1
                 navigates (issues/tree2-second-pane.md) */}
             <Tree2 path={tree2Path} />
           </Pane>

@@ -23,12 +23,38 @@ import { userAtom } from './user.ts'
 export const tree2Store = createStore()
 
 // initial entry of the pane's MemoryRouter; only used when the pane
-// mounts — once open, navigation goes through the pane's own navigate
-export const tree2PathAtom = atom('/Daten/Projekte')
+// mounts — once open, navigation goes through the pane's own navigate.
+// '' means "no explicit target": the pane then opens at pane 1's current
+// location (the former iframe-src default)
+export const tree2PathAtom = atom('')
 
-// opens (or navigates) the pane on a node. Build the pane path the same
-// way the former iframe src was built: keep only the tree2-tabs, de-2
-// them, and point at the node.
+// builds the pane path the way the former iframe src was built: keep all
+// search params, reduce projekteTabs to the de-2ed tree2-tabs (defaulting
+// to tree+daten), point at the given /Daten path
+export const buildTree2Path = (
+  path: string,
+  search: string,
+  onlyShowActivePath?: boolean | undefined,
+) => {
+  const paneSearch = new URLSearchParams()
+  for (const [key, value] of new URLSearchParams(search)) {
+    if (key !== 'projekteTabs') paneSearch.append(key, value)
+  }
+  // keep only the tree2-tabs, de-2 them (the former iframe src rule)
+  const derivedTabs = new URLSearchParams(search)
+    .getAll('projekteTabs')
+    .filter((t) => t.includes('2'))
+    .map((t) => t.replace('2', ''))
+  for (const t of derivedTabs) paneSearch.append('projekteTabs', t)
+  if (!paneSearch.getAll('projekteTabs').length) {
+    paneSearch.append('projekteTabs', 'tree')
+    paneSearch.append('projekteTabs', 'daten')
+  }
+  if (onlyShowActivePath) paneSearch.append('onlyShowActivePath', 'true')
+  return `${path}?${paneSearch.toString()}`
+}
+
+// opens (or navigates) the pane on a node
 export const setTree2PathByActiveNodeArrayAtom = atom(
   null,
   (
@@ -44,23 +70,11 @@ export const setTree2PathByActiveNodeArrayAtom = atom(
       onlyShowActivePath?: boolean | undefined
     },
   ) => {
-    const paneSearch = new URLSearchParams()
-    for (const [key, value] of new URLSearchParams(search)) {
-      if (key !== 'projekteTabs') paneSearch.append(key, value)
-    }
-    // keep only the tree2-tabs, de-2 them (the former iframe src rule)
-    const derivedTabs = new URLSearchParams(search)
-      .getAll('projekteTabs')
-      .filter((t) => t.includes('2'))
-      .map((t) => t.replace('2', ''))
-    for (const t of derivedTabs) paneSearch.append('projekteTabs', t)
-    if (!paneSearch.getAll('projekteTabs').length) {
-      paneSearch.append('projekteTabs', 'tree')
-      paneSearch.append('projekteTabs', 'daten')
-    }
-    if (onlyShowActivePath) paneSearch.append('onlyShowActivePath', 'true')
-
-    const path = `/Daten/${activeNodeArray.join('/')}?${paneSearch.toString()}`
+    const path = buildTree2Path(
+      `/Daten/${activeNodeArray.join('/')}`,
+      search,
+      onlyShowActivePath,
+    )
 
     const navigate = tree2Store.get(navigateObjectAtom)?.fn
     if (navigate) {

@@ -110,3 +110,16 @@ pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
 - `karte2`/`filter2` pane tabs currently have no effect on an open pane
   (the pane's tab set is fixed at mount); the pane-1 tab buttons still
   control pane 1 only. Can be revisited if missed.
+- The pane host must be a flex column: the routed workspace's root is a
+  flex child of the AppBar layout (`flex-grow: 1`), so without that
+  context the height chain collapses. The uploadcare context provider is
+  a childless sibling (like in App.tsx) — wrapping the layout in the
+  custom element breaks it the same way (it does not render).
+- Opening without an explicit target derives from pane 1's location only
+  once the router is idle (`useNavigation().state`): tree clicks open
+  nodes (rows become visible) before their navigation commits, and
+  reading the location earlier can catch one that is about to change.
+- The pane's React root is kept in a WeakMap keyed by its host element
+  and unmounts deferred+disconnected-checked — unmounting synchronously
+  in the effect cleanup races React's render (StrictMode double-invoke
+  warns about exactly that).

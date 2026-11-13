@@ -41,7 +41,6 @@ const PaneChrome = () => {
     initTree2SharedAtoms()
     bridgeTree2Notifications()
   }, [])
-
   return (
     <>
       <NavigateSetter store={tree2Store} />
@@ -56,7 +55,12 @@ const usePaneRouter = (path: string) =>
     () =>
       createMemoryRouter(
         createRoutesFromElements(
-          <Route element={<PaneChrome />}>{datenRoutes}</Route>,
+          <Route
+            element={<PaneChrome />}
+            hydrateFallbackElement={<Spinner />}
+          >
+            {datenRoutes}
+          </Route>,
         ),
         { initialEntries: [path] },
       ),
@@ -66,7 +70,9 @@ const usePaneRouter = (path: string) =>
     [],
   )
 
-// the workspace rendered inside the pane's own React root
+// the workspace rendered inside the pane's own React root. The uploadcare
+// context provider is a childless sibling (like in App.tsx) — it is a
+// non-rendering custom element and must not wrap the layout
 const PaneApp = ({ path }: { path: string }) => {
   const router = usePaneRouter(path)
   const queryClient = useSharedQueryClient()
@@ -92,6 +98,12 @@ const PaneApp = ({ path }: { path: string }) => {
   )
 }
 
+// react roots of open panes, keyed by their host element — lets the
+// StrictMode double-invoked effects reuse the root instead of unmounting
+// it mid-render (unmounting a root synchronously during render is the
+// race React warns about)
+const paneRoots = new WeakMap<HTMLDivElement, Root>()
+
 // the second tree: the same workspace (the app's /Daten route tree)
 // rendered against its own React root, jotai store and memory router —
 // the successor of the former whole-app iframe. react-router forbids
@@ -102,21 +114,38 @@ const PaneApp = ({ path }: { path: string }) => {
 // (issues/tree2-second-pane.md)
 export const Tree2 = ({ path }: { path: string }) => {
   const hostRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<Root | null>(null)
 
   useEffect(() => {
     const host = hostRef.current
-    if (!host || rootRef.current) return
-    const root = createRoot(host)
-    rootRef.current = root
+    if (!host) return
+    let root = paneRoots.get(host)
+    if (!root) {
+      root = createRoot(host)
+      paneRoots.set(host, root)
+    }
     root.render(<PaneApp path={path} />)
+
     return () => {
-      rootRef.current?.unmount()
-      rootRef.current = null
+      // deferred + only when the host really left the DOM: covers the
+      // real unmount (pane closed) without racing StrictMode's effect
+      // re-run
+      queueMicrotask(() => {
+        const current = paneRoots.get(host)
+        if (current === root && !host.isConnected) {
+          paneRoots.delete(host)
+          root?.unmount()
+        }
+      })
     }
     // path is mount-only by design (see usePaneRouter)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <div ref={hostRef} data-id="tree2-pane" className={styles.pane} />
+  return (
+    <div
+      ref={hostRef}
+      data-id="tree2-pane"
+      className={styles.pane}
+    />
+  )
 }

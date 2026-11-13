@@ -1,4 +1,9 @@
+/* the routed workspace's root element is a flex child of the app's
+   AppBar layout (flex-grow: 1) — reproduce that context so the height
+   chain works without the AppBar */
 .pane {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
 }
