@@ -62,20 +62,35 @@ export const Component = () => {
 
   return (
     <div className={styles.container}>
-      {!paneIsOpen ?
-        <ProjektContainer />
-      : <SplitPane direction="horizontal">
-          <Pane defaultSize="50%">
-            <ProjektContainer />
-          </Pane>
-          <Pane>
-            {/* the second tree is the same workspace against its own store
-                and memory router — no iframe, no app reload when pane 1
-                navigates (issues/tree2-second-pane.md) */}
-            <Tree2 path={tree2Path} />
-          </Pane>
-        </SplitPane>
-      }
+      {/* the SplitPane is always mounted with both panes — pane 1 must
+          never change tree position, or its whole workspace (tree + form)
+          remounts whenever the pane opens or closes (the QK form lost its
+          state and refetched). The closed state is styles-only: pane 1
+          forced to full width (the Pane's style prop wins over the
+          library's computed width), divider hidden, pane 2 collapsed.
+          Uncontrolled sizing keeps drag-resize working; the overrides are
+          undefined while open, so a dragged size survives close/reopen */}
+      <SplitPane
+        direction="horizontal"
+        dividerStyle={paneIsOpen ? {} : { display: 'none' }}
+      >
+        <Pane
+          defaultSize="50%"
+          style={paneIsOpen ? {} : { width: '100%' }}
+        >
+          <ProjektContainer />
+        </Pane>
+        <Pane
+          style={
+            paneIsOpen ? {} : { width: 0, minWidth: 0, overflow: 'hidden' }
+          }
+        >
+          {/* the second tree is the same workspace against its own store
+              and memory router — no iframe, no app reload when pane 1
+              navigates (issues/tree2-second-pane.md) */}
+          {paneIsOpen && <Tree2 path={tree2Path} />}
+        </Pane>
+      </SplitPane>
     </div>
   )
 }

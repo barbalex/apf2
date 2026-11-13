@@ -204,6 +204,23 @@ test.describe('tree2', () => {
 
     const messageRow = page.locator('p[class*="styledA"]').first()
     await expect(messageRow).toBeVisible({ timeout: 60_000 })
+
+    // give the QK form a marker and a distinctive year: opening the pane
+    // switches the workspace into the split layout — the form's DOM and
+    // state must survive that switch (regression: it used to remount,
+    // resetting state and refetching)
+    await page.evaluate(() => {
+      const input = document.querySelector<HTMLInputElement>('#berichtjahr')
+      const nativeSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value',
+      )?.set
+      nativeSetter?.call(input, '1999')
+      input?.dispatchEvent(new Event('input', { bubbles: true }))
+      input?.closest('div')?.setAttribute('data-marker', 'qk-survives')
+    })
+    await expect(page.locator('#berichtjahr')).toHaveValue('1999')
+
     await messageRow.click()
 
     // the pane opens on the message's node: it renders the target form,
@@ -218,6 +235,9 @@ test.describe('tree2', () => {
     await expect
       .poll(async () => pane2.locator('[data-url]').count())
       .toBeGreaterThan(1)
+    // pane 1's QK form was not remounted by the layout switch
+    await expect(page.locator('[data-marker="qk-survives"]')).toHaveCount(1)
+    await expect(page.locator('#berichtjahr')).toHaveValue('1999')
     // the appbar tabs survive the pane opening, and the inactive buttons
     // keep their white text: the pane prepends its emotion styles
     // (StyledEngineProvider injectFirst); without it they were appended
