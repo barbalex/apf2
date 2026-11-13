@@ -6,9 +6,11 @@
  */
 
 import { apiFetch } from '../../../../../modules/api.ts'
-import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import { treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface TpopParams {
+  store: Store
   id?: string | null | undefined
   popId?: string | null | undefined
   apId?: string | null | undefined
@@ -16,6 +18,7 @@ interface TpopParams {
 }
 
 export const tpop = async ({
+  store,
   id,
   popId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',

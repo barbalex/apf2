@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useStore } from 'jotai'
 
 import {
   copyingAtom,
   movingAtom,
-  store,
   mapActiveApfloraLayersAtom,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
@@ -59,6 +58,7 @@ export const useTpopNavData = (
       }
     | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -95,9 +95,11 @@ export const useTpopNavData = (
       beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
-      const tpopmassnberGqlFilterForTree =
-        getTpopmassnberGqlFilterForTree(tpopId)
-      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
+      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(
+        store,
+        tpopId,
+      )
+      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(store, tpopId)
       // phase 5: the former XByTpopId relation constraints merge into the
       // cascade filters; sibling keys are ANDed by compile_filter
       const tpopOf = (filter: object) => ({

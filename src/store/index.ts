@@ -2,6 +2,7 @@
 // the 400+ importers of '../store/index.ts' keep working unchanged
 export * from './store.ts'
 export * from './tree.ts'
+export * from './tree2.ts'
 export * from './filters.ts'
 export * from './map.ts'
 export * from './viewMode.ts'

@@ -12,6 +12,7 @@ import {
   addNotificationAtom,
   treeTpopmassnGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { store } from '../../../../store/index.ts'
 
 interface MassnahmenProps {
   filtered?: boolean
@@ -23,7 +24,7 @@ export const Massnahmen = ({ filtered = false }: MassnahmenProps) => {
 
   const [queryState, setQueryState] = useState<string | undefined>()
 
-  const tpopmassnIsFiltered = tableIsFiltered({ table: 'tpopmassn' })
+  const tpopmassnIsFiltered = tableIsFiltered({ store, table: 'tpopmassn' })
 
   const onClickMassnahmen = async () => {
     setQueryState('lade Daten...')

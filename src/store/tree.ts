@@ -2,11 +2,9 @@
 import { atom } from 'jotai'
 import type { Getter } from 'jotai/vanilla'
 import { atomWithStorage } from 'jotai/utils'
-import queryString from 'query-string'
 import { isEqual } from 'es-toolkit'
 import { validate as isUuid } from 'uuid'
 
-import { appBaseUrl } from '../modules/appBaseUrl.ts'
 import { createUnsubscribedStorage } from './store.ts'
 
 const isNonNilUuid = (value: unknown): value is string =>
@@ -115,53 +113,7 @@ export const treeSetActiveNodeArrayAtom = atom(
   },
 )
 
-// used to open tree2 on a specific activeNodeArray
-export const tree2SrcAtom = atom('')
-export const resetTree2SrcAtom = atom(null, (_get, set) => {
-  set(tree2SrcAtom, '')
-})
-export const setTree2SrcByActiveNodeArrayAtom = atom(
-  null,
-  (
-    _get,
-    set,
-    {
-      activeNodeArray,
-      search,
-      onlyShowActivePath,
-    }: {
-      activeNodeArray: (string | number)[]
-      search: string
-      onlyShowActivePath?: boolean | undefined
-    },
-  ) => {
-    const iFrameSearch = queryString.parse(search)
-    // need to alter projekteTabs:
-    if (Array.isArray(iFrameSearch.projekteTabs)) {
-      iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
-        // - remove non-tree2 values
-        .filter((t) => (t ?? '').includes('2'))
-        // - rewrite tree2 values to tree values
-        .map((t) => (t ?? '').replace('2', ''))
-    } else if (iFrameSearch.projekteTabs) {
-      iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
-        // - remove non-tree2 values
-        .filter((t) => t.includes('2'))
-        // - rewrite tree2 values to tree values
-        .map((t) => t.replace('2', ''))
-    }
-    if (onlyShowActivePath) {
-      iFrameSearch.onlyShowActivePath = 'true'
-    }
-    const newSearch = queryString.stringify(iFrameSearch)
-    // pass this via src to iframe
-    const iFrameSrc = `${appBaseUrl().slice(
-      0,
-      -1,
-    )}${`/Daten/${activeNodeArray.join('/')}`}?${newSearch}`
-    set(tree2SrcAtom, iFrameSrc)
-  },
-)
+// tree2 (the second tree pane) lives in ./tree2.ts
 
 // treeLastTouchedNode - tracks the last touched tree node for scrolling
 export const treeLastTouchedNodeAtom = atom<(string | number)[]>([])

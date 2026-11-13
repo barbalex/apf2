@@ -1,19 +1,21 @@
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { openNode } from '../openNode.ts'
 import {
-  store,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
+import type { Store } from 'jotai'
 import type { TreeNodeData } from './types.ts'
 
 export const toggleNode = ({
+  store,
   node,
   search,
   onlyShowActivePath = false,
 }: {
+  store: Store
   node: TreeNodeData
   search: string
   onlyShowActivePath?: boolean
@@ -34,7 +36,7 @@ export const toggleNode = ({
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed
     // open it and make it the active node
-    void openNode({ node, openNodes })
+    void openNode({ store, node, openNodes })
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
   } else if (node.urlLabel == activeNodeArray.slice(-1)[0]) {

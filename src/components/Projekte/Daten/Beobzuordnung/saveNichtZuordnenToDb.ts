@@ -3,7 +3,6 @@ import { isEqual } from 'es-toolkit'
 import type { QueryClient } from '@tanstack/react-query'
 
 import {
-  store,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -11,8 +10,10 @@ import {
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
 } from '../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface SaveNichtZuordnenToDbParams {
+  store: Store
   value: boolean
   id: string
   refetch: () => unknown
@@ -20,6 +21,7 @@ interface SaveNichtZuordnenToDbParams {
 }
 
 export const saveNichtZuordnenToDb = async ({
+  store,
   value,
   id,
   refetch: refetchPassed,

@@ -6,7 +6,7 @@ import {
 } from 'react-icons/md'
 import Highlighter from 'react-highlight-words'
 import { useLocation } from 'react-router'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useRef } from 'react'
 import type { Ref } from 'react'
 
@@ -37,6 +37,7 @@ interface RowProps {
 }
 
 export const Row = ({ node, ref }: RowProps) => {
+  const store = useStore()
   const { search } = useLocation()
 
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
@@ -81,12 +82,13 @@ export const Row = ({ node, ref }: RowProps) => {
 
   const onClickNode = () =>
     toggleNode({
+      store,
       node,
       search,
       onlyShowActivePath,
     })
 
-  const onClickNodeSymbol = () => toggleNodeSymbol({ node, search })
+  const onClickNodeSymbol = () => toggleNodeSymbol({ store, node, search })
 
   const onMouseEnterNode = () => {
     // Prefetch data when hovering over node
@@ -108,7 +110,12 @@ export const Row = ({ node, ref }: RowProps) => {
     const start = { x: e.clientX, y: e.clientY }
     holdToDisplayStart.current = start
     holdToDisplayTimer.current = setTimeout(() => {
-      openTreeContextMenu({ id: nextMenuOpenId(), node, x: start.x, y: start.y })
+      openTreeContextMenu({
+        id: nextMenuOpenId(),
+        node,
+        x: start.x,
+        y: start.y,
+      })
     }, holdToDisplayMs)
   }
   const onPointerMoveNode = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -213,8 +220,8 @@ export const Row = ({ node, ref }: RowProps) => {
             textToHighlight={node.label}
           />
         : node.label
-          .split('\n')
-          .map((part, index) => <div key={index}>{part}</div>)
+            .split('\n')
+            .map((part, index) => <div key={index}>{part}</div>)
         }
       </span>
       {node.labelRightElements?.length &&

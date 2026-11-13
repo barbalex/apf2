@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { uniq, isEqual, upperFirst } from 'es-toolkit'
@@ -43,6 +43,7 @@ import type { TreeMenuItem } from './menuConfig.tsx'
  * which read the node's data from data-* attributes on the row.
  */
 export const useRunMenuAction = () => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { projId, apId, popId } = params
@@ -83,8 +84,8 @@ export const useRunMenuAction = () => {
     const id = String((node.tableId || node.id) ?? '')
     // treeParentTableId/parentId are never set at runtime but typed number-
     // capable; the former implementation always passed a string or null
-    const parentId = ((node.treeParentTableId || node.parentId) ??
-      null) as string | null
+    const parentId = ((node.treeParentTableId || node.parentId) ?? null) as
+      string | null
     const url = node.url
     const label = node.label
     const nodeType = node.nodeType ?? null
@@ -104,6 +105,7 @@ export const useRunMenuAction = () => {
           urlForInsert.push(1)
         }
         void insertDataset({
+          store,
           tablePassed: table ?? '',
           parentId: parentId || id,
           url: urlForInsert,
@@ -115,6 +117,7 @@ export const useRunMenuAction = () => {
       },
       openLowerNodes() {
         openLowerNodes({
+          store,
           id,
           parentId,
           apId,
@@ -126,6 +129,7 @@ export const useRunMenuAction = () => {
       },
       closeLowerNodes() {
         void closeLowerNodes({
+          store,
           url,
           search,
         })
@@ -177,6 +181,7 @@ export const useRunMenuAction = () => {
       },
       move() {
         void moveTo({
+          store,
           id,
         })
       },
@@ -197,6 +202,7 @@ export const useRunMenuAction = () => {
       copy() {
         // issue: tpop-folder passes no parentId
         void copyTo({
+          store,
           parentId: nodeType === 'folder' ? (parentId ?? id) : id,
         })
       },
@@ -207,13 +213,14 @@ export const useRunMenuAction = () => {
         setCopyingBiotop({ id: null, label: null })
       },
       copyBiotop() {
-        void copyBiotopTo({ id })
+        void copyBiotopTo({ store, id })
       },
       copyTpopKoordToPop() {
-        void copyTpopKoordToPop({ id })
+        void copyTpopKoordToPop({ store, id })
       },
       createNewPopFromBeob() {
         void createNewPopFromBeob({
+          store,
           id,
           apId,
           projId,
@@ -225,7 +232,7 @@ export const useRunMenuAction = () => {
         setNewTpopFromBeobDialogOpen(true)
       },
       copyBeobZugeordnetKoordToTpop() {
-        void copyBeobZugeordnetKoordToTpop({ id })
+        void copyBeobZugeordnetKoordToTpop({ store, id })
       },
       openChooseApToCopyEkfrequenzsFrom() {
         setOpenChooseApToCopyEkfrequenzsFrom(true)

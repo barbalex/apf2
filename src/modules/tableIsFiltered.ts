@@ -1,12 +1,17 @@
 import {
-  store,
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   getGqlFilterAtomByTable,
 } from '../store/index.ts'
-import type { Atom } from 'jotai'
+import type { Atom, Store } from 'jotai'
 
-export const tableIsFiltered = ({ table }: { table: string }) => {
+export const tableIsFiltered = ({
+  store,
+  table,
+}: {
+  store: Store
+  table: string
+}) => {
   // check nodeLabelFilter
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const nodeLabelFilterExists = !!nodeLabelFilter[table]

@@ -1,14 +1,16 @@
 import { isNodeOpen } from './isNodeOpen.ts'
 import {
-  store,
   treeSetOpenNodesAtom,
   treeResetNodeLabelFilterKeepingApAtom,
 } from '../../../store/index.ts'
+import type { Store } from 'jotai'
 
 export const openNode = async ({
+  store,
   node,
   openNodes,
 }: {
+  store: Store
   node: {
     url: (string | number)[]
     menuType?: string | null | undefined

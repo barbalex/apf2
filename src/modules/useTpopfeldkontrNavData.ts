@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react'
 import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
-import {
-  copyingAtom,
-  copyingBiotopAtom,
-  movingAtom,
-  store,
-} from '../store/index.ts'
+import { useAtomValue, useStore } from 'jotai'
+import { copyingAtom, copyingBiotopAtom, movingAtom } from '../store/index.ts'
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -54,6 +49,7 @@ export const useTpopfeldkontrNavData = (
       }
     | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
@@ -64,8 +60,10 @@ export const useTpopfeldkontrNavData = (
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
-  const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
+  const tpopkontrzaehlGqlFilterForTree = getTpopkontrzaehlGqlFilterForTree(
+    store,
+    tpopkontrId,
+  )
 
   const { data } = useSuspenseQuery({
     queryKey: [

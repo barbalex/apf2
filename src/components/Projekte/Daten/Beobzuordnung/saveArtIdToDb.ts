@@ -3,7 +3,6 @@ import { isEqual } from 'es-toolkit'
 import type { QueryClient } from '@tanstack/react-query'
 
 import {
-  store,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -11,8 +10,10 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface SaveArtIdToDbParams {
+  store: Store
   value: string
   row: {
     id?: string
@@ -21,6 +22,7 @@ interface SaveArtIdToDbParams {
 }
 
 export const saveArtIdToDb = async ({
+  store,
   value,
   row,
   search,

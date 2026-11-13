@@ -12,6 +12,7 @@ import {
   addNotificationAtom,
   treePopGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { store } from '../../../../store/index.ts'
 
 interface PopsProps {
   filtered?: boolean
@@ -161,7 +162,7 @@ export const Pops = ({ filtered = false }: PopsProps) => {
     setQueryState(undefined)
   }
 
-  const popIsFiltered = tableIsFiltered({ table: 'pop' })
+  const popIsFiltered = tableIsFiltered({ store, table: 'pop' })
 
   return (
     <Button

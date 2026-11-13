@@ -4,7 +4,6 @@ import { upperFirst } from 'es-toolkit'
 
 import { tables } from '../../../modules/tables.ts'
 import {
-  store,
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
@@ -13,11 +12,15 @@ import {
   treeSetOpenNodesAtom,
   type Notification,
 } from '../../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 export const insertDataset = async ({
+  store,
   tablePassed,
   parentId,
   menuType,
@@ -26,6 +29,7 @@ export const insertDataset = async ({
   search,
   jahr: jahrPassed,
 }: {
+  store: Store
   tablePassed: string
   parentId?: string | null | undefined
   menuType: string
@@ -36,7 +40,7 @@ export const insertDataset = async ({
 }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
   if (!tsQueryClient) {
-    return addNotification({
+    return addNotification(store, {
       message: 'no query client found in store',
       options: {
         variant: 'error',
@@ -50,7 +54,7 @@ export const insertDataset = async ({
   const tableMetadata = tables.find((t) => t.table === table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return addNotification({
+    return addNotification(store, {
       message: `no table meta data found for table "${table}"`,
       options: {
         variant: 'error',
@@ -63,7 +67,7 @@ export const insertDataset = async ({
   }
   const idField = tableMetadata.idField
   if (!idField) {
-    return addNotification({
+    return addNotification(store, {
       message: 'new dataset not created as no idField could be found',
       options: {
         variant: 'error',
@@ -99,7 +103,7 @@ export const insertDataset = async ({
   try {
     await apiInsert(table, row)
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useStore } from 'jotai'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -38,6 +39,7 @@ export const TpopFromBeobPopList = ({
   closeNewTpopFromBeobDialog: () => void
   beobId: string | null | undefined
 }) => {
+  const store = useStore()
   const { projId, apId } = useParams()
   const { search } = useLocation()
 
@@ -64,6 +66,7 @@ export const TpopFromBeobPopList = ({
             key={pop.id}
             onClick={() => {
               void createNewTpopFromBeob({
+                store,
                 pop,
                 beobId: beobId ?? '',
                 projId,

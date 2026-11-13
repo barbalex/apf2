@@ -2,7 +2,7 @@ import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import {
   treeEmptyNodeLabelFilterAtom,
@@ -34,6 +34,7 @@ export const FilterTitle = ({
   filteredNr,
   activeTab,
 }: FilterTitleProps) => {
+  const store = useStore()
   const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
   const setApFilter = useSetAtom(treeApFilterAtom)
   const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
@@ -42,9 +43,11 @@ export const FilterTitle = ({
   const emptyDataFilterTab = useSetAtom(treeDataFilterEmptyTabAtom)
   const emptyDataFilter = useSetAtom(treeDataFilterEmptyAtom)
 
-  const existsTableFilter = tableIsFiltered({ table })
+  const existsTableFilter = tableIsFiltered({ store, table })
   const tables = Object.keys(dataFilter)
-  const existsTreeFilter = tables.some((table) => tableIsFiltered({ table }))
+  const existsTreeFilter = tables.some((table) =>
+    tableIsFiltered({ store, table }),
+  )
 
   const onEmptyTab = () => {
     // the button calling this is only rendered when activeTab is defined

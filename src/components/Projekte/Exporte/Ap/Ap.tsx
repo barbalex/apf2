@@ -14,6 +14,7 @@ import {
   addNotificationAtom,
   treeApGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { store } from '../../../../store/index.ts'
 
 interface ApProps {
   filtered?: boolean
@@ -114,7 +115,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
     setQueryState(undefined)
   }
 
-  const apIsFiltered = tableIsFiltered({ table: 'ap' })
+  const apIsFiltered = tableIsFiltered({ store, table: 'ap' })
 
   return (
     <Button

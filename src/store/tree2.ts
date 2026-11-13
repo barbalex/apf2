@@ -1,0 +1,109 @@
+// the second tree: an in-app pane with its own jotai store and its own
+// MemoryRouter (see src/components/Projekte/Tree2). The pane store is
+// initialized like a fresh app load and holds independent navigation,
+// open-node and filter state — the successor of the former whole-app
+// iframe (issues/tree2-second-pane.md).
+//
+// Shared atoms (user, query client, notifications) are mirrored from the
+// root store so the pane authenticates, invalidates and toasts through
+// the app's singletons.
+import { atom, createStore } from 'jotai'
+
+import { store as rootStore } from './store.ts'
+import { treeActiveNodeArrayAtom } from './tree.ts'
+import { tsQueryClientAtom } from './ui.ts'
+import {
+  addNotificationAtom,
+  navigateObjectAtom,
+  notificationsAtom,
+  type Notification,
+} from './notifications.ts'
+import { userAtom } from './user.ts'
+
+export const tree2Store = createStore()
+
+// initial entry of the pane's MemoryRouter; only used when the pane
+// mounts — once open, navigation goes through the pane's own navigate
+export const tree2PathAtom = atom('/Daten/Projekte')
+
+// opens (or navigates) the pane on a node. Build the pane path the same
+// way the former iframe src was built: keep only the tree2-tabs, de-2
+// them, and point at the node.
+export const setTree2PathByActiveNodeArrayAtom = atom(
+  null,
+  (
+    _get,
+    _set,
+    {
+      activeNodeArray,
+      search,
+      onlyShowActivePath,
+    }: {
+      activeNodeArray: (string | number)[]
+      search: string
+      onlyShowActivePath?: boolean | undefined
+    },
+  ) => {
+    const paneSearch = new URLSearchParams()
+    for (const [key, value] of new URLSearchParams(search)) {
+      if (key !== 'projekteTabs') paneSearch.append(key, value)
+    }
+    // keep only the tree2-tabs, de-2 them (the former iframe src rule)
+    const derivedTabs = new URLSearchParams(search)
+      .getAll('projekteTabs')
+      .filter((t) => t.includes('2'))
+      .map((t) => t.replace('2', ''))
+    for (const t of derivedTabs) paneSearch.append('projekteTabs', t)
+    if (!paneSearch.getAll('projekteTabs').length) {
+      paneSearch.append('projekteTabs', 'tree')
+      paneSearch.append('projekteTabs', 'daten')
+    }
+    if (onlyShowActivePath) paneSearch.append('onlyShowActivePath', 'true')
+
+    const path = `/Daten/${activeNodeArray.join('/')}?${paneSearch.toString()}`
+
+    const navigate = tree2Store.get(navigateObjectAtom)?.fn
+    if (navigate) {
+      // pane is open: navigate it in place — no remount, no reload
+      navigate(path)
+    } else {
+      tree2Store.set(treeActiveNodeArrayAtom, activeNodeArray)
+      rootStore.set(tree2PathAtom, path)
+    }
+  },
+)
+
+// mirror the shared atoms from the root store into the pane store.
+// Called once when the pane mounts.
+export const initTree2SharedAtoms = () => {
+  tree2Store.set(userAtom, rootStore.get(userAtom))
+  const tsQueryClient = rootStore.get(tsQueryClientAtom)
+  if (tsQueryClient) tree2Store.set(tsQueryClientAtom, tsQueryClient)
+}
+
+// pane-2 notifications are displayed by the root snackbar (notistack is
+// mounted once): forward every notification added in the pane store.
+let notificationsBridged = false
+export const bridgeTree2Notifications = () => {
+  if (notificationsBridged) return
+  notificationsBridged = true
+
+  let previous: Notification[] = []
+  tree2Store.sub(notificationsAtom, () => {
+    const next = tree2Store.get(notificationsAtom)
+    const added = next.filter((n) => !previous.includes(n))
+    previous = next
+    for (const notification of added) {
+      rootStore.set(addNotificationAtom, notification)
+    }
+    if (added.length) {
+      // consume locally so they are not forwarded again; the root store
+      // owns display and timeout removal
+      tree2Store.set(
+        notificationsAtom,
+        next.filter((n) => !added.includes(n)),
+      )
+      previous = tree2Store.get(notificationsAtom)
+    }
+  })
+}

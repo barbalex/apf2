@@ -1,7 +1,10 @@
 # tree2: replace the iframe with a real second pane
 
-Status: design + E2E safety net exist ([tests/tree2/tree2.spec.ts](../tests/tree2/tree2.spec.ts));
-implementation is its own project, not a drive-by change.
+Status: **implemented** (2026-11-13) — the iframe is gone. The pane renders
+the /Daten route tree against its own React root, jotai store and memory
+router; see [src/store/tree2.ts](../src/store/tree2.ts) and
+[src/components/Projekte/Tree2](../src/components/Projekte/Tree2/index.tsx).
+Deviations from the original plan are noted at the bottom.
 
 ## Why the iframe exists
 
@@ -73,7 +76,7 @@ Introduce a **store-resolution layer** instead of a module-level singleton:
    starting with the TreeContainer modules above — mechanical, one PR per
    module group, unit-testable.
 3. Render pane 2 as `<Provider store={tree2Store}><ProjektContainer
-   pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
+pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
    its navigation in atoms only; the address bar stays pane 1's).
 4. Keep `userAtom`, `tsQueryClientAtom` and notification atoms shared: mount
    them in both stores and bridge writes (`store.sub` on one, `set` on the
@@ -90,3 +93,20 @@ Introduce a **store-resolution layer** instead of a module-level singleton:
   survives, e.g. via a data-attribute counter)
 - Playwright suite + manual check of: login/logout, copy/paste between panes,
   map popups "in zweitem Baum öffnen", print, Electron
+
+## Implementation notes (2026-13-11)
+
+- react-router (v8) forbids nesting ANY router inside the app router —
+  both MemoryRouter and RouterProvider throw. The pane therefore renders
+  in its own React root (`createRoot`), which also matches the former
+  iframe's isolation without the reload costs.
+- The pane reuses the app's `/Daten` route subtree (`datenRoutes` in
+  [src/components/Router/index.tsx](../src/components/Router/index.tsx))
+  under a pathless layout route that carries the pane's
+  ActiveNodeArraySetter/NavigateSetter.
+- Imperative helpers take an explicit `store` param; hooks use
+  `useStore()`. Shared atoms (user, query client) are mirrored once at
+  pane mount, notifications are bridged into the root snackbar.
+- `karte2`/`filter2` pane tabs currently have no effect on an open pane
+  (the pane's tab set is fixed at mount); the pane-1 tab buttons still
+  control pane 1 only. Can be revisited if missed.
