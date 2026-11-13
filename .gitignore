@@ -36,3 +36,6 @@ schema.json
 playwright/.auth
 
 git_stats.txt
+
+# production policy snapshots (scripts/apply-production-sql.sh)
+prod-snapshots
