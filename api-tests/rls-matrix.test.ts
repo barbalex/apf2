@@ -25,12 +25,6 @@ type MatrixTable = {
   // inside (or outside) the given set of assigned aps
   rowSql: (assigned: string) => string
   patchColumn: string
-  // apflora_freiwillig normally has no grant on these tables. EXCEPTION
-  // tpopkontr: the reader-policy's with_check lets freiwillig update ANY
-  // tpopkontr row — the policy cannot distinguish Freiwilligen-Kontrollen
-  // from professional Kontrollen. Broad, but deliberate as of today; the
-  // app UI only exposes freiwkontr editing to volunteers.
-  freiwilligMayPatch?: boolean
 }
 
 const tables: MatrixTable[] = [
@@ -58,8 +52,8 @@ const tables: MatrixTable[] = [
     patchColumn: 'nr',
   },
   {
-    // Freiwilligen-Kontrollen live in the same table and have their own
-    // rules (see freiwillig.test.ts)
+    // Freiwilligen-Kontrollen live in the same table; volunteers are
+    // restricted to their own rows (see freiwillig.test.ts)
     label: 'tpopkontr (Feldkontrolle)',
     endpoint: 'tpopkontr',
     rowSql: (assigned) => `select k.id, k.jahr as val
@@ -68,7 +62,6 @@ const tables: MatrixTable[] = [
         join apflora.pop p on p.id = t.pop_id
         where k.typ in ('Kontrolle', 'Ausgangszustand') and p.ap_id ${assigned} limit 1`,
     patchColumn: 'jahr',
-    freiwilligMayPatch: true,
   },
   {
     label: 'tpopmassn',
@@ -149,14 +142,13 @@ describe('rls matrix: role x table x no-op update', () => {
         expect(res.status).toBe(403)
       })
 
-      it('apflora_freiwillig is refused (grant)', async () => {
+      it('apflora_freiwillig is refused', async () => {
         const res = await noOpPatch(
           table,
           rowFor(table, true),
           mintToken('apflora_freiwillig', 'Tester'),
         )
-        // see MatrixTable.freiwilligMayPatch for the tpopkontr exception
-        expect(res.status).toBe(table.freiwilligMayPatch ? 204 : 403)
+        expect(res.status).toBe(403)
       })
 
       it('apflora_ap_writer updates a row inside its assigned aps', async () => {

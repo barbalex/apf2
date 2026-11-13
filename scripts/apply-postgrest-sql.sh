@@ -20,6 +20,7 @@ FILES=(
   sql/apflora/migrations/2026-10-12_issue-823-ekf-passwort/00_grant_require_new_password.sql
   sql/apflora/migrations/2026-11-04_issue-835-login-password-enforcement/00_enforce_password_change_in_login.sql
   sql/apflora/migrations/2026-11-09_set-password-no-passless-claiming/00_close_passless_claiming.sql
+  sql/apflora/migrations/2026-11-13_freiwillig-tpopkontr-rls/00_tighten.sql
   sql/postgrest/createComputedViews.sql
   sql/postgrest/compileFilter.sql
   sql/postgrest/createQueryRpcs.sql
