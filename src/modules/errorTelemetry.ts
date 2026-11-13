@@ -73,11 +73,20 @@ export const reportError = (kind: ErrorKind, error: unknown): Promise<void> => {
   sentPerMessage.set(event.message, repeats + 1)
   sentEvents++
 
-  // the collector must never become a source of errors itself
+  // the collector is a PostgREST table (apflora.error_report): the body
+  // must contain exactly its columns — created_at is stamped server-side,
+  // user_agent is snake_case on the wire
   return fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(event),
+    body: JSON.stringify({
+      release: event.release,
+      kind: event.kind,
+      message: event.message,
+      stack: event.stack,
+      url: event.url,
+      user_agent: event.userAgent,
+    }),
     keepalive: true,
   })
     .then(() => undefined)
