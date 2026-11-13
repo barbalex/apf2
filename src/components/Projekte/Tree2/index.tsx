@@ -8,7 +8,7 @@ import {
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import { Provider as JotaiProvider } from 'jotai'
-import { ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
@@ -86,18 +86,26 @@ const PaneApp = ({ path }: { path: string }) => {
   return (
     <JotaiProvider store={tree2Store}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <uc-upload-ctx-provider
-            id="uploaderctx-tree2"
-            ctx-name="uploadcare"
-            ref={uploaderRef}
-          ></uc-upload-ctx-provider>
-          <UploaderContext value={uploaderRef}>
-            <Suspense fallback={<Spinner />}>
-              <RouterProvider router={router} />
-            </Suspense>
-          </UploaderContext>
-        </ThemeProvider>
+        {/* the pane is its own React root: it does not see the app's
+            StyledEngineProvider context, so its MUI styles would go to
+            emotion's default cache, appended at the END of head — landing
+            after the app's css modules and overriding them (the appbar's
+            inactive buttons turned theme-green, i.e. invisible on the
+            green bar). injectFirst makes the pane prepend like the app */}
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <uc-upload-ctx-provider
+              id="uploaderctx-tree2"
+              ctx-name="uploadcare"
+              ref={uploaderRef}
+            ></uc-upload-ctx-provider>
+            <UploaderContext value={uploaderRef}>
+              <Suspense fallback={<Spinner />}>
+                <RouterProvider router={router} />
+              </Suspense>
+            </UploaderContext>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </QueryClientProvider>
     </JotaiProvider>
   )

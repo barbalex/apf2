@@ -218,8 +218,21 @@ test.describe('tree2', () => {
     await expect
       .poll(async () => pane2.locator('[data-url]').count())
       .toBeGreaterThan(1)
-    // the appbar tabs survive the pane opening
+    // the appbar tabs survive the pane opening, and the inactive buttons
+    // keep their white text: the pane prepends its emotion styles
+    // (StyledEngineProvider injectFirst); without it they were appended
+    // after the app's css modules and turned the inactive buttons
+    // theme-green — invisible on the green bar
     await expect(page.locator('button[data-id="nav-daten2"]')).toBeVisible()
+    await expect
+      .poll(async () =>
+        page.evaluate(() =>
+          getComputedStyle(
+            document.querySelector('button[data-id="nav-filter1"]'),
+          ).color,
+        ),
+      )
+      .toBe('rgb(255, 255, 255)')
   })
 
   test('navigating pane 1 does not reload tree2', async ({ page }) => {
