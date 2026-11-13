@@ -16,13 +16,13 @@ Frontend (run from repo root):
 npm run dev          # vite dev server on :5173 (talks to PostgREST at localhost:3000 — see below)
 npm run build        # vite build -> dist/
 npm run preview      # serve the production build
-npm run typecheck    # tsc --noEmit (CI gates via type-baseline.json: npm run typecheck:ci fails only on NEW errors)
-npm run typecheck:update-baseline  # after intentionally accepted type changes
+npm run typecheck    # tsc --noEmit (CI hard-fails on any error — the baseline mechanism was removed once the count reached zero)
 npm run lint         # eslint src (flat config in eslint.config.mjs)
 npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser
 npm run test-report  # open the last html report
+npm run test:unit    # vitest unit tests for pure logic (filter cascade, modules helpers)
 npm run deploy       # deploy production: bump patch version + date, push master, update apflora branch (Vercel deploys apflora)
 npm run deploy minor # same with a minor bump (or: major)
 
@@ -34,9 +34,9 @@ npx playwright test --project=chromium   # or firefox
 
 Playwright tests require a running dev server and a credentials file at `playwright/.auth/user.json` (copy from `playwright/.auth/user.json.example`). The config auto-starts `npm run dev` on :5173 and reuses an existing server. WebKit is disabled by default (needs `playwright install-deps webkit`). See [QUICKSTART.md](QUICKSTART.md) and [MIGRATION.md](MIGRATION.md).
 
-> There is **no unit-test runner in active use** — `vitest`/`jsdom` are installed but the suite is Playwright E2E only.
+> Unit tests (`npm run test:unit`, vitest) cover the pure logic: the `tree*GqlFilterAtom` filter cascade in [src/store/gqlFilter.test.ts](src/store/gqlFilter.test.ts) (the jsonb contract with `apflora.compile_filter`) and helpers in `src/modules/`. They run in a node environment — `localStorage` (which the store reads at module scope) is stubbed in [src/testing/localStorageStub.ts](src/testing/localStorageStub.ts), registered as a vitest setup file in `vitest.config.unit.ts`. Test files live next to the code under test (`src/**/*.test.ts`) so they are typechecked and linted like everything else.
 
-Local backend stack (Postgres + PostgREST + Caddy) lives in [backend/](backend/):
+Local backend stack (Postgres + PostgREST + Caddy) lives in [backend/](backend/) — see [PRODUCTION.md](PRODUCTION.md) for the production VM, its docker stack and how to apply DB migrations there (`scripts/apply-production-sql.sh`):
 
 ```bash
 cd backend
@@ -51,11 +51,13 @@ The dev frontend (`postgrestUri()` in [src/modules/api.ts](src/modules/api.ts)) 
 
 ### Frontend state is the heart of the app
 
-[src/store/index.ts](src/store/index.ts) is a large Jotai store and the central nervous system. Almost everything routes through atoms here:
+The store lives in [src/store/](src/store/) as per-domain modules re-exported through the [src/store/index.ts](src/store/index.ts) barrel — import from `'../store/index.ts'` as before. Almost everything routes through atoms here:
 
-- **Navigation as data**: the current location is `treeActiveNodeArrayAtom` — an array of path/label segments like `['Projekte', <projId>, 'Arten', <apId>, 'Populationen', <popId>, ...]`. Derived atoms (`treeApIdInActiveNodeArrayAtom`, `treePopIdInActiveNodeArrayAtom`, …) extract UUIDs by index, and `treeSetActiveNodeArrayAtom` keeps `treeOpenNodesAtom` in sync. URL ↔ tree sync happens in [src/components/Router/ActiveNodeArraySetter.tsx](src/components/Router/ActiveNodeArraySetter.tsx) and [src/modules/navigateToLastActiveNodeArray.ts](src/modules/navigateToLastActiveNodeArray.ts).
-- **Filter cascade**: `tree*GqlFilterAtom` atoms build jsonb filter objects (compiled server-side by `apflora.compile_filter` inside the `query_*` RPCs) from three sources — hierarchy (parent filters, e.g. population filter restricts the tpop query), the user's form data filter (`treeDataFilterAtom`, multi-"OR" tabs in [src/store/DataFilter/](src/store/DataFilter/)), and label/map filters. Parent filters compose into both an `all` variant (unfiltered children) and a `filtered` variant. When touching filter logic, read the whole `store/index.ts` filter section — the `...ForTree` variants and `all`/`filtered` split are easy to get wrong.
-- **Persistence**: many UI-preference atoms use `atomWithStorage` (localStorage). `unsubscribedStorage` disables cross-tab sync for atoms that must not propagate.
+- `store.ts` — the `store` singleton and the storage helpers (`createUnsubscribedStorage`, `atomWithToggleAndStorage`). `createUnsubscribedStorage` must be used for storage atoms whose getters must not widen to `T | Promise<T>`.
+- `tree.ts` — navigation as data + node label filter + tree2. The current location is `treeActiveNodeArrayAtom` — an array of path/label segments like `['Projekte', <projId>, 'Arten', <apId>, 'Populationen', <popId>, ...]`. Derived atoms (`treeApIdInActiveNodeArrayAtom`, `treePopIdInActiveNodeArrayAtom`, …) extract UUIDs by index, and `treeSetActiveNodeArrayAtom` keeps `treeOpenNodesAtom` in sync. URL ↔ tree sync happens in [src/components/Router/ActiveNodeArraySetter.tsx](src/components/Router/ActiveNodeArraySetter.tsx) and [src/modules/navigateToLastActiveNodeArray.ts](src/modules/navigateToLastActiveNodeArray.ts).
+- `filters.ts` — the filter cascade. `tree*GqlFilterAtom` atoms build jsonb filter objects (compiled server-side by `apflora.compile_filter` inside the `query_*` RPCs) from three sources — hierarchy (parent filters, e.g. population filter restricts the tpop query), the user's form data filter (`treeDataFilterAtom`, multi-"OR" tabs in [src/store/DataFilter/](src/store/DataFilter/)), and label/map filters. Parent filters compose into both an `all` variant (unfiltered children) and a `filtered` variant. **Intended**: the `all` variant (the "X von Y" totals in the Filter panels) is scoped by the parent's *form* filter — a consequence of es-toolkit's mutating `merge` that is pinned in [src/store/gqlFilter.test.ts](src/store/gqlFilter.test.ts). When touching filter logic, read the whole `filters.ts` filter section — the `...ForTree` variants and `all`/`filtered` split are easy to get wrong.
+- `map.ts`, `viewMode.ts`, `ui.ts`, `notifications.ts`, `user.ts`, `clipboard.ts`, `deletions.ts`, `ekplan.ts`, `exports.ts` — the remaining domains.
+- **Persistence**: many UI-preference atoms use `atomWithStorage` (localStorage). `createUnsubscribedStorage` disables cross-tab sync for atoms that must not propagate.
 
 Other global state: TanStack Query (`QueryClient` with `refetchOnWindowFocus:false`, set in [src/App.tsx](src/App.tsx)), exposed to non-React code via `tsQueryClientAtom`/`store.get(...)`.
 
@@ -97,4 +99,5 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 - **Vite chunking**: `manualChunks` splits `mui`, `react-vendor`, `tanstack`. `cssMinify: 'esbuild'` is a workaround for a Vite 8 bug — don't remove it or `esbuild` without a reason.
 - **`overrides` pins `next` to a patched release**: `next` enters the lockfile as an (unused) peer dependency of `@uploadcare/react-uploader`/`@vercel/analytics` but is never imported or bundled. Unpinned it kept a vulnerable version in the lockfile, which lit up ~44 Dependabot alerts (incl. critical Next.js RCEs that can't apply — this is not a Next.js app). Keep the pin at or above the patched range; remove it entirely once the uploaders drop the peer dep.
 - **German UI**: keep labels, notifications, and route path segments in German unless explicitly asked to translate.
+- **Error telemetry is opt-in**: [src/modules/errorTelemetry.ts](src/modules/errorTelemetry.ts) posts client errors (global handlers + error boundaries) to `VITE_ERROR_TELEMETRY_URL` — a self-hosted collector (Sentry/GlitchTip/own RPC). Without the env var it is a complete no-op; the payload carries message/stack/url/user-agent/release only (no user identity). Stacks symbolicate against the deployed sourcemaps.
 - App version: `npm run deploy [patch|minor|major]` bumps `version` + `versionDate` in [package.json](package.json) automatically (default: patch) — don't bump manually. Deploys go through the `apflora` branch: the script merges master into apflora and pushes, which triggers the Vercel production deploy. The version is shown in the hamburger menu. `npm run build` also emits `version.json` (never cached — excluded from the sw precache in [vite.config.ts](vite.config.ts), `no-cache` header in [vercel.json](vercel.json)); `src/components/VersionCheck/` compares it against the running bundle and offers a cache-clearing reload so stale PWA clients surface instead of failing silently.

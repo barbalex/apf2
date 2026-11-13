@@ -1,12 +1,18 @@
+import { useEffect } from 'react'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../modules/logout.ts'
+import { reportError } from '../../modules/errorTelemetry.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
 export const RouterErrorBoundary = () => {
   const error = useRouteError()
+
+  useEffect(() => {
+    void reportError('boundary', error)
+  }, [error])
 
   const onReload = () => window.location.reload()
 
