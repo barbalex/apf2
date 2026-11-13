@@ -17,8 +17,6 @@ Tree keyboard navigation as in ae3
 
 ---
 
-port 5432 is open for pgadmin. is there a safer way to connect?
-
 ---
 
 tree2 (d9bddc432) — deliberately not rewritten in this pass
