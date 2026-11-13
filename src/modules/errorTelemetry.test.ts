@@ -52,7 +52,9 @@ describe('errorTelemetry', () => {
     expect(body.stack).toContain('someChunk.js')
     expect(body.release).toBe('0.0.0-test')
     expect(body.url).toBe('/Daten/Projekte')
-    expect(body.userAgent).toBe('vitest')
+    // created_at is stamped server-side, user_agent is snake_case on the wire
+    expect(body.user_agent).toBe('vitest')
+    expect(body.timestamp).toBeUndefined()
   })
 
   it('is a no-op without VITE_ERROR_TELEMETRY_URL', async () => {

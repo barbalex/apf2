@@ -26,6 +26,8 @@ dist-ssr
 # dotenv environment variables file
 .env
 .env*
+# .env.production is committed: it carries the public telemetry endpoint, no secrets
+!.env.production
 dropbox_uploader.conf
 
 schema.json
