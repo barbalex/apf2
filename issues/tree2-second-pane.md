@@ -144,3 +144,15 @@ object to correct"):
 Pinned by unit tests on the open action (closed / stale-navigate /
 open-pane branches) and an E2E regression: open tree2, close it, open a
 QK message — the pane must open on the message's node, not pane 1's.
+
+## Round 3: explicit open wiped mid-navigation (2026-11-13)
+
+Reproduced via a page reload on the QK page + message click: the open
+action set the pane path correctly, but during the tab-opening
+navigation's loading phase the pane-1 derive/reset effect saw
+tabs-not-yet-committed + path-set and its RESET branch wiped the just-set
+path — after commit, the derive replaced it with pane 1's location. The
+effect now returns early unless `navigation.state === 'idle'` (both
+branches gated). The AppBar "tab menus invisible" report did not
+reproduce after this fix — it was downstream of the broken pane state.
+The QK E2E now reloads the page before clicking the message.

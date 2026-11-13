@@ -128,6 +128,8 @@ test.describe('tree2', () => {
     await page.goto(
       `${apUrl}/Qualitätskontrollen?projekteTabs=tree&projekteTabs=daten`,
     )
+    // reload on the QK page like a returning user, then click
+    await page.reload()
     // message rows open tree2 on click
     const messageRow = page.locator('p[class*="styledA"]').first()
     await expect(messageRow).toBeVisible({ timeout: 60_000 })

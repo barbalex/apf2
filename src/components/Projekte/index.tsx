@@ -34,11 +34,18 @@ export const Component = () => {
     // starts it at pane 1's current location — the former iframe-src
     // default. Explicit targets (map popups, Qk) set the atom beforehand.
     // Closing resets it so the next open re-derives.
+    //
+    // Never touch the path while a navigation is pending: an explicit
+    // open sets the path and opens the tabs in one go, and during that
+    // navigation's loading phase the tabs are not yet committed — the
+    // reset branch would wipe the just-set path and the derive below
+    // would replace it with pane 1's location
+    if (navigation.state !== 'idle') return
+
     if (tree2Tabs.length > 0 && !isPrint) {
-      // derive only once pane 1's router is idle: tree clicks open nodes
-      // (and can make new rows visible) before the navigation commits, so
-      // anything read earlier may be a location about to change
-      if (!tree2Path && navigation.state === 'idle') {
+      // derive only from a committed location: tree clicks open nodes
+      // (and can make new rows visible) before the navigation commits
+      if (!tree2Path) {
         store.set(tree2PathAtom, buildTree2Path(pathname, search))
       }
     } else if (tree2Path) {
