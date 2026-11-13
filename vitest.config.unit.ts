@@ -5,6 +5,9 @@ import { defineConfig } from 'vitest/config'
 // node environment is enough — browser globals the store touches at module
 // scope (localStorage) are stubbed in the setup file below
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify('0.0.0-test'),
+  },
   test: {
     include: ['src/**/*.test.ts'],
     environment: 'node',
