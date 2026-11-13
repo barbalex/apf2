@@ -46,3 +46,10 @@ export const navigateObjectAtom = atom(
   },
 )
 export const navigateAtom = atom((get) => get(navigateObjectBaseAtom)?.fn)
+
+// drops the navigate function — the tree2 pane does this on unmount so a
+// later explicit open sets the start path instead of navigating the dead
+// memory router
+export const unsetNavigateObjectAtom = atom(null, (_get, set) => {
+  set(navigateObjectBaseAtom, undefined)
+})

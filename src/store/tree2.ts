@@ -14,7 +14,7 @@ import { treeActiveNodeArrayAtom } from './tree.ts'
 import { tsQueryClientAtom } from './ui.ts'
 import {
   addNotificationAtom,
-  navigateObjectAtom,
+  navigateAtom,
   notificationsAtom,
   type Notification,
 } from './notifications.ts'
@@ -54,6 +54,13 @@ export const buildTree2Path = (
   return `${path}?${paneSearch.toString()}`
 }
 
+// whether the pane is currently mounted. Maintained by the Tree2
+// component — NOT derivable from tree2Store's navigateObjectAtom, which
+// outlives the pane (module-level store): an explicit open after a
+// close would otherwise navigate the dead memory router instead of
+// setting the pane's start path
+export const tree2OpenAtom = atom(false)
+
 // opens (or navigates) the pane on a node
 export const setTree2PathByActiveNodeArrayAtom = atom(
   null,
@@ -76,7 +83,8 @@ export const setTree2PathByActiveNodeArrayAtom = atom(
       onlyShowActivePath,
     )
 
-    const navigate = tree2Store.get(navigateObjectAtom)?.fn
+    const navigate =
+      rootStore.get(tree2OpenAtom) ? tree2Store.get(navigateAtom) : undefined
     if (navigate) {
       // pane is open: navigate it in place — no remount, no reload
       navigate(path)

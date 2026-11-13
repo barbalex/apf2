@@ -1,14 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import type { Store } from 'jotai'
+import { useStore } from 'jotai'
 
-import { navigateObjectAtom, store } from '../../store/index.ts'
+import { navigateObjectAtom } from '../../store/index.ts'
 
-// writes the router's navigate function into a store's navigateObjectAtom.
-// Without a store prop this targets the root store (pane 1); the tree2
-// pane passes its own store (see src/components/Projekte/Tree2)
-export const NavigateSetter = ({ store: targetStore }: { store?: Store }) => {
+// writes the surrounding router's navigate function into the surrounding
+// jotai store (useStore resolves to the tree2 pane's store inside the
+// pane's Provider, to the app's store in the main tree). Pane and main
+// tree MUST NOT share one navigate: ProtectedRoute renders this setter in
+// both, and a shared value would navigate one tree's router from the other
+export const NavigateSetter = () => {
   const navigate = useNavigate()
+  const store = useStore()
   const navigateSet = useRef(false)
 
   useEffect(() => {
@@ -16,9 +19,9 @@ export const NavigateSetter = ({ store: targetStore }: { store?: Store }) => {
     // only because of strict mode?
     if (navigateSet.current) return
 
-    ;(targetStore ?? store).set(navigateObjectAtom, navigate)
+    store.set(navigateObjectAtom, navigate)
     navigateSet.current = true
-  }, [navigate, targetStore])
+  }, [navigate, store])
 
   return null
 }

@@ -71,6 +71,78 @@ test.describe('tree2', () => {
     })
   })
 
+  test('a QK message opens tree2 at the object to correct, not at pane 1', async ({
+    page,
+  }) => {
+    // QK loads the full message list for the ap — needs more than the
+    // default 30s alongside the navigation steps
+    test.setTimeout(120_000)
+    // regression: after an open/close cycle the pane's navigate outlived
+    // the pane, so explicit opens (QK, Karte) navigated the dead memory
+    // router and the pane fell back to pane 1's location
+    const projId = '017d3474-6b07-7c56-86ef-84b0af1de903'
+    await page.goto('/Daten/Projekte')
+    await page.getByText('AP Flora Kt. Zürich').click()
+    await expect(page).toHaveURL(/\/Daten\/Projekte\/[0-9a-f-]{36}/, {
+      timeout: 30_000,
+    })
+
+    // open and close tree2 once — this is what leaves the stale navigate
+    await page.locator('[data-id="nav-tree2"]').click()
+    await expect(page.locator('[data-id="tree2-pane"]')).toBeVisible({
+      timeout: 30_000,
+    })
+    await page.locator('[data-id="nav-tree2"]').click()
+    await expect(page.locator('[data-id="tree2-pane"]')).toHaveCount(0)
+
+    // open the aps folder, then the first art (rows carry their node url)
+    await page.getByText('Arten').first().click()
+    await expect(page).toHaveURL(/\/Arten(\?|\/|$)/, { timeout: 30_000 })
+    // the art rows load with the aps query
+    await page.waitForFunction(
+      () =>
+        [...document.querySelectorAll('[data-url]')].some((r) => {
+          try {
+            const u = JSON.parse(r.dataset.url ?? '[]') as unknown[]
+            return Array.isArray(u) && u.length === 4 && u[2] === 'Arten'
+          } catch {
+            return false
+          }
+        }),
+      { timeout: 30_000 },
+    )
+    await page.evaluate(() => {
+      const rows = [...document.querySelectorAll<HTMLElement>('[data-url]')]
+      const artRow = rows.find((r) => {
+        try {
+          const u = JSON.parse(r.dataset.url ?? '[]') as unknown[]
+          return Array.isArray(u) && u.length === 4 && u[2] === 'Arten'
+        } catch {
+          return false
+        }
+      })
+      ;(artRow?.querySelector('[class*="label"]') ?? artRow)?.click()
+    })
+    await expect(page).toHaveURL(/Arten\/[0-9a-f-]{36}/, { timeout: 30_000 })
+    const apUrl = page.url().split('?')[0]
+    await page.goto(
+      `${apUrl}/Qualitätskontrollen?projekteTabs=tree&projekteTabs=daten`,
+    )
+    // message rows open tree2 on click
+    const messageRow = page.locator('p[class*="styledA"]').first()
+    await expect(messageRow).toBeVisible({ timeout: 60_000 })
+    await messageRow.click()
+
+    // the pane opens — on the message's node, not on pane 1's QK page:
+    // it renders no QK message rows and its active path shows the ap
+    const pane2 = page.locator('[data-id="tree2-pane"]')
+    await expect(pane2).toBeVisible({ timeout: 30_000 })
+    await expect(pane2.locator('p[class*="styledA"]')).toHaveCount(0)
+    await expect(pane2.getByText('Arten').first()).toBeVisible({
+      timeout: 30_000,
+    })
+  })
+
   test('navigating pane 1 does not reload tree2', async ({ page }) => {
     await page.goto('/Daten/Projekte')
     await page.locator('[data-id="nav-tree2"]').click()

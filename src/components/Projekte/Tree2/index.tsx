@@ -13,9 +13,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { theme } from '../../../utils/materialTheme.ts'
-import { store as rootStore, tsQueryClientAtom } from '../../../store/index.ts'
+import {
+  store as rootStore,
+  tsQueryClientAtom,
+  unsetNavigateObjectAtom,
+} from '../../../store/index.ts'
 import {
   tree2Store,
+  tree2OpenAtom,
   initTree2SharedAtoms,
   bridgeTree2Notifications,
 } from '../../../store/tree2.ts'
@@ -43,7 +48,7 @@ const PaneChrome = () => {
   }, [])
   return (
     <>
-      <NavigateSetter store={tree2Store} />
+      <NavigateSetter />
       <ActiveNodeArraySetter />
       <Outlet />
     </>
@@ -118,6 +123,8 @@ export const Tree2 = ({ path }: { path: string }) => {
   useEffect(() => {
     const host = hostRef.current
     if (!host) return
+    // explicit opens must target this live pane (see setTree2PathByActiveNodeArrayAtom)
+    rootStore.set(tree2OpenAtom, true)
     let root = paneRoots.get(host)
     if (!root) {
       root = createRoot(host)
@@ -134,6 +141,11 @@ export const Tree2 = ({ path }: { path: string }) => {
         if (current === root && !host.isConnected) {
           paneRoots.delete(host)
           root?.unmount()
+          // the pane's navigate outlives the unmounted memory router —
+          // drop it plus the open flag so a later explicit open sets the
+          // start path instead of navigating a dead router
+          rootStore.set(tree2OpenAtom, false)
+          tree2Store.set(unsetNavigateObjectAtom)
         }
       })
     }

@@ -123,3 +123,24 @@ pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
   and unmounts deferred+disconnected-checked — unmounting synchronously
   in the effect cleanup races React's render (StrictMode double-invoke
   warns about exactly that).
+
+## Explicit opens + navigate isolation (2026-11-13, round 2)
+
+Two related bugs surfaced via QK ("opens at pane 1's node instead of the
+object to correct"):
+
+1. The pane's `navigateObjectAtom` outlives the pane (module-level
+   store): an explicit open after an open/close cycle navigated the dead
+   memory router instead of setting the start path. Fixed with
+   `tree2OpenAtom` (maintained by the pane component) gating the open
+   action, plus clearing the pane's navigate on unmount.
+2. Worse: `ProtectedRoute` renders a bare `NavigateSetter` — inside the
+   pane it overwrote the ROOT store's navigate with the memory router's,
+   so after opening tree2, pane-1 tree clicks navigated the pane; after
+   closing, they navigated nothing at all. `NavigateSetter` now resolves
+   its store via `useStore()` (Provider-scoped in the pane, the app
+   store in the main tree).
+
+Pinned by unit tests on the open action (closed / stale-navigate /
+open-pane branches) and an E2E regression: open tree2, close it, open a
+QK message — the pane must open on the message's node, not pane 1's.
