@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation, useNavigation } from 'react-router'
 import { SplitPane, Pane } from 'react-split-pane'
 import { useAtomValue } from 'jotai'
@@ -29,6 +29,13 @@ export const Component = () => {
   // before the pane mounts
   const paneIsOpen = tree2Tabs.length > 0 && !isPrint && !!tree2Path
 
+  // whether the pane was open in the last committed state — the reset
+  // below must only react to the pane really closing, never to the
+  // tab-less gap between an explicit open's path-set and its tab
+  // navigation committing (that gap wiped the explicit path and the pane
+  // re-derived pane 1's location instead)
+  const paneWasOpenRef = useRef(false)
+
   useEffect(() => {
     // opening the pane without an explicit target (the app-bar button)
     // starts it at pane 1's current location — the former iframe-src
@@ -37,20 +44,20 @@ export const Component = () => {
     //
     // Never touch the path while a navigation is pending: an explicit
     // open sets the path and opens the tabs in one go, and during that
-    // navigation's loading phase the tabs are not yet committed — the
-    // reset branch would wipe the just-set path and the derive below
-    // would replace it with pane 1's location
+    // navigation's loading phase the tabs are not yet committed
     if (navigation.state !== 'idle') return
 
-    if (tree2Tabs.length > 0 && !isPrint) {
+    const paneIsOpen = tree2Tabs.length > 0 && !isPrint
+    if (paneIsOpen) {
       // derive only from a committed location: tree clicks open nodes
       // (and can make new rows visible) before the navigation commits
       if (!tree2Path) {
         store.set(tree2PathAtom, buildTree2Path(pathname, search))
       }
-    } else if (tree2Path) {
+    } else if (paneWasOpenRef.current && tree2Path) {
       store.set(tree2PathAtom, '')
     }
+    paneWasOpenRef.current = paneIsOpen
   }, [tree2Tabs.length, isPrint, tree2Path, pathname, search, navigation.state])
 
   return (

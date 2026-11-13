@@ -145,6 +145,71 @@ test.describe('tree2', () => {
     })
   })
 
+  test('a QK message opens tree2 at its node after warm navigation (no reload)', async ({
+    page,
+  }) => {
+    // regression: between the message click setting the pane path and the
+    // tab-opening navigation committing, the router is briefly idle with
+    // no tree2 tabs — the reset branch of the derive effect wiped the
+    // just-set path in that gap and the pane re-derived pane 1's (QK)
+    // location instead of the message's node
+    test.setTimeout(120_000)
+    // tree rows carry their node url as JSON in data-url; clicking via the
+    // label span is immune to the layout shifts of a settling page
+    const waitForTreeRow = (pattern: RegExp) =>
+      page.waitForFunction(
+        (source) => {
+          const re = new RegExp(source)
+          return [...document.querySelectorAll('[data-url]')].some((r) =>
+            re.test(r.dataset.url ?? ''),
+          )
+        },
+        pattern.source,
+        { timeout: 30_000 },
+      )
+    const clickTreeRow = (pattern: RegExp) =>
+      page.evaluate((source) => {
+        const re = new RegExp(source)
+        const rows = [...document.querySelectorAll<HTMLElement>('[data-url]')]
+        const row = rows.find((r) => re.test(r.dataset.url ?? ''))
+        ;(row?.querySelector('[class*="label"]') ?? row)?.click()
+      }, pattern.source)
+
+    await page.goto('/Daten/Projekte')
+    await waitForTreeRow(/^\["Projekte","[0-9a-f-]{36}"\]$/)
+    await clickTreeRow(/^\["Projekte","[0-9a-f-]{36}"\]$/)
+    await expect(page).toHaveURL(/\/Daten\/Projekte\/[0-9a-f-]{36}/, {
+      timeout: 30_000,
+    })
+
+    // open the project's 'Arten' folder, then its first art
+    await waitForTreeRow(/,"Arten"\]$/)
+    await clickTreeRow(/,"Arten"\]$/)
+    await expect(page).toHaveURL(/\/Arten(\?|\/|$)/, { timeout: 30_000 })
+    await waitForTreeRow(/,"Arten","[0-9a-f-]{36}"\]$/)
+    await clickTreeRow(/,"Arten","[0-9a-f-]{36}"\]$/)
+    await expect(page).toHaveURL(/Arten\/[0-9a-f-]{36}/, { timeout: 30_000 })
+
+    // warm-open the QK page through the tree, like a user browsing there
+    await waitForTreeRow(/,"Qualitätskontrollen"\]$/)
+    await clickTreeRow(/,"Qualitätskontrollen"\]$/)
+    await expect(page).toHaveURL(/Qualit(%C3%A4|ä)tskontrollen/, {
+      timeout: 30_000,
+    })
+
+    const messageRow = page.locator('p[class*="styledA"]').first()
+    await expect(messageRow).toBeVisible({ timeout: 60_000 })
+    await messageRow.click()
+
+    // the pane opens on the message's node: it renders the target form,
+    // not a duplicate of the QK message list
+    const pane2 = page.locator('[data-id="tree2-pane"]')
+    await expect(pane2).toBeVisible({ timeout: 30_000 })
+    await expect(pane2.locator('p[class*="styledA"]')).toHaveCount(0)
+    // the appbar tabs survive the pane opening
+    await expect(page.locator('button[data-id="nav-daten2"]')).toBeVisible()
+  })
+
   test('navigating pane 1 does not reload tree2', async ({ page }) => {
     await page.goto('/Daten/Projekte')
     await page.locator('[data-id="nav-tree2"]').click()
