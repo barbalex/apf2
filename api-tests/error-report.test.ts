@@ -53,7 +53,11 @@ describe('error_report collector', () => {
   it('rejects payloads violating the caps or the kind enum', async () => {
     const tooLong = await pgrst('/error_report', {
       method: 'POST',
-      body: { release: '0.0.0-test', kind: 'manual', message: 'a'.repeat(2001) },
+      body: {
+        release: '0.0.0-test',
+        kind: 'manual',
+        message: 'a'.repeat(2001),
+      },
     })
     expect(tooLong.status).toBe(400)
 
@@ -67,7 +71,9 @@ describe('error_report collector', () => {
   it('is not readable anonymously', async () => {
     const res = await pgrst('/error_report?select=id&limit=1')
     expect(res.status).toBe(401)
-    expect(res.data.message).toContain('permission denied for table error_report')
+    expect(res.data.message).toContain(
+      'permission denied for table error_report',
+    )
   })
 
   it('is readable by apflora_manager', async () => {
