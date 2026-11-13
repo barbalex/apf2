@@ -13,11 +13,23 @@
 
 ---
 
----
+Tree keyboard navigation as in ae3
 
 ---
 
-do we need a 'how to build/update production' documentation to prevent agents from having to find out themselves?
+port 5432 is open for pgadmin. is there a safer way to connect?
+
+---
+
+tree2 (d9bddc432) — deliberately not rewritten in this pass
+
+---
+
+Error telemetry (8a01e4259) — dependency-free, opt-in reporter at
+errorTelemetry.ts
+: completely inert unless VITE_ERROR_TELEMETRY_URL is set at build time, then posts message/stack/url/UA/release to your self-hosted collector (capped at 25/session, deduped, never throws). Wired into window.onerror, unhandledrejection, and both error boundaries.
+
+---
 
 ---
 
