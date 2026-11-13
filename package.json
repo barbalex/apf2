@@ -27,6 +27,7 @@
     "test:ui": "cross-env NODE_ENV=dev playwright test --ui",
     "test:headed": "cross-env NODE_ENV=dev playwright test --headed",
     "test-report": "playwright show-report",
+    "test:unit": "vitest run --config vitest.config.unit.ts",
     "bump": "node scripts/bumpVersion.mjs",
     "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",

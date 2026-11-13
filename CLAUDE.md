@@ -23,6 +23,7 @@ npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser
 npm run test-report  # open the last html report
+npm run test:unit    # vitest unit tests for pure logic (filter cascade, modules helpers)
 npm run deploy       # deploy production: bump patch version + date, push master, update apflora branch (Vercel deploys apflora)
 npm run deploy minor # same with a minor bump (or: major)
 
@@ -34,7 +35,7 @@ npx playwright test --project=chromium   # or firefox
 
 Playwright tests require a running dev server and a credentials file at `playwright/.auth/user.json` (copy from `playwright/.auth/user.json.example`). The config auto-starts `npm run dev` on :5173 and reuses an existing server. WebKit is disabled by default (needs `playwright install-deps webkit`). See [QUICKSTART.md](QUICKSTART.md) and [MIGRATION.md](MIGRATION.md).
 
-> There is **no unit-test runner in active use** — `vitest`/`jsdom` are installed but the suite is Playwright E2E only.
+> Unit tests (`npm run test:unit`, vitest) cover the pure logic: the `tree*GqlFilterAtom` filter cascade in [src/store/gqlFilter.test.ts](src/store/gqlFilter.test.ts) (the jsonb contract with `apflora.compile_filter`) and helpers in `src/modules/`. They run in a node environment — `localStorage` (which the store reads at module scope) is stubbed in [src/testing/localStorageStub.ts](src/testing/localStorageStub.ts), registered as a vitest setup file in `vitest.config.unit.ts`. Test files live next to the code under test (`src/**/*.test.ts`) so they are typechecked and linted like everything else.
 
 Local backend stack (Postgres + PostgREST + Caddy) lives in [backend/](backend/):
 

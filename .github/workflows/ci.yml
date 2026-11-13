@@ -23,6 +23,8 @@ jobs:
         run: npm run lint
       - name: Typecheck (baseline — fails on new errors only)
         run: npm run typecheck:ci
+      - name: Unit tests
+        run: npm run test:unit
       - name: Generated selects are fresh
         run: |
           npm run selects:generate
