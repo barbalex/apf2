@@ -16,8 +16,7 @@ Frontend (run from repo root):
 npm run dev          # vite dev server on :5173 (talks to PostgREST at localhost:3000 — see below)
 npm run build        # vite build -> dist/
 npm run preview      # serve the production build
-npm run typecheck    # tsc --noEmit (CI gates via type-baseline.json: npm run typecheck:ci fails only on NEW errors)
-npm run typecheck:update-baseline  # after intentionally accepted type changes
+npm run typecheck    # tsc --noEmit (CI hard-fails on any error — the baseline mechanism was removed once the count reached zero)
 npm run lint         # eslint src (flat config in eslint.config.mjs)
 npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)

@@ -19,8 +19,6 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "typecheck:ci": "node scripts/typecheck-baseline.mjs",
-    "typecheck:update-baseline": "node scripts/typecheck-baseline.mjs --update",
     "lint": "eslint src",
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=dev playwright test",
