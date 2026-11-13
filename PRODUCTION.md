@@ -59,12 +59,30 @@ frontend.
 master into `apflora`, pushes; Vercel deploys the `apflora` branch. The
 version is surfaced to stale PWA clients via `version.json`.
 
+## Database admin access (pgAdmin)
+
+Postgres is **not reachable from the internet** — the published port is
+bound to the VM's loopback only (`127.0.0.1:5432:5432` in
+`/root/apf/docker-compose.yml`). Admin tools connect through an SSH
+tunnel:
+
+- pgAdmin server dialog — Connection tab: host `localhost`, port `5432`,
+  maintenance db `apflora`, user `postgres`; SSH Tunnel tab: host
+  `api.apflora.ch`, port `22`, user `root`, identity file `~/.ssh/id_ed25519`
+- or a manual tunnel: `ssh -N -L 5433:localhost:5432 root@api.apflora.ch`,
+  then connect to `localhost:5433`
+
+Both workstation keys are authorized on the server. This also fixes the
+previous plaintext exposure: `ssl = off`, so Postgres traffic must never
+cross the internet directly — only inside the SSH channel. PostgREST is
+unaffected (it talks to `apf_db` over the docker network, not the
+published port).
+
 ## Known cautions
 
-- **Postgres is reachable from the internet** on `api.apflora.ch:5432`
-  (docker publishes `0.0.0.0:5432`, verified open). Only password auth
-  protects it. Consider firewalling the port or binding Postgres to
-  localhost/the docker network only — PostgREST does not need the
-  published port.
+- Postgres was previously exposed on `0.0.0.0:5432` without TLS — closed
+  on 2026-11-13 (see "Database admin access" above). If the port ever
+  needs to be published again, enable TLS first (`ssl = on` + cert) or
+  keep it loopback-only.
 - No error telemetry is configured yet (the opt-in client reporter exists
   — set `VITE_ERROR_TELEMETRY_URL` at build time, see CLAUDE.md).
