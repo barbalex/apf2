@@ -84,5 +84,6 @@ published port).
   on 2026-11-13 (see "Database admin access" above). If the port ever
   needs to be published again, enable TLS first (`ssl = on` + cert) or
   keep it loopback-only.
-- No error telemetry is configured yet (the opt-in client reporter exists
-  — set `VITE_ERROR_TELEMETRY_URL` at build time, see CLAUDE.md).
+- Error telemetry is active: client errors land in the
+  `apflora.error_report` table (anon insert-only, manager-readable) —
+  check it in pgAdmin when investigating user reports.
