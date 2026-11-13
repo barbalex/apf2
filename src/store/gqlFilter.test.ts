@@ -223,7 +223,7 @@ describe('treePopGqlFilterAtom', () => {
     })
   })
 
-  it('leaks the parent "filtered" filter into all — known merge-mutation quirk', () => {
+  it('restricts the "all" total by the parent form filter — intended behavior', () => {
     store.set(treeActiveNodeArrayAtom, [
       'Projekte',
       projId,
@@ -235,9 +235,9 @@ describe('treePopGqlFilterAtom', () => {
 
     // es-toolkit's merge mutates its target: singleFilterForAll is the same
     // object as singleFilterByHierarchy, which the branch loop then merges
-    // the parent "filtered" filter into. The ap form filter ("nur AP" here)
-    // therefore restricts the "all" count that PopFilter shows as the total.
-    // Pinned as-is — changing it changes visible counts (see PopFilter).
+    // the parent "filtered" filter into. Intended: the "X von Y" totals the
+    // Filter panels show (popGqlFilter.all) are meant to be scoped by the
+    // parent ap form filter ("nur AP" here), not to count all pops.
     expect(store.get(treePopGqlFilterAtom).all).toEqual({
       apId: { equalTo: apId },
       apByApId: { or: [{ bearbeitung: { in: [1, 2, 3] } }] },
@@ -269,7 +269,7 @@ describe('treeTpopGqlFilterAtom', () => {
   it('defaults to the empty pop filter nested under popByPopId', () => {
     // the branch is not empty: the parent merge puts apByApId and the pop
     // "filtered" or-array into popByPopId (all and filtered share content —
-    // see the merge-mutation quirk test in treePopGqlFilterAtom)
+    // see the intended parent-scoping of all in treePopGqlFilterAtom)
     expect(store.get(treeTpopGqlFilterAtom)).toEqual({
       all: {
         popByPopId: {
@@ -303,8 +303,8 @@ describe('treeTpopGqlFilterAtom', () => {
       tpop: [tabWith(initialTpopTab, { flurname: 'seen' })],
     })
 
-    // the pop criteria (nr: 5) also restrict all — the same merge-mutation
-    // quirk as above, one level deeper
+    // the pop criteria (nr: 5) also restrict all — the same intended
+    // parent-scoping as above, one level deeper
     expect(store.get(treeTpopGqlFilterAtom)).toEqual({
       all: {
         popByPopId: {
