@@ -18,7 +18,7 @@ services:
       - "5432"
     ports:
       # make the Postgres database accessible from outside the Docker container on port 5432
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
