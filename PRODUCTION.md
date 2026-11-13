@@ -59,6 +59,28 @@ frontend.
 master into `apflora`, pushes; Vercel deploys the `apflora` branch. The
 version is surfaced to stale PWA clients via `version.json`.
 
+## Error telemetry
+
+Client errors are collected in the `apflora.error_report` table
+(anon insert-only, manager-readable — see CLAUDE.md). New reports
+trigger a phone notification:
+
+- `/root/apf/error-notify.sh` on the VM (repo copy:
+  [scripts/notify-error-reports.sh](scripts/notify-error-reports.sh))
+  runs from cron every 5 minutes, aggregates everything newer than its
+  watermark and POSTs a summary to the webhook in
+  `/root/apf/.error-notify.env` (mode 600). Delivery is at-least-once:
+  the watermark only advances after a successful send.
+- The default channel is ntfy: install the ntfy app (or use
+  ntfy.sh in a browser) and subscribe to the topic named in
+  `/root/apf/.error-notify.env`. The topic name is the secret — anyone
+  who knows it can read the notifications (which carry only count,
+  release and a 120-char preview; full reports stay in the database).
+- To switch channels (Telegram bot, Gotify, email-to-webhook …), change
+  `NOTIFY_URL` in the env file to an endpoint accepting ntfy semantics
+  (`Title` header + plain-text body) and run the script once to test.
+- Logs: `/root/apf/error-notify.log` (one line per notifying run).
+
 ## Database admin access (pgAdmin)
 
 Postgres is **not reachable from the internet** — the published port is
