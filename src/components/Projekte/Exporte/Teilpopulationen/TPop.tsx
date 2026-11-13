@@ -12,6 +12,7 @@ import {
   addNotificationAtom,
   treeTpopGqlFilterAtom,
 } from '../../../../store/index.ts'
+import { store } from '../../../../store/index.ts'
 
 interface TPopProps {
   filtered?: boolean
@@ -263,7 +264,7 @@ export const TPop = ({ filtered = false }: TPopProps) => {
     //console.timeEnd('exporting')
   }
 
-  const tpopIsFiltered = tableIsFiltered({ table: 'tpop' })
+  const tpopIsFiltered = tableIsFiltered({ store, table: 'tpop' })
 
   return (
     <Button

@@ -1,5 +1,6 @@
 // ui state: nav-list filter visibility, query client, dialogs, print
 import { atom } from 'jotai'
+import type { Store } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -173,6 +174,10 @@ export const tsQueryClientAtom = atom<QueryClient | null>(null)
  */
 export const getTsQueryClientFromStore = () =>
   store.get(tsQueryClientAtom) as QueryClient
+
+// same for an explicit store (the tree2 pane passes its own)
+export const getTsQueryClientFrom = (targetStore: Store) =>
+  targetStore.get(tsQueryClientAtom) as QueryClient
 
 // Assigning Beob
 export const assigningBeobAtom = atom(false)

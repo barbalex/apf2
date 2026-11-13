@@ -1,102 +1,81 @@
-import { useLocation } from 'react-router'
-import queryString from 'query-string'
+import { useEffect, useRef } from 'react'
+import { useLocation, useNavigation } from 'react-router'
 import { SplitPane, Pane } from 'react-split-pane'
 import { useAtomValue } from 'jotai'
 
-// when Karte was loaded async, it did not load,
-// but only in production!
-import { isPrintAtom, tree2SrcAtom } from '../../store/index.ts'
+import { isPrintAtom, store } from '../../store/index.ts'
+import { tree2PathAtom, buildTree2Path } from '../../store/tree2.ts'
 import { ProjektContainer } from './ProjektContainer.tsx'
-// import AppRenderer from '../../AppRenderer'
-import { appBaseUrl } from '../../modules/appBaseUrl.ts'
-import { inIframe } from '../../modules/inIframe.ts'
+import { Tree2 } from './Tree2/index.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 import styles from './index.module.css'
 
-const isInIframe = inIframe()
-
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 export const Component = () => {
-  const { pathname, search } = useLocation()
   const isPrint = useAtomValue(isPrintAtom)
-  const tree2Src = useAtomValue(tree2SrcAtom)
+  const tree2Path = useAtomValue(tree2PathAtom)
+  const { pathname, search } = useLocation()
+  // pending while a router navigation is in flight — the pane must not
+  // open on a location that is about to change
+  const navigation = useNavigation()
 
   const [projekteTabs] = useProjekteTabs()
   const tree2Tabs = [
     ...new Set(tree2TabValues).intersection(new Set(projekteTabs)),
   ]
+  // tree2Path is set by the effect below (or an explicit open action)
+  // before the pane mounts
+  const paneIsOpen = tree2Tabs.length > 0 && !isPrint && !!tree2Path
 
-  let iFrameSrc = tree2Src
-  if (!tree2Src) {
-    // build search string for iframe
-    const iFrameSearch = queryString.parse(search)
-    // need to alter projekteTabs:
-    if (Array.isArray(iFrameSearch.projekteTabs)) {
-      iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
-        // - remove non-tree2 values
-        .filter((t) => (t ?? '').includes('2'))
-        // - rewrite tree2 values to tree values
-        .map((t) => (t ?? '').replace('2', ''))
-    } else if (iFrameSearch.projekteTabs) {
-      iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
-        // - remove non-tree2 values
-        .filter((t) => t.includes('2'))
-        // - rewrite tree2 values to tree values
-        .map((t) => t.replace('2', ''))
+  // whether the pane was open in the last committed state — the reset
+  // below must only react to the pane really closing, never to the
+  // tab-less gap between an explicit open's path-set and its tab
+  // navigation committing (that gap wiped the explicit path and the pane
+  // re-derived pane 1's location instead)
+  const paneWasOpenRef = useRef(false)
+
+  useEffect(() => {
+    // opening the pane without an explicit target (the app-bar button)
+    // starts it at pane 1's current location — the former iframe-src
+    // default. Explicit targets (map popups, Qk) set the atom beforehand.
+    // Closing resets it so the next open re-derives.
+    //
+    // Never touch the path while a navigation is pending: an explicit
+    // open sets the path and opens the tabs in one go, and during that
+    // navigation's loading phase the tabs are not yet committed
+    if (navigation.state !== 'idle') return
+
+    const paneIsOpen = tree2Tabs.length > 0 && !isPrint
+    if (paneIsOpen) {
+      // derive only from a committed location: tree clicks open nodes
+      // (and can make new rows visible) before the navigation commits
+      if (!tree2Path) {
+        store.set(tree2PathAtom, buildTree2Path(pathname, search))
+      }
+    } else if (paneWasOpenRef.current && tree2Path) {
+      store.set(tree2PathAtom, '')
     }
-    const newSearch = queryString.stringify(iFrameSearch)
-    // pass this via src to iframe
-    iFrameSrc = `${appBaseUrl().slice(0, -1)}${pathname}?${newSearch}`
-  }
-
-  if (isInIframe) {
-    // inside iframe app bar should be hidden
-    return (
-      <div className={styles.container}>
-        {tree2Tabs.length === 0 || isPrint ?
-          <ProjektContainer />
-        : <SplitPane direction="horizontal">
-            <Pane defaultSize="50%">
-              <ProjektContainer />
-            </Pane>
-            <Pane>
-              <iframe
-                className={styles.iframe}
-                src={iFrameSrc}
-                title="tree2"
-                width="100%"
-                height="100%"
-              />
-            </Pane>
-          </SplitPane>
-        }
-      </div>
-    )
-  }
+    paneWasOpenRef.current = paneIsOpen
+  }, [tree2Tabs.length, isPrint, tree2Path, pathname, search, navigation.state])
 
   return (
-    <>
-      <div className={styles.container}>
-        {tree2Tabs.length === 0 || isPrint ?
-          <ProjektContainer />
-        : <SplitPane direction="horizontal">
-            <Pane defaultSize="50%">
-              <ProjektContainer />
-            </Pane>
-            <Pane>
-              <iframe
-                className={styles.iframe}
-                src={iFrameSrc}
-                title="tree2"
-                width="100%"
-                height="100%"
-              />
-            </Pane>
-          </SplitPane>
-        }
-      </div>
-    </>
+    <div className={styles.container}>
+      {!paneIsOpen ?
+        <ProjektContainer />
+      : <SplitPane direction="horizontal">
+          <Pane defaultSize="50%">
+            <ProjektContainer />
+          </Pane>
+          <Pane>
+            {/* the second tree is the same workspace against its own store
+                and memory router — no iframe, no app reload when pane 1
+                navigates (issues/tree2-second-pane.md) */}
+            <Tree2 path={tree2Path} />
+          </Pane>
+        </SplitPane>
+      }
+    </div>
   )
 }

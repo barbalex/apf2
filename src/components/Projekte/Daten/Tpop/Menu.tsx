@@ -19,7 +19,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { uniq } from 'es-toolkit'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import type { TpopId } from '../../../../models/apflora/index.ts'
 
@@ -62,6 +62,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -112,6 +113,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'tpop',
@@ -131,6 +133,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
+      store,
       id: tpopId,
       projId,
       apId,
@@ -142,6 +145,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: [
         'Projekte',
         projId,
@@ -184,11 +188,11 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickMoveInTree = () => {
     if (isMovingTpop) {
       // move to this pop
-      return moveTo({ id: popId })
+      return moveTo({ store, id: popId })
     }
     if (isMovingTpopfeldkontr || isMovingTpopfreiwkontr || isMovingTpopmassn) {
       // move to this tpop
-      return moveTo({ id: tpopId })
+      return moveTo({ store, id: tpopId })
     }
     setMoving({
       id: row.id,
@@ -219,11 +223,11 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickCopy = () => {
     if (isCopyingTpop) {
       // copy to this pop
-      return copyTo({ parentId: popId })
+      return copyTo({ store, parentId: popId })
     }
     if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
       // copy to this tpop
-      return copyTo({ parentId: tpopId })
+      return copyTo({ store, parentId: tpopId })
     }
     setCopying({
       table: 'tpop',
@@ -247,7 +251,7 @@ export const Menu = ({ row }: MenuProps) => {
   const onCopyCoordToPop = async () => {
     if (!tpopId) return
     setCopyingCoordToTpop(true)
-    await copyTpopKoordToPop({ id: tpopId })
+    await copyTpopKoordToPop({ store, id: tpopId })
     setCopyingCoordToTpop(false)
   }
 

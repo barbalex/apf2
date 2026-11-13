@@ -6,15 +6,18 @@
  */
 
 import { apiFetch } from '../../../../../modules/api.ts'
-import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import { treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface PopParams {
+  store: Store
   id?: string | null | undefined
   apId?: string | null | undefined
   projId?: string | null | undefined
 }
 
 export const pop = async ({
+  store,
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',

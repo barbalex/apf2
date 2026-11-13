@@ -10,15 +10,17 @@ import { copyTpopsOfPop } from '../copyTpopsOfPop.ts'
 import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.ts'
 
 import {
-  store,
   addNotificationAtom,
   copyingAtom,
   type Notification,
-  getTsQueryClientFromStore,
+  getTsQueryClientFrom,
 } from '../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 // columns that must not be copied: system columns get fresh defaults,
 // old_id belongs to the original row (uuidv7 migration bookkeeping)
@@ -31,15 +33,17 @@ const stripColumns = [
 
 // copyTpopsOfPop can pass table and id separately
 export const copyTo = async ({
+  store,
   parentId,
   table: tablePassed,
   id: idPassed,
 }: {
+  store: Store
   parentId?: string | undefined
   table?: string | undefined
   id?: string | undefined
 }) => {
-  const tsQueryClient = getTsQueryClientFromStore()
+  const tsQueryClient = getTsQueryClientFrom(store)
 
   const copying = store.get(copyingAtom)
   const table = tablePassed ?? copying.table
@@ -49,7 +53,7 @@ export const copyTo = async ({
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
   if (!tabelle) {
-    return addNotification({
+    return addNotification(store, {
       message: `change was not saved because table "${table}" was not found`,
       options: {
         variant: 'error',
@@ -59,7 +63,7 @@ export const copyTo = async ({
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   const dbTable = tabelle.dbTable ?? tabelle.table
   if (!tabelle.parentIdField) {
-    return addNotification({
+    return addNotification(store, {
       message: `change was not saved because parent field of table "${table}" was not found`,
       options: {
         variant: 'error',
@@ -75,7 +79,7 @@ export const copyTo = async ({
   )?.[0]
 
   if (!row) {
-    return addNotification({
+    return addNotification(store, {
       message: 'change was not saved because dataset was not found in store',
       options: {
         variant: 'error',
@@ -94,7 +98,7 @@ export const copyTo = async ({
   try {
     await apiInsert(dbTable, copy)
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: `Die Kopie wurde nicht erstellt. Fehlermeldung: ${(error as Error).message}`,
       options: {
         variant: 'error',
@@ -130,6 +134,7 @@ export const copyTo = async ({
   if (table === 'tpopfeldkontr') {
     // always copy Zaehlungen
     void copyZaehlOfTpopKontr({
+      store,
       tpopkontrIdFrom: id as string,
       tpopkontrIdTo: newId,
     })
@@ -152,6 +157,7 @@ export const copyTo = async ({
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     void copyTpopsOfPop({
+      store,
       popIdFrom: id as string,
       popIdTo: newId,
     })

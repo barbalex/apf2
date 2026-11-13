@@ -6,7 +6,7 @@ import { FaPlus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -25,6 +25,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -65,6 +66,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
+      store,
       id: apId,
       projId,
       apId,
@@ -73,6 +75,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
       search,
     })

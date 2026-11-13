@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useStore } from 'jotai'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
@@ -132,6 +132,7 @@ const getTpopZuordnenSource = ({
 }
 
 export const Component = () => {
+  const store = useStore()
   // this component only renders on routes containing beobId and apId
   const { beobId: id, apId } = useParams<{
     beobId: string
@@ -255,6 +256,7 @@ export const Component = () => {
 
   const onSaveArtIdToDb = (event: SaveToDbEvent) =>
     saveArtIdToDb({
+      store,
       value: event.target.value as string,
       row,
       search,
@@ -262,6 +264,7 @@ export const Component = () => {
 
   const onSaveNichtZuordnenToDb = (value: boolean) =>
     saveNichtZuordnenToDb({
+      store,
       value,
       id,
       refetch,
@@ -270,6 +273,7 @@ export const Component = () => {
 
   const onSaveTpopIdToDb = (event: SaveToDbEvent) => {
     void saveTpopIdToDb({
+      store,
       value: event.target.value as string | number | null,
       id,
       type,

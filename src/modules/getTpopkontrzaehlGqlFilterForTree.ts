@@ -1,7 +1,11 @@
 import type { TpopkontrzaehlFilter } from '../modules/gqlFilterTypes.ts'
-import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
+import { treeNodeLabelFilterAtom } from '../store/index.ts'
+import type { Store } from 'jotai'
 
-export const getTpopkontrzaehlGqlFilterForTree = (_tpopkontrId: string) => {
+export const getTpopkontrzaehlGqlFilterForTree = (
+  store: Store,
+  _tpopkontrId: string,
+) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const gqlFilter: TpopkontrzaehlFilter = {}
 

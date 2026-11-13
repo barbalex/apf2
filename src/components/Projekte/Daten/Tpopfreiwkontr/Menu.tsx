@@ -1,7 +1,7 @@
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -41,6 +41,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -89,6 +90,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'tpopfreiwkontr',
@@ -126,7 +128,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickMoveInTree = () => {
     if (isMovingTpopfreiwkontr) {
-      return moveTo({ id: tpopId })
+      return moveTo({ store, id: tpopId })
     }
     setMoving({
       id: row?.id,
@@ -152,7 +154,7 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickCopy = () => {
     if (isCopyingTpopfreiwkontr) {
       // copy to this tpop
-      return copyTo({ parentId: tpopId })
+      return copyTo({ store, parentId: tpopId })
     }
     setCopying({
       table: 'tpopfreiwkontr',

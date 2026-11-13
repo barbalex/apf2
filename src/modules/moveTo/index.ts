@@ -5,30 +5,34 @@
 import { tables } from '../tables.ts'
 import { apiUpdate } from '../api.ts'
 import {
-  store,
   addNotificationAtom,
   movingAtom,
   setMovingAtom,
   type Notification,
-  getTsQueryClientFromStore,
+  getTsQueryClientFrom,
 } from '../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 export const moveTo = async ({
+  store,
   id: newParentId,
 }: {
+  store: Store
   id?: string | undefined
 }) => {
-  const tsQueryClient = getTsQueryClientFromStore()
+  const tsQueryClient = getTsQueryClientFrom(store)
 
   const moving = store.get(movingAtom)
   const table = moving?.table
   const id = moving?.id
 
   if (!newParentId) {
-    return addNotification({
+    return addNotification(store, {
       message: 'change was not saved: Reason: parent is missing',
       options: {
         variant: 'error',
@@ -36,7 +40,7 @@ export const moveTo = async ({
     })
   }
   if (!id) {
-    return addNotification({
+    return addNotification(store, {
       message:
         'change was not saved: Reason: the dataset to move was not found',
       options: {
@@ -50,7 +54,7 @@ export const moveTo = async ({
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   const dbTable = tabelle?.dbTable ?? table
   if (!dbTable) {
-    return addNotification({
+    return addNotification(store, {
       message: 'change was not saved: Reason: table was not found',
       options: {
         variant: 'error',
@@ -59,7 +63,7 @@ export const moveTo = async ({
   }
   const idField = tabelle?.idField
   if (!idField) {
-    return addNotification({
+    return addNotification(store, {
       message: 'change was not saved: Reason: idField was not found',
       options: {
         variant: 'error',
@@ -68,7 +72,7 @@ export const moveTo = async ({
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return addNotification({
+    return addNotification(store, {
       message: 'change was not saved: Reason: parentIdField was not found',
       options: {
         variant: 'error',
@@ -80,7 +84,7 @@ export const moveTo = async ({
   try {
     await apiUpdate(dbTable, id, { [parentIdField]: newParentId })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: `Der Datensatz wurde nicht verschoben. Fehlermeldung: ${(error as Error).message}`,
       options: {
         variant: 'error',

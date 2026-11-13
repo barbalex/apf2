@@ -1,4 +1,5 @@
 import { tpopfreiwkontrFolder } from './tpopfreiwkontrFolder/index.ts'
+import type { Store } from 'jotai'
 import { tpopfeldkontrFolder } from './tpopfeldkontrFolder/index.ts'
 import { tpop } from './tpop/index.ts'
 import { tpopFolder } from './tpopFolder/index.ts'
@@ -8,6 +9,7 @@ import { zielFolder } from './zielFolder/index.ts'
 import { zieljahrFolder } from './zieljahrFolder/index.ts'
 
 interface OpenLowerNodesParams {
+  store: Store
   id?: string | null | undefined
   parentId?: string | null | undefined
   popId?: string | null | undefined
@@ -18,6 +20,7 @@ interface OpenLowerNodesParams {
 }
 
 export const openLowerNodes = ({
+  store,
   id,
   parentId,
   popId,
@@ -45,19 +48,20 @@ export const openLowerNodes = ({
   // })
   switch (menuType) {
     case 'popFolder':
-      void popFolder({ id, projId })
+      void popFolder({ store, id, projId })
       break
     case 'pop':
-      void pop({ id, apId, projId })
+      void pop({ store, id, apId, projId })
       break
     case 'tpopFolder':
-      void tpopFolder({ popId: id, apId, projId })
+      void tpopFolder({ store, popId: id, apId, projId })
       break
     case 'tpop':
-      void tpop({ id, popId, apId, projId })
+      void tpop({ store, id, popId, apId, projId })
       break
     case 'tpopfeldkontrFolder':
       void tpopfeldkontrFolder({
+        store,
         id,
         apId,
         projId,
@@ -66,6 +70,7 @@ export const openLowerNodes = ({
       break
     case 'tpopfreiwkontrFolder':
       void tpopfreiwkontrFolder({
+        store,
         id,
         apId,
         projId,
@@ -73,10 +78,11 @@ export const openLowerNodes = ({
       })
       break
     case 'zielFolder':
-      void zielFolder({ id, projId })
+      void zielFolder({ store, id, projId })
       break
     case 'zieljahrFolder':
       void zieljahrFolder({
+        store,
         id,
         projId,
         parentId,

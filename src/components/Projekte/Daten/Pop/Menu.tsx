@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -41,6 +41,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -93,6 +94,7 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickDelete = () => {
     setDelMenuAnchorEl(null)
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'pop',
@@ -115,6 +117,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
+      store,
       id: popId,
       projId,
       apId,
@@ -126,6 +129,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
       search,
     })
@@ -142,7 +146,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickMoveInTree = () => {
     if (isTpopMoving) {
-      return moveTo({ id: popId })
+      return moveTo({ store, id: popId })
     }
     setMoving({
       id: popId,
@@ -167,12 +171,12 @@ export const Menu = ({ row }: MenuProps) => {
   const isCopyingTpop = copying.table === 'tpop'
 
   // TODO: add for feldkontr/freiwkontr/massn in tpop menu
-  const onClickCopyTpopToHere = () => copyTo({ parentId: popId })
+  const onClickCopyTpopToHere = () => copyTo({ store, parentId: popId })
 
   const onClickCopyPop = (withNextLevel?: boolean) => {
     if (isCopyingPop) {
       // copy to this ap
-      return copyTo({ parentId: apId })
+      return copyTo({ store, parentId: apId })
     }
     setCopying({
       table: 'pop',

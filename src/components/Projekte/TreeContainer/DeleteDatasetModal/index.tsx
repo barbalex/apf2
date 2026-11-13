@@ -2,19 +2,17 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { useLocation } from 'react-router'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
 
 import { tables } from '../../../../modules/tables.ts'
 import { deleteModule } from './delete/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import {
-  toDeleteAtom,
-  emptyToDeleteAtom,
-} from '../../../../store/index.ts'
+import { toDeleteAtom, emptyToDeleteAtom } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 
 export const DatasetDeleteModal = () => {
+  const store = useStore()
   const { search } = useLocation()
 
   const toDelete = useAtomValue(toDeleteAtom)
@@ -32,8 +30,7 @@ export const DatasetDeleteModal = () => {
     question = `${tableName} löschen?`
   }
 
-  const onClickLoeschen = () =>
-    deleteModule({ search, toDelete })
+  const onClickLoeschen = () => deleteModule({ store, search, toDelete })
 
   return (
     <ErrorBoundary>

@@ -1,11 +1,14 @@
 import { apiFetch } from './api.ts'
+import type { Store } from 'jotai'
 
 import { copyTo } from './copyTo/index.ts'
 
 export const copyZaehlOfTpopKontr = async ({
+  store,
   tpopkontrIdFrom,
   tpopkontrIdTo,
 }: {
+  store: Store
   tpopkontrIdFrom: string
   tpopkontrIdTo: string | null | undefined
 }) => {
@@ -17,6 +20,7 @@ export const copyZaehlOfTpopKontr = async ({
   ;(tpopkontrzaehl ?? []).forEach(
     (zaehl) =>
       void copyTo({
+        store,
         parentId: tpopkontrIdTo ?? undefined,
         table: 'tpopkontrzaehl',
         id: zaehl.id,

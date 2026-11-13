@@ -5,7 +5,6 @@ import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
 
 import {
-  store,
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -13,26 +12,31 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
-  getTsQueryClientFromStore,
+  getTsQueryClientFrom,
 } from '../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 export const createNewTpopFromBeob = async ({
+  store,
   pop,
   beobId,
   projId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
   search,
 }: {
+  store: Store
   pop: { id: string }
   beobId: string
   projId?: string | undefined
   apId?: string | undefined
   search: string
 }) => {
-  const tsQueryClient = getTsQueryClientFromStore()
+  const tsQueryClient = getTsQueryClientFrom(store)
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -53,7 +57,7 @@ export const createNewTpopFromBeob = async ({
     >(`/q_beob?id=eq.${beobId}&select=datum,data,geom_point`)
     beob = beobs?.[0]
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -82,7 +86,7 @@ export const createNewTpopFromBeob = async ({
       flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -97,7 +101,7 @@ export const createNewTpopFromBeob = async ({
       nichtZuordnen: false,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

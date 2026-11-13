@@ -1,6 +1,6 @@
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -30,6 +30,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -68,7 +69,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   }
 
   const isMovingMassn = moving.table === 'tpopmassn'
-  const onClickMoveMassnToHere = () => moveTo({ id: tpopId })
+  const onClickMoveMassnToHere = () => moveTo({ store, id: tpopId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -80,7 +81,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     })
 
   const isCopyingMassn = copying.table === 'tpopmassn'
-  const onClickCopyMassnToHere = () => copyTo({ parentId: tpopId })
+  const onClickCopyMassnToHere = () => copyTo({ store, parentId: tpopId })
 
   const onClickStopCopying = () =>
     setCopying({

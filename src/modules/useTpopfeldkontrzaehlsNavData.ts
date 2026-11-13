@@ -1,4 +1,5 @@
 import { apiCount, apiFetch } from './api.ts'
+import { useStore } from 'jotai'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -15,14 +16,17 @@ export const useTpopfeldkontrzaehlsNavData = (
       }
     | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
   const popId = props?.popId ?? params.popId ?? ''
   const tpopId = props?.tpopId ?? params.tpopId ?? ''
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
-  const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
+  const tpopkontrzaehlGqlFilterForTree = getTpopkontrzaehlGqlFilterForTree(
+    store,
+    tpopkontrId,
+  )
 
   const { data } = useSuspenseQuery({
     queryKey: [

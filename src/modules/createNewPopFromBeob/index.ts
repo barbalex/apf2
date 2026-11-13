@@ -5,7 +5,6 @@ import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
 
 import {
-  store,
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -13,24 +12,29 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
-  getTsQueryClientFromStore,
+  getTsQueryClientFrom,
 } from '../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 export const createNewPopFromBeob = async ({
+  store,
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
   search,
 }: {
+  store: Store
   id: string
   apId?: string | undefined
   projId?: string | undefined
   search: string
 }) => {
-  const tsQueryClient = getTsQueryClientFromStore()
+  const tsQueryClient = getTsQueryClientFrom(store)
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -52,7 +56,7 @@ export const createNewPopFromBeob = async ({
     >(`/q_beob?id=eq.${id}&select=datum,data,geom_point`)
     beob = beobs?.[0]
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -60,7 +64,7 @@ export const createNewPopFromBeob = async ({
     })
   }
   if (!beob) {
-    return addNotification({
+    return addNotification(store, {
       message: 'Die Beobachtung wurde nicht gefunden',
       options: {
         variant: 'error',
@@ -90,7 +94,7 @@ export const createNewPopFromBeob = async ({
       bekannt_seit: bekanntSeit,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -109,7 +113,7 @@ export const createNewPopFromBeob = async ({
       flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -123,7 +127,7 @@ export const createNewPopFromBeob = async ({
       tpopId: newTpopId,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

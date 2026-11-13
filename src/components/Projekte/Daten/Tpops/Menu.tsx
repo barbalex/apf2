@@ -8,7 +8,7 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -32,6 +32,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -68,6 +69,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
+      store,
       id: popId,
       projId,
       apId,
@@ -79,6 +81,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: [
         'Projekte',
         projId,
@@ -93,11 +96,11 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const isTpopMoving = moving.table === 'tpop'
 
-  const onClickMoveTpopToHere = () => moveTo({ id: popId })
+  const onClickMoveTpopToHere = () => moveTo({ store, id: popId })
 
   const isCopyingTpop = copying.table === 'tpop'
 
-  const onClickCopyTpopToHere = () => copyTo({ parentId: popId })
+  const onClickCopyTpopToHere = () => copyTo({ store, parentId: popId })
 
   const onClickStopCopyingTpop = () =>
     setCopying({

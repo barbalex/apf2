@@ -1,7 +1,7 @@
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -45,6 +45,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -128,6 +129,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'tpopfeldkontr',
@@ -153,7 +155,7 @@ export const Menu = ({ row }: MenuProps) => {
   const movingFromThisTpop = moving.fromParentId === tpopId
   const onClickMoveInTree = () => {
     if (isMovingFeldkontr) {
-      return moveTo({ id: tpopId })
+      return moveTo({ store, id: tpopId })
     }
     setMoving({
       id: tpopkontrId,
@@ -178,9 +180,10 @@ export const Menu = ({ row }: MenuProps) => {
   const isCopying = isCopyingTpopfeldkontr || isCopyingBiotop
   const thisTpopfeldkontrIsCopying = copying.id === tpopkontrId
 
-  const onClickCopyFeldkontrToHere = () => copyTo({ parentId: tpopId })
+  const onClickCopyFeldkontrToHere = () => copyTo({ store, parentId: tpopId })
 
-  const onClickCopyBiotopToHere = () => copyBiotopTo({ id: tpopkontrId ?? '' })
+  const onClickCopyBiotopToHere = () =>
+    copyBiotopTo({ store, id: tpopkontrId ?? '' })
 
   const onClickSetFeldkontrCopying = () => {
     setCopying({

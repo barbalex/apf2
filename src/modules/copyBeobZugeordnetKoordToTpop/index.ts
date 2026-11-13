@@ -1,15 +1,20 @@
 import { apiFetch, apiUpdateByVariables } from '../api.ts'
 
-import {
+import { addNotificationAtom, type Notification } from '../../store/index.ts'
+import type { Store } from 'jotai'
+
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
+
+export const copyBeobZugeordnetKoordToTpop = async ({
   store,
-  addNotificationAtom,
-  type Notification,
-} from '../../store/index.ts'
-
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
-
-export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
+  id,
+}: {
+  store: Store
+  id: string
+}) => {
   // fetch beob coodinates
   let beob:
     | {
@@ -28,7 +33,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
     >(`/q_beob?id=eq.${id}&select=tpop_id,wgs84_lat,wgs84_long`)
     beob = beobs?.[0]
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -41,7 +46,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
     tpop_id: tpopId,
   } = beob ?? {}
   if (!tpopId) {
-    return addNotification({
+    return addNotification(store, {
       message: 'Die Beobachtung ist keiner Teil-Population zugeordnet',
       options: {
         variant: 'error',
@@ -67,7 +72,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
       geomPoint,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

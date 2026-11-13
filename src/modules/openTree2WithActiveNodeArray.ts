@@ -1,4 +1,4 @@
-import { store, setTree2SrcByActiveNodeArrayAtom } from '../store/index.ts'
+import { store, setTree2PathByActiveNodeArrayAtom } from '../store/index.ts'
 
 export const openTree2WithActiveNodeArray = ({
   activeNodeArray,
@@ -13,7 +13,7 @@ export const openTree2WithActiveNodeArray = ({
   setProjekteTabs: (tabs: string[]) => void
   onlyShowActivePath?: boolean | undefined
 }) => {
-  store.set(setTree2SrcByActiveNodeArrayAtom, {
+  store.set(setTree2PathByActiveNodeArrayAtom, {
     activeNodeArray,
     search,
     onlyShowActivePath,

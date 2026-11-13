@@ -1,7 +1,10 @@
 # tree2: replace the iframe with a real second pane
 
-Status: design + E2E safety net exist ([tests/tree2/tree2.spec.ts](../tests/tree2/tree2.spec.ts));
-implementation is its own project, not a drive-by change.
+Status: **implemented** (2026-11-13) — the iframe is gone. The pane renders
+the /Daten route tree against its own React root, jotai store and memory
+router; see [src/store/tree2.ts](../src/store/tree2.ts) and
+[src/components/Projekte/Tree2](../src/components/Projekte/Tree2/index.tsx).
+Deviations from the original plan are noted at the bottom.
 
 ## Why the iframe exists
 
@@ -73,7 +76,7 @@ Introduce a **store-resolution layer** instead of a module-level singleton:
    starting with the TreeContainer modules above — mechanical, one PR per
    module group, unit-testable.
 3. Render pane 2 as `<Provider store={tree2Store}><ProjektContainer
-   pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
+pane="tree2" /></Provider>` behind a `MemoryRouter`-free setup (pane 2 keeps
    its navigation in atoms only; the address bar stays pane 1's).
 4. Keep `userAtom`, `tsQueryClientAtom` and notification atoms shared: mount
    them in both stores and bridge writes (`store.sub` on one, `set` on the
@@ -90,3 +93,66 @@ Introduce a **store-resolution layer** instead of a module-level singleton:
   survives, e.g. via a data-attribute counter)
 - Playwright suite + manual check of: login/logout, copy/paste between panes,
   map popups "in zweitem Baum öffnen", print, Electron
+
+## Implementation notes (2026-13-11)
+
+- react-router (v8) forbids nesting ANY router inside the app router —
+  both MemoryRouter and RouterProvider throw. The pane therefore renders
+  in its own React root (`createRoot`), which also matches the former
+  iframe's isolation without the reload costs.
+- The pane reuses the app's `/Daten` route subtree (`datenRoutes` in
+  [src/components/Router/index.tsx](../src/components/Router/index.tsx))
+  under a pathless layout route that carries the pane's
+  ActiveNodeArraySetter/NavigateSetter.
+- Imperative helpers take an explicit `store` param; hooks use
+  `useStore()`. Shared atoms (user, query client) are mirrored once at
+  pane mount, notifications are bridged into the root snackbar.
+- `karte2`/`filter2` pane tabs currently have no effect on an open pane
+  (the pane's tab set is fixed at mount); the pane-1 tab buttons still
+  control pane 1 only. Can be revisited if missed.
+- The pane host must be a flex column: the routed workspace's root is a
+  flex child of the AppBar layout (`flex-grow: 1`), so without that
+  context the height chain collapses. The uploadcare context provider is
+  a childless sibling (like in App.tsx) — wrapping the layout in the
+  custom element breaks it the same way (it does not render).
+- Opening without an explicit target derives from pane 1's location only
+  once the router is idle (`useNavigation().state`): tree clicks open
+  nodes (rows become visible) before their navigation commits, and
+  reading the location earlier can catch one that is about to change.
+- The pane's React root is kept in a WeakMap keyed by its host element
+  and unmounts deferred+disconnected-checked — unmounting synchronously
+  in the effect cleanup races React's render (StrictMode double-invoke
+  warns about exactly that).
+
+## Explicit opens + navigate isolation (2026-11-13, round 2)
+
+Two related bugs surfaced via QK ("opens at pane 1's node instead of the
+object to correct"):
+
+1. The pane's `navigateObjectAtom` outlives the pane (module-level
+   store): an explicit open after an open/close cycle navigated the dead
+   memory router instead of setting the start path. Fixed with
+   `tree2OpenAtom` (maintained by the pane component) gating the open
+   action, plus clearing the pane's navigate on unmount.
+2. Worse: `ProtectedRoute` renders a bare `NavigateSetter` — inside the
+   pane it overwrote the ROOT store's navigate with the memory router's,
+   so after opening tree2, pane-1 tree clicks navigated the pane; after
+   closing, they navigated nothing at all. `NavigateSetter` now resolves
+   its store via `useStore()` (Provider-scoped in the pane, the app
+   store in the main tree).
+
+Pinned by unit tests on the open action (closed / stale-navigate /
+open-pane branches) and an E2E regression: open tree2, close it, open a
+QK message — the pane must open on the message's node, not pane 1's.
+
+## Round 3: explicit open wiped mid-navigation (2026-11-13)
+
+Reproduced via a page reload on the QK page + message click: the open
+action set the pane path correctly, but during the tab-opening
+navigation's loading phase the pane-1 derive/reset effect saw
+tabs-not-yet-committed + path-set and its RESET branch wiped the just-set
+path — after commit, the derive replaced it with pane 1's location. The
+effect now returns early unless `navigation.state === 'idle'` (both
+branches gated). The AppBar "tab menus invisible" report did not
+reproduce after this fix — it was downstream of the broken pane state.
+The QK E2E now reloads the page before clicking the message.
