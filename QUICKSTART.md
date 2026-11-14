@@ -3,14 +3,17 @@
 ## Setup (One-time)
 
 1. **Create auth credentials file:**
+
    ```bash
    cp playwright/.auth/user.json.example playwright/.auth/user.json
    ```
 
 2. **Edit with your credentials:**
+
    ```bash
    nano playwright/.auth/user.json
    ```
+
    ```json
    {
      "name": "your-username",
@@ -63,14 +66,16 @@ npx playwright test --update-snapshots
 
 ```
 tests/
-├── auth/login.spec.ts           # 8 tests: login, validation
-├── forms/
-│   ├── aktionsplan.spec.ts      # 6 tests
-│   ├── population.spec.ts       # 8 tests
-│   ├── teil-population.spec.ts  # 9 tests
-│   └── ...                      # 7 more form suites
-└── all.spec.ts                  # Original navigation tests
+├── auth/                         # login, password helper, dead-session logout
+├── ekplan/                       # EkPlan header filters
+├── forms/aktionsplan.spec.ts     # form validation
+├── prefetch/                     # route data prefetch
+├── tree2/                        # second-tree pane
+└── auth.setup.ts                 # login → storageState
 ```
+
+API-level role/permission tests live in [api-tests/](api-tests/) — run with
+`npm run test:api` (needs the local backend: `docker compose -f backend-dev/docker-compose.yml up -d`).
 
 ## Troubleshooting
 
@@ -81,20 +86,18 @@ tests/
 → Make sure `npm run dev` is running in another terminal
 
 **❌ Authentication fails**
-→ Check credentials in `playwright/.auth/user.json`
+→ Check credentials in `playwright/.auth/user.json` (must be a user of the local dev db)
+
+**❌ Tests suddenly meet the Anmeldung dialog**
+→ The auth token expired (24 h): `node scripts/refresh-auth-state.mjs` (needs the local backend on :3000)
 
 **❌ Need to see what's happening**
 → Use `npm run test:headed` or `npm run test:ui`
 
-## Next Steps
+## CI
 
-✅ Tests migrated from Cypress to Playwright  
-✅ Core forms covered (10 test suites)  
-✅ Authentication setup  
+E2E does not run in CI (`.github/workflows/playwright.yml` is disabled on
+purpose — it would need the backend stack and real credentials). CI runs lint,
+typecheck, unit tests and selects freshness.
 
-**You can now:**
-- Delete Cypress: `rm -rf cypress/ cypress.config.cjs`
-- Add more tests as needed
-- Integrate with CI/CD
-
-See [MIGRATION.md](MIGRATION.md) for full details.
+See [MIGRATION.md](MIGRATION.md) for the Cypress → Playwright migration details.

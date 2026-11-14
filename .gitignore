@@ -35,7 +35,9 @@ schema.json
 /test-results/
 /playwright-report/
 /playwright/.cache/
-playwright/.auth
+# ignore the real credentials/state, keep the template shareable
+playwright/.auth/*
+!playwright/.auth/user.json.example
 
 git_stats.txt
 
