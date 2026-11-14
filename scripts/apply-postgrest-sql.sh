@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Applies the PostgREST-migration SQL to the local dev database
 # (backend-dev, container apf_db).
 #

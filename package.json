@@ -35,6 +35,7 @@
     "models:generate": "node scripts/kanel-generate.mjs",
     "selects:generate": "node scripts/generate-selects.mjs",
     "db:apply-sql": "scripts/apply-postgrest-sql.sh",
+    "fetchBackup": "node scripts/fetchBackup.mjs",
     "test:api": "vitest run --config vitest.config.api.ts"
   },
   "dependencies": {

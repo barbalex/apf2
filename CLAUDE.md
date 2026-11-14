@@ -60,6 +60,8 @@ docker compose -f backend-dev/docker-compose.yml up -d
 # db on :5432, postgrest on :3000 — after recreating the db volume run npm run db:apply-sql
 ```
 
+`npm run fetchBackup` seeds `backend-dev/db/apflora.backup` (gitignored) with a fresh production backup — it runs the production backup first (its fingerprint skip makes this cheap), so a `down -v && up -d --build` afterwards initializes the dev db from current production data (deletes local dev data; then `npm run db:apply-sql`). The production backup machinery (fingerprint skip, restore test, host cron wrapper) lives in [backend/db/](backend/db/) — see the Backups section of [PRODUCTION.md](PRODUCTION.md).
+
 [backend/](backend/) mirrors the production VM stack (PostgREST behind Caddy, :3000 not published to the host) — see [PRODUCTION.md](PRODUCTION.md) for the VM and for applying DB migrations there (`scripts/apply-production-sql.sh`).
 
 ## Architecture
