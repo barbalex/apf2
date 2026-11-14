@@ -17,7 +17,63 @@ The API lives under the `/postgrest` path — `https://api.apflora.ch/`
 itself returns 404. PostgREST connects to `apf_db` inside the docker
 network; the browser only talks to caddy.
 
-VM-level backups: the whole VM is backed up "every few days" (see the
+## Backups
+
+Nightly db backup via cron on the VM (23:00, root): `/root/backup/backup.sh`
+(in-repo copy: [backend/db/host-backup.sh](backend/db/host-backup.sh)) runs
+[backend/db/backup.sh](backend/db/backup.sh) inside the `apf_db` container:
+
+1. computes a deterministic data fingerprint — per `apflora`-schema base
+   table the row count plus an order-independent sum of per-row md5
+   hashes. The table list comes from the catalog, so future migration
+   tables are covered automatically; `error_report` is excluded (client
+   telemetry changes almost daily without real data changing — it stays
+   in the dump itself). Unchanged fingerprint → no dump at all.
+2. `pg_dump -Fc -Z9 apflora` → `/sik_data/<datetime>_apflora.backup`
+3. uploads it to nextcloud via rclone (config at `/root/backup/rclone.conf`,
+   mounted into the container read-only)
+4. only after a successful upload moves it to `/sik_data/last.backup`
+   and writes `/sik_data/last.fingerprint` — a failed upload is
+   retried by the next run
+
+The fingerprint replaces the old size-equality check, which silently
+skipped backups when the size happened to match despite changed
+content (and always built a full 145MB dump first).
+
+Restore test (verify the backups actually restore):
+
+```bash
+ssh root@api.apflora.ch 'docker exec -it apf_db bash ./test-restore.sh'
+# or against a local dump file, skipping the download:
+ssh root@api.apflora.ch 'docker exec -it apf_db bash ./test-restore.sh /sik_data/last.backup'
+```
+
+downloads the newest nextcloud backup, restores it into a scratch
+database inside the running postgres, runs sanity counts, and drops
+the scratch database. No extensions need pre-creating — the dump
+carries its own `CREATE EXTENSION` statements. Passed 14.11.2026
+against the 02.11. dump (0 errors; 600 ap / 21'457 tpop / 28'360
+tpopkontr / 500'775 beob).
+
+Deploying changes to these scripts: `/root/apf` on the VM is a plain
+copy of this repo's `backend/` (not a git checkout). `scp` the changed
+files (e.g. `backend/db/backup.sh`, `backend/db/test-restore.sh`,
+`backend/db/Dockerfile`) to `root@api.apflora.ch:/root/apf/db/`, then
+`cd /root/apf && docker compose build db && docker compose up -d db`
+(volumes survive the container recreation). The host wrapper at
+`/root/backup/backup.sh` is copied manually — keep it in sync with
+`backend/db/host-backup.sh`.
+
+Seeding the dev stack from production: `npm run fetchBackup`
+([scripts/fetchBackup.mjs](scripts/fetchBackup.mjs)) runs the
+production backup (fingerprint-skips when unchanged), copies
+`/sik_data/last.backup` out of the container and downloads it into
+`backend-dev/db/apflora.backup` (gitignored) — the file a fresh dev db
+volume initializes from. Then
+`docker compose -f backend-dev/docker-compose.yml down -v && up -d --build`
+(deletes local dev data!) and `npm run db:apply-sql`.
+
+Additionally, the whole VM is backed up "every few days" (see the
 app's Daten sichern doc). For risky data changes, additionally take a
 `pg_dump` before applying.
 

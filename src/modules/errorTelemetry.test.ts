@@ -103,6 +103,21 @@ describe('errorTelemetry', () => {
     expect(JSON.parse(init?.body as string).message).toBe('string rejection')
   })
 
+  it('drops benign browser noise', async () => {
+    const { reportError } = await loadModule()
+
+    await reportError(
+      'window.error',
+      'ResizeObserver loop completed with undelivered notifications.',
+    )
+    await reportError(
+      'window.error',
+      new Error('ResizeObserver loop limit exceeded'),
+    )
+
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('installs window handlers that report', async () => {
     const { installErrorTelemetry } = await loadModule()
 

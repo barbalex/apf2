@@ -13,6 +13,16 @@ declare const __APP_VERSION__: string
 
 const endpoint = import.meta.env.VITE_ERROR_TELEMETRY_URL as string | undefined
 
+// browser noise that reaches window as an error event but has no app
+// impact: Chrome emits these from its ResizeObserver loop detector and
+// defers the work to the next frame on its own. Unfiltered they were
+// the most frequent rows in error_report (and would keep pinging the
+// phone notifier).
+const benignMessages = [
+  'ResizeObserver loop completed with undelivered notifications',
+  'ResizeObserver loop limit exceeded',
+]
+
 // hard caps so a broken release cannot flood the collector or loop
 const maxEventsPerSession = 25
 const maxRepeatsPerMessage = 3
@@ -47,6 +57,7 @@ const buildEvent = (
     : typeof error === 'string' ? error
     : (JSON.stringify(error) ?? 'unknown error')
   if (!message) return undefined
+  if (benignMessages.some((m) => message.startsWith(m))) return undefined
   return {
     release: __APP_VERSION__,
     timestamp: new Date().toISOString(),
