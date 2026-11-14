@@ -5,6 +5,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 
 import { isPrintAtom } from '../../store/index.ts'
 import { version as appVersion } from '../../../package.json'
+import { dropCachesAndWorker } from '../../modules/dropCachesAndWorker.ts'
 
 import styles from './index.module.css'
 
@@ -52,25 +53,6 @@ const isUpdateInFlight = (pending: PendingUpdate | null): boolean =>
   pending.target !== appVersion &&
   pending.attempts < MAX_UPDATE_ATTEMPTS &&
   Date.now() - pending.startedAt <= GIVE_UP_AFTER_MS
-
-/**
- * Drop the precache and the service worker registration so a reload
- * cannot be served the stale bundle again.
- */
-const dropCachesAndWorker = async () => {
-  try {
-    const cacheKeys = await caches.keys()
-    await Promise.all(cacheKeys.map((key) => caches.delete(key)))
-  } catch {
-    // insecure contexts have no caches api
-  }
-  try {
-    const registration = await navigator.serviceWorker?.getRegistration()
-    await registration?.unregister()
-  } catch {
-    // no service worker: plain reload is enough
-  }
-}
 
 /**
  * The service worker can keep a stale bundle running for days
