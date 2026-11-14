@@ -26,6 +26,7 @@
     "test:headed": "cross-env NODE_ENV=dev playwright test --headed",
     "test-report": "playwright show-report",
     "test:unit": "vitest run --config vitest.config.unit.ts",
+    "check": "npm run typecheck && npm run lint && npm run test:unit",
     "bump": "node scripts/bumpVersion.mjs",
     "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm i",

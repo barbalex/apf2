@@ -17,22 +17,25 @@ Tree keyboard navigation as in ae3
 
 ---
 
----
-
-tree2 (d9bddc432) — deliberately not rewritten in this pass
-
----
-
-Error telemetry (8a01e4259) — dependency-free, opt-in reporter at
-errorTelemetry.ts
-: completely inert unless VITE_ERROR_TELEMETRY_URL is set at build time, then posts message/stack/url/UA/release to your self-hosted collector (capped at 25/session, deduped, never throws). Wired into window.onerror, unhandledrejection, and both error boundaries.
+Backup hardening as in vermehrung
 
 ---
 
 ---
 
-do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
 ---
+
+---
+
+---
+
+How can we optimize this repo for agentic work on it?
+Are the following things clear to an agent or do we need to document/prepare them for agents to work better on this repo?
+
+- how to build
+- how to deploy
+- how to test user roles
+- anything else?
 
 ---
 

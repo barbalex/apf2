@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents (Claude Code, ZCode, …) working with code in this repository. `AGENTS.md` is a symlink to this file — edit this one.
 
 ## What this is
 
@@ -9,6 +9,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 It is a client-side SPA (Vite + React 19, **no SSR** — see [src/react-router.config.ts](src/react-router.config.ts)) talking to a **PostgREST** API over **PostgreSQL + PostGIS**. Frontend deploys to Vercel; the production API lives at `api.apflora.ch`. It is also packaged as an Electron app and a PWA (`vite-plugin-pwa`).
 
 ## Commands
+
+Node 22 ([.nvmrc](.nvmrc)) — what CI runs; the dev machine's 24 also works.
 
 Frontend (run from repo root):
 
@@ -23,6 +25,8 @@ npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser
 npm run test-report  # open the last html report
 npm run test:unit    # vitest unit tests for pure logic (filter cascade, modules helpers)
+npm run test:api     # vitest api tests: role/permission matrix against the local backend (see "Testing user roles")
+npm run check        # typecheck + lint + unit tests — the CI subset; run before declaring work done
 npm run deploy       # deploy production: bump patch version + date, push master, update apflora branch (Vercel deploys apflora)
 npm run deploy minor # same with a minor bump (or: major)
 
@@ -32,20 +36,31 @@ npx playwright test population
 npx playwright test --project=chromium   # or firefox
 ```
 
-Playwright tests require a running dev server and a credentials file at `playwright/.auth/user.json` (copy from `playwright/.auth/user.json.example`). The config auto-starts `npm run dev` on :5173 and reuses an existing server. WebKit is disabled by default (needs `playwright install-deps webkit`). See [QUICKSTART.md](QUICKSTART.md) and [MIGRATION.md](MIGRATION.md).
+> ⚠️ `npm run deploy` ships production immediately (no prompt), and `scripts/apply-production-sql.sh` writes the production database. Never run either unless the user explicitly asks.
+
+Playwright tests require a running dev server and a credentials file at `playwright/.auth/user.json` (copy from `playwright/.auth/user.json.example`; the name/password must be a user of the local dev db). The config auto-starts `npm run dev` on :5173 and reuses an existing server. WebKit is disabled by default (needs `playwright install-deps webkit`). The storage state expires with the login token after 24 h — when tests suddenly meet the Anmeldung dialog, run `node scripts/refresh-auth-state.mjs` (needs the local backend). E2E does not run in CI: the Playwright workflow is disabled on purpose (it would need the backend stack and real credentials); CI runs lint, typecheck, unit tests and selects freshness only. See [QUICKSTART.md](QUICKSTART.md) and [MIGRATION.md](MIGRATION.md).
 
 > Unit tests (`npm run test:unit`, vitest) cover the pure logic: the `tree*GqlFilterAtom` filter cascade in [src/store/gqlFilter.test.ts](src/store/gqlFilter.test.ts) (the jsonb contract with `apflora.compile_filter`) and helpers in `src/modules/`. They run in a node environment — `localStorage` (which the store reads at module scope) is stubbed in [src/testing/localStorageStub.ts](src/testing/localStorageStub.ts), registered as a vitest setup file in `vitest.config.unit.ts`. Test files live next to the code under test (`src/**/*.test.ts`) so they are typechecked and linted like everything else.
 
-Local backend stack (Postgres + PostgREST + Caddy) lives in [backend/](backend/) — see [PRODUCTION.md](PRODUCTION.md) for the production VM, its docker stack and how to apply DB migrations there (`scripts/apply-production-sql.sh`):
+### Testing user roles
+
+`npm run test:api` (vitest, [api-tests/](api-tests/)) answers role/permission questions. It talks to the local PostgREST directly and mints per-role JWTs with the dev secret ([api-tests/helpers.ts](api-tests/helpers.ts): `mintToken`, `getTestUser`), so no per-role passwords are needed. The five app roles: `apflora_reader`, `apflora_ap_reader`, `apflora_ap_writer`, `apflora_freiwillig`, `apflora_manager`.
+
+- [api-tests/rls-matrix.test.ts](api-tests/rls-matrix.test.ts) — the role × table × action matrix on the writable hierarchy tables
+- [api-tests/rls.test.ts](api-tests/rls.test.ts), [api-tests/grants.test.ts](api-tests/grants.test.ts), [api-tests/freiwillig.test.ts](api-tests/freiwillig.test.ts) — ap-scoping in depth, grant checks, volunteers restricted to their own rows
+
+When changing RLS policies or grants, extend these — Playwright e2e runs as a single user and cannot see role differences.
+
+Local backend stack (Postgres + PostgREST) for dev and tests is **[backend-dev/](backend-dev/)** — the only stack that publishes PostgREST on `localhost:3000`, which the dev frontend (`postgrestUri()` in [src/modules/api.ts](src/modules/api.ts)) and the api tests talk to. **`npm run dev` is only useful with it running:**
 
 ```bash
-cd backend
-# backend/.env must define: POSTGRES_USER, POSTGRES_PASSWORD, AUTHENTICATOR_PASSWORD,
-# JWT_SECRET, DATABASE_URL (it already exists in this checkout)
-docker compose up      # db on :5432, postgrest on :3000
+docker compose -f backend-dev/docker-compose.yml up -d
+# backend-dev/.env must define: POSTGRES_USER, POSTGRES_PASSWORD,
+# AUTHENTICATOR_PASSWORD, JWT_SECRET, DATABASE_URL (it already exists in this checkout)
+# db on :5432, postgrest on :3000 — after recreating the db volume run npm run db:apply-sql
 ```
 
-The dev frontend (`postgrestUri()` in [src/modules/api.ts](src/modules/api.ts)) points at `http://localhost:3000`, so **`npm run dev` is only useful with the backend stack running**. ([backend-dev/](backend-dev/) is a parallel copy of the stack; after recreating its db volume run `npm run db:apply-sql`.)
+[backend/](backend/) mirrors the production VM stack (PostgREST behind Caddy, :3000 not published to the host) — see [PRODUCTION.md](PRODUCTION.md) for the VM and for applying DB migrations there (`scripts/apply-production-sql.sh`).
 
 ## Architecture
 
@@ -100,4 +115,5 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 - **`overrides` pins `next` to a patched release**: `next` enters the lockfile as an (unused) peer dependency of `@uploadcare/react-uploader`/`@vercel/analytics` but is never imported or bundled. Unpinned it kept a vulnerable version in the lockfile, which lit up ~44 Dependabot alerts (incl. critical Next.js RCEs that can't apply — this is not a Next.js app). Keep the pin at or above the patched range; remove it entirely once the uploaders drop the peer dep.
 - **German UI**: keep labels, notifications, and route path segments in German unless explicitly asked to translate.
 - **Error telemetry is active**: [src/modules/errorTelemetry.ts](src/modules/errorTelemetry.ts) posts client errors (global handlers + error boundaries) to the `apflora.error_report` PostgREST table on the production api (endpoint from [.env.production](.env.production); dev builds without the env var stay no-op). Payload: message/stack/url/user-agent/release only — no user identity, capped and deduped client-side, CHECK-capped and `created_at`-stamped server-side. Anyone may append, only `apflora_manager` may read — view reports in pgAdmin or via the api.
+- Working files: [tasks.md](tasks.md) is the user's running scratch/task list; [issues/](issues/) holds per-issue write-ups; [messages/](messages/) holds the user-facing German release notes per released version (`<major>-<minor>-<patch>.txt`).
 - App version: `npm run deploy [patch|minor|major]` bumps `version` + `versionDate` in [package.json](package.json) automatically (default: patch) — don't bump manually. Deploys go through the `apflora` branch: the script merges master into apflora and pushes, which triggers the Vercel production deploy. The version is shown in the hamburger menu. `npm run build` also emits `version.json` (never cached — excluded from the sw precache in [vite.config.ts](vite.config.ts), `no-cache` header in [vercel.json](vercel.json)); `src/components/VersionCheck/` compares it against the running bundle and offers a cache-clearing reload so stale PWA clients surface instead of failing silently.
