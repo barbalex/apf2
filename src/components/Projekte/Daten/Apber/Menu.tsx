@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus, FaFilePdf } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
@@ -85,11 +86,19 @@ export const Menu = () => {
       },
     })
 
-  const onClickPrint = () => navigate(`print${search}`)
+  const [openingPrint, setOpeningPrint] = useState(false)
+  const onClickPrint = () => {
+    // the form stays mounted while the lazy print route loads — show the
+    // click registered until the navigation commits
+    setOpeningPrint(true)
+    navigate(`print${search}`)
+  }
 
   return (
     <ErrorBoundary>
-      <MenuBar>
+      {/* rerenderer: MenuBar snapshots the children — without it the
+          print-loading spinner would never appear */}
+      <MenuBar rerenderer={String(openingPrint)}>
         <Tooltip title="Neuen AP-Bericht erstellen">
           <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
@@ -105,7 +114,12 @@ export const Menu = () => {
         </Tooltip>
         <Tooltip title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server.">
           <IconButton onClick={() => void onClickPrint()}>
-            <FaFilePdf style={iconStyle} />
+            {openingPrint ?
+              <CircularProgress
+                size={20}
+                style={iconStyle}
+              />
+            : <FaFilePdf style={iconStyle} />}
           </IconButton>
         </Tooltip>
       </MenuBar>
