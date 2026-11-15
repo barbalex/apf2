@@ -1,7 +1,6 @@
 import { sortBy } from 'es-toolkit'
 import { format } from 'date-fns/format'
 import { MdPrint, MdArrowBack } from 'react-icons/md'
-import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
@@ -108,27 +107,28 @@ export const ApberForAp = ({
         className={isSubReport ? styles.containerSubreport : styles.container}
       >
         {!subReportIndex && (
-          <>
-            <Fab
+          /* leaflet-bar style, like the map's controls */
+          <div className={styles.printBar}>
+            <button
+              type="button"
+              className={styles.printBarButton}
+              onClick={onClickPrint}
+              disabled={isFetching > 0}
+              title="drucken"
+              aria-label="drucken"
+            >
+              <MdPrint size={20} />
+            </button>
+            <button
+              type="button"
+              className={styles.printBarButton}
               onClick={onClickBack}
               title="zurück zum Bericht"
               aria-label="zurück zum Bericht"
-              size="small"
-              className={styles.fabBack}
             >
-              <MdArrowBack />
-            </Fab>
-            <Fab
-              onClick={onClickPrint}
-              title="drucken"
-              aria-label="drucken"
-              color="primary"
-              className={styles.fab}
-              disabled={isFetching > 0}
-            >
-              <MdPrint />
-            </Fab>
-          </>
+              <MdArrowBack size={20} />
+            </button>
+          </div>
         )}
         <div
           className={
