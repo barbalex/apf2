@@ -1,6 +1,6 @@
 import { sortBy } from 'es-toolkit'
 import { format } from 'date-fns/format'
-import { MdPrint } from 'react-icons/md'
+import { MdPrint, MdArrowBack } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
@@ -75,6 +75,10 @@ export const ApberForAp = ({
     ],
   )
 
+  const onClickBack = () => {
+    navigate(`..${window.location.search}`)
+  }
+
   const onClickPrint = () => {
     // print layout comes from the route itself (useIsPrint) — the report
     // mounted in print layout and does not remount for printing. After the
@@ -104,16 +108,27 @@ export const ApberForAp = ({
         className={isSubReport ? styles.containerSubreport : styles.container}
       >
         {!subReportIndex && (
-          <Fab
-            onClick={onClickPrint}
-            title="drucken"
-            aria-label="drucken"
-            color="primary"
-            className={styles.fab}
-            disabled={isFetching > 0}
-          >
-            <MdPrint />
-          </Fab>
+          <>
+            <Fab
+              onClick={onClickBack}
+              title="zurück zum Bericht"
+              aria-label="zurück zum Bericht"
+              size="small"
+              className={styles.fabBack}
+            >
+              <MdArrowBack />
+            </Fab>
+            <Fab
+              onClick={onClickPrint}
+              title="drucken"
+              aria-label="drucken"
+              color="primary"
+              className={styles.fab}
+              disabled={isFetching > 0}
+            >
+              <MdPrint />
+            </Fab>
+          </>
         )}
         <div
           className={

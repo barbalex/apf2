@@ -178,6 +178,12 @@
   }
 }
 
+/* back-to-form, below the print fab (56px + 4px gap) */
+.fabBack {
+  composes: fab;
+  top: 134px;
+}
+
 .chartContainer {
   padding: 10px 0;
   @media print {
