@@ -1,0 +1,9 @@
+Drucken: viele Verbesserungen
+
+- AP-Berichte einzelner Arten: Grundmengen, Start-Jahr, erste Massnahme etc. werden wieder korrekt angezeigt (seit 1.11.2025 waren sie immer 0)
+- Zuverlässigeres Drucken: Die Druckvorschau wartet nun automatisch, bis alle Daten, Grafiken und Bilder geladen sind — statt mit festen Wartezeiten zu rechnen
+- Nach dem Drucken kehrt die App direkt ins Formular zurück — kein langes weisses Warten und kein Aufblitzen des ganzen Berichts mehr
+- Die Druckversion ist ab Anfang an im Druck-Layout und kann gescrollt werden; die Drucken-Schaltfläche ist erst klickbar, wenn der Bericht geladen ist, und eine Zurück-Schaltfläche führt ohne Drucken zurück zum Formular
+- Beim Öffnen einer Druckversion zeigt die PDF-Schaltfläche nun einen Ladeindikator, bis die Druckversion erscheint
+- EKF drucken: keine leere Seite mehr am Ende (einzelne und alle)
+- EKF-Kopfzeile: Beschriftung "Jahr:" ist nun auf gleicher Höhe wie die Jahreszahl
