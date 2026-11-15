@@ -4,8 +4,10 @@ import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 import { useSetAtom } from 'jotai'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { setIsPrintAtom } from '../../../store/index.ts'
+import { printWhenReady } from '../../../modules/print.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.tsx'
 import { PopStatus } from '../../Projekte/Daten/ApAuswertung/PopStatus/index.tsx'
@@ -40,6 +42,7 @@ export const ApberForAp = ({
   chartData,
 }: ApberForApProps) => {
   const setIsPrint = useSetAtom(setIsPrintAtom)
+  const queryClient = useQueryClient()
 
   // when called from ApberForYear (isSubReport), apData is the ap node itself;
   // otherwise it is the result of the apByIdJahr query with the ap node in apById
@@ -74,13 +77,7 @@ export const ApberForAp = ({
 
   const onClickPrint = () => {
     setIsPrint(true)
-    // need a long enough timeout
-    // because the component is loaded anew
-    // otherwise the graphics are not shown
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    }, 15000)
+    void printWhenReady(queryClient).finally(() => setIsPrint(false))
   }
 
   if (!node) {

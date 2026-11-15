@@ -128,11 +128,6 @@ export const ApberForYear = (_props: ApberForYearProps) => {
 
   if (error) return `Fehler: ${error.message}`
 
-  // // DANGER: without rerendering when loading mutates from true to false
-  // // data remains undefined
-  // // BUT WITH IT PRINT SOMETIMES ONLY SHOWS THE SPINNER!!!!!!!!!!!!!!!
-  // if (isLoading) return <Spinner />
-
   const jahr = data?.jahr
   const apberuebersicht = data?.data?.apberuebersichtById
 

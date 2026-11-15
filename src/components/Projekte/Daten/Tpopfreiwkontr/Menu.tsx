@@ -17,6 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
+import { printWhenReady } from '../../../../modules/print.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
@@ -114,12 +115,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickPrint = () => {
     setIsPrint(true)
-    // wait for file to load
-    // https://github.com/barbalex/apf2/issues/617
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    }, 0)
+    void printWhenReady(tsQueryClient).finally(() => setIsPrint(false))
   }
 
   const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
