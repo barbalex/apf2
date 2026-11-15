@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { apiFetch } from '../../../modules/api.ts'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { useSetAtom } from 'jotai'
 
 import { ApberForAp } from '../ApberForAp/index.tsx'
 import type {
@@ -9,6 +11,7 @@ import type {
 } from '../ApberForAp/types.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
+import { setIsPrintAtom } from '../../../store/index.ts'
 
 // result type of the apByIdJahr query (apByIdJahr.ts)
 interface ApByIdJahrQueryResult {
@@ -19,6 +22,12 @@ interface ApByIdJahrQueryResult {
 }
 export const Component = () => {
   const { apberId, apId } = useParams()
+  const setIsPrint = useSetAtom(setIsPrintAtom)
+
+  // leaving the print route ends print mode: the print button navigates
+  // away without resetting isPrint (resetting first would re-render the
+  // report in screen mode before the route transition commits)
+  useEffect(() => () => setIsPrint(false), [setIsPrint])
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
