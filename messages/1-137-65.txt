@@ -1,0 +1,5 @@
+Drucken: Titel- und Berichtsseiten in der Mitte zentiert
+
+- Bisher waren zentrierte Elemente auf den gedruckten Seiten (z.B. der Titel auf der Titelseite des Jahresberichts) rund 7 mm zu weit rechts: Die Papier-Container waren im Druck fix auf 21 cm breit — breiter als der bedruckbare Bereich bei gewählten Seitenrändern, sodass der Inhalt nach rechts überlief
+- Neu füllen die Container den bedruckbaren Bereich; die im Druckdialog gewählten Ränder gelten für den ganzen Bericht
+- Die Vorschau auf dem Bildschirm bleibt unverändert (Papier-Optik mit 21 cm)
