@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
@@ -13,9 +12,10 @@ import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.tsx'
 import { InfoFlora } from './InfoFlora.tsx'
 
 import styles from '../index.module.css'
+import { useExporteExpanded } from '../useExporteExpanded.ts'
 
 export const Kontrollen = () => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useExporteExpanded('kontrollen')
 
   return (
     <Card className={styles.card}>

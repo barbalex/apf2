@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
@@ -11,9 +10,10 @@ import { Massnahmen as MassnahmenComponent } from './Massnahmen.tsx'
 import { MassnWebgisBun } from './MassnWebgisBun.tsx'
 
 import styles from '../index.module.css'
+import { useExporteExpanded } from '../useExporteExpanded.ts'
 
 export const Massnahmen = () => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useExporteExpanded('massnahmen')
 
   return (
     <Card className={styles.card}>
