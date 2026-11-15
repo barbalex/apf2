@@ -37,15 +37,6 @@ export const userRoleAtom = atom((get) => {
     return null
   }
 })
-// roles that may save filters (same privilege as creating file records)
-export const userCanSaveFiltersAtom = atom((get) => {
-  const role = get(userRoleAtom)
-  return (
-    role === 'apflora_ap_writer' ||
-    role === 'apflora_freiwillig' ||
-    role === 'apflora_manager'
-  )
-})
 
 export const removeUserAtom = atom(null, (_get, set) => {
   set(userAtom, {
