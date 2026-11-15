@@ -79,18 +79,24 @@ export const ApberForAp = ({
 
   const onClickPrint = () => {
     setIsPrint(true)
-    void printWhenReady(queryClient).finally(() => {
-      // navigating away is a router transition, but resetting isPrint is
-      // urgent: resetting first would re-render the whole report in screen
-      // mode (long blank period + flicker) before the transition commits.
-      // So keep print mode; the print routes reset isPrint on unmount.
-      // Live location, not the one at click time: the user may have
-      // navigated while the print was being prepared.
+    void printWhenReady(queryClient).finally(async () => {
       if (window.location.pathname.endsWith('/print')) {
-        void navigate(`..${window.location.search}`)
-      } else {
-        setIsPrint(false)
+        navigate(`..${window.location.search}`)
+        // the url changes only when the router transition commits (the lazy
+        // destination route can take a while in dev) — resetting isPrint
+        // earlier would remount the whole report in screen mode. Also note:
+        // the route component REMOUNTS on every isPrint flip (ProjektContainer
+        // swaps tree shapes), so an unmount cleanup would reset isPrint right
+        // after it was set — the app would print the screen paper preview.
+        const started = Date.now()
+        while (
+          window.location.pathname.endsWith('/print') &&
+          Date.now() - started < 30000
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 200))
+        }
       }
+      setIsPrint(false)
     })
   }
 
