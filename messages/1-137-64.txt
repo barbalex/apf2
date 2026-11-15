@@ -1,0 +1,5 @@
+Exporte: deutlich schneller
+
+- Die fünf grossen Exporte (Arten, Populationen, Teilpopulationen, Massnahmen, Kontrollen) werden neu in einem Schritt auf dem Server zusammengestellt statt mit vielen Einzelabfragen im Browser — sie starten schneller und blockieren den Computer weniger
+- In den Kontrollen-Exporten wird die Spalte «Typ» neu korrekt gefüllt (Ausgangszustand / Kontrolle / Freiwilligen-Kontrolle); sie war bisher immer leer
+- Der Inhalt und Aufbau der Dateien (Spalten, Reihenfolge, Sortierung) bleibt unverändert
