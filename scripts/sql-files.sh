@@ -13,6 +13,7 @@ FILES=(
   sql/postgrest/createComputedViews.sql
   sql/postgrest/compileFilter.sql
   sql/postgrest/createQueryRpcs.sql
+  sql/postgrest/createExportRpcs.sql
   sql/postgrest/createGetGemeinde.sql
   sql/postgrest/createKarteHelpers.sql
   sql/postgrest/createApberForYear.sql
