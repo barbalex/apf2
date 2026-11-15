@@ -123,8 +123,8 @@ export const ApberForAp = ({
               type="button"
               className={styles.printBarButton}
               onClick={onClickBack}
-              title="zurück zum Bericht"
-              aria-label="zurück zum Bericht"
+              title="Zurück zum Formular"
+              aria-label="Zurück zum Formular"
             >
               <MdArrowBack size={20} />
             </button>
