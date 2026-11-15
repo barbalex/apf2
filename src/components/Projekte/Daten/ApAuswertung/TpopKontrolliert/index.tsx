@@ -178,7 +178,7 @@ const TpopKontrolliertChart = ({
                 dataKey="Teil-Populationen"
                 stroke="#2e7d32"
                 strokeWidth={1}
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
                 dot={{ strokeWidth: 2, r: 4 }}
                 fill="rgba(255,253,231,0)"
               />
@@ -187,7 +187,7 @@ const TpopKontrolliertChart = ({
                 dataKey="kontrolliert"
                 stroke="red"
                 strokeWidth={1}
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
                 dot={{ strokeWidth: 2, r: 4 }}
                 fill="rgba(255,253,231,0)"
               />

@@ -81,6 +81,9 @@ const isUpdateInFlight = (pending: PendingUpdate | null): boolean =>
  * is lost in the reload.
  */
 export const VersionCheck = () => {
+  // atom only: this component renders outside the router, where the
+  // route-aware useIsPrint hook cannot be used; the banner itself is
+  // hidden on paper via @media print
   const isPrint = useAtomValue(isPrintAtom)
   const [availableVersion, setAvailableVersion] = useState<string | null>(null)
   const pendingVersionRef = useRef<string | null>(null)

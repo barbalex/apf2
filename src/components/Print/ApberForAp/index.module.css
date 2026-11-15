@@ -161,20 +161,49 @@
   width: 100%;
 }
 
-.fab {
-  position: fixed !important;
+/* print + back, connected like the map's leaflet-bar controls */
+.printBar {
+  position: fixed;
   top: 74px;
   right: 20px;
-  > span {
-    height: 24px;
-    width: 24px;
-  }
-  > span > svg {
-    height: 24px;
-    width: 24px;
-  }
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+
   @media print {
     display: none !important;
+  }
+}
+
+.printBarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
+
+  &:first-child {
+    border-radius: 4px 4px 0 0;
+  }
+  &:last-child {
+    border-radius: 0 0 4px 4px;
+  }
+  & + & {
+    border-top: 1px solid #ccc;
+  }
+  &:hover:not(:disabled) {
+    background: #f4f4f4;
+  }
+  &:disabled {
+    color: rgba(0, 0, 0, 0.26);
+    cursor: default;
   }
 }
 
