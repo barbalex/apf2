@@ -53,6 +53,7 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapPersister } from './MapPersister.tsx'
+import { MapLayersUrlSync } from './MapLayersUrlSync.tsx'
 import { ClickListener } from './ClickListener/index.tsx'
 import {
   mapViewSearchParamName,
@@ -207,6 +208,10 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
 
   const BaseLayerComponent =
     BaseLayerComponents[activeBaseLayer as keyof typeof BaseLayerComponents]
+  // urls and stale storage can carry base layer names that no longer exist
+  // (renames, hand-edited links) — degrade to no base layer instead of
+  // crashing on an undefined component
+  const showBaseLayer = !!BaseLayerComponent && !!activeBaseLayer
   const activeOverlaysSorted = activeOverlays
     // drop values that no longer exist, e.g. from renamed overlays
     // still stored in a user's cache
@@ -256,7 +261,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
           zoomControl={false}
           className={`map-container ${styles.mapContainer}`}
         >
-          {activeBaseLayer && (
+          {showBaseLayer && (
             <MapResizer mapContainerRef={mapContainerRef}>
               <BaseLayerComponent />
             </MapResizer>
@@ -333,6 +338,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
           )}
           <ClickListener />
           <MapPersister />
+          <MapLayersUrlSync />
           <ScaleControl imperial={false} />
           <Control
             position="topright"
