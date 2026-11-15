@@ -63,8 +63,9 @@ export const setMapShowApfLayersForMultipleApsAtom = atom(
   (get) => get(mapShowApfLayersForMultipleApsAtom),
   (_get, set, value: boolean) => set(mapShowApfLayersForMultipleApsAtom, value),
 )
-// make this a regular atom so we can change the default value
-export const mapOverlaysAtom = atom([
+// make this a regular atom so we can change the default value.
+// standalone catalog export so the url param helpers can validate against it
+export const mapOverlayCatalog = [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
   {
@@ -93,7 +94,8 @@ export const mapOverlaysAtom = atom([
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
   { label: 'Forstreviere', value: 'ZhForstreviereWms' },
-])
+]
+export const mapOverlaysAtom = atom(mapOverlayCatalog)
 export const setMapOverlaysAtom = atom(
   (get) => get(mapOverlaysAtom),
   (_get, set, value: { label: string; value: string }[]) =>
@@ -185,15 +187,17 @@ export const setMapBeobDetailsOpenAtom = atom(
   (_get, set, value: boolean) => set(mapBeobDetailsOpenAtom, value),
 )
 
-// apfloraLayers is not stored - needs to update when code changes
-export const mapApfloraLayersAtom = atom([
+// apfloraLayers is not stored - needs to update when code changes.
+// standalone catalog export so the url param helpers can validate against it
+export const mapApfloraLayerCatalog = [
   { label: 'Populationen', value: 'pop' },
   { label: 'Teil-Populationen', value: 'tpop' },
   { label: 'Beobachtungen: zugeordnet', value: 'beobZugeordnet' },
   { label: 'Beobachtungen: nicht beurteilt', value: 'beobNichtBeurteilt' },
   { label: 'Beobachtungen: nicht zuzuordnen', value: 'beobNichtZuzuordnen' },
   { label: 'Zuordnungs-Linien', value: 'beobZugeordnetAssignPolylines' },
-])
+]
+export const mapApfloraLayersAtom = atom(mapApfloraLayerCatalog)
 export const mapActiveApfloraLayersAtom = atomWithStorage<string[]>(
   'activeApfloraLayers',
   [] as string[],

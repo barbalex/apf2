@@ -64,6 +64,8 @@ docker compose -f backend-dev/docker-compose.yml up -d
 
 [backend/](backend/) mirrors the production VM stack (PostgREST behind Caddy, :3000 not published to the host) — see [PRODUCTION.md](PRODUCTION.md) for the VM and for applying DB migrations there (`scripts/apply-production-sql.sh`).
 
+Bringing a dev machine (e.g. the notebook) back up after a pull — one-time setup plus the recurring catch-up steps (install, rebuild stack, `db:apply-sql`, auth-state refresh) — is checklist-ified in [DEVELOPMENT.md](DEVELOPMENT.md).
+
 ## Architecture
 
 ### Frontend state is the heart of the app

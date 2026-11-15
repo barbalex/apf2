@@ -25,6 +25,8 @@ import { Spinner } from '../shared/Spinner.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
+import { DataFilterUrlSync } from './DataFilterUrlSync.tsx'
+import { LabelFilterUrlSync } from './LabelFilterUrlSync.tsx'
 
 import styles from './ProjektContainer.module.css'
 
@@ -119,6 +121,13 @@ export const ProjektContainer = () => {
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
+      {/* keeps the working data filter in the url (?f=, plus
+          ?savedFilter= as load instruction/origin marker) and the tree
+          label filter (?labelFilter.<type>=…) — mounted here (not in
+          the Filter pane) because the filters drive the tree, forms and
+          map alike */}
+      <DataFilterUrlSync />
+      <LabelFilterUrlSync />
       {!hideBookmarks && (
         <Suspense fallback={null}>
           <Bookmarks />

@@ -43,7 +43,8 @@ export const ekPlanRemoveApAtom = atom(
 )
 
 // EkPlan fields
-const defaultFields = [
+// standalone export so the url param helpers can compare against it
+export const ekPlanDefaultFields = [
   'ap',
   'popNr',
   'nr',
@@ -51,6 +52,7 @@ const defaultFields = [
   'ekfrequenzStartjahr',
   'ekfrequenzAbweichend',
 ]
+const defaultFields = ekPlanDefaultFields
 export const ekPlanFieldsAtom = atom(defaultFields)
 export const ekPlanToggleFieldAtom = atom(null, (get, set, field: string) => {
   const current = get(ekPlanFieldsAtom)
@@ -107,14 +109,16 @@ export const ekPlanResetHoveredAtom = atom(null, (_get, set) => {
 export const ekPlanApsDataLoadingAtom = atom(true)
 
 // EkPlan filters
+// standalone export so the url param helpers can compare against it
+export const ekPlanDefaultStatusFilter = [100, 101, 200, 201, 202, 300]
 export const ekPlanFilterApAtom = atom<string | null>(null)
 export const ekPlanFilterPopNrAtom = atom<number | null>(null)
 export const ekPlanFilterPopNameAtom = atom<string | null>(null)
-export const ekPlanFilterPopStatusAtom = atom([100, 101, 200, 201, 202, 300])
+export const ekPlanFilterPopStatusAtom = atom(ekPlanDefaultStatusFilter)
 export const ekPlanFilterNrAtom = atom<number | null>(null)
 export const ekPlanFilterGemeindeAtom = atom<string | null>(null)
 export const ekPlanFilterFlurnameAtom = atom<string | null>(null)
-export const ekPlanFilterStatusAtom = atom([100, 101, 200, 201, 202, 300])
+export const ekPlanFilterStatusAtom = atom(ekPlanDefaultStatusFilter)
 export const ekPlanFilterBekanntSeitAtom = atom<number | null>(null)
 export const ekPlanFilterLv95XAtom = atom<number | null>(null)
 export const ekPlanFilterLv95YAtom = atom<number | null>(null)
