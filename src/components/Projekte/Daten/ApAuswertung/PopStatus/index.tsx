@@ -188,7 +188,7 @@ const PopStatusChart = ({
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               <Area
                 type="monotone"
@@ -197,7 +197,7 @@ const PopStatusChart = ({
                 stroke={color['angesiedelt (vor Beginn AP)']}
                 fill={color['angesiedelt (vor Beginn AP)']}
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               <Area
                 type="monotone"
@@ -206,7 +206,7 @@ const PopStatusChart = ({
                 stroke={color['angesiedelt (nach Beginn AP)']}
                 fill={color['angesiedelt (nach Beginn AP)']}
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               <Area
                 type="monotone"
@@ -215,7 +215,7 @@ const PopStatusChart = ({
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               <Area
                 type="monotone"
@@ -232,7 +232,7 @@ const PopStatusChart = ({
                   ]
                 }
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               <Area
                 type="monotone"
@@ -249,7 +249,7 @@ const PopStatusChart = ({
                   ]
                 }
                 legendType="square"
-                isAnimationActive={!isSubReport}
+                isAnimationActive={!print && !isSubReport}
               />
               {!isSubReport && (
                 <Tooltip content={<CustomTooltip color={color} />} />

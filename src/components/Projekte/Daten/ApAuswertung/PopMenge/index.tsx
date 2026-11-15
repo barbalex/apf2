@@ -279,7 +279,7 @@ const PopMengeChart = ({
                     stroke={color}
                     strokeWidth={2}
                     fill={color}
-                    isAnimationActive={!isSubReport}
+                    isAnimationActive={!print && !isSubReport}
                   />
                 )
               })}

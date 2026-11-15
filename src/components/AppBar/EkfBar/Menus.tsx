@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { MdPrint, MdHourglassEmpty, MdRefresh } from 'react-icons/md'
 import Button from '@mui/material/Button'
@@ -19,6 +19,7 @@ import {
   userNameAtom,
 } from '../../../store/index.ts'
 import { apiFetch } from '../../../modules/api.ts'
+import { printWhenReady } from '../../../modules/print.ts'
 import { clearSiteData } from '../../../modules/clearSiteData.ts'
 
 import type { UserId } from '../../../models/apflora/User.ts'
@@ -49,6 +50,7 @@ export const Menus = () => {
   const username = useAtomValue(userNameAtom)
   const setIsPrint = useSetAtom(setIsPrintAtom)
   const setIsEkfSinglePrint = useSetAtom(setIsEkfSinglePrintAtom)
+  const queryClient = useQueryClient()
   const ekfIsActive = !!ekfId
 
   const tokenDecoded = token ? jwtDecode<{ role?: string }>(token) : null
@@ -110,8 +112,7 @@ export const Menus = () => {
   const onClickPrintSingle = () => {
     setIsPrint(true)
     setIsEkfSinglePrint(true)
-    setTimeout(() => {
-      window.print()
+    void printWhenReady(queryClient).finally(() => {
       setIsPrint(false)
       setIsEkfSinglePrint(false)
     })
@@ -120,17 +121,10 @@ export const Menus = () => {
   const onClickPrintAll = () => {
     setPreparingEkfMultiprint(true)
     setIsPrint(true)
-    // TODO: need to know when all tpopfreiwkontr forms have finished rendering
-    // idea for hack: use ekfCount to set timeout value?
-    setTimeout(
-      () => {
-        window.print()
-        setIsPrint(false)
-        setPreparingEkfMultiprint(false)
-        setPreparingEkfMultiprint(false)
-      },
-      3000 + ekfCount * 300,
-    )
+    void printWhenReady(queryClient).finally(() => {
+      setIsPrint(false)
+      setPreparingEkfMultiprint(false)
+    })
   }
 
   return (
