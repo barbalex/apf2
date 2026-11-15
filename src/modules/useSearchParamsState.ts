@@ -26,20 +26,25 @@ export function useSearchParamsState<T extends string | string[]>(
     if (searchParamName === 'projekteTabs') {
       ;(newState as string[]).sort(projekteTabsSortFunction)
     }
-    const previous = [...searchParams.entries()].reduce<
-      Record<string, unknown>
-    >((o, [key, value]) => {
-      if (key in o) {
-        if (o[key] instanceof Array) {
-          return { ...o, [key]: [...(o[key] as unknown[]), value] }
-        }
-        return { ...o, [key]: [o[key], value] }
-      } else {
-        return { ...o, [key]: value }
-      }
-    }, {})
-    const next = Object.assign({}, previous, { [searchParamName]: newState })
-    setSearchParams(next)
+    // functional update: building from the last committed search would
+    // drop params written by a still-pending navigation (e.g. ?f= or
+    // map params written from effects)
+    setSearchParams((prev) => {
+      const previous = [...prev.entries()].reduce<Record<string, unknown>>(
+        (o, [key, value]) => {
+          if (key in o) {
+            if (o[key] instanceof Array) {
+              return { ...o, [key]: [...(o[key] as unknown[]), value] }
+            }
+            return { ...o, [key]: [o[key], value] }
+          } else {
+            return { ...o, [key]: value }
+          }
+        },
+        {},
+      )
+      return Object.assign({}, previous, { [searchParamName]: newState })
+    })
   }
   return [searchParamsState, setSearchParamsState] as const
 }

@@ -26,11 +26,12 @@ import styles from './SavedFilters.module.css'
 
 /**
  * save/load bar for the complete data filter (all tabs of the Filter
- * panel at once): saved filters live in apflora.saved_filter and are
- * linkable via ?savedFilter=<id>. Loading applies the filter and points
- * the url at it; emptying the filter detaches it again
- * (SavedFilterSetter). Everyone may load; saving is for the writing
- * roles; overwriting/deleting for the owner (or managers).
+ * panel at once). The url always carries the working filter itself
+ * (?f=, see DataFilterUrlSync) — "Link kopieren" shares it without any
+ * saving step. Saved filters (apflora.saved_filter, ?savedFilter=<id>)
+ * are the optional named layer for recurring filters: everyone may
+ * load; saving is for the writing roles; overwriting/deleting for the
+ * owner (or managers).
  */
 export const SavedFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -187,14 +188,12 @@ export const SavedFilters = () => {
           aktualisieren
         </Button>
       )}
-      {activeFilter && (
-        <Button
-          color="inherit"
-          onClick={() => void onCopyLink()}
-        >
-          Link kopieren
-        </Button>
-      )}
+      <Button
+        color="inherit"
+        onClick={() => void onCopyLink()}
+      >
+        Link kopieren
+      </Button>
       {activeFilter && canEditActive && (
         <Button
           color="inherit"
