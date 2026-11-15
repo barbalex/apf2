@@ -5,6 +5,7 @@ import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 import { useSetAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
+import { useLocation, useNavigate } from 'react-router'
 
 import { setIsPrintAtom } from '../../../store/index.ts'
 import { printWhenReady } from '../../../modules/print.ts'
@@ -43,6 +44,8 @@ export const ApberForAp = ({
 }: ApberForApProps) => {
   const setIsPrint = useSetAtom(setIsPrintAtom)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const { pathname, search } = useLocation()
 
   // when called from ApberForYear (isSubReport), apData is the ap node itself;
   // otherwise it is the result of the apByIdJahr query with the ap node in apById
@@ -77,7 +80,12 @@ export const ApberForAp = ({
 
   const onClickPrint = () => {
     setIsPrint(true)
-    void printWhenReady(queryClient).finally(() => setIsPrint(false))
+    void printWhenReady(queryClient).finally(() => {
+      // leave the print route before resetting isPrint: resetting here would
+      // remount the whole report in screen mode — the long blank period
+      if (pathname.endsWith('/print')) void navigate(`..${search}`)
+      setIsPrint(false)
+    })
   }
 
   if (!node) {
