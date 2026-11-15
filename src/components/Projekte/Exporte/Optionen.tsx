@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -17,11 +16,12 @@ import {
 
 import optionenStyles from './Optionen.module.css'
 import styles from './index.module.css'
+import { useExporteExpanded } from './useExporteExpanded.ts'
 
 export const Optionen = () => {
   const exportFileType = useAtomValue(exportFileTypeAtom)
   const setExportFileType = useSetAtom(setExportFileTypeAtom)
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useExporteExpanded('optionen')
 
   return (
     <Card className={styles.card}>

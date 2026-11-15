@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
@@ -15,9 +14,10 @@ import { ZuVieleDaten } from './ZuVieleDaten.tsx'
 
 import tippsStyles from './index.module.css'
 import styles from '../index.module.css'
+import { useExporteExpanded } from '../useExporteExpanded.ts'
 
 export const Tipps = () => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useExporteExpanded('tipps')
 
   return (
     <Card className={styles.card}>
