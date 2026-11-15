@@ -1519,8 +1519,8 @@ export const treeApFilterAtom = atomWithStorage<boolean>(
 )
 
 // dataFilter atoms
-// persisted so filter work survives a reload; loaded/saved filters
-// (apflora.saved_filter, ?savedFilter=<id>) write this same atom
+// persisted so filter work survives a reload; the linkable url filter
+// (?f=) writes this same atom
 export const treeDataFilterAtom = atomWithStorage(
   'treeDataFilter',
   initialDataFilterValues,

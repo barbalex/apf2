@@ -1,5 +1,5 @@
-// A saved filter (apflora.saved_filter.filter) is user data that lands
-// in treeDataFilterAtom: sanitize it so unknown tables, unknown field
+// A filter from the url (?f=) is user data that lands in
+// treeDataFilterAtom: sanitize it so unknown tables, unknown field
 // names (after renames) or a malformed shape cannot break the filter
 // cascade or the Filter panels
 import { initialDataFilterValues } from '../store/initialDataFilterValues.ts'

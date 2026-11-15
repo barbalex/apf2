@@ -121,10 +121,9 @@ export const ProjektContainer = () => {
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
-      {/* keeps the working data filter in the url (?f=, plus
-          ?savedFilter= as load instruction/origin marker) and the tree
-          label filter (?labelFilter.<type>=…) — mounted here (not in
-          the Filter pane) because the filters drive the tree, forms and
+      {/* keeps the working data filter (?f=) and the tree label filter
+          (?labelFilter.<type>=…) in the url — mounted here (not in the
+          Filter pane) because the filters drive the tree, forms and
           map alike */}
       <DataFilterUrlSync />
       <LabelFilterUrlSync />
