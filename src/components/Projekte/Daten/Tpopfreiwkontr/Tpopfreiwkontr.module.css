@@ -13,6 +13,12 @@
     overflow: hidden;
     page-break-after: always;
   }
+  /* the last form must not force an empty trailing page */
+  &:last-child {
+    @media print {
+      page-break-after: auto;
+    }
+  }
 }
 
 .scrollContainer {
