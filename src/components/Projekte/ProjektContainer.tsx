@@ -26,6 +26,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 import { DataFilterUrlSync } from './DataFilterUrlSync.tsx'
+import { LabelFilterUrlSync } from './LabelFilterUrlSync.tsx'
 
 import styles from './ProjektContainer.module.css'
 
@@ -121,10 +122,12 @@ export const ProjektContainer = () => {
   return (
     <div className={styles.outerContainer}>
       {/* keeps the working data filter in the url (?f=, plus
-          ?savedFilter= as load instruction/origin marker) — mounted
-          here (not in the Filter pane) because the filter drives the
-          tree, forms and map alike */}
+          ?savedFilter= as load instruction/origin marker) and the tree
+          label filter (?labelFilter.<type>=…) — mounted here (not in
+          the Filter pane) because the filters drive the tree, forms and
+          map alike */}
       <DataFilterUrlSync />
+      <LabelFilterUrlSync />
       {!hideBookmarks && (
         <Suspense fallback={null}>
           <Bookmarks />
