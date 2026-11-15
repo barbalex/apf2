@@ -101,7 +101,12 @@ export const ProjektContainer = () => {
     ),
   }
 
-  if (isPrint) return <Outlet />
+  if (isPrint)
+    return (
+      <div className={styles.printContainer}>
+        <Outlet />
+      </div>
+    )
 
   // TODO: why were these needed?
   // const overflowPane1 =

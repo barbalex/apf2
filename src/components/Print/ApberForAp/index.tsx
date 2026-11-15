@@ -3,7 +3,7 @@ import { format } from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
-import { useQueryClient } from '@tanstack/react-query'
+import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
 import { printWhenReady } from '../../../modules/print.ts'
@@ -41,6 +41,7 @@ export const ApberForAp = ({
   chartData,
 }: ApberForApProps) => {
   const queryClient = useQueryClient()
+  const isFetching = useIsFetching()
   const navigate = useNavigate()
 
   // when called from ApberForYear (isSubReport), apData is the ap node itself;
@@ -109,6 +110,7 @@ export const ApberForAp = ({
             aria-label="drucken"
             color="primary"
             className={styles.fab}
+            disabled={isFetching > 0}
           >
             <MdPrint />
           </Fab>
