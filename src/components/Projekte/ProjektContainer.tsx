@@ -24,7 +24,8 @@ const Bookmarks = lazy(async () => ({
 import { Spinner } from '../shared/Spinner.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
-import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
+import { hideBookmarksAtom } from '../../store/index.ts'
+import { useIsPrint } from '../../modules/useIsPrint.ts'
 import { DataFilterUrlSync } from './DataFilterUrlSync.tsx'
 import { LabelFilterUrlSync } from './LabelFilterUrlSync.tsx'
 
@@ -33,7 +34,7 @@ import styles from './ProjektContainer.module.css'
 export const ProjektContainer = () => {
   const { projId } = useParams()
 
-  const isPrint = useAtomValue(isPrintAtom)
+  const isPrint = useIsPrint()
 
   const hideBookmarks = useAtomValue(hideBookmarksAtom)
 

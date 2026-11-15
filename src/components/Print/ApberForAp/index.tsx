@@ -3,11 +3,9 @@ import { format } from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
-import { useSetAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
-import { setIsPrintAtom } from '../../../store/index.ts'
 import { printWhenReady } from '../../../modules/print.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.tsx'
@@ -42,7 +40,6 @@ export const ApberForAp = ({
   // prints) the charts fetch for themselves
   chartData,
 }: ApberForApProps) => {
-  const setIsPrint = useSetAtom(setIsPrintAtom)
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
@@ -78,25 +75,13 @@ export const ApberForAp = ({
   )
 
   const onClickPrint = () => {
-    setIsPrint(true)
-    void printWhenReady(queryClient).finally(async () => {
+    // print layout comes from the route itself (useIsPrint) — the report
+    // mounted in print layout and does not remount for printing. After the
+    // dialog closed, return to the form; leaving the route ends print mode.
+    void printWhenReady(queryClient).finally(() => {
       if (window.location.pathname.endsWith('/print')) {
         navigate(`..${window.location.search}`)
-        // the url changes only when the router transition commits (the lazy
-        // destination route can take a while in dev) — resetting isPrint
-        // earlier would remount the whole report in screen mode. Also note:
-        // the route component REMOUNTS on every isPrint flip (ProjektContainer
-        // swaps tree shapes), so an unmount cleanup would reset isPrint right
-        // after it was set — the app would print the screen paper preview.
-        const started = Date.now()
-        while (
-          window.location.pathname.endsWith('/print') &&
-          Date.now() - started < 30000
-        ) {
-          await new Promise((resolve) => setTimeout(resolve, 200))
-        }
       }
-      setIsPrint(false)
     })
   }
 

@@ -3,18 +3,19 @@ import { useLocation, useNavigation } from 'react-router'
 import { SplitPane, Pane } from 'react-split-pane'
 import { useAtomValue } from 'jotai'
 
-import { isPrintAtom, store } from '../../store/index.ts'
+import { store } from '../../store/index.ts'
 import { tree2PathAtom, buildTree2Path } from '../../store/tree2.ts'
 import { ProjektContainer } from './ProjektContainer.tsx'
 import { Tree2 } from './Tree2/index.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
+import { useIsPrint } from '../../modules/useIsPrint.ts'
 
 import styles from './index.module.css'
 
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
 export const Component = () => {
-  const isPrint = useAtomValue(isPrintAtom)
+  const isPrint = useIsPrint()
   const tree2Path = useAtomValue(tree2PathAtom)
   const { pathname, search } = useLocation()
   // pending while a router navigation is in flight — the pane must not
