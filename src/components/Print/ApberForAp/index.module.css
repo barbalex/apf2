@@ -22,10 +22,12 @@
     /* this is when it is actually printed */
     height: auto !important;
     overflow: visible !important;
-    width: 21cm;
+    /* fill the printable width — a fixed 21cm overflows right past the
+       browser margins (see ApberForYear.module.css) */
+    width: auto;
 
     margin: 0 !important;
-    padding: 0.5cm !important;
+    padding: 0 !important;
 
     box-shadow: unset;
   }
@@ -51,7 +53,7 @@
     /* this is when it is actually printed */
     height: auto !important;
     overflow: visible !important;
-    width: 21cm;
+    width: auto;
 
     margin: 0 !important;
     padding: 0;
@@ -69,7 +71,7 @@
   @media print {
     padding: 0;
     padding: 0 1.5cm;
-    width: 21cm;
+    width: auto;
     height: auto !important;
     overflow: visible !important;
   }
