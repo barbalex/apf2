@@ -6,6 +6,7 @@ import { TpopfeldkontrFilter } from '../Daten/TpopfeldkontrFilter/index.tsx'
 import { TpopfreiwkontrFilter } from '../Daten/TpopfreiwkontrFilter/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Title } from './Title.tsx'
+import { SavedFilters } from './SavedFilters.tsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.ts'
 
 import styles from './index.module.css'
@@ -25,6 +26,7 @@ export const Filter = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
+        <SavedFilters />
         <Title
           activeTab={tab}
           setActiveTab={setTab}

@@ -1519,7 +1519,16 @@ export const treeApFilterAtom = atomWithStorage<boolean>(
 )
 
 // dataFilter atoms
-export const treeDataFilterAtom = atom(initialDataFilterValues)
+// persisted so filter work survives a reload; loaded/saved filters
+// (apflora.saved_filter, ?savedFilter=<id>) write this same atom
+export const treeDataFilterAtom = atomWithStorage(
+  'treeDataFilter',
+  initialDataFilterValues,
+  createUnsubscribedStorage<typeof initialDataFilterValues>(),
+  {
+    getOnInit: true,
+  },
+)
 
 export const treeDataFilterEmptyTableAtom = atom(
   null,

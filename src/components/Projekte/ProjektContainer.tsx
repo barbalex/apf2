@@ -25,6 +25,7 @@ import { Spinner } from '../shared/Spinner.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
+import { SavedFilterSetter } from './SavedFilterSetter.tsx'
 
 import styles from './ProjektContainer.module.css'
 
@@ -119,6 +120,10 @@ export const ProjektContainer = () => {
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
+      {/* applies the saved filter behind ?savedFilter= — mounted here
+          (not in the Filter pane) because the filter drives the tree,
+          forms and map alike */}
+      <SavedFilterSetter />
       {!hideBookmarks && (
         <Suspense fallback={null}>
           <Bookmarks />
