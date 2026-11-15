@@ -35,6 +35,15 @@ describe('grants', () => {
       expect(res.status).toBe(401)
       expect(res.data.message).toContain('permission denied for function')
     })
+
+    it('cannot run export_ rpcs', async () => {
+      const res = await pgrst('/rpc/export_tpopkontr?select=id', {
+        method: 'POST',
+        body: { p_filter: {} },
+      })
+      expect(res.status).toBe(401)
+      expect(res.data.message).toContain('permission denied for function')
+    })
   })
 
   describe('every app role runs the query_ rpcs', () => {
@@ -47,6 +56,23 @@ describe('grants', () => {
         })
         expect(res.status).toBe(200)
       })
+
+      for (const fn of [
+        'export_ap',
+        'export_pop',
+        'export_tpop',
+        'export_tpopmassn',
+        'export_tpopkontr',
+      ]) {
+        it(`${role}: ${fn}`, async () => {
+          const res = await pgrst(`/rpc/${fn}?select=id`, {
+            method: 'POST',
+            token: mintToken(role, 'gabriel'),
+            body: { p_filter: {} },
+          })
+          expect(res.status).toBe(200)
+        })
+      }
     }
   })
 
