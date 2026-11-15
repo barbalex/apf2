@@ -86,8 +86,21 @@ export const printMap = async (map: LeafletMap, pageSize: string) => {
       }
     </style>
   </head><body>
-    <img src="${dataUrl}"
-      onload="setTimeout(() => { window.print(); window.close() }, 100)">
+    <img src="${dataUrl}">
+    <script>
+      // print once the image is decoded, fonts are ready and a frame is
+      // laid out — replaces the former onload + 100 ms guess
+      Promise.all([
+        document.querySelector('img').decode().catch(() => undefined),
+        document.fonts.ready,
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        ),
+      ]).then(() => {
+        window.print()
+        window.close()
+      })
+    </script>
   </body></html>`)
   printWindow.document.close()
 }
