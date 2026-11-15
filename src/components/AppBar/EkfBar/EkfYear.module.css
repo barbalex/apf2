@@ -13,7 +13,11 @@
 }
 
 .jahr {
-  margin-top: auto;
-  margin-bottom: auto;
+  /* line-height 1 + margin 0: the label's glyphs center on the row like
+     the year value and the button texts (its default 22px line box sat
+     the text ~3px lower) */
+  margin: 0;
+  align-self: center;
+  line-height: 1;
   color: white;
 }
