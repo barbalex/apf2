@@ -18,6 +18,7 @@ const Choose = lazy(async () => ({
 }))
 import { apiFetch } from '../../modules/api.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
+import { EkPlanUrlSync } from './EkPlanUrlSync.tsx'
 import {
   type EkPlanApsData,
   userTokenAtom,
@@ -202,6 +203,9 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
+      {/* keeps the plan state linkable via ?ekplan= (mounted here: the
+          param describes this route and is removed when leaving it) */}
+      <EkPlanUrlSync />
       <div className={styles.container}>
         <Suspense fallback={<Spinner />}>
           {!!userToken && (
