@@ -31,13 +31,15 @@ export const CustomTooltip = ({
   label,
   tpopsData,
 }: CustomTooltipProps) => {
+  // same order as the chart stacks the areas: highest number first
+  // (topmost band), so rows and bands correspond
   const payloadSorted = sortBy(payload, [
     (p) => {
       const tpop = tpopsData.find((d) => d.id === p.dataKey)
       if (tpop) return tpop.nr
       return p.dataKey
     },
-  ])
+  ]).reverse()
 
   return (
     <div className={styles.container}>
