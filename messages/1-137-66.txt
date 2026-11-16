@@ -1,0 +1,5 @@
+Dateien: Beschreibungen konnten nicht gespeichert werden
+
+- Seit dem 1.11.2026 schlug das Speichern der Beschreibung einer Datei (z.B. die Beschriftung eines Fotos) mit einer Fehlermeldung fehl — in allen Dateien-Formularen (Arten, Idealbiotope, Populationen, Teilpopulationen, Erfolgskontrollen, Massnahmen)
+- Hochladen und Löschen funktionierte währenddessen unverändert; auch bereits gespeicherte Beschreibungen blieben erhalten
+- Neu werden Beschreibungen wieder normal gespeichert
