@@ -1,0 +1,1 @@
+In der Karte konnte das Klicken auf "auf aktive … zoomen" in einer Ebene, die das aktive Objekt nicht enthält, eine Fehlermeldung auslösen ("Bounds are not valid"). Die Zoom-Schaltflächen sind nun wirklich deaktiviert, wenn es nichts zu zoomen gibt.

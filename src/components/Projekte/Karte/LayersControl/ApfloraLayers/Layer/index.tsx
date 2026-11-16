@@ -329,52 +329,31 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
   const onClickZoomToActive = () => {
     // console.log('zoomToActive')
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
-      const highlightedObjects = layerData.filter((o) => o.id === highlightedId)
-      const newBounds = getBounds(highlightedObjects)
-      if (newBounds) {
-        map.fitBounds(newBounds)
-        setMapBounds(newBounds)
-      }
+      // getBounds returns [] (truthy) for empty input,
+      // and Leaflet's fitBounds throws on empty bounds
+      if (layerDataHighlighted.length === 0) return
+      const newBounds = getBounds(layerDataHighlighted)
+      map.fitBounds(newBounds)
+      setMapBounds(newBounds)
     }
   }
 
+  const zoomToAllEnabled =
+    activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0
+  const zoomToActiveEnabled =
+    activeApfloraLayers.includes(apfloraLayer.value) &&
+    layerDataHighlighted.length > 0
+
   const zoomToAllIconStyle = {
-    color:
-      activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0 ?
-        'black'
-      : '#e2e2e2',
-    fontWeight:
-      activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0 ?
-        'bold'
-      : 'normal',
-    cursor:
-      activeApfloraLayers.includes(apfloraLayer.value) && layerData.length > 0 ?
-        'pointer'
-      : 'not-allowed',
+    color: zoomToAllEnabled ? 'black' : '#e2e2e2',
+    fontWeight: zoomToAllEnabled ? 'bold' : 'normal',
+    cursor: zoomToAllEnabled ? 'pointer' : 'not-allowed',
   }
 
   const zoomToActiveIconStyle = {
-    color:
-      (
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-      ) ?
-        '#fbec04'
-      : '#e2e2e2',
-    fontWeight:
-      (
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-      ) ?
-        'bold'
-      : 'normal',
-    cursor:
-      (
-        activeApfloraLayers.includes(apfloraLayer.value) &&
-        layerDataHighlighted.length > 0
-      ) ?
-        'pointer'
-      : 'not-allowed',
+    color: zoomToActiveEnabled ? '#fbec04' : '#e2e2e2',
+    fontWeight: zoomToActiveEnabled ? 'bold' : 'normal',
+    cursor: zoomToActiveEnabled ? 'pointer' : 'not-allowed',
   }
 
   if (error) return <Error error={error} />
@@ -463,6 +442,7 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
             title={`auf alle ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToAll}
             color="inherit"
+            disabled={!zoomToAllEnabled}
             className={styles.iconButton}
           >
             <MdFilterCenterFocus
@@ -476,6 +456,7 @@ export const Layer = ({ apfloraLayer }: LayerProps) => {
             title={`auf aktive ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToActive}
             color="inherit"
+            disabled={!zoomToActiveEnabled}
             className={styles.iconButton}
           >
             <MdFilterCenterFocus
