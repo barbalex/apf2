@@ -5,7 +5,7 @@ import { apiFetch } from '../../../../modules/api.ts'
 
 interface DetailplanNode {
   id: string
-  data: string | null
+  data: Record<string, unknown> | null
   geom: {
     geojson: string
   } | null
@@ -32,11 +32,14 @@ export const Detailplaene = () => {
   const { data } = useQuery({
     queryKey: ['detailplaene'],
     queryFn: async () => {
-      // phase 5: the former geometry embed arrives as raw GeoJSON
+      // phase 5: the former geometry embed arrives as raw GeoJSON,
+      // data (jsonb) as an already-parsed object
       const nodes =
-        (await apiFetch<{ id: string; data: string | null; geom: unknown }[]>(
-          `/detailplaene?select=id,data,geom`,
-        )) ?? []
+        (await apiFetch<{
+          id: string
+          data: Record<string, unknown> | null
+          geom: unknown
+        }[]>(`/detailplaene?select=id,data,geom`)) ?? []
       return {
         allDetailplaenes: {
           nodes: nodes.map((n) => ({
@@ -54,7 +57,7 @@ export const Detailplaene = () => {
   const nodes = data?.allDetailplaenes?.nodes ?? []
   const detailplaene = nodes.map((n): Feature => ({
     type: 'Feature',
-    properties: n.data ? JSON.parse(n.data) : null,
+    properties: n.data ?? null,
     geometry: JSON.parse(String(n?.geom?.geojson)),
   }))
 
