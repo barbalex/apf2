@@ -6,15 +6,18 @@
  */
 
 import { apiFetch } from '../../../../../modules/api.ts'
-import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import { treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface TpopFolderParams {
+  store: Store
   popId?: string | null | undefined
   apId?: string | null | undefined
   projId?: string | null | undefined
 }
 
 export const tpopFolder = async ({
+  store,
   popId,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
@@ -29,8 +32,7 @@ export const tpopFolder = async ({
   // with no tpops there is nothing to fetch — skip the requests
   // (a former 'id=eq.null' "fetch nothing" filter errors on PostgREST
   //  12: it passes the string "null" to the uuid cast)
-  const tpopFilter =
-    tpopIds.length ? `tpop_id=in.(${tpopIds.join(',')})` : null
+  const tpopFilter = tpopIds.length ? `tpop_id=in.(${tpopIds.join(',')})` : null
   const results = await Promise.all([
     tpopFilter ?
       apiFetch<{ id: string; tpop_id: string }[]>(

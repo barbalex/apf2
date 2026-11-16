@@ -1,7 +1,7 @@
 import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { countBy } from 'es-toolkit'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useStore } from 'jotai'
 import {
   mapActiveApfloraLayersAtom,
   treePopGqlFilterForTreeAtom,
@@ -24,6 +24,7 @@ export const useApNavData = (
   props?:
     { projId?: string | undefined; apId?: string | undefined } | undefined,
 ) => {
+  const store = useStore()
   const projId = props?.projId ?? ''
   const apId = props?.apId ?? ''
 
@@ -54,13 +55,16 @@ export const useApNavData = (
   }
 
   // Get filters before useQuery so changes trigger refetch
-  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
-  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
-  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
-  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
-  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
-  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
-  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
+  const zielGqlFilterForTree = getZielGqlFilterForTree(store, apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(store, apId)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(store, apId)
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(store, apId)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(store, apId)
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(store, apId)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(
+    store,
+    apId,
+  )
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?

@@ -12,28 +12,53 @@ import {
 // freiwillige have their own UI to edit their EKF-Kontrollen. they hold
 // full grants on tpopkontr / tpopkontrzaehl / tpopkontr_file /
 // usermessage (and SELECT on the q_ views they read), but no access to
-// the other tables. jahr 2999 marks the rows this test creates.
+// the other tables. On tpopkontr, RLS restricts them to their OWN
+// Freiwilligen-Kontrollen: bearbeiter must be the adresse linked to
+// their user account (INSERT may leave bearbeiter NULL — the app creates
+// them unassigned). jahr 2999 marks the rows this test creates.
 describe('freiwillig EKF editing', () => {
   const token = mintToken('apflora_freiwillig', 'Tester')
   const markerJahr = 2999
 
   let tpopId: string
   let kontrId: string | undefined
-  // typ references tpopkontr_typ_werte(text), not its code
-  let typ: string
+  let adresseId: string
+  let ownKontrId: string
+  let foreignKontr: { id: string; jahr: number }
   let einheit: number
-  let existingKontr: { id: string; jahr: number }
 
   beforeAll(() => {
     ;[tpopId] = psqlJson<{ id: string }>(
       'select id from apflora.tpop limit 1',
     ).map((r) => r.id)
-    ;[typ] = psqlJson<{ text: string }>(
-      'select text from apflora.tpopkontr_typ_werte order by sort limit 1',
-    ).map((r) => r.text)
     ;[einheit] = psqlJson<{ code: number }>(
       'select code from apflora.tpopkontrzaehl_einheit_werte limit 1',
     ).map((r) => r.code)
+
+    // seed the adresse that makes 'Tester' own Freiwilligen-Kontrollen
+    // (psqlJson wraps sql in a from (…) subquery — inserts go through
+    // plain psql, ids are read back with a select)
+    psql(
+      `insert into apflora.adresse (name) values ('api-test-freiwillig-adresse')`,
+    )
+    ;[adresseId] = psqlJson<{ id: string }>(
+      `select id from apflora.adresse where name = 'api-test-freiwillig-adresse'`,
+    ).map((r) => r.id)
+    psql(
+      `update apflora."user" set adresse_id = '${adresseId}' where name = 'Tester'`,
+    )
+    psql(
+      `insert into apflora.tpopkontr (tpop_id, jahr, typ, bearbeiter)
+       values ('${tpopId}', ${markerJahr}, 'Freiwilligen-Kontrolle', '${adresseId}')`,
+    )
+    ;[ownKontrId] = psqlJson<{ id: string }>(
+      `select id from apflora.tpopkontr
+        where tpop_id = '${tpopId}' and jahr = ${markerJahr} and bearbeiter = '${adresseId}'`,
+    ).map((r) => r.id)
+    ;[foreignKontr] = psqlJson<{ id: string; jahr: number }>(
+      `select id, jahr from apflora.tpopkontr
+        where typ in ('Kontrolle', 'Ausgangszustand') limit 1`,
+    )
   })
 
   afterAll(() => {
@@ -43,33 +68,66 @@ describe('freiwillig EKF editing', () => {
                                  where tpop_id = '${tpopId}'
                                    and jahr = ${markerJahr});
        delete from apflora.tpopkontr
-        where tpop_id = '${tpopId}' and jahr = ${markerJahr}`,
+        where tpop_id = '${tpopId}' and jahr = ${markerJahr};
+       update apflora."user" set adresse_id = null where name = 'Tester';
+       delete from apflora.adresse where id = '${adresseId}'`,
     )
   })
 
   it('reads tpopkontr and the q_ views', async () => {
     const kontr = await pgrst('/tpopkontr?select=id,jahr&limit=1', { token })
     expect(kontr.status).toBe(200)
-    existingKontr = (kontr.data as Json[])[0]
     const tpop = await pgrst('/q_tpop?select=id&limit=1', { token })
     expect(tpop.status).toBe(200)
   })
 
-  it('updates a tpopkontr', async () => {
-    const res = await pgrst(`/tpopkontr?id=eq.${existingKontr.id}`, {
+  it('updates its own Freiwilligen-Kontrolle', async () => {
+    const res = await pgrst(`/tpopkontr?id=eq.${ownKontrId}`, {
       method: 'PATCH',
       token,
-      body: { jahr: existingKontr.jahr },
+      body: { jahr: markerJahr },
     })
     expect(res.status).toBe(204)
   })
 
-  it('creates a tpopkontr with a zaehl and removes it again', async () => {
+  it('may not update a professional Kontrolle', async () => {
+    const res = await pgrst(`/tpopkontr?id=eq.${foreignKontr.id}`, {
+      method: 'PATCH',
+      token,
+      body: { jahr: foreignKontr.jahr },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('may not create a professional Kontrolle', async () => {
+    const res = await pgrst('/tpopkontr?select=id', {
+      method: 'POST',
+      token,
+      body: { tpop_id: tpopId, jahr: markerJahr, typ: 'Kontrolle' },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('may not add a zaehl to a professional Kontrolle', async () => {
+    const res = await pgrst('/tpopkontrzaehl', {
+      method: 'POST',
+      token,
+      body: { tpopkontr_id: foreignKontr.id, einheit, anzahl: 1 },
+    })
+    expect(res.status).toBe(403)
+  })
+
+  it('creates an own Freiwilligen-Kontrolle with a zaehl and removes it again', async () => {
     const inserted = await pgrst('/tpopkontr?select=id', {
       method: 'POST',
       token,
       prefer: 'return=representation',
-      body: { tpop_id: tpopId, jahr: markerJahr, typ },
+      body: {
+        tpop_id: tpopId,
+        jahr: markerJahr,
+        typ: 'Freiwilligen-Kontrolle',
+        bearbeiter: adresseId,
+      },
     })
     expect(inserted.status).toBe(201)
     kontrId = (inserted.data as Json[])[0].id

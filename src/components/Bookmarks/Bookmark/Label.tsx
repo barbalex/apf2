@@ -5,6 +5,7 @@ import type { NavData } from '../types.ts'
 import Tooltip from '@mui/material/Tooltip'
 
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.ts'
+import { store } from '../../../store/index.ts'
 import { PrefetchLink } from '../../shared/PrefetchLink.tsx'
 
 import styles from './Label.module.css'
@@ -40,6 +41,7 @@ export const Label = ({
     }, 1000)
     // 2. sync tree openNodes
     toggleNodeSymbol({
+      store,
       node: {
         url: navData.url
           .split('/')

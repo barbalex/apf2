@@ -121,7 +121,6 @@ export const ChooseApToCopyErfkritsFrom = () => {
       options: { variant: 'info' },
     })
     void tsQueryClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
-    void tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
     void tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
   }
 

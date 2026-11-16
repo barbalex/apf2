@@ -26,6 +26,8 @@ dist-ssr
 # dotenv environment variables file
 .env
 .env*
+# .env.production is committed: it carries the public telemetry endpoint, no secrets
+!.env.production
 dropbox_uploader.conf
 
 schema.json
@@ -33,6 +35,11 @@ schema.json
 /test-results/
 /playwright-report/
 /playwright/.cache/
-playwright/.auth
+# ignore the real credentials/state, keep the template shareable
+playwright/.auth/*
+!playwright/.auth/user.json.example
 
 git_stats.txt
+
+# production policy snapshots (scripts/apply-production-sql.sh)
+prod-snapshots

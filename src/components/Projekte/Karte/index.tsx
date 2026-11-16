@@ -1,5 +1,5 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { MapContainer } from 'react-leaflet'
 import type { MapContainerProps } from 'react-leaflet'
@@ -53,7 +53,12 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapPersister } from './MapPersister.tsx'
+import { MapLayersUrlSync } from './MapLayersUrlSync.tsx'
 import { ClickListener } from './ClickListener/index.tsx'
+import {
+  mapViewSearchParamName,
+  parseMapView,
+} from '../../../modules/mapViewSearchParam.ts'
 
 import 'leaflet/dist/leaflet.css'
 // markercluster v2 no longer ships a base stylesheet (only the default skin,
@@ -137,8 +142,23 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
   // captured once per mount because react-leaflet applies these props
   // only when creating the map.
   // Read imperatively (not via useAtomValue) so that persisting the view
-  // on every moveend does not re-render the whole map
-  const [initialView] = useState(() => store.get(mapViewAtom))
+  // on every moveend does not re-render the whole map.
+  // A ?map=zoom/lat/lng param wins over the stored view: shared links open
+  // the shared view. Read from window.location (not useSearchParams) so
+  // Karte does not subscribe to search changes; in the tree2 pane this
+  // resolves to the main window's param, which buildTree2Path forwarded
+  // into the pane's initial entry
+  const [viewFromUrl] = useState(() =>
+    parseMapView(
+      new URLSearchParams(window.location.search).get(mapViewSearchParamName),
+    ),
+  )
+  const [initialView] = useState(() => viewFromUrl ?? store.get(mapViewAtom))
+  // seed the stored view from the param (in an effect: initializers stay
+  // pure) so later map openings and MapResizer's bounds fallback follow it
+  useEffect(() => {
+    if (viewFromUrl) store.set(mapViewAtom, viewFromUrl)
+  }, [viewFromUrl])
   // react-leaflet applies center/zoom/bounds only when creating the map.
   // Restore the exact persisted view if one exists: unlike fitBounds,
   // setView does not depend on the container size.
@@ -188,6 +208,10 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
 
   const BaseLayerComponent =
     BaseLayerComponents[activeBaseLayer as keyof typeof BaseLayerComponents]
+  // urls and stale storage can carry base layer names that no longer exist
+  // (renames, hand-edited links) — degrade to no base layer instead of
+  // crashing on an undefined component
+  const showBaseLayer = !!BaseLayerComponent && !!activeBaseLayer
   const activeOverlaysSorted = activeOverlays
     // drop values that no longer exist, e.g. from renamed overlays
     // still stored in a user's cache
@@ -237,7 +261,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
           zoomControl={false}
           className={`map-container ${styles.mapContainer}`}
         >
-          {activeBaseLayer && (
+          {showBaseLayer && (
             <MapResizer mapContainerRef={mapContainerRef}>
               <BaseLayerComponent />
             </MapResizer>
@@ -314,6 +338,7 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
           )}
           <ClickListener />
           <MapPersister />
+          <MapLayersUrlSync />
           <ScaleControl imperial={false} />
           <Control
             position="topright"

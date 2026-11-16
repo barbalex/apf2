@@ -33,6 +33,9 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
   default: (await import('./ChooseApToCopyErfkritsFrom.tsx'))
     .ChooseApToCopyErfkritsFrom,
 }))
+const UrlGuard = lazy(async () => ({
+  default: (await import('./UrlGuard.tsx')).UrlGuard,
+}))
 
 import { Spinner } from '../shared/Spinner.tsx'
 import styles from './ProtectedRoute.module.css'
@@ -47,7 +50,12 @@ export const Component = () => {
   const user = useAtomValue(userAtom)
 
   const token = user?.token
-  const tokenDecoded = token ? (jwtDecode(token) as import('jwt-decode').JwtPayload & { role?: string | null }) : null
+  const tokenDecoded =
+    token ?
+      (jwtDecode(token) as import('jwt-decode').JwtPayload & {
+        role?: string | null
+      })
+    : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
   const userIdToUse = userId ?? user?.id
@@ -87,6 +95,7 @@ export const Component = () => {
             <ChooseApToCopyEkfrequenzsFrom />
             <ChooseApToCopyErfkritsFrom />
             <ApfLayerNotifier />
+            <UrlGuard />
           </Suspense>
         </>
       )}

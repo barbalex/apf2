@@ -45,13 +45,15 @@ export const CustomTooltip = ({
   zielEinheit,
   rowsMaxHeight,
 }: CustomTooltipProps) => {
+  // same order as the chart stacks the areas: highest number first
+  // (topmost band), so rows and bands correspond
   const payloadSorted = sortBy(payload, [
     (p) => {
       const pop = popsData.find((d) => d.id === p.dataKey)
       if (pop) return pop.nr
       return p.dataKey
     },
-  ])
+  ]).reverse()
 
   const onClickExport = () => {
     const einheit = zielEinheit ?? 'Anzahl'

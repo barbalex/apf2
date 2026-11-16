@@ -1,4 +1,5 @@
 import { apiCount, apiFetch } from './api.ts'
+import { useStore } from 'jotai'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -8,12 +9,13 @@ export const useApbersNavData = (
   props?:
     { projId?: string | undefined; apId?: string | undefined } | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
-  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(store, apId)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeApber', apId, apberGqlFilterForTree],

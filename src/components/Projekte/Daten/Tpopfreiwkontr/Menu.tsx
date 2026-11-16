@@ -1,7 +1,7 @@
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -17,6 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
+import { printWhenReady } from '../../../../modules/print.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
@@ -41,6 +42,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -89,6 +91,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'tpopfreiwkontr',
@@ -112,12 +115,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickPrint = () => {
     setIsPrint(true)
-    // wait for file to load
-    // https://github.com/barbalex/apf2/issues/617
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    }, 0)
+    void printWhenReady(tsQueryClient).finally(() => setIsPrint(false))
   }
 
   const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
@@ -126,7 +124,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickMoveInTree = () => {
     if (isMovingTpopfreiwkontr) {
-      return moveTo({ id: tpopId })
+      return moveTo({ store, id: tpopId })
     }
     setMoving({
       id: row?.id,
@@ -152,7 +150,7 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickCopy = () => {
     if (isCopyingTpopfreiwkontr) {
       // copy to this tpop
-      return copyTo({ parentId: tpopId })
+      return copyTo({ store, parentId: tpopId })
     }
     setCopying({
       table: 'tpopfreiwkontr',

@@ -4,7 +4,7 @@ import { useParams, useLocation } from 'react-router'
 import Button from '@mui/material/Button'
 import type { ButtonProps } from '@mui/material/Button'
 
-import { useAtom } from 'jotai'
+import { useAtom, useStore } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
@@ -27,6 +27,7 @@ interface MenuButtonProps extends ButtonProps {
 const MenuButton = Button as unknown as ComponentType<MenuButtonProps>
 
 export const Menu = () => {
+  const store = useStore()
   const { search, pathname } = useLocation()
   // this component only renders on routes containing projId, apId and beobId
   const { projId, apId, beobId, tpopId } = useParams<{
@@ -53,6 +54,7 @@ export const Menu = () => {
     if (!beobId) return
     setCopyingBeobZugeordnetKoordToTpop(true)
     await copyBeobZugeordnetKoordToTpop({
+      store,
       id: beobId,
     })
     setCopyingBeobZugeordnetKoordToTpop(false)
@@ -74,6 +76,7 @@ export const Menu = () => {
   const onClickCreateNewPopFromBeob = async () => {
     setCreatingNewPopFromBeob(true)
     await createNewPopFromBeob({
+      store,
       id: beobId,
       apId,
       projId,

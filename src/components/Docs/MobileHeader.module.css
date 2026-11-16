@@ -1,0 +1,26 @@
+/* 998px mirrors constants.mobileViewMaxWidth (999):
+   the app treats widths below 999 as mobile */
+.header {
+  display: none;
+}
+
+@media (max-width: 998px) {
+  .header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-height: 42px;
+    background-color: #388e3c;
+    color: white;
+  }
+}
+
+.title {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+}

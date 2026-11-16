@@ -24,14 +24,17 @@ const Bookmarks = lazy(async () => ({
 import { Spinner } from '../shared/Spinner.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
-import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
+import { hideBookmarksAtom } from '../../store/index.ts'
+import { useIsPrint } from '../../modules/useIsPrint.ts'
+import { DataFilterUrlSync } from './DataFilterUrlSync.tsx'
+import { LabelFilterUrlSync } from './LabelFilterUrlSync.tsx'
 
 import styles from './ProjektContainer.module.css'
 
 export const ProjektContainer = () => {
   const { projId } = useParams()
 
-  const isPrint = useAtomValue(isPrintAtom)
+  const isPrint = useIsPrint()
 
   const hideBookmarks = useAtomValue(hideBookmarksAtom)
 
@@ -98,7 +101,12 @@ export const ProjektContainer = () => {
     ),
   }
 
-  if (isPrint) return <Outlet />
+  if (isPrint)
+    return (
+      <div className={styles.printContainer}>
+        <Outlet />
+      </div>
+    )
 
   // TODO: why were these needed?
   // const overflowPane1 =
@@ -119,6 +127,12 @@ export const ProjektContainer = () => {
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
+      {/* keeps the working data filter (?f=) and the tree label filter
+          (?labelFilter.<type>=…) in the url — mounted here (not in the
+          Filter pane) because the filters drive the tree, forms and
+          map alike */}
+      <DataFilterUrlSync />
+      <LabelFilterUrlSync />
       {!hideBookmarks && (
         <Suspense fallback={null}>
           <Bookmarks />

@@ -4,7 +4,6 @@ import { upperFirst } from 'es-toolkit'
 
 import { tables } from '../../../modules/tables.ts'
 import {
-  store,
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
@@ -13,11 +12,15 @@ import {
   treeSetOpenNodesAtom,
   type Notification,
 } from '../../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 export const insertDataset = async ({
+  store,
   tablePassed,
   parentId,
   menuType,
@@ -26,6 +29,7 @@ export const insertDataset = async ({
   search,
   jahr: jahrPassed,
 }: {
+  store: Store
   tablePassed: string
   parentId?: string | null | undefined
   menuType: string
@@ -36,7 +40,7 @@ export const insertDataset = async ({
 }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
   if (!tsQueryClient) {
-    return addNotification({
+    return addNotification(store, {
       message: 'no query client found in store',
       options: {
         variant: 'error',
@@ -50,7 +54,7 @@ export const insertDataset = async ({
   const tableMetadata = tables.find((t) => t.table === table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return addNotification({
+    return addNotification(store, {
       message: `no table meta data found for table "${table}"`,
       options: {
         variant: 'error',
@@ -63,7 +67,7 @@ export const insertDataset = async ({
   }
   const idField = tableMetadata.idField
   if (!idField) {
-    return addNotification({
+    return addNotification(store, {
       message: 'new dataset not created as no idField could be found',
       options: {
         variant: 'error',
@@ -99,7 +103,7 @@ export const insertDataset = async ({
   try {
     await apiInsert(table, row)
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -155,39 +159,43 @@ export const insertDataset = async ({
   //   menuType,
   //   queryKeyTable,
   // })
-  const queryKeyFolder =
-    ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZiel'
-    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
-    : (
-      [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ) ?
-      'treeWerteFolders'
-    : `tree${upperFirst(parentTable ?? '')}Folders`
-  // console.log('insertDataset', {
-  //   table,
-  //   parentTable,
-  //   menuType,
-  //   queryKeyFoldersTable: queryKeyFolder,
-  //   queryKeyTable,
-  //   queryKeyFolder,
-  // })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [queryKeyFolder],
-  })
-  // also invalidate parent queries for folder counts
-  void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
-  })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [`treeAp`],
-  })
+  // folder labels and counts live in the list queries themselves —
+  // only these two tables have folder queries of their own
+  if (['apberuebersicht'].includes(table)) {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+  }
+  if (table === 'ziel') {
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeZiel'] })
+  }
+  // ap-level lists and counts live in the per-ap tree queries — each of
+  // them fires ~10 requests, so refetching them for every insert anywhere
+  // storms the api (#837). Only inserts that can change them count:
+  // a new ap changes the projekt's ap list, children of an ap (pop, ziel,
+  // erfkrit, …) change that ap's folder counts.
+  const apChildTables = [
+    'pop',
+    'ziel',
+    'erfkrit',
+    'apber',
+    'idealbiotop',
+    'assozart',
+    'ekzaehleinheit',
+    'ekfrequenz',
+    'apart',
+    'beobNichtZuzuordnen',
+    'beobNichtBeurteilt',
+  ]
+  if (table === 'ap') {
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
+  } else if (apChildTables.includes(table) && parentId) {
+    // useApNavData keys are ['treeAp', projId, apId, …filters]
+    const projId = url[1]
+    if (typeof projId === 'string') {
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeAp`, projId, parentId],
+      })
+    }
+  }
   if (table === 'ziel') {
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],

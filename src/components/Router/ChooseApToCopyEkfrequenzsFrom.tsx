@@ -141,7 +141,6 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
       },
     })
     void tsQueryClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
-    void tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })

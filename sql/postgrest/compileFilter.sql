@@ -330,6 +330,20 @@ BEGIN
           v_expr := format('%I.%I', p_alias, v_col);
         END IF;
 
+        -- postgraphile-style shorthand: a scalar value means equality
+        -- (#837: the EKF list sends {bearbeiter: <adresse-id>})
+        IF jsonb_typeof(v_value) IN ('string', 'number', 'boolean', 'null') THEN
+          IF jsonb_typeof(v_value) = 'null' THEN
+            v_parts := v_parts || ARRAY[format('%s IS NULL', v_expr)];
+          ELSE
+            v_lit := v_value #>> '{}';
+            v_parts := v_parts || ARRAY[format(
+              '%s = %L::%s', v_expr, v_lit, v_col_type
+            )];
+          END IF;
+          CONTINUE;
+        END IF;
+
         FOR v_op, v_op_value IN SELECT * FROM jsonb_each(v_value) LOOP
           v_lit := v_op_value #>> '{}';
           CASE v_op

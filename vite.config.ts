@@ -9,6 +9,11 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf8'))
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // bundle-time version for the (opt-in) error telemetry payload;
+  // declared in src/vite-env.d.ts
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   build: {
     // cssMinify is needed due to an error in vite:
     // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874

@@ -9,11 +9,15 @@
 
 .container {
   display: flex;
+  align-items: center;
   padding-left: 20px;
 }
 
 .jahr {
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: 0;
+  /* the app font (system-ui) has different metrics than the MUI input's
+     Roboto — with boxes centered, the label's baseline sat ~3px below the
+     year's digits */
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   color: white;
 }

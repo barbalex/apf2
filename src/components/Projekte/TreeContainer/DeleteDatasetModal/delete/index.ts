@@ -4,7 +4,6 @@ import { tables } from '../../../../../modules/tables.ts'
 import { apiFetch, apiDelete } from '../../../../../modules/api.ts'
 import { invalidateTreeQueries } from '../../../../../modules/invalidateTreeQueries.ts'
 import {
-  store,
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
@@ -17,23 +16,28 @@ import {
   type DeletedDataset,
   type ToDelete,
 } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
 const isFreiwilligenKontrolle = (activeNodeArray: (string | number)[]) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
 export const deleteModule = async ({
+  store,
   search,
   toDelete: toDeletePassed,
 }: {
+  store: Store
   search: string
   toDelete: ToDelete
 }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
   if (!tsQueryClient) {
-    return addNotification({
+    return addNotification(store, {
       message: 'no query client found in store',
       options: {
         variant: 'error',
@@ -44,7 +48,7 @@ export const deleteModule = async ({
   const toDelete = toDeletePassed
   // deletion is only possible with a dataset selected
   if (!toDelete.id) {
-    return addNotification({
+    return addNotification(store, {
       message: 'Es wurde kein Datensatz gewählt.',
       options: {
         variant: 'error',
@@ -56,7 +60,7 @@ export const deleteModule = async ({
   const tableMetadata = tables.find((t) => t.table === toDelete.table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return addNotification({
+    return addNotification(store, {
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${toDelete.table}"`,
       options: {
         variant: 'error',
@@ -80,7 +84,7 @@ export const deleteModule = async ({
     )?.[0]
   } catch (error) {
     console.log(error)
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -104,7 +108,7 @@ export const deleteModule = async ({
   try {
     await apiDelete(table, toDelete.id)
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

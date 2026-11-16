@@ -12,6 +12,10 @@
   padding: 8px 16px;
   background-color: #2e7d32;
   color: #fff;
+
+  @media print {
+    display: none;
+  }
 }
 
 .text {
@@ -23,6 +27,14 @@
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+}
+
+/* replaces the buttons while an update is in flight: signals that
+   the click worked even though the reload may still be seconds away */
+.progress {
+  flex-shrink: 0;
+  width: 120px;
+  color: #fff;
 }
 
 .button {

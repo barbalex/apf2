@@ -1,8 +1,15 @@
 import { apiFetch, apiUpdateByVariables } from './api.ts'
 
-import { store, copyingBiotopAtom } from '../store/index.ts'
+import { copyingBiotopAtom } from '../store/index.ts'
+import type { Store } from 'jotai'
 
-export const copyBiotopTo = async ({ id }: { id: string }) => {
+export const copyBiotopTo = async ({
+  store,
+  id,
+}: {
+  store: Store
+  id: string
+}) => {
   const copyingBiotop = store.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id

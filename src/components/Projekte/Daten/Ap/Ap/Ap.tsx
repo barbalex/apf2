@@ -125,11 +125,30 @@ export const Ap = ({ children }: Props) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    void refetch()
     if (field === 'artId') {
+      // artname in the form and the tree label follow the art — only a
+      // refetch knows the new artname
+      void refetch()
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
+    } else if (row.id) {
+      // the patch is the row's new state — write it into the cache
+      // instead of refetching: the form query also pulls the whole
+      // address table and two static werte lists (#837)
+      tsQueryClient.setQueriesData<ApQueryResult>(
+        { queryKey: ['ap', apId] },
+        (old) =>
+          old?.apById ?
+            {
+              ...old,
+              apById: {
+                ...old.apById,
+                [field]: value,
+              } as ApQueryResult['apById'],
+            }
+          : old,
+      )
     }
   }
 

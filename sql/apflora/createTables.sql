@@ -2679,8 +2679,14 @@ COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso 
 ALTER TABLE apflora.tpopkontr ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.tpopkontr;
+DROP POLICY IF EXISTS writer_insert ON apflora.tpopkontr;
+DROP POLICY IF EXISTS writer_update ON apflora.tpopkontr;
+DROP POLICY IF EXISTS writer_delete ON apflora.tpopkontr;
 
+-- read visibility: unchanged (all app roles see all kontrollen, ap_reader
+-- only those of its assigned aps)
 CREATE POLICY reader ON apflora.tpopkontr
+FOR SELECT
 USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   OR (
@@ -2693,9 +2699,89 @@ USING (
       WHERE ap_user.user_name = current_user_name()
     )
   )
+);
+
+-- writes: apflora_freiwillig only touches ITS OWN Freiwilligen-Kontrollen
+-- (bearbeiter = the adresse of the logged-in account). New ones may be
+-- created while bearbeiter is still unset — but only ever as
+-- Freiwilligen-Kontrolle. Professionals stay unrestricted (manager
+-- everywhere, ap_writer within its assigned aps).
+CREATE POLICY writer_insert ON apflora.tpopkontr
+FOR INSERT
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND typ = 'Freiwilligen-Kontrolle'
+    AND (
+      bearbeiter IS NULL
+      OR bearbeiter = (
+        SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+      )
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpop_id IN (
+      select tpop.id 
+      from apflora.tpop 
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      where ap_user.user_name = current_user_name()
+    )
+  )
+);
+
+-- UPDATE keeps the broad USING so that forbidden updates fail loudly (403
+-- from the WITH CHECK) instead of silently updating zero rows. DELETE can
+-- only be restricted via USING — forbidden deletes are silent no-ops.
+CREATE POLICY writer_update ON apflora.tpopkontr
+FOR UPDATE
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_ap_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpop_id IN (
+      SELECT tpop.id 
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
 )
 WITH CHECK (
-  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND typ = 'Freiwilligen-Kontrolle'
+    AND bearbeiter = (
+      SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpop_id IN (
+      select tpop.id 
+      from apflora.tpop 
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      where ap_user.user_name = current_user_name()
+    )
+  )
+);
+
+CREATE POLICY writer_delete ON apflora.tpopkontr
+FOR DELETE
+USING (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND typ = 'Freiwilligen-Kontrolle'
+    AND bearbeiter = (
+      SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+    )
+  )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
     AND tpop_id IN (
@@ -2732,8 +2818,61 @@ CREATE INDEX ON apflora.tpopkontr_file USING btree(file_mime_type);
 ALTER TABLE apflora.tpopkontr_file ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.tpopkontr_file;
+DROP POLICY IF EXISTS writer_insert ON apflora.tpopkontr_file;
+DROP POLICY IF EXISTS writer_update ON apflora.tpopkontr_file;
+DROP POLICY IF EXISTS writer_delete ON apflora.tpopkontr_file;
 
+-- read visibility: unchanged
 CREATE POLICY reader ON apflora.tpopkontr_file
+FOR SELECT
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
+
+-- writes: apflora_freiwillig only for rows of its OWN Freiwilligen-Kontrollen
+-- (see the tpopkontr policies). UPDATE keeps the broad USING so forbidden
+-- updates fail loudly (403); DELETE can only be restricted via USING —
+-- forbidden deletes are silent no-ops.
+CREATE POLICY writer_insert ON apflora.tpopkontr_file
+FOR INSERT
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
+
+CREATE POLICY writer_update ON apflora.tpopkontr_file
+FOR UPDATE
 USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   OR (
@@ -2749,7 +2888,17 @@ USING (
   )
 )
 WITH CHECK (
-  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
     AND tpopkontr_id IN (
@@ -2763,6 +2912,32 @@ WITH CHECK (
   )
 );
 
+CREATE POLICY writer_delete ON apflora.tpopkontr_file
+FOR DELETE
+USING (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 -- tpopkontrzaehl
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 
@@ -2800,24 +2975,46 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree(methode);
 ALTER TABLE apflora.tpopkontrzaehl ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl;
+DROP POLICY IF EXISTS writer_insert ON apflora.tpopkontrzaehl;
+DROP POLICY IF EXISTS writer_update ON apflora.tpopkontrzaehl;
+DROP POLICY IF EXISTS writer_delete ON apflora.tpopkontrzaehl;
 
+-- read visibility: unchanged
 CREATE POLICY reader ON apflora.tpopkontrzaehl
+FOR SELECT
 USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_reader') 
     AND tpopkontr_id IN (
-        SELECT tpopkontr.id
-        FROM apflora.tpopkontr
-          inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-          inner join apflora.pop on tpop.pop_id = pop.id
-          inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-        WHERE ap_user.user_name = current_user_name()
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
     )
   )
-)
+);
+
+-- writes: apflora_freiwillig only for rows of its OWN Freiwilligen-Kontrollen
+-- (see the tpopkontr policies). UPDATE keeps the broad USING so forbidden
+-- updates fail loudly (403); DELETE can only be restricted via USING —
+-- forbidden deletes are silent no-ops.
+CREATE POLICY writer_insert ON apflora.tpopkontrzaehl
+FOR INSERT
 WITH CHECK (
-  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
     AND tpopkontr_id IN (
@@ -2831,6 +3028,73 @@ WITH CHECK (
   )
 );
 
+CREATE POLICY writer_update ON apflora.tpopkontrzaehl
+FOR UPDATE
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
+
+CREATE POLICY writer_delete ON apflora.tpopkontrzaehl
+FOR DELETE
+USING (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_freiwillig')
+    AND tpopkontr_id IN (
+      SELECT k.id FROM apflora.tpopkontr k
+      WHERE k.typ = 'Freiwilligen-Kontrolle'
+        AND k.bearbeiter = (
+          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
+        )
+    )
+  )
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpopkontr_id IN (
+      SELECT tpopkontr.id
+      FROM apflora.tpopkontr
+        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 -- tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn;
 
@@ -3692,4 +3956,61 @@ CREATE INDEX ON apflora.ch_administrative_unit USING btree(localisedcharacterstr
 CREATE INDEX ON apflora.ch_administrative_unit USING btree(text);
 
 CREATE INDEX ON apflora.ch_administrative_unit USING gist(geom);
+
+
+-- error telemetry: client error reports posted by src/modules/errorTelemetry.ts
+-- (see sql/apflora/migrations/2026-11-13_error-telemetry/00_error_report.sql)
+-- Error telemetry collector: the opt-in client reporter
+-- (src/modules/errorTelemetry.ts) posts one JSON object per client error
+-- to VITE_ERROR_TELEMETRY_URL = https://api.apflora.ch/postgrest/error_report
+--
+-- Privacy model: the payload carries message/stack/url/user-agent/release
+-- only — no user identity. Anyone (anon) may append a report; only
+-- apflora_manager may read them. Field caps are enforced by CHECKs and
+-- id/created_at are forced server-side, so the endpoint cannot be abused
+-- as arbitrary storage.
+
+CREATE TABLE IF NOT EXISTS apflora.error_report (
+  id uuid PRIMARY KEY DEFAULT uuidv7(),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  release text CHECK (char_length(release) <= 40),
+  kind text NOT NULL CHECK (
+    kind IN ('window.error', 'unhandledrejection', 'boundary', 'manual')
+  ),
+  message text NOT NULL CHECK (char_length(message) <= 2000),
+  stack text CHECK (char_length(stack) <= 5000),
+  url text CHECK (char_length(url) <= 2000),
+  user_agent text CHECK (char_length(user_agent) <= 1000)
+);
+
+-- force id/created_at regardless of what the client sends
+CREATE OR REPLACE FUNCTION apflora.error_report_force_defaults()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.id := uuidv7();
+  NEW.created_at := now();
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS error_report_force_defaults ON apflora.error_report;
+CREATE TRIGGER error_report_force_defaults
+  BEFORE INSERT ON apflora.error_report
+  FOR EACH ROW EXECUTE FUNCTION apflora.error_report_force_defaults();
+
+ALTER TABLE apflora.error_report ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS insert_anon ON apflora.error_report;
+CREATE POLICY insert_anon ON apflora.error_report
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+DROP POLICY IF EXISTS read_manager ON apflora.error_report;
+CREATE POLICY read_manager ON apflora.error_report
+  FOR SELECT TO apflora_manager
+  USING (true);
+
+-- anon: insert only — no read/update/delete
+GRANT INSERT ON apflora.error_report TO anon;
+GRANT SELECT ON apflora.error_report TO apflora_manager;
 

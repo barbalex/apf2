@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -38,6 +38,7 @@ export const Menu = ({
   label?: string | null
   toggleFilterInput?: () => void
 }) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -83,6 +84,7 @@ export const Menu = ({
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'ap',
@@ -98,7 +100,7 @@ export const Menu = ({
       },
     })
 
-  const onClickMoveHere = () => moveTo({ id: apId })
+  const onClickMoveHere = () => moveTo({ store, id: apId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -109,10 +111,11 @@ export const Menu = ({
       fromParentId: null,
     })
 
-  const onClickCopyTo = () => copyTo({ parentId: apId })
+  const onClickCopyTo = () => copyTo({ store, parentId: apId })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: ['Projekte', projId, 'Arten', apId],
       search,
     })

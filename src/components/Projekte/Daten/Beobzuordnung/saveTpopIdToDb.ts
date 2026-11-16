@@ -3,7 +3,6 @@ import { isEqual } from 'es-toolkit'
 import type { QueryClient } from '@tanstack/react-query'
 
 import {
-  store,
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -11,8 +10,10 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface SaveTpopIdToDbParams {
+  store: Store
   value: string | number | null
   id: string
   type: string
@@ -20,6 +21,7 @@ interface SaveTpopIdToDbParams {
 }
 
 export const saveTpopIdToDb = async ({
+  store,
   value,
   id,
   type,
@@ -284,9 +286,6 @@ export const saveTpopIdToDb = async ({
   })
   void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
-  })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [`treeApFolders`],
   })
   void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],

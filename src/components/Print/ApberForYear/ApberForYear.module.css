@@ -16,11 +16,14 @@
   @media print {
     /* this is when it is actually printed */
     height: auto;
-    width: 21cm;
+    /* the page IS the paper: fill the printable width. A fixed 21cm is
+       wider than the printable area (browser margins) — auto margins
+       collapse to 0 and the box overflowed right, pushing every centered
+       element right of the page center */
+    width: auto;
 
-    margin: 0 auto !important;
-    padding: 0.5cm !important;
-    padding-left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 
     box-shadow: unset;
     overflow: visible !important;

@@ -148,9 +148,54 @@ as $fn$
   select jsonb_build_object(
     'apById', (select obj from ap_json),
     'jberAbcByApId', jsonb_build_object('nodes', coalesce((
-      select array_to_json(array(
-        select j from apflora.jber_abc(p_jahr) j where j.id = p_ap_id
-      ))::jsonb
+      -- PostgREST select-aliases (like ApberForYear's jber_abc call) cannot
+      -- reach inside this jsonb, so the camelCase keys of the document type
+      -- (ApberForApJberAbcNode) must be built here
+      select jsonb_agg(jsonb_build_object(
+        'id', j.id,
+        'artname', j.artname,
+        'startJahr', j.start_jahr,
+        'bearbeiter', j.bearbeiter,
+        'bearbeitung', j.bearbeitung,
+        'a3LPop', j.a_3_l_pop,
+        'a3LTpop', j.a_3_l_tpop,
+        'a4LPop', j.a_4_l_pop,
+        'a4LTpop', j.a_4_l_tpop,
+        'a5LPop', j.a_5_l_pop,
+        'a5LTpop', j.a_5_l_tpop,
+        'a7LPop', j.a_7_l_pop,
+        'a7LTpop', j.a_7_l_tpop,
+        'a8LPop', j.a_8_l_pop,
+        'a8LTpop', j.a_8_l_tpop,
+        'a9LPop', j.a_9_l_pop,
+        'a9LTpop', j.a_9_l_tpop,
+        'b1LPop', j.b_1_l_pop,
+        'b1LTpop', j.b_1_l_tpop,
+        'b1FirstYear', j.b_1_first_year,
+        'b1RPop', j.b_1_r_pop,
+        'b1RTpop', j.b_1_r_tpop,
+        'c1LPop', j.c_1_l_pop,
+        'c1LTpop', j.c_1_l_tpop,
+        'c1RPop', j.c_1_r_pop,
+        'c1RTpop', j.c_1_r_tpop,
+        'c1FirstYear', j.c_1_first_year,
+        'firstMassn', j.first_massn,
+        'c2RPop', j.c_2_r_pop,
+        'c2RTpop', j.c_2_r_tpop,
+        'c3RPop', j.c_3_r_pop,
+        'c3RTpop', j.c_3_r_tpop,
+        'c4RPop', j.c_4_r_pop,
+        'c4RTpop', j.c_4_r_tpop,
+        'c5RPop', j.c_5_r_pop,
+        'c5RTpop', j.c_5_r_tpop,
+        'c6RPop', j.c_6_r_pop,
+        'c6RTpop', j.c_6_r_tpop,
+        'c7RPop', j.c_7_r_pop,
+        'c7RTpop', j.c_7_r_tpop,
+        'erfolg', j.erfolg,
+        'erfolgVorjahr', j.erfolg_vorjahr
+      ) order by j.artname)
+      from apflora.jber_abc(p_jahr) j where j.id = p_ap_id
     ), '[]'::jsonb))
   )
 $fn$;

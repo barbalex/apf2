@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { apiCount, apiFetch, rpcCount } from './api.ts'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
-import { copyingAtom, movingAtom, store } from '../store/index.ts'
+import { useAtomValue, useStore } from 'jotai'
+import { copyingAtom, movingAtom } from '../store/index.ts'
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -41,14 +41,17 @@ export const useTpopfreiwkontrNavData = (
       }
     | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
   const popId = props?.popId ?? params.popId ?? ''
   const tpopId = props?.tpopId ?? params.tpopId ?? ''
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId ?? ''
-  const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
+  const tpopkontrzaehlGqlFilterForTree = getTpopkontrzaehlGqlFilterForTree(
+    store,
+    tpopkontrId,
+  )
 
   const { data } = useSuspenseQuery({
     queryKey: [

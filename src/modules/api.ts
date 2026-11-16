@@ -158,7 +158,8 @@ export const apiUpdateByVariables = (
   const body = Object.fromEntries(
     Object.entries(patch).map(([k, v]) => [camelToSnake(k), v]),
   )
-  body.changed_by = changedBy
+  // only tables with a changed_by column may receive it
+  if (changedBy != null) body.changed_by = changedBy
   return apiUpdate(dbTable, id, body)
 }
 

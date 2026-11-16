@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../modules/logout.ts'
+import { reportError } from '../../modules/errorTelemetry.ts'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -44,6 +45,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 export const ErrorBoundary = ({ children }: { children: ReactNode }) => (
   <RawErrorBoundary
     FallbackComponent={ErrorFallback}
+    onError={(error) => void reportError('boundary', error)}
     onReset={() => void logout()}
   >
     {children}

@@ -8,7 +8,7 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -33,6 +33,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -70,6 +71,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
+      store,
       id: tpopId,
       projId,
       apId,
@@ -79,6 +81,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: [
         'Projekte',
         projId,
@@ -95,7 +98,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const isMovingEkf = moving.table === 'tpopfreiwkontr'
 
-  const onClickMoveEkfToHere = () => moveTo({ id: tpopId })
+  const onClickMoveEkfToHere = () => moveTo({ store, id: tpopId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -108,7 +111,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   const isCopyingEkf = copying.table === 'tpopfreiwkontr'
 
-  const onClickCopyEkfToHere = () => copyTo({ parentId: tpopId })
+  const onClickCopyEkfToHere = () => copyTo({ store, parentId: tpopId })
 
   const onClickStopCopying = () =>
     setCopying({

@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { remove } from 'es-toolkit'
 import { jwtDecode } from 'jwt-decode'
 import { useParams, useLocation, useNavigate } from 'react-router'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { MdFilterAlt, MdInfoOutline } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
@@ -22,7 +22,6 @@ import {
   isDesktopViewAtom,
   hideTreeAtom,
   userTokenAtom,
-  resetTree2SrcAtom,
 } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
@@ -36,8 +35,6 @@ export const ProjekteMenus = () => {
   const isMobileView = !isDesktopView
 
   const hideTree = useAtomValue(hideTreeAtom)
-
-  const resetTree2Src = useSetAtom(resetTree2SrcAtom)
 
   const token = useAtomValue(userTokenAtom)
   const tokenDecoded = token ? jwtDecode<{ role?: string }>(token) : null
@@ -90,7 +87,6 @@ export const ProjekteMenus = () => {
   const onClickExporte = () => onClickButton('exporte')
 
   const onClickTree2 = () => {
-    resetTree2Src()
     onClickButton('tree2')
   }
 

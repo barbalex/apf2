@@ -1,7 +1,11 @@
 import type { PopmassnberFilter } from '../modules/gqlFilterTypes.ts'
-import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
+import { treeNodeLabelFilterAtom } from '../store/index.ts'
+import type { Store } from 'jotai'
 
-export const getPopmassnberGqlFilterForTree = (_popId: string) => {
+export const getPopmassnberGqlFilterForTree = (
+  store: Store,
+  _popId: string,
+) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const gqlFilter: PopmassnberFilter = {}
 

@@ -1,4 +1,5 @@
 import { apiCount, apiFetch } from './api.ts'
+import { useStore } from 'jotai'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -13,13 +14,17 @@ export const usePopmassnbersNavData = (
       }
     | undefined,
 ) => {
+  const store = useStore()
   const params = useParams()
   const projId = props?.projId ?? params.projId ?? ''
   const apId = props?.apId ?? params.apId ?? ''
   const popId = props?.popId ?? params.popId ?? ''
 
   // Get filter before useQuery so changes trigger refetch
-  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId)
+  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(
+    store,
+    popId,
+  )
 
   const { data } = useSuspenseQuery({
     queryKey: ['treePopmassnber', popId, popmassnberGqlFilterForTree],

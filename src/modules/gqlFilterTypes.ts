@@ -4122,56 +4122,21 @@ export type VPopKmlnamanFilter = {
 export type VPopLastCountFilter = {
   /** Checks for all expressions in this list. */
   and?: Array<VPopLastCountFilter> | null | undefined
-  /** Filter by the object’s `andereZaehleinheit` field. */
-  andereZaehleinheit?: FloatFilter | null | undefined
+
   /** Filter by the object’s `apId` field. */
   apId?: UuidFilter | null | undefined
-  /** Filter by the object’s `artIstVorhanden` field. */
-  artIstVorhanden?: BigIntFilter | null | undefined
+
   /** Filter by the object’s `artname` field. */
   artname?: StringFilter | null | undefined
-  /** Filter by the object’s `blatter` field. */
-  blatter?: FloatFilter | null | undefined
-  /** Filter by the object’s `bluten` field. */
-  bluten?: FloatFilter | null | undefined
-  /** Filter by the object’s `blutenstande` field. */
-  blutenstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendePflanzen` field. */
-  davonBluhendePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendeTriebe` field. */
-  davonBluhendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonRosetten` field. */
-  davonRosetten?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckung` field. */
-  deckung?: FloatFilter | null | undefined
-  /** Filter by the object’s `fertilePflanzen` field. */
-  fertilePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `flacheM2` field. */
-  flacheM2?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtendeTriebe` field. */
-  fruchtendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtstande` field. */
-  fruchtstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `gruppen` field. */
-  gruppen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `jahre` field. */
   jahre?: StringFilter | null | undefined
-  /** Filter by the object’s `jungpflanzen` field. */
-  jungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `keimlinge` field. */
-  keimlinge?: FloatFilter | null | undefined
+
   /** Negates the expression. */
   not?: VPopLastCountFilter | null | undefined
   /** Checks for any expressions in this list. */
   or?: Array<VPopLastCountFilter> | null | undefined
-  /** Filter by the object’s `pflanzen5M2` field. */
-  pflanzen5M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenOhneJungpflanzen` field. */
-  pflanzenOhneJungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenTotal` field. */
-  pflanzenTotal?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzstellen` field. */
-  pflanzstellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `popByPopId` relation. */
   popByPopId?: PopFilter | null | undefined
   /** A related `popByPopId` exists. */
@@ -4184,75 +4149,26 @@ export type VPopLastCountFilter = {
   popNr?: IntFilter | null | undefined
   /** Filter by the object’s `popStatus` field. */
   popStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `stellen` field. */
-  stellen?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebe50M2` field. */
-  triebe50M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeBeweidung` field. */
-  triebeBeweidung?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeIn30M2` field. */
-  triebeIn30M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeMahflache` field. */
-  triebeMahflache?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeTotal` field. */
-  triebeTotal?: FloatFilter | null | undefined
 }
 
 export type VPopLastCountWithMassnFilter = {
   /** Checks for all expressions in this list. */
   and?: Array<VPopLastCountWithMassnFilter> | null | undefined
-  /** Filter by the object’s `andereZaehleinheit` field. */
-  andereZaehleinheit?: FloatFilter | null | undefined
+
   /** Filter by the object’s `apId` field. */
   apId?: UuidFilter | null | undefined
-  /** Filter by the object’s `artIstVorhanden` field. */
-  artIstVorhanden?: StringFilter | null | undefined
+
   /** Filter by the object’s `artname` field. */
   artname?: StringFilter | null | undefined
-  /** Filter by the object’s `blatter` field. */
-  blatter?: FloatFilter | null | undefined
-  /** Filter by the object’s `bluten` field. */
-  bluten?: FloatFilter | null | undefined
-  /** Filter by the object’s `blutenstande` field. */
-  blutenstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendePflanzen` field. */
-  davonBluhendePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendeTriebe` field. */
-  davonBluhendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonRosetten` field. */
-  davonRosetten?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckung` field. */
-  deckung?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckungXFlache` field. */
-  deckungXFlache?: FloatFilter | null | undefined
-  /** Filter by the object’s `fertilePflanzen` field. */
-  fertilePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `flacheM2` field. */
-  flacheM2?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtendeTriebe` field. */
-  fruchtendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtstande` field. */
-  fruchtstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `gruppen` field. */
-  gruppen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `jahre` field. */
   jahre?: StringFilter | null | undefined
-  /** Filter by the object’s `jungpflanzen` field. */
-  jungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `keimlinge` field. */
-  keimlinge?: FloatFilter | null | undefined
+
   /** Negates the expression. */
   not?: VPopLastCountWithMassnFilter | null | undefined
   /** Checks for any expressions in this list. */
   or?: Array<VPopLastCountWithMassnFilter> | null | undefined
-  /** Filter by the object’s `pflanzen5M2` field. */
-  pflanzen5M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenOhneJungpflanzen` field. */
-  pflanzenOhneJungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenTotal` field. */
-  pflanzenTotal?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzstellen` field. */
-  pflanzstellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `popByPopId` relation. */
   popByPopId?: PopFilter | null | undefined
   /** A related `popByPopId` exists. */
@@ -4265,18 +4181,6 @@ export type VPopLastCountWithMassnFilter = {
   popNr?: IntFilter | null | undefined
   /** Filter by the object’s `popStatus` field. */
   popStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `stellen` field. */
-  stellen?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebe50M2` field. */
-  triebe50M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeBeweidung` field. */
-  triebeBeweidung?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeIn30M2` field. */
-  triebeIn30M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeMahflache` field. */
-  triebeMahflache?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeTotal` field. */
-  triebeTotal?: FloatFilter | null | undefined
 }
 
 export type VPopMitLetzterPopberFilter = {
@@ -5104,56 +5008,21 @@ export type VTpopKmlnamanFilter = {
 export type VTpopLastCountFilter = {
   /** Checks for all expressions in this list. */
   and?: Array<VTpopLastCountFilter> | null | undefined
-  /** Filter by the object’s `andereZaehleinheit` field. */
-  andereZaehleinheit?: FloatFilter | null | undefined
+
   /** Filter by the object’s `apId` field. */
   apId?: UuidFilter | null | undefined
-  /** Filter by the object’s `artIstVorhanden` field. */
-  artIstVorhanden?: StringFilter | null | undefined
+
   /** Filter by the object’s `artname` field. */
   artname?: StringFilter | null | undefined
-  /** Filter by the object’s `blatter` field. */
-  blatter?: FloatFilter | null | undefined
-  /** Filter by the object’s `bluten` field. */
-  bluten?: FloatFilter | null | undefined
-  /** Filter by the object’s `blutenstande` field. */
-  blutenstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendePflanzen` field. */
-  davonBluhendePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendeTriebe` field. */
-  davonBluhendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonRosetten` field. */
-  davonRosetten?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckung` field. */
-  deckung?: FloatFilter | null | undefined
-  /** Filter by the object’s `fertilePflanzen` field. */
-  fertilePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `flacheM2` field. */
-  flacheM2?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtendeTriebe` field. */
-  fruchtendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtstande` field. */
-  fruchtstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `gruppen` field. */
-  gruppen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `jahr` field. */
   jahr?: IntFilter | null | undefined
-  /** Filter by the object’s `jungpflanzen` field. */
-  jungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `keimlinge` field. */
-  keimlinge?: FloatFilter | null | undefined
+
   /** Negates the expression. */
   not?: VTpopLastCountFilter | null | undefined
   /** Checks for any expressions in this list. */
   or?: Array<VTpopLastCountFilter> | null | undefined
-  /** Filter by the object’s `pflanzen5M2` field. */
-  pflanzen5M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenOhneJungpflanzen` field. */
-  pflanzenOhneJungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenTotal` field. */
-  pflanzenTotal?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzstellen` field. */
-  pflanzstellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `popId` field. */
   popId?: UuidFilter | null | undefined
   /** Filter by the object’s `popName` field. */
@@ -5162,8 +5031,7 @@ export type VTpopLastCountFilter = {
   popNr?: IntFilter | null | undefined
   /** Filter by the object’s `popStatus` field. */
   popStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `stellen` field. */
-  stellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `tpopByTpopId` relation. */
   tpopByTpopId?: TpopFilter | null | undefined
   /** A related `tpopByTpopId` exists. */
@@ -5178,73 +5046,26 @@ export type VTpopLastCountFilter = {
   tpopNr?: IntFilter | null | undefined
   /** Filter by the object’s `tpopStatus` field. */
   tpopStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `triebe50M2` field. */
-  triebe50M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeBeweidung` field. */
-  triebeBeweidung?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeIn30M2` field. */
-  triebeIn30M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeMahflache` field. */
-  triebeMahflache?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeTotal` field. */
-  triebeTotal?: FloatFilter | null | undefined
 }
 
 export type VTpopLastCountWithMassnFilter = {
   /** Checks for all expressions in this list. */
   and?: Array<VTpopLastCountWithMassnFilter> | null | undefined
-  /** Filter by the object’s `andereZaehleinheit` field. */
-  andereZaehleinheit?: FloatFilter | null | undefined
+
   /** Filter by the object’s `apId` field. */
   apId?: UuidFilter | null | undefined
-  /** Filter by the object’s `artIstVorhanden` field. */
-  artIstVorhanden?: StringFilter | null | undefined
+
   /** Filter by the object’s `artname` field. */
   artname?: StringFilter | null | undefined
-  /** Filter by the object’s `blatter` field. */
-  blatter?: FloatFilter | null | undefined
-  /** Filter by the object’s `bluten` field. */
-  bluten?: FloatFilter | null | undefined
-  /** Filter by the object’s `blutenstande` field. */
-  blutenstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendePflanzen` field. */
-  davonBluhendePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonBluhendeTriebe` field. */
-  davonBluhendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `davonRosetten` field. */
-  davonRosetten?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckung` field. */
-  deckung?: FloatFilter | null | undefined
-  /** Filter by the object’s `deckungXFlache` field. */
-  deckungXFlache?: FloatFilter | null | undefined
-  /** Filter by the object’s `fertilePflanzen` field. */
-  fertilePflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `flacheM2` field. */
-  flacheM2?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtendeTriebe` field. */
-  fruchtendeTriebe?: FloatFilter | null | undefined
-  /** Filter by the object’s `fruchtstande` field. */
-  fruchtstande?: FloatFilter | null | undefined
-  /** Filter by the object’s `gruppen` field. */
-  gruppen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `jahr` field. */
   jahr?: IntFilter | null | undefined
-  /** Filter by the object’s `jungpflanzen` field. */
-  jungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `keimlinge` field. */
-  keimlinge?: FloatFilter | null | undefined
+
   /** Negates the expression. */
   not?: VTpopLastCountWithMassnFilter | null | undefined
   /** Checks for any expressions in this list. */
   or?: Array<VTpopLastCountWithMassnFilter> | null | undefined
-  /** Filter by the object’s `pflanzen5M2` field. */
-  pflanzen5M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenOhneJungpflanzen` field. */
-  pflanzenOhneJungpflanzen?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzenTotal` field. */
-  pflanzenTotal?: FloatFilter | null | undefined
-  /** Filter by the object’s `pflanzstellen` field. */
-  pflanzstellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `popId` field. */
   popId?: UuidFilter | null | undefined
   /** Filter by the object’s `popName` field. */
@@ -5253,8 +5074,7 @@ export type VTpopLastCountWithMassnFilter = {
   popNr?: IntFilter | null | undefined
   /** Filter by the object’s `popStatus` field. */
   popStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `stellen` field. */
-  stellen?: FloatFilter | null | undefined
+
   /** Filter by the object’s `tpopByTpopId` relation. */
   tpopByTpopId?: TpopFilter | null | undefined
   /** A related `tpopByTpopId` exists. */
@@ -5269,16 +5089,6 @@ export type VTpopLastCountWithMassnFilter = {
   tpopNr?: IntFilter | null | undefined
   /** Filter by the object’s `tpopStatus` field. */
   tpopStatus?: StringFilter | null | undefined
-  /** Filter by the object’s `triebe50M2` field. */
-  triebe50M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeBeweidung` field. */
-  triebeBeweidung?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeIn30M2` field. */
-  triebeIn30M2?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeMahflache` field. */
-  triebeMahflache?: FloatFilter | null | undefined
-  /** Filter by the object’s `triebeTotal` field. */
-  triebeTotal?: FloatFilter | null | undefined
 }
 
 export type ZielFilter = {

@@ -37,6 +37,19 @@ interface TpopViewNode {
   nr: number | null
 }
 
+/** massnahme/kontrolle nodes as returned by the v_q_*_datum_jahr views */
+interface TpopChildViewNode {
+  projId: ProjektId
+  apId: ApId
+  popId: PopId
+  popNr: number | null
+  tpopId: TpopId
+  tpopNr: number | null
+  id: string
+  jahr: number | null
+  bemerkung: string | null
+}
+
 interface PopRef {
   id: PopId
   nr: number | null
@@ -291,6 +304,9 @@ export interface QkQueryData {
   tpopErsteMassnVorBekanntSeit?: ViewNodes<
     TpopViewNode & { bemerkung: string | null }
   >
+  tpopmassnDatumJahr?: ViewNodes<TpopChildViewNode>
+  tpopfeldkontrDatumJahr?: ViewNodes<TpopChildViewNode>
+  tpopfreiwkontrDatumJahr?: ViewNodes<TpopChildViewNode>
   tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?: ViewNodes<TpopViewNode>
   tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit?: ViewNodes<TpopViewNode>
   tpopOhneNr?: ApProjektWrapper<{
@@ -1559,6 +1575,60 @@ export const createMessageFunctions = ({
       text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
         n.nr || n.id
       } (${n.bemerkung})`,
+    })),
+  tpopmassnDatumJahr: () =>
+    (data?.tpopmassnDatumJahr?.nodes ?? []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Arten',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.tpopId,
+        'Massnahmen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.tpopNr || n.tpopId
+      }, Massnahme: ${n.jahr || n.id} (${n.bemerkung})`,
+    })),
+  tpopfeldkontrDatumJahr: () =>
+    (data?.tpopfeldkontrDatumJahr?.nodes ?? []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Arten',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.tpopId,
+        'Feld-Kontrollen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.tpopNr || n.tpopId
+      }, Kontrolle: ${n.jahr || n.id} (${n.bemerkung})`,
+    })),
+  tpopfreiwkontrDatumJahr: () =>
+    (data?.tpopfreiwkontrDatumJahr?.nodes ?? []).map((n) => ({
+      url: [
+        'Projekte',
+        n.projId,
+        'Arten',
+        n.apId,
+        'Populationen',
+        n.popId,
+        'Teil-Populationen',
+        n.tpopId,
+        'Freiwilligen-Kontrollen',
+        n.id,
+      ],
+      text: `Population: ${n.popNr || n.popId}, Teil-Population: ${
+        n.tpopNr || n.tpopId
+      }, Kontrolle: ${n.jahr || n.id} (${n.bemerkung})`,
     })),
   tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: () =>
     (data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes ?? []).map(

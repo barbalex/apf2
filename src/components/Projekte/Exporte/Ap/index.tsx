@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
@@ -21,9 +20,10 @@ import { Idealbiotop } from './Idealbiotop.tsx'
 import { Assozart } from './Assozart.tsx'
 
 import styles from '../index.module.css'
+import { useExporteExpanded } from '../useExporteExpanded.ts'
 
 export const Ap = () => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useExporteExpanded('ap')
 
   const onClickAction = () => setExpanded(!expanded)
 

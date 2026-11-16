@@ -1,7 +1,8 @@
 import type { PopberFilter } from '../modules/gqlFilterTypes.ts'
-import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
+import { treeNodeLabelFilterAtom } from '../store/index.ts'
+import type { Store } from 'jotai'
 
-export const getPopberGqlFilterForTree = (_popId: string) => {
+export const getPopberGqlFilterForTree = (store: Store, _popId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const gqlFilter: PopberFilter = {}
 

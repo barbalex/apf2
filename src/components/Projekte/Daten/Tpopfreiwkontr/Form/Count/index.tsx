@@ -9,6 +9,7 @@ import { useSetAtom, useAtomValue } from 'jotai'
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
+import { appendTpopkontrzaehlToKontrCache } from '../../../../../../modules/updateTpopkontrzaehlInCaches.ts'
 import {
   setToDeleteAtom,
   treeActiveNodeArrayAtom,
@@ -108,7 +109,7 @@ export const Count = ({
 
   const tsQueryClient = useQueryClient()
 
-  const { data, refetch: refetchMe } = useQuery({
+  const { data } = useQuery({
     queryKey: ['tpopkontrzaehl', id],
     queryFn: async () => {
       const [rows, einheitWertes] = await Promise.all([
@@ -132,19 +133,21 @@ export const Count = ({
 
   const row: Partial<TpopkontrzaehlRow> = data?.tpopkontrzaehlById ?? {}
 
-  const createNew = () =>
-    apiInsert('tpopkontrzaehl', {
-      id: uuidv7(),
+  const createNew = () => {
+    if (!tpopkontrId) return Promise.resolve()
+    const id = uuidv7() as TpopkontrzaehlId
+    return apiInsert('tpopkontrzaehl', {
+      id,
       tpopkontr_id: tpopkontrId,
     }).then(() => {
-      refetch()
+      // #837: append the new row to the open forms instead of refetching
+      // the whole kontr; the tree still refetches for the new label
+      appendTpopkontrzaehlToKontrCache({ tsQueryClient, tpopkontrId, id })
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
       })
-      void tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
-      })
     })
+  }
 
   const zaehleinheitWerte = getZaehleinheitWerte({
     data,
@@ -161,9 +164,6 @@ export const Count = ({
       refetch()
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfreiwkontrzaehl`],
-      })
-      void tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfreiwkontrzaehlFolders`],
       })
     }
     setToDelete({
@@ -225,23 +225,16 @@ export const Count = ({
     >
       <Einheit
         row={row}
-        refetch={refetch}
         zaehleinheitWerte={zaehleinheitWerte}
         nr={nr}
       />
       <div className={styles.gezaehltLabel}>gezählt</div>
       <div className={styles.geschaetztLabel}>geschätzt</div>
       <div className={styles.gezaehltVal}>
-        <Gezaehlt
-          row={row}
-          refetch={() => void refetchMe()}
-        />
+        <Gezaehlt row={row} />
       </div>
       <div className={styles.geschaetztVal}>
-        <Geschaetzt
-          row={row}
-          refetch={() => void refetchMe()}
-        />
+        <Geschaetzt row={row} />
       </div>
       {showDelete && (
         <div className={styles.deleteClass}>

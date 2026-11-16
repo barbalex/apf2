@@ -3,20 +3,22 @@ import { isEqual } from 'es-toolkit'
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import {
-  store,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.ts'
+import type { Store } from 'jotai'
 import type { TreeNodeData } from './types.ts'
 
 export const toggleNodeSymbol = ({
+  store,
   node,
   search,
   doNotSwitchToNodesParent = false,
 }: {
+  store: Store
   // only url is used; some callers pass a partial node
   node: Pick<TreeNodeData, 'url'>
   search: string

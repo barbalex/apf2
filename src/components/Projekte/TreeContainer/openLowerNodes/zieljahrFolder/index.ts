@@ -6,9 +6,11 @@
  */
 
 import { apiFetch } from '../../../../../modules/api.ts'
-import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import { treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface ZieljahrFolderParams {
+  store: Store
   parentId?: string | null | undefined
   projId?: string | null | undefined
   jahr?: string | null | undefined
@@ -17,6 +19,7 @@ interface ZieljahrFolderParams {
 }
 
 export const zieljahrFolder = async ({
+  store,
   parentId: apId,
   projId = '99999999-9999-9999-9999-999999999999',
   jahr: jahrString,

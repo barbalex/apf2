@@ -7,11 +7,13 @@
 
 ---
 
-I see there are still a few useCallback and useMemo (and others?) usages. Are they still needed considering this app uses react compiler?
-
 ---
 
 ---
+
+---
+
+Tree keyboard navigation as in ae3
 
 ---
 

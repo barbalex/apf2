@@ -1,16 +1,24 @@
 import { apiFetch, apiUpdateByVariables } from '../api.ts'
 import {
-  store,
   addNotificationAtom,
   type Notification,
-  getTsQueryClientFromStore,
+  getTsQueryClientFrom,
 } from '../../store/index.ts'
+import type { Store } from 'jotai'
 
-const addNotification = (notification: Omit<Notification, 'key'>) =>
-  store.set(addNotificationAtom, notification)
+const addNotification = (
+  store: Store,
+  notification: Omit<Notification, 'key'>,
+) => store.set(addNotificationAtom, notification)
 
-export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
-  const tsQueryClient = getTsQueryClientFromStore()
+export const copyTpopKoordToPop = async ({
+  store,
+  id,
+}: {
+  store: Store
+  id: string
+}) => {
+  const tsQueryClient = getTsQueryClientFrom(store)
   // fetch tpop
   let tpop:
     | { pop_id: string | null; geom_point: { coordinates: number[] } | null }
@@ -21,7 +29,7 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
     >(`/q_tpop?id=eq.${id}&select=pop_id,geom_point`)
     tpop = tpops?.[0]
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',
@@ -29,7 +37,7 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
     })
   }
   if (!tpop?.pop_id || !tpop?.geom_point) {
-    return addNotification({
+    return addNotification(store, {
       message:
         'Die Teil-Population hat keine Koordinaten oder keine Population',
       options: {
@@ -61,7 +69,7 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
       geomPoint,
     })
   } catch (error) {
-    return addNotification({
+    return addNotification(store, {
       message: (error as Error).message,
       options: {
         variant: 'error',

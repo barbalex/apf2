@@ -1,11 +1,12 @@
 import { apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useStore } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus, FaFilePdf } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
@@ -21,6 +22,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 const iconStyle = { color: 'white' }
 
 export const Menu = () => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -51,9 +53,6 @@ export const Menu = () => {
       queryKey: [`treeApber`],
     })
     void tsQueryClient.invalidateQueries({
-      queryKey: [`treeApFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = newId
@@ -69,6 +68,7 @@ export const Menu = () => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'apber',
@@ -86,11 +86,19 @@ export const Menu = () => {
       },
     })
 
-  const onClickPrint = () => navigate(`print${search}`)
+  const [openingPrint, setOpeningPrint] = useState(false)
+  const onClickPrint = () => {
+    // the form stays mounted while the lazy print route loads — show the
+    // click registered until the navigation commits
+    setOpeningPrint(true)
+    navigate(`print${search}`)
+  }
 
   return (
     <ErrorBoundary>
-      <MenuBar>
+      {/* rerenderer: MenuBar snapshots the children — without it the
+          print-loading spinner would never appear */}
+      <MenuBar rerenderer={String(openingPrint)}>
         <Tooltip title="Neuen AP-Bericht erstellen">
           <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
@@ -106,7 +114,12 @@ export const Menu = () => {
         </Tooltip>
         <Tooltip title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server.">
           <IconButton onClick={() => void onClickPrint()}>
-            <FaFilePdf style={iconStyle} />
+            {openingPrint ?
+              <CircularProgress
+                size={20}
+                style={iconStyle}
+              />
+            : <FaFilePdf style={iconStyle} />}
           </IconButton>
         </Tooltip>
       </MenuBar>

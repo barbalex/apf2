@@ -1,7 +1,7 @@
 import { apiFetch, apiInsert } from '../../../../modules/api.ts'
 import { v7 as uuidv7 } from 'uuid'
 import { useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useStore } from 'jotai'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation, Link } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
@@ -46,6 +46,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ row }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -128,6 +129,7 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickDelete = () =>
     void deleteModule({
+      store,
       search,
       toDelete: {
         table: 'user',

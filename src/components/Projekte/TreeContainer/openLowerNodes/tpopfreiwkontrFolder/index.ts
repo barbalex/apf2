@@ -7,9 +7,11 @@
  */
 
 import { apiFetch } from '../../../../../modules/api.ts'
-import { store, treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import { treeAddOpenNodesAtom } from '../../../../../store/index.ts'
+import type { Store } from 'jotai'
 
 interface TpopfreiwkontrFolderParams {
+  store: Store
   id?: string | null | undefined
   apId?: string | null | undefined
   popId?: string | null | undefined
@@ -17,6 +19,7 @@ interface TpopfreiwkontrFolderParams {
 }
 
 export const tpopfreiwkontrFolder = async ({
+  store,
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   popId = '99999999-9999-9999-9999-999999999999',

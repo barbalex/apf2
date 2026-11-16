@@ -22,3 +22,15 @@
     text-decoration: underline;
   }
 }
+
+/* 998px mirrors constants.mobileViewMaxWidth (999):
+   the app treats widths below 999 as mobile.
+   Doc pages hide the menu entirely (see DesktopDocs.module.css);
+   on the index route it becomes the page itself */
+@media (max-width: 998px) {
+  .menu {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+  }
+}

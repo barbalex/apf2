@@ -8,7 +8,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -35,6 +35,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const store = useStore()
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -73,7 +74,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     void navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
   }
 
-  const onClickMoveHere = () => moveTo({ id: apId })
+  const onClickMoveHere = () => moveTo({ store, id: apId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -84,10 +85,11 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       fromParentId: null,
     })
 
-  const onClickCopyTo = () => copyTo({ parentId: apId })
+  const onClickCopyTo = () => copyTo({ store, parentId: apId })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
+      store,
       url: ['Projekte', projId, 'Arten', apId],
       search,
     })
