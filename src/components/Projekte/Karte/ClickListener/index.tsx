@@ -130,24 +130,27 @@ export const ClickListener = () => {
     }
 
     if (activeOverlays.includes('Detailplaene')) {
-      let detailplan: { id: string; data: string | null } | null = null
+      // the rpc returns jsonb: data arrives as an already-parsed object
+      let detailplan: {
+        id: string
+        data: Record<string, unknown> | null
+      } | null = null
       try {
-        detailplan = await apiFetch<{ id: string; data: string | null } | null>(
-          '/rpc/get_detailplan_at_point',
-          {
-            method: 'POST',
-            body: JSON.stringify({ p_lng: lng, p_lat: lat }),
-          },
-        )
+        detailplan = await apiFetch<{
+          id: string
+          data: Record<string, unknown> | null
+        } | null>('/rpc/get_detailplan_at_point', {
+          method: 'POST',
+          body: JSON.stringify({ p_lng: lng, p_lat: lat }),
+        })
       } catch (error) {
         console.log(error)
       }
 
       if (detailplan?.data) {
-        const properties = JSON.parse(detailplan.data)
         layersData.push({
           label: 'Detailpläne',
-          properties: Object.entries(properties),
+          properties: Object.entries(detailplan.data),
         })
       }
     }
