@@ -6,15 +6,15 @@ import { FaPlus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom, useAtomValue, useStore } from 'jotai'
+import { useSetAtom, useStore } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
+import { useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
 import {
-  showTreeMenusAtom,
   addNotificationAtom,
 } from '../../../../store/index.ts'
 
@@ -80,7 +80,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       search,
     })
 
-  const showTreeMenus = useAtomValue(showTreeMenusAtom)
+  const showTreeMenus = useShowTreeMenus()
 
   return (
     <ErrorBoundary>
