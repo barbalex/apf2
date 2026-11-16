@@ -1,0 +1,1 @@
+Die App dokumentiert Laufzeit-Fehler in einer eigenen Tabelle mit Informationen über die verwendete apflora-Version, Browser und Betriebssystem. Ziel ist es, die App zu verbessern. Es werden keinerlei Informationen über Euch gesammelt.
