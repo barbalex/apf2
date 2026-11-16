@@ -28,14 +28,13 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
-import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
+import { useProjekteTabs, useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import {
-  showTreeMenusAtom,
   addNotificationAtom,
   movingAtom,
   setMovingAtom,
@@ -265,7 +264,7 @@ export const Menu = ({ row }: MenuProps) => {
       id: tpopId ?? '',
     })
 
-  const showTreeMenus = useAtomValue(showTreeMenusAtom)
+  const showTreeMenus = useShowTreeMenus()
 
   // ISSUE: refs are sometimes/often not set on first render
   // trying to measure widths of menus leads to complete chaos

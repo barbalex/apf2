@@ -19,3 +19,10 @@ export const useProjekteTabs = () => {
 
   return [projekteTabs, setProjekteTabs] as const
 }
+
+// the tree menus (folders in list views) only make sense when the nav tree
+// pane is actually visible, i.e. when the tree tab is open in this pane
+export const useShowTreeMenus = () => {
+  const [projekteTabs] = useProjekteTabs()
+  return projekteTabs.includes('tree')
+}

@@ -17,8 +17,8 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
+import { useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
 import {
-  showTreeMenusAtom,
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
@@ -167,7 +167,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     setCopyingBiotop({ id: null, label: null })
   }
 
-  const showTreeMenus = useAtomValue(showTreeMenusAtom)
+  const showTreeMenus = useShowTreeMenus()
 
   return (
     <ErrorBoundary>

@@ -17,8 +17,8 @@ import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
+import { useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
 import {
-  showTreeMenusAtom,
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
@@ -47,7 +47,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
-  const showTreeMenus = useAtomValue(showTreeMenusAtom)
+  const showTreeMenus = useShowTreeMenus()
 
   const onClickAdd = async () => {
     const newId = uuidv7()
