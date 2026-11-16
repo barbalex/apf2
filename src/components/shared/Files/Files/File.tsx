@@ -1,6 +1,6 @@
 import { apiDelete, apiUpdateByVariables } from '../../../../modules/api.ts'
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -17,7 +17,7 @@ import { isImageFile } from '../isImageFile.ts'
 import type { FileNode, FileParent } from '../types.ts'
 import type { SaveToDbEvent } from '../../types.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { userNameAtom, addNotificationAtom } from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 import styles from './File.module.css'
 
@@ -64,17 +64,15 @@ export const File = ({ file, parent, refetch }: FileProps) => {
   const onClickDownload = () =>
     window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`)
 
-  const userName = useAtomValue(userNameAtom)
-
   const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
     if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
+    // *_file tables have no changed_by column (only the updated_at trigger)
     const variables = {
       id: file.id,
       [field]: value,
-      changedBy: userName,
     }
     try {
       await apiUpdateByVariables(`${parent}_file`, variables)
