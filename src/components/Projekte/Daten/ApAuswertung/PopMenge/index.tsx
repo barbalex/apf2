@@ -259,7 +259,10 @@ const PopMengeChart = ({
                 }}
                 tickFormatter={formatNumber as (value: number) => string}
               />
-              {popIdsWithDataSorted.reverse().map((id) => {
+              {/* ascending by Nr: the base stays with the lowest (usually
+                  ursprüngliche) Populationen, newly founded ones enter at the
+                  top — no white wedges at the base (issue 794) */}
+              {popIdsWithDataSorted.map((id) => {
                 const pop = popsData.find((p) => p.id === id)
                 let color: string
                 if (!pop) {

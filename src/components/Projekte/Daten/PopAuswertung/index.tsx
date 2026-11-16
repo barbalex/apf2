@@ -190,7 +190,10 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                 }}
                 tickFormatter={formatNumber as (value: number) => string}
               />
-              {tpopIdsWithDataSorted.reverse().map((id) => {
+              {/* ascending by Nr: the base stays with the lowest (usually
+                  ursprüngliche) Teil-Populationen, newly founded ones enter
+                  at the top — no white wedges at the base (issue 794) */}
+              {tpopIdsWithDataSorted.map((id) => {
                 const tpop = tpopsData.find((p) => p.id === id)
                 let color: string
                 if (!tpop) {
