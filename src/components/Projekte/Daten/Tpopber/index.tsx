@@ -26,6 +26,7 @@ import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface TpopberQueryResult {
   tpopberById?: {
@@ -106,8 +107,13 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // invalidate tpopber query
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpopber', tpopberId] })
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['tpopber'],
+      rowKey: 'tpopberById',
+      row: variables,
+    })
     // only set if necessary (to reduce renders)
     if (Object.keys(fieldErrors).length) {
       setFieldErrors((prev) => {

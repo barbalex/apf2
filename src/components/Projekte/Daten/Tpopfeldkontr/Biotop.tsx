@@ -18,6 +18,7 @@ import type { TpopkontrId, TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
 import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 // shared RadioButtonGroup's props are inferred from an untyped signature
 // (dataSource infers as never, value as null);
@@ -132,9 +133,12 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // invalidate tpopfeldkontr query
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['tpopfeldkontrBiotop'],
+      rowKey: 'tpopkontrById',
+      row: variables,
     })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
