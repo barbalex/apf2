@@ -1,6 +1,4 @@
 .innerDiv {
-  border: none !important;
-  box-shadow: none !important;
   /* float children right */
   display: flex;
   flex-direction: column;
