@@ -28,7 +28,12 @@ export const Control = ({
       style={{ visibility: visible ? 'visible' : 'hidden' }}
     >
       <div className={positionClass}>
-        <div className={`leaflet-control leaflet-bar ${styles.innerDiv}`}>
+        {/*
+         * no leaflet-bar: its css styles every [role="button"] descendant
+         * like a zoom button (30px wide) — which wrecks the dnd-kit layer
+         * rows (they carry role="button" via their drag attributes)
+         */}
+        <div className={`leaflet-control ${styles.innerDiv}`}>
           {children}
         </div>
       </div>
