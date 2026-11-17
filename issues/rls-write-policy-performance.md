@@ -70,6 +70,14 @@ After (same statements, same accounts):
 | UPDATE tpopkontrzaehl | 15 ms | 2.7 ms |
 | INSERT tpopkontrzaehl | 2.2 ms | 0.6 ms |
 
+Why the reader policies keep their IN-subqueries: for bulk SELECTs the
+planner hashes the grant set once per statement — measured as granted
+apflora_ap_reader, `count(*) FROM v_export_tpopkontr` (1195 rows) runs in
+42 ms with the subqueries but 360 ms with per-row probe helpers (~8x
+slower, scaling with row count). The probes are a write-path tool; a
+future read-path optimization would need a set-returning grant function
+instead.
+
 Verified locally: all 133 api tests green (rls-matrix, rls, grants,
 freiwillig, exports), forbidden writes still fail loudly with the RLS
 check violation. One deliberate semantics fix rode along: the live

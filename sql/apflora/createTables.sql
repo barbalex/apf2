@@ -707,6 +707,14 @@ SECURITY DEFINER;
 -- tpop/pop/ap_user do not nest into every check.
 -- EXECUTE is granted to the five app roles only so PostgREST does not
 -- expose them to anon.
+--
+-- Deliberately ONLY the write expressions use them. The USING clauses of
+-- the reader policies keep the IN-subqueries above: for bulk SELECTs the
+-- planner hashes the grant set once per statement and probes in O(1), while
+-- these per-row probes measured 8x slower on apflora_ap_reader exports
+-- (v_export_tpopkontr: 42 ms -> 360 ms for ~1200 rows). If an
+-- ap_reader-specific read path ever needs optimizing, use a set-returning
+-- grant function instead - not these probes.
 CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_ap(p_ap_id uuid)
 RETURNS boolean
 LANGUAGE sql
