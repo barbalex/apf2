@@ -42,7 +42,9 @@ describe('mapLayersSearchParam', () => {
   })
 
   it('replaces stale values instead of accumulating them', () => {
-    const stale = new URLSearchParams('mapOverlays=ZhSvo&mapApfloraLayers=beobZugeordnet')
+    const stale = new URLSearchParams(
+      'mapOverlays=ZhSvo&mapApfloraLayers=beobZugeordnet',
+    )
     const written = writeMapLayersToSearchParams(stale, {
       ...state,
       overlays: ['Gemeinden'],
@@ -59,14 +61,18 @@ describe('mapLayersSearchParam', () => {
   })
 
   it('returns an empty object when no layer params are present', () => {
-    expect(readMapLayersFromSearchParams(new URLSearchParams('map=12/47.3/8.5'))).toEqual({})
+    expect(
+      readMapLayersFromSearchParams(new URLSearchParams('map=12/47.3/8.5')),
+    ).toEqual({})
   })
 
   it('drops unknown overlay and apflora layer values', () => {
     const params = new URLSearchParams(
       'mapOverlays=DoesNotExist&mapOverlays=Gemeinden&mapApfloraLayers=nope',
     )
-    expect(readMapLayersFromSearchParams(params).overlays).toEqual(['Gemeinden'])
+    expect(readMapLayersFromSearchParams(params).overlays).toEqual([
+      'Gemeinden',
+    ])
     expect(readMapLayersFromSearchParams(params).apfloraLayers).toEqual([])
   })
 

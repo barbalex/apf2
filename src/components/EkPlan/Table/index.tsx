@@ -304,10 +304,11 @@ export const EkPlanTable = () => {
           // every tpop id out of the URL (a ~30 kB URL kills the
           // connection on production, #830)
           apiFetch<
-            Record<string, unknown> & {
-              id: string
-              ekplan: { jahr: number | null; typ: string | null }[]
-            }[]
+            Record<string, unknown> &
+              {
+                id: string
+                ekplan: { jahr: number | null; typ: string | null }[]
+              }[]
           >('/rpc/query_tpop?select=*,ekplan(jahr,typ)', {
             method: 'POST',
             body: JSON.stringify({ p_filter: tpopFilter }),

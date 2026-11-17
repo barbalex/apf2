@@ -78,10 +78,7 @@ const formatNumber = (tickItem: number) => {
   return value
 }
 
-export const PopMenge = ({
-  data: dataPassed,
-  ...rest
-}: PopMengeProps) =>
+export const PopMenge = ({ data: dataPassed, ...rest }: PopMengeProps) =>
   dataPassed ?
     <PopMengeData
       data={dataPassed}

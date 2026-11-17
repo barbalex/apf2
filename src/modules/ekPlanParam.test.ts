@@ -8,7 +8,9 @@ import {
   sparseToEkPlanState,
 } from './ekPlanParam.ts'
 
-type EkPlanStatePartial = Partial<Omit<typeof defaultEkPlanUrlState, 'filters'>> & {
+type EkPlanStatePartial = Partial<
+  Omit<typeof defaultEkPlanUrlState, 'filters'>
+> & {
   filters?: Partial<typeof defaultEkPlanUrlState.filters>
 }
 

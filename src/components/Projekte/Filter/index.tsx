@@ -12,12 +12,7 @@ import styles from './index.module.css'
 
 // keep in sync with TabValue in ./Title.tsx
 type FilterTab =
-  | 'ap'
-  | 'pop'
-  | 'tpop'
-  | 'tpopmassn'
-  | 'tpopfeldkontr'
-  | 'tpopfreiwkontr'
+  'ap' | 'pop' | 'tpop' | 'tpopmassn' | 'tpopfeldkontr' | 'tpopfreiwkontr'
 
 export const Filter = () => {
   const [tab, setTab] = useSearchParamsState<FilterTab>('filterTab', 'ap')

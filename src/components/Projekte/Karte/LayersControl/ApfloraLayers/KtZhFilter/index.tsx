@@ -11,7 +11,7 @@ export const KtZhFilter = () => {
     value:
       | { type: string; coordinates: number[][][] }
       | Record<string, unknown>
-      | undefined
+      | undefined,
   ) => void
 
   const onClickFilterZh = () =>

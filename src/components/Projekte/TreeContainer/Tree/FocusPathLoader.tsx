@@ -40,7 +40,10 @@ export const FocusPathLoader = ({
     if (!row) continue
     const rowUrl = row.node.url
     if (rowUrl.length >= targetUrl.length) continue
-    if (JSON.stringify(rowUrl) !== JSON.stringify(targetUrl.slice(0, rowUrl.length)))
+    if (
+      JSON.stringify(rowUrl) !==
+      JSON.stringify(targetUrl.slice(0, rowUrl.length))
+    )
       continue
     // row is an ancestor of the target
     if (
@@ -57,8 +60,10 @@ export const FocusPathLoader = ({
 
   // key by row: when the loading frontier advances, a new fetcher hook
   // must run in a fresh component instance, not the previous one
-  return <ChildLoader
-    key={menuToLoad.key}
-    menu={menuToLoad.menu}
-  />
+  return (
+    <ChildLoader
+      key={menuToLoad.key}
+      menu={menuToLoad.menu}
+    />
+  )
 }

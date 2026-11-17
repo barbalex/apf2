@@ -179,9 +179,9 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
                 severity="error"
                 className={styles.styledFormControl}
               >{`Eine Prüfung konnte nicht geladen werden (Prüfung: ${
-                  qks.find((qk) => qk.name === failedCheck.checkName)
-                    ?.titel ?? failedCheck.checkName
-                }): ${failedCheck.message}. Bitte melden Sie diesen Fehler.`}</Alert>
+                qks.find((qk) => qk.name === failedCheck.checkName)?.titel ??
+                failedCheck.checkName
+              }): ${failedCheck.message}. Bitte melden Sie diesen Fehler.`}</Alert>
             ))}
             {messageGroups.length > 0 ?
               <div className={styles.scrollContainer}>
@@ -236,8 +236,10 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
                   </Paper>
                 ))}
               </div>
-            : failedChecks.length === 0 &&
-              <div>Juhui. Offenbar gibt es nichts zu meckern!</div>}
+            : failedChecks.length === 0 && (
+                <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
+              )
+            }
           </>
         }
       </div>

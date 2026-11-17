@@ -60,7 +60,7 @@ export const useProgressiveCount = (length: number, chunkSize = 300) => {
  * react-query's structural sharing keeps identical results referentially
  * equal, and changed filters remount the layer via its key.
  */
-export const useProgressiveElements = <T,>(
+export const useProgressiveElements = <T>(
   items: T[],
   createElement: (item: T) => ReactElement,
   chunkSize = 300,

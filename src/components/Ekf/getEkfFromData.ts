@@ -61,7 +61,11 @@ export interface EkfQueryResult {
   userById: UserNode | null
 }
 
-export const getEkfFromData = ({ data }: { data?: EkfQueryResult | undefined }) => {
+export const getEkfFromData = ({
+  data,
+}: {
+  data?: EkfQueryResult | undefined
+}) => {
   const ekfNodes =
     data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
 
@@ -86,7 +90,5 @@ export const getEkfFromData = ({ data }: { data?: EkfQueryResult | undefined }) 
 
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
-
-
 
 export type EkfRow = ReturnType<typeof getEkfFromData>[number]

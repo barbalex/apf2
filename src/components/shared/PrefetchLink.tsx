@@ -13,26 +13,26 @@ export const PrefetchLink = ({
   ...props
 }: LinkProps & { ref?: Ref<HTMLAnchorElement> | undefined }) => {
   const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
-      // Call any existing onMouseEnter handler
-      onMouseEnter?.(e)
+    // Call any existing onMouseEnter handler
+    onMouseEnter?.(e)
 
-      // Prefetch the route data
-      // string targets can contain a search string - prefetch the path only
-      const path =
-        typeof to === 'string' ? to.split('?')[0]
-        : typeof to === 'object' && 'pathname' in to ? to.pathname
-        : null
+    // Prefetch the route data
+    // string targets can contain a search string - prefetch the path only
+    const path =
+      typeof to === 'string' ? to.split('?')[0]
+      : typeof to === 'object' && 'pathname' in to ? to.pathname
+      : null
 
-      if (path) {
-        void prefetchRouteData(path)
-      }
+    if (path) {
+      void prefetchRouteData(path)
     }
-
-    return (
-      <Link
-        to={to}
-        onMouseEnter={handleMouseEnter}
-        {...props}
-      />
-    )
   }
+
+  return (
+    <Link
+      to={to}
+      onMouseEnter={handleMouseEnter}
+      {...props}
+    />
+  )
+}

@@ -58,9 +58,8 @@ export const useUsersNavData = () => {
       treeTableId: p?.id,
       treeUrl: ['Benutzer', p?.id],
       hasChildren: false,
-      labelRightElements: data.passlessIds.has(p?.id ?? '')
-        ? [PasswortFehlt]
-        : undefined,
+      labelRightElements:
+        data.passlessIds.has(p?.id ?? '') ? [PasswortFehlt] : undefined,
     })),
   }
 

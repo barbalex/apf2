@@ -13,9 +13,7 @@ export const labelFilterPrefix = 'labelFilter.'
 export const readLabelFilterFromSearchParams = (
   params: URLSearchParams,
 ): LabelFilterUrlState => {
-  const knownTypes = new Set(
-    Object.keys(initialTreeNodeLabelFilter),
-  )
+  const knownTypes = new Set(Object.keys(initialTreeNodeLabelFilter))
   const result: LabelFilterUrlState = {}
   for (const [key, value] of params.entries()) {
     if (!key.startsWith(labelFilterPrefix) || !value) continue

@@ -52,9 +52,7 @@ export const Password = ({
     hasSpecialChars: false,
   })
 
-  const passwordButtonLabel = passIsNull
-    ? 'Passwort setzen'
-    : 'Passwort ändern'
+  const passwordButtonLabel = passIsNull ? 'Passwort setzen' : 'Passwort ändern'
 
   // Reset password fields when editPassword becomes false
   useEffect(() => {
@@ -177,9 +175,9 @@ export const Password = ({
           }}
           className={styles.button}
         >
-          {editPassword
-            ? `${passwordButtonLabel} abbrechen`
-            : passwordButtonLabel}
+          {editPassword ?
+            `${passwordButtonLabel} abbrechen`
+          : passwordButtonLabel}
         </Button>
       )}
       {!!passwordMessage && (

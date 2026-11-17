@@ -14,10 +14,7 @@ import {
   LABELS_MAX_MARKERS,
   useProgressiveElements,
 } from '../../useProgressiveCount.ts'
-import type {
-  MarkerCluster,
-  MarkerClusterGroup,
-} from 'leaflet.markercluster'
+import type { MarkerCluster, MarkerClusterGroup } from 'leaflet.markercluster'
 
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
@@ -75,7 +72,10 @@ interface TpopQueryResult {
 const iconCreateFunction = (cluster: MarkerCluster) => {
   const hasHighlightedTpop = cluster
     .getAllChildMarkers()
-    .some((m) => (m.options.icon.options as { isHighlighted?: boolean }).isHighlighted)
+    .some(
+      (m) =>
+        (m.options.icon.options as { isHighlighted?: boolean }).isHighlighted,
+    )
   const className =
     hasHighlightedTpop ? 'tpopClusterHighlighted' : 'tpopCluster'
 
@@ -287,7 +287,11 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
   const labeled = nodes.length <= LABELS_MAX_MARKERS
   const groupRef = useRef<MarkerClusterGroup<LeafletMarkerType> | null>(null)
   const tpopMarkers = useProgressiveElements(nodes, (tpop) => (
-    <Marker key={tpop.id} tpop={tpop} labeled={labeled} />
+    <Marker
+      key={tpop.id}
+      tpop={tpop}
+      labeled={labeled}
+    />
   ))
   useDisplayedLabels({
     map: leafletMap,
@@ -324,7 +328,8 @@ export const Tpop = ({ clustered }: { clustered: boolean }) => {
   // Solution: do not return tpop while gqlFilter does not contain
   // the route's apId. Comparing (instead of only checking presence) also
   // hides the previous ap's data while navigating between aps
-  const gqlFilterApId = tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId?.equalTo
+  const gqlFilterApId =
+    tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId?.equalTo
   const apIdDoesNotMatchGqlFilter = !!apId && gqlFilterApId !== apId
 
   if (apIdDoesNotMatchGqlFilter) return null

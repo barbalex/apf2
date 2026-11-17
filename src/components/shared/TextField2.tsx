@@ -39,9 +39,9 @@ export const TextField2 = ({
   const [stateValue, setStateValue] = useState<string | number>(
     value || value === 0 ? value : '',
   )
-  const [prevValue, setPrevValue] = useState<string | number | null | undefined>(
-    value,
-  )
+  const [prevValue, setPrevValue] = useState<
+    string | number | null | undefined
+  >(value)
   // adjust state when the value changes from outside
   if (prevValue !== value) {
     setPrevValue(value)
@@ -49,7 +49,6 @@ export const TextField2 = ({
   }
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setStateValue(event.target.value)
-
 
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -94,9 +93,7 @@ export const TextField2 = ({
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
       {!!helperText && (
-        <FormHelperText id={`${label}HelperText`}>
-          {helperText}
-        </FormHelperText>
+        <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
       )}
     </FormControl>
   )

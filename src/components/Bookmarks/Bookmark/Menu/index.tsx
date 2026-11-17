@@ -24,14 +24,15 @@ interface StyledMenuProps extends MuiMenuProps {
 
 const StyledMenu = styled((props: StyledMenuProps) => <MuiMenu {...props} />)(
   (props: StyledMenuProps) => ({
-  '& .MuiPaper-root': {
-    scrollbarWidth: 'thin',
-    minWidth: props.minwidth ? `${props.minwidth}px` : 'unset',
-  },
-  '& .MuiList-root': {
-    paddingTop: 0,
-  },
-}))
+    '& .MuiPaper-root': {
+      scrollbarWidth: 'thin',
+      minWidth: props.minwidth ? `${props.minwidth}px` : 'unset',
+    },
+    '& .MuiList-root': {
+      paddingTop: 0,
+    },
+  }),
+)
 
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
@@ -40,7 +41,8 @@ export const Menu = ({ navData }: { navData: NavData }) => {
   const activeFilterTable = store.get(treeActiveFilterTableAtom)
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
 
-  const filterValue = activeFilterTable ? (nodeLabelFilter[activeFilterTable] ?? '') : ''
+  const filterValue =
+    activeFilterTable ? (nodeLabelFilter[activeFilterTable] ?? '') : ''
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)

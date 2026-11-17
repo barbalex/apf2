@@ -35,11 +35,13 @@ export const Detailplaene = () => {
       // phase 5: the former geometry embed arrives as raw GeoJSON,
       // data (jsonb) as an already-parsed object
       const nodes =
-        (await apiFetch<{
-          id: string
-          data: Record<string, unknown> | null
-          geom: unknown
-        }[]>(`/detailplaene?select=id,data,geom`)) ?? []
+        (await apiFetch<
+          {
+            id: string
+            data: Record<string, unknown> | null
+            geom: unknown
+          }[]
+        >(`/detailplaene?select=id,data,geom`)) ?? []
       return {
         allDetailplaenes: {
           nodes: nodes.map((n) => ({

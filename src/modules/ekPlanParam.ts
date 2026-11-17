@@ -98,14 +98,19 @@ export const buildSparseEkPlanState = (
   if (state.pastYears !== defaultEkPlanUrlState.pastYears) {
     sparse.pastYears = state.pastYears
   }
-  for (const key of ['showEk', 'showEkf', 'showCount', 'showEkCount', 'showMassn'] as const) {
+  for (const key of [
+    'showEk',
+    'showEkf',
+    'showCount',
+    'showEkCount',
+    'showMassn',
+  ] as const) {
     if (!state[key]) sparse[key] = false
   }
   const sparseFilters: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(state.filters)) {
-    const defaultValue = defaultEkPlanUrlState.filters[
-      key as keyof EkPlanUrlState['filters']
-    ]
+    const defaultValue =
+      defaultEkPlanUrlState.filters[key as keyof EkPlanUrlState['filters']]
     if (Array.isArray(value) || Array.isArray(defaultValue)) {
       const v = Array.isArray(value) ? value : []
       const d = Array.isArray(defaultValue) ? defaultValue : []
@@ -147,7 +152,10 @@ const filterValueTypes = {
   ekplanYear: 'number',
 } as const satisfies Record<keyof EkPlanUrlState['filters'], string>
 
-const isValidFilterValue = (key: keyof typeof filterValueTypes, value: unknown): boolean => {
+const isValidFilterValue = (
+  key: keyof typeof filterValueTypes,
+  value: unknown,
+): boolean => {
   switch (filterValueTypes[key]) {
     case 'number':
       return isFiniteNumber(value)
@@ -191,7 +199,13 @@ export const sparseToEkPlanState = (
     if (fields.length > 0) result.fields = [...new Set(fields)]
   }
   if (isFiniteNumber(source.pastYears)) result.pastYears = source.pastYears
-  for (const key of ['showEk', 'showEkf', 'showCount', 'showEkCount', 'showMassn'] as const) {
+  for (const key of [
+    'showEk',
+    'showEkf',
+    'showCount',
+    'showEkCount',
+    'showMassn',
+  ] as const) {
     if (source[key] === false) result[key] = false
   }
   if (typeof source.filters === 'object' && source.filters !== null) {

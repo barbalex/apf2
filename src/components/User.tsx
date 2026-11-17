@@ -272,13 +272,15 @@ export const User = () => {
           fullWidth
           maxWidth="xs"
         >
-          <DialogTitle id="dialog-title">Noch kein Passwort gesetzt</DialogTitle>
+          <DialogTitle id="dialog-title">
+            Noch kein Passwort gesetzt
+          </DialogTitle>
           <div className={styles.setupDiv}>
             <p className={styles.setupMessage}>
-              Für den Benutzer «{name}» wurde noch kein Passwort gesetzt.
-              Wenden Sie sich an topos: Es setzt für Sie ein initiales Passwort
-              und teilt es Ihnen mit. Ersetzen Sie es beim ersten Anmelden durch
-              Ihr eigenes.
+              Für den Benutzer «{name}» wurde noch kein Passwort gesetzt. Wenden
+              Sie sich an topos: Es setzt für Sie ein initiales Passwort und
+              teilt es Ihnen mit. Ersetzen Sie es beim ersten Anmelden durch Ihr
+              eigenes.
             </p>
           </div>
           <DialogActions>
@@ -314,7 +316,9 @@ export const User = () => {
               variant="standard"
               className={styles.oldPasswordField}
             >
-              <InputLabel htmlFor="altes-passwort">Aktuelles Passwort</InputLabel>
+              <InputLabel htmlFor="altes-passwort">
+                Aktuelles Passwort
+              </InputLabel>
               <Input
                 id="altes-passwort"
                 inputRef={oldPasswordInput}

@@ -17,11 +17,7 @@ interface EinheitProps {
   zaehleinheitWerte: { value: number; label: string }[]
 }
 
-export const Einheit = ({
-  nr,
-  row,
-  zaehleinheitWerte,
-}: EinheitProps) => {
+export const Einheit = ({ nr, row, zaehleinheitWerte }: EinheitProps) => {
   const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()

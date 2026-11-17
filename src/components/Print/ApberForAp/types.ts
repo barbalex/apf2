@@ -160,10 +160,7 @@ export interface ApberForApProps {
    * when ApberForAp is called from ApberForYear (isSubReport)
    * the ap node itself is passed
    */
-  apData?:
-    | { apById?: ApberForApApNode | null }
-    | ApberForApApNode
-    | undefined
+  apData?: { apById?: ApberForApApNode | null } | ApberForApApNode | undefined
   node?: ApberForApJberAbcNode | undefined
   /**
    * when ApberForAp is called from ApberForYear

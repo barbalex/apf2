@@ -41,11 +41,15 @@ export const readMapLayersFromSearchParams = (
   if (params.has(mapLayersParamNames.apfloraLayers)) {
     result.apfloraLayers = params
       .getAll(mapLayersParamNames.apfloraLayers)
-      .filter((value) =>
-        mapApfloraLayerCatalog.some((l) => l.value === value),
-      )
+      .filter((value) => mapApfloraLayerCatalog.some((l) => l.value === value))
   }
-  for (const key of ['baseLayer', 'popIcon', 'tpopIcon', 'popLabel', 'tpopLabel'] as const) {
+  for (const key of [
+    'baseLayer',
+    'popIcon',
+    'tpopIcon',
+    'popLabel',
+    'tpopLabel',
+  ] as const) {
     const value = params.get(mapLayersParamNames[key])
     if (value) result[key] = value
   }

@@ -165,8 +165,9 @@ export const Karte = ({ mapContainerRef }: KarteProps) => {
   // Fall back to stored bounds when no view has been persisted yet.
   // atomWithStorage provides the bounds as number[][],
   // which is a valid LatLngBoundsLiteral at runtime
-  const initialViewProps: MapContainerProps = initialView
-    ? {
+  const initialViewProps: MapContainerProps =
+    initialView ?
+      {
         center: [initialView.center.lat, initialView.center.lng],
         zoom: initialView.zoom,
       }

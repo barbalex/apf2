@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import {
-  store,
-  tsQueryClientAtom,
-} from '../../store/index.ts'
+import { store, tsQueryClientAtom } from '../../store/index.ts'
 
 export const QueryClientSetter = () => {
   const tsQueryClient = useQueryClient()

@@ -25,7 +25,9 @@ interface BeobZugeordnetQueryResult {
 const iconCreateFunction = (cluster: MarkerCluster) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    (m) => (m.options.icon as DivIcon | undefined)?.options.className === 'beobIconHighlighted',
+    (m) =>
+      (m.options.icon as DivIcon | undefined)?.options.className ===
+      'beobIconHighlighted',
   )
   const className =
     hasHighlightedTpop ?
@@ -168,7 +170,12 @@ const BeobZugeordnetMarker = ({ clustered }: { clustered: boolean }) => {
   // so the UI stays responsive
   const beobMarkers = useProgressiveElements(
     data?.allBeobs?.nodes ?? [],
-    (beob) => <Marker key={beob.id} beob={beob} />,
+    (beob) => (
+      <Marker
+        key={beob.id}
+        beob={beob}
+      />
+    ),
   )
 
   if (clustered) {

@@ -18,8 +18,8 @@ interface DisplayedLabelsOptions {
 }
 
 const isCluster = (marker: Marker) =>
-  typeof (marker as unknown as { getAllChildMarkers?: unknown }).getAllChildMarkers ===
-  'function'
+  typeof (marker as unknown as { getAllChildMarkers?: unknown })
+    .getAllChildMarkers === 'function'
 
 /**
  * Permanent label tooltips for the markers of a big layer — but only for
@@ -44,7 +44,12 @@ export const useDisplayedLabels = ({
       const bounds = map.getBounds()
       let inView = 0
       for (const n of nodes) {
-        if (bounds.contains({ lat: n.wgs84Lat, lng: n.wgs84Long } as LatLngLiteral)) {
+        if (
+          bounds.contains({
+            lat: n.wgs84Lat,
+            lng: n.wgs84Long,
+          } as LatLngLiteral)
+        ) {
           inView++
         }
         if (inView > LABELS_MAX_MARKERS) break

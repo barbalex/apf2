@@ -136,10 +136,12 @@ const Polylines = () => {
 
   // thousands of lines with "Layer auch anzeigen...": mount in chunks
   // so the UI stays responsive
-  return useProgressiveElements(
-    data?.allBeobs?.nodes ?? [],
-    (beob) => <Polyline key={beob.id} beob={beob} />,
-  )
+  return useProgressiveElements(data?.allBeobs?.nodes ?? [], (beob) => (
+    <Polyline
+      key={beob.id}
+      beob={beob}
+    />
+  ))
 }
 
 export const BeobZugeordnetAssignPolylines = () => {

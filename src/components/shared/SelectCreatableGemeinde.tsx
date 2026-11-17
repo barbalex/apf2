@@ -95,9 +95,9 @@ export const SelectCreatableGemeinde = ({
 
   const styleMeantForSelect =
     maxHeight ?
-      {
+      ({
         '--react-select-menu-list-max-height': `${maxHeight}px`,
-      } as CSSProperties
+      } as CSSProperties)
     : {}
 
   return (

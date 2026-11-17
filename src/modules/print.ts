@@ -12,10 +12,7 @@ const nextPaint = async () => {
 // mounts that refetch right after their data lands (tpopkontr forms insert
 // missing zaehl rows, then refetch). Capped so a hung request cannot
 // disable printing.
-const waitForQueries = async (
-  queryClient: QueryClient,
-  timeoutMs = 20000,
-) => {
+const waitForQueries = async (queryClient: QueryClient, timeoutMs = 20000) => {
   const start = Date.now()
   let idleChecks = 0
   while (Date.now() - start < timeoutMs) {
@@ -33,10 +30,7 @@ const waitForImages = async (timeoutMs = 10000) => {
   const pending = Array.from(document.images).filter((img) => !img.complete)
   await Promise.allSettled(
     pending.map((img) =>
-      Promise.race([
-        img.decode().catch(() => undefined),
-        sleep(timeoutMs),
-      ]),
+      Promise.race([img.decode().catch(() => undefined), sleep(timeoutMs)]),
     ),
   )
 }

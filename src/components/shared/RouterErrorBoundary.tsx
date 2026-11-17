@@ -29,17 +29,16 @@ export const RouterErrorBoundary = () => {
 
   return (
     <div className={styles.container}>
-      {staleClient ? (
+      {staleClient ?
         <p>
-          Die App wurde aktualisiert und diese Sitzung ist veraltet. Bitte
-          neu starten (falls das nicht hilft, App-Cache leeren):
+          Die App wurde aktualisiert und diese Sitzung ist veraltet. Bitte neu
+          starten (falls das nicht hilft, App-Cache leeren):
         </p>
-      ) : (
-        <>
+      : <>
           <p>Sorry, ein Fehler ist aufgetreten:</p>
           <pre className={styles.preWrapping}>{errorMessage}</pre>
         </>
-      )}
+      }
       <div className={styles.buttonContainer}>
         <Button
           className={styles.button}

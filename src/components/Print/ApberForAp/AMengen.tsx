@@ -22,25 +22,24 @@ export const AMengen = ({ loading, jahr, node }: AMengenProps) => {
   const a9LPop = node?.a9LPop
   const a9LTpop = node?.a9LTpop
   const a1LPop =
-    loading ?
-      '...'
-    : (a3LPop ?? 0) +
+    loading ? '...' : (
+      (a3LPop ?? 0) +
       (a4LPop ?? 0) +
       (a5LPop ?? 0) +
       (a7LPop ?? 0) +
       (a8LPop ?? 0) +
       (a9LPop ?? 0)
+    )
   const a1LTpop =
-    loading ?
-      '...'
-    : (a3LTpop ?? 0) +
+    loading ? '...' : (
+      (a3LTpop ?? 0) +
       (a4LTpop ?? 0) +
       (a5LTpop ?? 0) +
       (a7LTpop ?? 0) +
       (a8LTpop ?? 0) +
       (a9LTpop ?? 0)
-  const a2LPop =
-    loading ? '...' : (a3LPop ?? 0) + (a4LPop ?? 0) + (a5LPop ?? 0)
+    )
+  const a2LPop = loading ? '...' : (a3LPop ?? 0) + (a4LPop ?? 0) + (a5LPop ?? 0)
   const a2LTpop =
     loading ? '...' : (a3LTpop ?? 0) + (a4LTpop ?? 0) + (a5LTpop ?? 0)
   const a6LPop = loading ? '...' : (a7LPop ?? 0) + (a8LPop ?? 0)

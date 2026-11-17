@@ -72,10 +72,7 @@ export const Deletions = () => {
               Object.keys(dataset).forEach(
                 (key) => dataset[key] == null && delete dataset[key],
               )
-              const time = format(
-                new Date(ds.time ?? 0),
-                'yyyy.MM.dd HH:mm:ss',
-              )
+              const time = format(new Date(ds.time ?? 0), 'yyyy.MM.dd HH:mm:ss')
 
               return (
                 <div

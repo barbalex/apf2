@@ -3,10 +3,7 @@ import {
   ZoomControl as LeafletZoomControl,
   ScaleControl as LeafletScaleControl,
 } from 'leaflet'
-import type {
-  ScaleControlOptions,
-  ZoomControlOptions,
-} from 'leaflet'
+import type { ScaleControlOptions, ZoomControlOptions } from 'leaflet'
 
 // react-leaflet 5's built-in ZoomControl/ScaleControl instantiate the
 // Leaflet-1 nested classes (new Control.Zoom / new Control.Scale),

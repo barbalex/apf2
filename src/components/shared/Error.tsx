@@ -28,9 +28,8 @@ export const Error = ({ errors: errorsPassed, error }: ErrorProps) => {
   } else if (Array.isArray(errorsPassed)) {
     errorsToUse = errorsPassed as { message?: string }[]
   } else {
-    errorsToUse = (
-      (errorsPassed as { errors?: unknown[] } | undefined)?.errors
-    ) as { message?: string }[] | undefined
+    errorsToUse = (errorsPassed as { errors?: unknown[] } | undefined)
+      ?.errors as { message?: string }[] | undefined
   }
 
   if (existsPermissionError(errorsToUse)) {

@@ -66,7 +66,9 @@ describe('installPreloadErrorRecovery', () => {
     expect(reloadMock).toHaveBeenCalledTimes(3)
 
     // age out the counter: a much-later incident gets new attempts
-    const raw = JSON.parse(localStorage.getItem('preloadErrorRecoveryAttempts') ?? '{}') as {
+    const raw = JSON.parse(
+      localStorage.getItem('preloadErrorRecoveryAttempts') ?? '{}',
+    ) as {
       attempts: number
       startedAt: number
     }

@@ -65,7 +65,10 @@ export const Status = ({
      */
     const targetValue = (event.target as HTMLInputElement).value
 
-    if (targetValue !== undefined && targetValue == String(herkunftValue ?? '')) {
+    if (
+      targetValue !== undefined &&
+      targetValue == String(herkunftValue ?? '')
+    ) {
       // an already active option was clicked
       // set value null
       const fakeEvent = {

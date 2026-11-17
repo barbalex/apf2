@@ -5,12 +5,7 @@ import Tab from '@mui/material/Tab'
 import styles from './Title.module.css'
 
 type TabValue =
-  | 'ap'
-  | 'pop'
-  | 'tpop'
-  | 'tpopmassn'
-  | 'tpopfeldkontr'
-  | 'tpopfreiwkontr'
+  'ap' | 'pop' | 'tpop' | 'tpopmassn' | 'tpopfeldkontr' | 'tpopfreiwkontr'
 
 const titleObject: Record<TabValue, string> = {
   ap: 'Art Filter',

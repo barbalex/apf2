@@ -7,7 +7,10 @@ import { exportModule } from '../../../../modules/export.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom, treeTpopkontrGqlFilterAtom } from '../../../../store/index.ts'
+import {
+  addNotificationAtom,
+  treeTpopkontrGqlFilterAtom,
+} from '../../../../store/index.ts'
 
 interface KontrollenProps {
   filtered?: boolean

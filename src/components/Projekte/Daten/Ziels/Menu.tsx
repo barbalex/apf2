@@ -14,9 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
-import {
-  addNotificationAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface MenuProps {
   toggleFilterInput?: () => void

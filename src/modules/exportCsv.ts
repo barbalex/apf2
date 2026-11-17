@@ -14,8 +14,5 @@ export const exportCsv = ({
   const parse = (data: Record<string, unknown>[]) => new Parser().parse(data)
   const csvData = parse(data)
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  fileSaver.saveAs(
-    new Blob([csvData], { type: 'text/csv' }),
-    `${file}.csv`,
-  )
+  fileSaver.saveAs(new Blob([csvData], { type: 'text/csv' }), `${file}.csv`)
 }

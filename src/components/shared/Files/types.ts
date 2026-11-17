@@ -7,12 +7,7 @@ export interface FileNode {
 }
 
 export type FileParent =
-  | 'ap'
-  | 'idealbiotop'
-  | 'pop'
-  | 'tpop'
-  | 'tpopkontr'
-  | 'tpopmassn'
+  'ap' | 'idealbiotop' | 'pop' | 'tpop' | 'tpopkontr' | 'tpopmassn'
 
 /** context passed through the files router outlet */
 export interface FilesOutletContext {

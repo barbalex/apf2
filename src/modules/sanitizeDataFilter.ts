@@ -15,10 +15,9 @@ export const sanitizeDataFilter = (value: unknown): DataFilter => {
   ) as (keyof DataFilter)[]) {
     const tableValue = source[table]
     if (!Array.isArray(tableValue)) continue
-    const initialTab = (initialDataFilterValues[table] as Record<
-      string,
-      unknown
-    >[])[0]
+    const initialTab = (
+      initialDataFilterValues[table] as Record<string, unknown>[]
+    )[0]
     const knownFields = initialTab ? Object.keys(initialTab) : []
     const tabs = tableValue
       .filter(

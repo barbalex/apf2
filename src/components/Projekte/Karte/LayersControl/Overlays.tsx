@@ -159,9 +159,8 @@ export const Overlays = (_props: OverlaysProps) => {
   const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
   const setActiveOverlays = useSetAtom(setMapActiveOverlaysAtom)
 
-  const [draggingOverlay, setDraggingOverlay] = useState<DraggingOverlay | null>(
-    null,
-  )
+  const [draggingOverlay, setDraggingOverlay] =
+    useState<DraggingOverlay | null>(null)
   const onDragStart = ({ active }: DragStartEvent) =>
     setDraggingOverlay(active as DraggingOverlay)
 
