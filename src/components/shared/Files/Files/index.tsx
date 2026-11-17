@@ -6,9 +6,11 @@ import type { FilesOutletContext } from '../types.ts'
 export const Component = () => {
   const { parent, files, refetch } = useOutletContext<FilesOutletContext>()
 
-  return <List
-    files={files}
-    parent={parent}
-    refetch={refetch}
-  />
+  return (
+    <List
+      files={files}
+      parent={parent}
+      refetch={refetch}
+    />
+  )
 }

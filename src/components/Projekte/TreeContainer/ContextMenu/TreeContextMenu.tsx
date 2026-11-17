@@ -21,7 +21,11 @@ import {
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import { treeContextMenuAtom } from './treeContextMenuAtom.ts'
-import { treeMenuConfigs, type MenuContext, type TreeMenuConfig } from './menuConfig.tsx'
+import {
+  treeMenuConfigs,
+  type MenuContext,
+  type TreeMenuConfig,
+} from './menuConfig.tsx'
 import { useRunMenuAction } from './useRunMenuAction.ts'
 import type { TreeNodeData } from '../Tree/types.ts'
 import type { TreeContextMenuState } from './treeContextMenuAtom.ts'

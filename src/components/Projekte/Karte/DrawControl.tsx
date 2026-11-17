@@ -14,9 +14,11 @@ import type { FeatureCollection, Geometry, GeometryCollection } from 'geojson'
 
 import { treeMapFilterAtom } from '../../../store/index.ts'
 
-const Geoman = (geomanModule as unknown as {
-  default: { initialize(): void }
-}).default
+const Geoman = (
+  geomanModule as unknown as {
+    default: { initialize(): void }
+  }
+).default
 
 // Registers the init hooks that attach `map.geoman` / `layer.geoman`.
 // Must run before the first map is created (module evaluation time is fine).
@@ -59,11 +61,8 @@ export const DrawControl = () => {
     drawLayerRef.current = drawLayer
 
     const filterGeometryFromDrawLayer = () => {
-      const geometry = (
-        drawLayer.toGeoJSON() as FeatureCollection
-      ).features[0]?.geometry as
-        | Exclude<Geometry, GeometryCollection>
-        | undefined
+      const geometry = (drawLayer.toGeoJSON() as FeatureCollection).features[0]
+        ?.geometry as Exclude<Geometry, GeometryCollection> | undefined
       setMapFilter(geometry)
     }
     persistRef.current = filterGeometryFromDrawLayer
@@ -196,7 +195,8 @@ export const DrawControl = () => {
     }
 
     const drawnGeometry = (drawLayer.toGeoJSON() as FeatureCollection)
-      .features[0]?.geometry as Exclude<Geometry, GeometryCollection> | undefined
+      .features[0]?.geometry as
+      Exclude<Geometry, GeometryCollection> | undefined
 
     if (!mapFilter) {
       // filter was cleared from outside the map
@@ -216,8 +216,9 @@ export const DrawControl = () => {
     // filtern"). leaflet 2's GeoJSON types are narrower than the geojson
     // package's, but the values are compatible
     drawLayer.clearLayers()
-    const geojsonArg =
-      mapFilter as unknown as ConstructorParameters<typeof L.GeoJSON>[0]
+    const geojsonArg = mapFilter as unknown as ConstructorParameters<
+      typeof L.GeoJSON
+    >[0]
     new L.GeoJSON(geojsonArg).eachLayer((layer) => {
       layer.on('geoman:update', () => persistRef.current?.())
       if (removalModeRef.current) {

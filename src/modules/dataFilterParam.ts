@@ -24,7 +24,9 @@ const buildSparseDataFilter = (
     const sparseTabs = tabs
       .map((tab) =>
         Object.fromEntries(
-          Object.entries(tab).filter(([key, value]) => isSet(value) && key !== 'id'),
+          Object.entries(tab).filter(
+            ([key, value]) => isSet(value) && key !== 'id',
+          ),
         ),
       )
       .filter((tab) => Object.keys(tab).length > 0)
@@ -35,19 +37,16 @@ const buildSparseDataFilter = (
 
 // sparse tabs only carry the set values: fill every known field back in
 // so the atom's full shape (all keys present) is restored
-const sparseToDataFilter = (
-  sparse: Record<string, unknown>,
-): DataFilter => {
+const sparseToDataFilter = (sparse: Record<string, unknown>): DataFilter => {
   const result: DataFilter = { ...initialDataFilterValues }
   for (const table of Object.keys(
     initialDataFilterValues,
   ) as (keyof DataFilter)[]) {
     const tabs = sparse[table]
     if (!Array.isArray(tabs)) continue
-    const initialTab = (initialDataFilterValues[table] as Record<
-      string,
-      unknown
-    >[])[0]
+    const initialTab = (
+      initialDataFilterValues[table] as Record<string, unknown>[]
+    )[0]
     if (!initialTab) continue
     const fullTabs = tabs
       .filter(

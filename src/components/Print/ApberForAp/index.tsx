@@ -15,7 +15,11 @@ import { AMengen } from './AMengen.tsx'
 import { BMengen } from './BMengen.tsx'
 import { CMengen } from './CMengen.tsx'
 import { Massnahmen } from './Massnahmen.tsx'
-import type { ApberForApApberNode, ApberForApApNode, ApberForApProps } from './types.ts'
+import type {
+  ApberForApApberNode,
+  ApberForApApNode,
+  ApberForApProps,
+} from './types.ts'
 import type { ApId } from '../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
@@ -46,11 +50,9 @@ export const ApberForAp = ({
   // when called from ApberForYear (isSubReport), apData is the ap node itself;
   // otherwise it is the result of the apByIdJahr query with the ap node in apById
   const apData = (
-    isSubReport ?
-      apDataPassed
-    : (apDataPassed as { apById?: ApberForApApNode | null } | undefined)
-      ?.apById
-  ) as ApberForApApNode | undefined
+    isSubReport ? apDataPassed : (
+      (apDataPassed as { apById?: ApberForApApNode | null } | undefined)?.apById
+    )) as ApberForApApNode | undefined
   const apber: Partial<ApberForApApberNode> =
     apData?.apbersByApId?.nodes?.[0] ?? {}
   const apberDatum = apber?.datum

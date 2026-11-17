@@ -72,9 +72,10 @@ export interface ApberChartsBulk {
     ApberChartBulkRow)[]
 }
 
-export type ApberEkzaehleinheits = (PopMengeQueryResult['allEkzaehleinheits']['nodes'][number] & {
-  ap_id: string
-})[]
+export type ApberEkzaehleinheits =
+  (PopMengeQueryResult['allEkzaehleinheits']['nodes'][number] & {
+    ap_id: string
+  })[]
 
 export type ApberPops = (PopMengeQueryResult['allPops']['nodes'][number] & {
   ap_id: string

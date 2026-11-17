@@ -3,10 +3,7 @@ import { useSnackbar } from 'notistack'
 import type { OptionsObject } from 'notistack'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import {
-  notificationsAtom,
-  removeNotificationAtom,
-} from '../../store/index.ts'
+import { notificationsAtom, removeNotificationAtom } from '../../store/index.ts'
 
 export const Notifier = () => {
   const { enqueueSnackbar } = useSnackbar()

@@ -10,10 +10,11 @@ const apTab = initialDataFilterValues.ap[0] as Record<string, unknown>
 const popTab = initialDataFilterValues.pop[0] as Record<string, unknown>
 const tpopTab = initialDataFilterValues.tpop[0] as Record<string, unknown>
 
-const withFilter = (partial: Record<string, Record<string, unknown>[]>) => ({
-  ...initialDataFilterValues,
-  ...partial,
-}) as typeof initialDataFilterValues
+const withFilter = (partial: Record<string, Record<string, unknown>[]>) =>
+  ({
+    ...initialDataFilterValues,
+    ...partial,
+  }) as typeof initialDataFilterValues
 
 describe('dataFilterParam', () => {
   it('encodes a sparse filter and decodes it back (round trip)', () => {
@@ -86,9 +87,7 @@ describe('dataFilterParam', () => {
     )
     const decoded = decodeDataFilterParam(encoded)
     const decodedPopTab = decoded?.pop[0]
-    expect(Object.keys(decodedPopTab ?? {})).toEqual(
-      Object.keys(popTab ?? {}),
-    )
+    expect(Object.keys(decodedPopTab ?? {})).toEqual(Object.keys(popTab ?? {}))
     expect(decodedPopTab?.nr).toBeNull()
   })
 

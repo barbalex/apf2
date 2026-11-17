@@ -57,9 +57,8 @@ export const FilterInput = ({
     (v) => v !== null && v !== '',
   )
 
-  const filterValue = activeFilterTable ?
-    (nodeLabelFilter?.[activeFilterTable] ?? '')
-  : ''
+  const filterValue =
+    activeFilterTable ? (nodeLabelFilter?.[activeFilterTable] ?? '') : ''
   const [value, setValue] = useState(filterValue)
   const [prevFilterValue, setPrevFilterValue] = useState(filterValue)
   // value should update when changed from outside

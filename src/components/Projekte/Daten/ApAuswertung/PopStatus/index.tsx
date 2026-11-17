@@ -56,10 +56,7 @@ const color = {
     'rgba(245,141,66,0.5)',
 }
 
-export const PopStatus = ({
-  data: dataPassed,
-  ...rest
-}: PopStatusProps) =>
+export const PopStatus = ({ data: dataPassed, ...rest }: PopStatusProps) =>
   dataPassed ?
     <PopStatusData
       data={dataPassed}

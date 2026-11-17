@@ -10,10 +10,7 @@ interface MapResizerProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>
 }
 
-export const MapResizer = ({
-  children,
-  mapContainerRef,
-}: MapResizerProps) => {
+export const MapResizer = ({ children, mapContainerRef }: MapResizerProps) => {
   const map = useMap()
   const bounds = useAtomValue(mapBoundsAtom)
 

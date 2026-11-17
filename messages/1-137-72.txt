@@ -1,0 +1,1 @@
+Wenn die App in einem Tab offen blieb, während ein Update installiert wurde, konnte beim Weiterklicken der Inhalt leer bleiben, ohne Fehlermeldung. Jetzt erscheint stattdessen ein verständlicher Hinweis mit der Aufforderung, die App neu zu starten.

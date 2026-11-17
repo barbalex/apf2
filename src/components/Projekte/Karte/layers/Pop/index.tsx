@@ -13,10 +13,7 @@ import {
   LABELS_MAX_MARKERS,
   useProgressiveElements,
 } from '../../useProgressiveCount.ts'
-import type {
-  MarkerCluster,
-  MarkerClusterGroup,
-} from 'leaflet.markercluster'
+import type { MarkerCluster, MarkerClusterGroup } from 'leaflet.markercluster'
 import { apiFetch } from '../../../../../modules/api.ts'
 import { Marker } from './Marker.tsx'
 
@@ -181,7 +178,11 @@ const ObservedPop = () => {
   const labeled = nodes.length <= LABELS_MAX_MARKERS
   const groupRef = useRef<MarkerClusterGroup<LeafletMarkerType> | null>(null)
   const popMarkers = useProgressiveElements(nodes, (pop) => (
-    <Marker key={pop.id} pop={pop} labeled={labeled} />
+    <Marker
+      key={pop.id}
+      pop={pop}
+      labeled={labeled}
+    />
   ))
   useDisplayedLabels({
     map,

@@ -87,7 +87,6 @@ export const ErfolgList = ({ jahr, data }: ErfolgListProps) => {
             <div>nicht beurteilt</div>
           </div>
           {apRows.map((row, index) => {
-             
             const odd = Math.abs(index % 2) == 1
 
             return (

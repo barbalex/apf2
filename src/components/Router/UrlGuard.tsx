@@ -46,9 +46,8 @@ export const UrlGuard = () => {
     queryFn: async () =>
       Promise.all(
         checks.map(async (check) => {
-          const parent = check.parent ?
-              `&${check.parent.column}=eq.${check.parent.id}`
-            : ''
+          const parent =
+            check.parent ? `&${check.parent.column}=eq.${check.parent.id}` : ''
           try {
             const rows = await apiFetch<{ id: string }[]>(
               `/${check.view}?id=eq.${check.id}${parent}&select=id&limit=1`,
@@ -76,10 +75,7 @@ export const UrlGuard = () => {
 
   useEffect(() => {
     if (!redirectTo) return
-    void navigate(
-      { pathname: redirectTo, search },
-      { replace: true },
-    )
+    void navigate({ pathname: redirectTo, search }, { replace: true })
     addNotification({
       message:
         'Die geöffnete Adresse enthielt eine ungültige ID. Sie wurde zur tiefsten noch existierenden Ebene weitergeleitet.',

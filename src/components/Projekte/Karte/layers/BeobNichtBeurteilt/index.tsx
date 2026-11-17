@@ -25,7 +25,9 @@ interface BeobNichtBeurteiltQueryResult {
 const iconCreateFunction = (cluster: MarkerCluster) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedBeob = markers.some(
-    (m) => (m.options.icon as DivIcon | undefined)?.options.className === 'beobIconHighlighted',
+    (m) =>
+      (m.options.icon as DivIcon | undefined)?.options.className ===
+      'beobIconHighlighted',
   )
   const className =
     hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
@@ -131,7 +133,12 @@ const BeobNichtBeurteiltMarker = ({ clustered }: { clustered: boolean }) => {
   // so the UI stays responsive
   const beobMarkers = useProgressiveElements(
     data?.allBeobs?.nodes ?? [],
-    (beob) => <Marker key={beob.id} beob={beob} />,
+    (beob) => (
+      <Marker
+        key={beob.id}
+        beob={beob}
+      />
+    ),
   )
 
   if (clustered) {
@@ -161,8 +168,8 @@ export const BeobNichtBeurteilt = ({ clustered }: { clustered: boolean }) => {
   // the route's apId. Comparing (instead of only checking presence) also
   // hides the previous ap's beobs while navigating between aps
   const gqlFilterApIds =
-    beobNichtBeurteiltGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId?.in ?? []
+    beobNichtBeurteiltGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId?.some
+      ?.apId?.in ?? []
   const apIdDoesNotMatchGqlFilter = !!apId && !gqlFilterApIds.includes(apId)
 
   if (apIdDoesNotMatchGqlFilter) return null

@@ -70,7 +70,10 @@ export const ChildLoader = ({ menu }: ChildLoaderProps) => {
 
   return (
     <Suspense fallback={null}>
-      <RegisterChildren menu={menu} fetcherModule={fetcherModule} />
+      <RegisterChildren
+        menu={menu}
+        fetcherModule={fetcherModule}
+      />
     </Suspense>
   )
 }

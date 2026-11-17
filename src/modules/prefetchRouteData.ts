@@ -20,9 +20,7 @@ interface RouteConfig {
   // Extract params from the path match
   extractParams: (match: RegExpMatchArray) => Record<string, string>
   // Get query configuration
-  getQueryConfig: (
-    params: Record<string, string>,
-  ) => Promise<QueryOptionsShape>
+  getQueryConfig: (params: Record<string, string>) => Promise<QueryOptionsShape>
 }
 
 // Route patterns mapped to their form's queryOptions factory.
@@ -34,21 +32,18 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/([^/]+)$/,
     extractParams: (match) => ({ apId: match[1] ?? '' }),
     getQueryConfig: async ({ apId }) => {
-      const { apQueryOptions } = await import(
-        '../components/Projekte/Daten/Ap/Ap/Ap.tsx'
-      )
+      const { apQueryOptions } =
+        await import('../components/Projekte/Daten/Ap/Ap/Ap.tsx')
       return apQueryOptions(apId)
     },
   },
   // Population
   {
-    pattern:
-      /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/([^/]+)$/,
+    pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/([^/]+)$/,
     extractParams: (match) => ({ popId: match[1] ?? '' }),
     getQueryConfig: async ({ popId }) => {
-      const { popQueryOptions } = await import(
-        '../components/Projekte/Daten/Pop/Pop.tsx'
-      )
+      const { popQueryOptions } =
+        await import('../components/Projekte/Daten/Pop/Pop.tsx')
       return popQueryOptions(popId)
     },
   },
@@ -58,9 +53,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/([^/]+)$/,
     extractParams: (match) => ({ tpopId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopId }) => {
-      const { tpopQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpop/Tpop.tsx'
-      )
+      const { tpopQueryOptions } =
+        await import('../components/Projekte/Daten/Tpop/Tpop.tsx')
       return tpopQueryOptions(tpopId)
     },
   },
@@ -70,9 +64,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Kontroll-Berichte\/([^/]+)$/,
     extractParams: (match) => ({ tpopberId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopberId }) => {
-      const { tpopberQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopber/index.tsx'
-      )
+      const { tpopberQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopber/index.tsx')
       return tpopberQueryOptions(tpopberId)
     },
   },
@@ -82,9 +75,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Massnahmen\/([^/]+)$/,
     extractParams: (match) => ({ tpopmassnId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopmassnId }) => {
-      const { tpopmassnQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopmassn/Tpopmassn.tsx'
-      )
+      const { tpopmassnQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopmassn/Tpopmassn.tsx')
       return tpopmassnQueryOptions(tpopmassnId)
     },
   },
@@ -94,9 +86,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Massnahmen-Berichte\/([^/]+)$/,
     extractParams: (match) => ({ tpopmassnberId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopmassnberId }) => {
-      const { tpopmassnberQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopmassnber/index.tsx'
-      )
+      const { tpopmassnberQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopmassnber/index.tsx')
       return tpopmassnberQueryOptions(tpopmassnberId)
     },
   },
@@ -106,9 +97,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Feld-Kontrollen\/([^/]+)$/,
     extractParams: (match) => ({ tpopkontrId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopkontrId }) => {
-      const { tpopfeldkontrQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopfeldkontr/Tpopfeldkontr.tsx'
-      )
+      const { tpopfeldkontrQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopfeldkontr/Tpopfeldkontr.tsx')
       return tpopfeldkontrQueryOptions(tpopkontrId)
     },
   },
@@ -118,9 +108,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Freiwilligen-Kontrollen\/([^/]+)$/,
     extractParams: (match) => ({ tpopkontrId: match[1] ?? '' }),
     getQueryConfig: async ({ tpopkontrId }) => {
-      const { tpopfreiwkontrQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopfreiwkontr/Tpopfreiwkontr.tsx'
-      )
+      const { tpopfreiwkontrQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopfreiwkontr/Tpopfreiwkontr.tsx')
       return tpopfreiwkontrQueryOptions(tpopkontrId)
     },
   },
@@ -133,9 +122,8 @@ const routeConfigs: RouteConfig[] = [
       tpopkontrzaehlId: match[2] ?? '',
     }),
     getQueryConfig: async ({ tpopkontrzaehlId, tpopkontrId }) => {
-      const { tpopkontrzaehlQueryOptions } = await import(
-        '../components/Projekte/Daten/Tpopkontrzaehl/index.tsx'
-      )
+      const { tpopkontrzaehlQueryOptions } =
+        await import('../components/Projekte/Daten/Tpopkontrzaehl/index.tsx')
       return tpopkontrzaehlQueryOptions(tpopkontrzaehlId, tpopkontrId)
     },
   },
@@ -144,9 +132,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Berichte\/([^/]+)$/,
     extractParams: (match) => ({ apberId: match[1] ?? '' }),
     getQueryConfig: async ({ apberId }) => {
-      const { apberQueryOptions } = await import(
-        '../components/Projekte/Daten/Apber/index.tsx'
-      )
+      const { apberQueryOptions } =
+        await import('../components/Projekte/Daten/Apber/index.tsx')
       return apberQueryOptions(apberId)
     },
   },
@@ -156,9 +143,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Kontroll-Berichte\/([^/]+)$/,
     extractParams: (match) => ({ popberId: match[1] ?? '' }),
     getQueryConfig: async ({ popberId }) => {
-      const { popberQueryOptions } = await import(
-        '../components/Projekte/Daten/Popber/index.tsx'
-      )
+      const { popberQueryOptions } =
+        await import('../components/Projekte/Daten/Popber/index.tsx')
       return popberQueryOptions(popberId)
     },
   },
@@ -168,9 +154,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Massnahmen-Berichte\/([^/]+)$/,
     extractParams: (match) => ({ popmassnberId: match[1] ?? '' }),
     getQueryConfig: async ({ popmassnberId }) => {
-      const { popmassnberQueryOptions } = await import(
-        '../components/Projekte/Daten/Popmassnber/index.tsx'
-      )
+      const { popmassnberQueryOptions } =
+        await import('../components/Projekte/Daten/Popmassnber/index.tsx')
       return popmassnberQueryOptions(popmassnberId)
     },
   },
@@ -179,9 +164,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Taxonomie\/([^/]+)$/,
     extractParams: (match) => ({ apartId: match[1] ?? '' }),
     getQueryConfig: async ({ apartId }) => {
-      const { apartQueryOptions } = await import(
-        '../components/Projekte/Daten/Apart/index.tsx'
-      )
+      const { apartQueryOptions } =
+        await import('../components/Projekte/Daten/Apart/index.tsx')
       return apartQueryOptions(apartId)
     },
   },
@@ -190,9 +174,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Adressen\/([^/]+)$/,
     extractParams: (match) => ({ adresseId: match[1] ?? '' }),
     getQueryConfig: async ({ adresseId }) => {
-      const { adresseQueryOptions } = await import(
-        '../components/Projekte/Daten/Adresse/index.tsx'
-      )
+      const { adresseQueryOptions } =
+        await import('../components/Projekte/Daten/Adresse/index.tsx')
       return adresseQueryOptions(adresseId)
     },
   },
@@ -201,9 +184,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/EK-Zähleinheiten\/([^/]+)$/,
     extractParams: (match) => ({ ekzaehleinheitId: match[1] ?? '' }),
     getQueryConfig: async ({ ekzaehleinheitId }) => {
-      const { ekzaehleinheitQueryOptions } = await import(
-        '../components/Projekte/Daten/Ekzaehleinheit/index.tsx'
-      )
+      const { ekzaehleinheitQueryOptions } =
+        await import('../components/Projekte/Daten/Ekzaehleinheit/index.tsx')
       return ekzaehleinheitQueryOptions(ekzaehleinheitId)
     },
   },
@@ -212,9 +194,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Benutzer\/([^/]+)$/,
     extractParams: (match) => ({ userId: match[1] ?? '' }),
     getQueryConfig: async ({ userId }) => {
-      const { userQueryOptions } = await import(
-        '../components/Projekte/Daten/User/index.tsx'
-      )
+      const { userQueryOptions } =
+        await import('../components/Projekte/Daten/User/index.tsx')
       return userQueryOptions(userId)
     },
   },
@@ -224,9 +205,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Erfolgskriterien\/([^/]+)$/,
     extractParams: (match) => ({ erfkritId: match[1] ?? '' }),
     getQueryConfig: async ({ erfkritId }) => {
-      const { erfkritQueryOptions } = await import(
-        '../components/Projekte/Daten/Erfkrit/index.tsx'
-      )
+      const { erfkritQueryOptions } =
+        await import('../components/Projekte/Daten/Erfkrit/index.tsx')
       return erfkritQueryOptions(erfkritId)
     },
   },
@@ -235,9 +215,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Ziele\/\d+\/([^/]+)$/,
     extractParams: (match) => ({ zielId: match[1] ?? '' }),
     getQueryConfig: async ({ zielId }) => {
-      const { zielQueryOptions } = await import(
-        '../components/Projekte/Daten/Ziel/Ziel.tsx'
-      )
+      const { zielQueryOptions } =
+        await import('../components/Projekte/Daten/Ziel/Ziel.tsx')
       return zielQueryOptions(zielId)
     },
   },
@@ -247,9 +226,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/assoziierte-Arten\/([^/]+)$/,
     extractParams: (match) => ({ assozartId: match[1] ?? '' }),
     getQueryConfig: async ({ assozartId }) => {
-      const { assozartQueryOptions } = await import(
-        '../components/Projekte/Daten/Assozart/index.tsx'
-      )
+      const { assozartQueryOptions } =
+        await import('../components/Projekte/Daten/Assozart/index.tsx')
       return assozartQueryOptions(assozartId)
     },
   },
@@ -258,9 +236,8 @@ const routeConfigs: RouteConfig[] = [
     pattern: /\/Daten\/Projekte\/([^/]+)$/,
     extractParams: (match) => ({ projektId: match[1] ?? '' }),
     getQueryConfig: async ({ projektId }) => {
-      const { projektQueryOptions } = await import(
-        '../components/Projekte/Daten/Projekt/Projekt.tsx'
-      )
+      const { projektQueryOptions } =
+        await import('../components/Projekte/Daten/Projekt/Projekt.tsx')
       return projektQueryOptions(projektId)
     },
   },
@@ -270,9 +247,8 @@ const routeConfigs: RouteConfig[] = [
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/nicht-zuzuordnende-Beobachtungen\/([^/]+)$/,
     extractParams: (match) => ({ beobId: match[1] ?? '' }),
     getQueryConfig: async ({ beobId }) => {
-      const { beobQueryOptions } = await import(
-        '../components/Projekte/Daten/Beob/index.tsx'
-      )
+      const { beobQueryOptions } =
+        await import('../components/Projekte/Daten/Beob/index.tsx')
       return beobQueryOptions(beobId)
     },
   },

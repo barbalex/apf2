@@ -15,10 +15,9 @@ export const useExporteExpanded = (
   const expanded = openSections.includes(key)
   const setExpanded = (open: boolean) => {
     const next = (
-      open ? [...new Set([...openSections, key])] : openSections.filter(
-          (k) => k !== key,
-        )
-    ).sort()
+      open ?
+        [...new Set([...openSections, key])]
+      : openSections.filter((k) => k !== key)).sort()
     setOpenSections(next)
   }
   return [expanded, setExpanded] as const

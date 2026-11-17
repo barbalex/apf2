@@ -9,7 +9,12 @@ interface CheckboxProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void | Promise<void>
 }
 
-export const Checkbox = ({ value, label, checked, onChange }: CheckboxProps) => (
+export const Checkbox = ({
+  value,
+  label,
+  checked,
+  onChange,
+}: CheckboxProps) => (
   <div className={styles.container}>
     <label className={styles.label}>
       <input

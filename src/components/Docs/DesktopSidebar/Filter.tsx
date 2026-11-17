@@ -13,7 +13,8 @@ export const Filter = ({
   filter: string
   setFilter: (val: string) => void
 }) => {
-  const onChange = (e: { target: { value: string } }) => setFilter(e.target.value)
+  const onChange = (e: { target: { value: string } }) =>
+    setFilter(e.target.value)
   const onClickEmptyFilter = () => setFilter('')
 
   return (

@@ -5,7 +5,6 @@ import { apiFetch } from '../../../modules/api.ts'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-
 import styles from './AktPopList.module.css'
 
 interface AktPopListProps {

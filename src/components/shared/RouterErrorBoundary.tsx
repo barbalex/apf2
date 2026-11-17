@@ -7,6 +7,14 @@ import { reportError } from '../../modules/errorTelemetry.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
+// how a failed dynamic import surfaces when a stale client (open tab
+// across a deploy) requests a hashed chunk that no longer exists —
+// wording differs per browser
+const moduleLoadFailed = (message: string | undefined) =>
+  !!message &&
+  (message.includes('dynamically imported module') ||
+    message.includes('Importing a module script failed'))
+
 export const RouterErrorBoundary = () => {
   const error = useRouteError()
 
@@ -14,14 +22,23 @@ export const RouterErrorBoundary = () => {
     void reportError('boundary', error)
   }, [error])
 
+  const errorMessage = (error as Error)?.message ?? String(error)
+  const staleClient = moduleLoadFailed(errorMessage)
+
   const onReload = () => window.location.reload()
 
   return (
     <div className={styles.container}>
-      <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={styles.preWrapping}>
-        {(error as Error)?.message ?? String(error)}
-      </pre>
+      {staleClient ?
+        <p>
+          Die App wurde aktualisiert und diese Sitzung ist veraltet. Bitte neu
+          starten (falls das nicht hilft, App-Cache leeren):
+        </p>
+      : <>
+          <p>Sorry, ein Fehler ist aufgetreten:</p>
+          <pre className={styles.preWrapping}>{errorMessage}</pre>
+        </>
+      }
       <div className={styles.buttonContainer}>
         <Button
           className={styles.button}

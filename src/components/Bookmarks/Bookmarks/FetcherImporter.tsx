@@ -11,18 +11,26 @@ export const FetcherImporter = ({
   match: UIMatch
   [key: string]: unknown
 }) => {
-  const [fetcherModule, setFetcherModule] = useState<
-    Record<string, (params: Record<string, string | undefined>) => unknown> | null
-  >(null)
+  const [fetcherModule, setFetcherModule] = useState<Record<
+    string,
+    (params: Record<string, string | undefined>) => unknown
+  > | null>(null)
 
-  const fetcherName = (match.handle as { bookmarkFetcherName?: string } | undefined)?.bookmarkFetcherName
+  const fetcherName = (
+    match.handle as { bookmarkFetcherName?: string } | undefined
+  )?.bookmarkFetcherName
 
   useEffect(() => {
     if (fetcherModule || !fetcherName) return
 
     // return the module, not the hook as that would already be called
     void import(`../../../modules/${fetcherName}.ts`).then((module) =>
-      setFetcherModule(module as Record<string, (params: Record<string, string | undefined>) => unknown>),
+      setFetcherModule(
+        module as Record<
+          string,
+          (params: Record<string, string | undefined>) => unknown
+        >,
+      ),
     )
   }, [fetcherName, fetcherModule])
 
@@ -31,9 +39,11 @@ export const FetcherImporter = ({
   return (
     <Fetcher
       params={match.params}
-      fetcherModule={fetcherModule[fetcherName] as (
-        params: Record<string, string | undefined>,
-      ) => import('../types.ts').NavData}
+      fetcherModule={
+        fetcherModule[fetcherName] as (
+          params: Record<string, string | undefined>,
+        ) => import('../types.ts').NavData
+      }
       {...other}
     />
   )

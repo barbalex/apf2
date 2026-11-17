@@ -44,7 +44,9 @@ export const ApberForYear = (_props: ApberForYearProps) => {
       const jahr = data1?.apberuebersichtById?.jahr ?? undefined
       // then the per-ap jber list: it defines which aps the report covers
       // (its ids also scope the bulk charts rpc below)
-      const jberRows = await apiFetch<NonNullable<JberQueryResult['jberAbc']>['nodes']>(
+      const jberRows = await apiFetch<
+        NonNullable<JberQueryResult['jberAbc']>['nodes']
+      >(
         '/rpc/jber_abc?select=artname,id,startJahr:start_jahr,bearbeiter,bearbeitung,a3LPop:a_3_l_pop,a3LTpop:a_3_l_tpop,a4LPop:a_4_l_pop,a4LTpop:a_4_l_tpop,a5LPop:a_5_l_pop,a5LTpop:a_5_l_tpop,a7LPop:a_7_l_pop,a7LTpop:a_7_l_tpop,a8LPop:a_8_l_pop,a8LTpop:a_8_l_tpop,a9LPop:a_9_l_pop,a9LTpop:a_9_l_tpop,b1LPop:b_1_l_pop,b1LTpop:b_1_l_tpop,b1FirstYear:b_1_first_year,b1RPop:b_1_r_pop,b1RTpop:b_1_r_tpop,c1LPop:c_1_l_pop,c1LTpop:c_1_l_tpop,c1RPop:c_1_r_pop,c1RTpop:c_1_r_tpop,c1FirstYear:c_1_first_year,firstMassn:first_massn,c2RPop:c_2_r_pop,c2RTpop:c_2_r_tpop,c3RPop:c_3_r_pop,c3RTpop:c_3_r_tpop,c4RPop:c_4_r_pop,c4RTpop:c_4_r_tpop,c5RPop:c_5_r_pop,c5RTpop:c_5_r_tpop,c6RPop:c_6_r_pop,c6RTpop:c_6_r_tpop,c7RPop:c_7_r_pop,c7RTpop:c_7_r_tpop,erfolg,erfolgVorjahr:erfolg_vorjahr',
         {
           method: 'POST',
@@ -119,7 +121,9 @@ export const ApberForYear = (_props: ApberForYearProps) => {
 
       return {
         data: tree ?? undefined,
-        jberData: { jberAbc: { nodes: jberRows ?? [] } } as unknown as JberQueryResult,
+        jberData: {
+          jberAbc: { nodes: jberRows ?? [] },
+        } as unknown as JberQueryResult,
         charts,
         jahr,
       }

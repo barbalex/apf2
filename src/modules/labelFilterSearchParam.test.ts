@@ -9,7 +9,9 @@ import {
 
 describe('labelFilterSearchParam', () => {
   it('reads typed params into per-type entries', () => {
-    const params = new URLSearchParams('labelFilter.pop=Eg&labelFilter.tpop=Zürich')
+    const params = new URLSearchParams(
+      'labelFilter.pop=Eg&labelFilter.tpop=Zürich',
+    )
     expect(readLabelFilterFromSearchParams(params)).toEqual({
       pop: 'Eg',
       tpop: 'Zürich',
@@ -36,7 +38,9 @@ describe('labelFilterSearchParam', () => {
   })
 
   it('writes entries and replaces stale ones, keeping other params', () => {
-    const stale = new URLSearchParams('map=12/47.3/8.5&labelFilter.pop=Old&labelFilter.tpop=Old')
+    const stale = new URLSearchParams(
+      'map=12/47.3/8.5&labelFilter.pop=Old&labelFilter.tpop=Old',
+    )
     const written = writeLabelFilterToSearchParams(stale, { pop: 'Eg' })
     expect(written.get('map')).toBe('12/47.3/8.5')
     expect(written.get(`${labelFilterPrefix}pop`)).toBe('Eg')
@@ -45,7 +49,10 @@ describe('labelFilterSearchParam', () => {
 
   it('round trips write -> read', () => {
     const entries = { pop: 'Eg', tpop: 'Zürich' }
-    const written = writeLabelFilterToSearchParams(new URLSearchParams(), entries)
+    const written = writeLabelFilterToSearchParams(
+      new URLSearchParams(),
+      entries,
+    )
     expect(readLabelFilterFromSearchParams(written)).toEqual(entries)
   })
 })

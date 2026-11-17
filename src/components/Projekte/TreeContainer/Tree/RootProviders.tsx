@@ -51,13 +51,28 @@ export const RootProviders = () => {
 
   return (
     <>
-      <RegisterRootMenu slot="projekt" fetcher={useProjektNavData} />
-      <RegisterRootMenu slot="users" fetcher={useUsersNavData} />
+      <RegisterRootMenu
+        slot="projekt"
+        fetcher={useProjektNavData}
+      />
+      <RegisterRootMenu
+        slot="users"
+        fetcher={useUsersNavData}
+      />
       {role === 'apflora_manager' && (
-        <RegisterRootMenu slot="wertes" fetcher={useWertesNavData} />
+        <RegisterRootMenu
+          slot="wertes"
+          fetcher={useWertesNavData}
+        />
       )}
-      <RegisterRootMenu slot="messages" fetcher={useMessagesNavData} />
-      <RegisterRootMenu slot="currentissues" fetcher={useCurrentissuesNavData} />
+      <RegisterRootMenu
+        slot="messages"
+        fetcher={useMessagesNavData}
+      />
+      <RegisterRootMenu
+        slot="currentissues"
+        fetcher={useCurrentissuesNavData}
+      />
     </>
   )
 }

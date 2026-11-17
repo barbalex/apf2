@@ -5,7 +5,10 @@ import { formatMapView, parseMapView } from './mapViewSearchParam.ts'
 describe('mapViewSearchParam', () => {
   it('formats a view as zoom/lat/lng', () => {
     expect(
-      formatMapView({ center: { lat: 47.37688888, lng: 8.54169444 }, zoom: 12 }),
+      formatMapView({
+        center: { lat: 47.37688888, lng: 8.54169444 },
+        zoom: 12,
+      }),
     ).toBe('12/47.37689/8.54169')
   })
 

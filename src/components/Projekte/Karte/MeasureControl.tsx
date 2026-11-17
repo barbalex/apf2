@@ -177,9 +177,10 @@ export const MeasureControl = () => {
         if (i === 0) return true
         const prev = latlngs[i - 1]!
         return (
-          map.latLngToContainerPoint(ll).distanceTo(
-            map.latLngToContainerPoint(prev),
-          ) > VERTEX_MERGE_DISTANCE_PX
+          map
+            .latLngToContainerPoint(ll)
+            .distanceTo(map.latLngToContainerPoint(prev)) >
+          VERTEX_MERGE_DISTANCE_PX
         )
       })
       if (deduped.length < 2) return

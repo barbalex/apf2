@@ -61,9 +61,9 @@ export const Select = ({
   const selectValue = optionsToUse.find((o) => o.value === value)
   const styleMeantForSelect =
     maxHeight ?
-      {
+      ({
         '--react-select-menu-list-max-height': `${maxHeight}px`,
-      } as CSSProperties
+      } as CSSProperties)
     : {}
 
   return (

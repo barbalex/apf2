@@ -156,7 +156,9 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
   },
   apartFolder: {
     title: 'Taxa',
-    items: [{ ...insert('apart', 'erstelle neue'), when: (ctx) => ctx.mayWrite }],
+    items: [
+      { ...insert('apart', 'erstelle neue'), when: (ctx) => ctx.mayWrite },
+    ],
   },
   apber: {
     title: 'AP-Bericht',
@@ -167,7 +169,9 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
   },
   apberFolder: {
     title: 'AP-Bericht',
-    items: [{ ...insert('apber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite }],
+    items: [
+      { ...insert('apber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+    ],
   },
   apberuebersicht: {
     title: 'AP-Bericht',
@@ -236,9 +240,7 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
     items: [
       {
         label: (ctx) =>
-          `blende auf Karte ${
-            ctx.beobZugeordnetLayerIsActive ? 'aus' : 'ein'
-          }`,
+          `blende auf Karte ${ctx.beobZugeordnetLayerIsActive ? 'aus' : 'ein'}`,
         action: 'showBeobOnMap',
         actionTable: 'beobZugeordnet',
       },
@@ -286,7 +288,10 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
   ekzaehleinheitFolder: {
     title: 'EK-Zähleinheit',
     items: [
-      { ...insert('ekzaehleinheit', 'erstelle neue'), when: (ctx) => ctx.mayWrite },
+      {
+        ...insert('ekzaehleinheit', 'erstelle neue'),
+        when: (ctx) => ctx.mayWrite,
+      },
     ],
   },
   erfkrit: {
@@ -375,19 +380,27 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
   },
   popberFolder: {
     title: 'Kontroll-Berichte',
-    items: [{ ...insert('popber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite }],
+    items: [
+      { ...insert('popber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+    ],
   },
   popmassnber: {
     title: 'Massnahmen-Bericht',
     items: [
-      { ...insert('popmassnber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+      {
+        ...insert('popmassnber', 'erstelle neuen'),
+        when: (ctx) => ctx.mayWrite,
+      },
       { ...remove('popmassnber'), when: (ctx) => ctx.mayWrite },
     ],
   },
   popmassnberFolder: {
     title: 'Massnahmen-Berichte',
     items: [
-      { ...insert('popmassnber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+      {
+        ...insert('popmassnber', 'erstelle neuen'),
+        when: (ctx) => ctx.mayWrite,
+      },
     ],
   },
   tpop: {
@@ -417,7 +430,8 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
       },
       {
         ...moveHere(kontrTables),
-        when: (ctx) => ctx.mayWrite && matchesTable(kontrTables, ctx.moving.table),
+        when: (ctx) =>
+          ctx.mayWrite && matchesTable(kontrTables, ctx.moving.table),
       },
       {
         label: 'kopiere',
@@ -427,11 +441,13 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
       },
       {
         ...copyHere(kontrTables),
-        when: (ctx) => ctx.mayWrite && matchesTable(kontrTables, ctx.copying.table),
+        when: (ctx) =>
+          ctx.mayWrite && matchesTable(kontrTables, ctx.copying.table),
       },
       {
         ...resetCopying(kontrTables),
-        when: (ctx) => ctx.mayWrite && matchesTable(kontrTables, ctx.copying.table),
+        when: (ctx) =>
+          ctx.mayWrite && matchesTable(kontrTables, ctx.copying.table),
       },
       {
         label: 'Kopiere Koordinaten in die Population',
@@ -508,7 +524,8 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
         when: (ctx) => ctx.mayWrite,
       },
       {
-        label: (ctx) => `kopiere Biotop von '${ctx.copyingBiotop.label}' hierhin`,
+        label: (ctx) =>
+          `kopiere Biotop von '${ctx.copyingBiotop.label}' hierhin`,
         action: 'copyBiotop',
         when: (ctx) => ctx.mayWrite && !!ctx.copyingBiotop.label,
       },
@@ -603,7 +620,8 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
       {
         ...copyHere('tpopfreiwkontr'),
         when: (ctx) =>
-          ctx.mayWriteFreiw && matchesTable('tpopfreiwkontr', ctx.copying.table),
+          ctx.mayWriteFreiw &&
+          matchesTable('tpopfreiwkontr', ctx.copying.table),
       },
       {
         ...resetCopying(),
@@ -671,14 +689,20 @@ export const treeMenuConfigs: Record<string, TreeMenuConfig> = {
     title: 'Massnahmen-Bericht',
     titleWidth: 180,
     items: [
-      { ...insert('tpopmassnber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+      {
+        ...insert('tpopmassnber', 'erstelle neuen'),
+        when: (ctx) => ctx.mayWrite,
+      },
       { ...remove('tpopmassnber'), when: (ctx) => ctx.mayWrite },
     ],
   },
   tpopmassnberFolder: {
     title: 'Massnahmen-Berichte',
     items: [
-      { ...insert('tpopmassnber', 'erstelle neuen'), when: (ctx) => ctx.mayWrite },
+      {
+        ...insert('tpopmassnber', 'erstelle neuen'),
+        when: (ctx) => ctx.mayWrite,
+      },
     ],
   },
   tpopApberrelevantGrundWerte: {

@@ -7,7 +7,10 @@ import { MdPrint } from 'react-icons/md'
 
 import { printMap } from './mapExport.ts'
 
-import { addNotificationAtom, setMapHideControlsAtom } from '../../../store/index.ts'
+import {
+  addNotificationAtom,
+  setMapHideControlsAtom,
+} from '../../../store/index.ts'
 
 import styles from './FullscreenControl.module.css'
 

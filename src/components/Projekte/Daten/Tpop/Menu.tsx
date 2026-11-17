@@ -28,7 +28,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
-import { useProjekteTabs, useShowTreeMenus } from '../../../../modules/useProjekteTabs.ts'
+import {
+  useProjekteTabs,
+  useShowTreeMenus,
+} from '../../../../modules/useProjekteTabs.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.ts'

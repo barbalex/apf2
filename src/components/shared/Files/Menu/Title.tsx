@@ -35,7 +35,11 @@ export interface FilesMenuTitleProps {
   titleComponentWidth: number
 }
 
-export const Title = ({ file, numbers, titleComponentWidth }: FilesMenuTitleProps) => {
+export const Title = ({
+  file,
+  numbers,
+  titleComponentWidth,
+}: FilesMenuTitleProps) => {
   if (!file && numbers === undefined) return null
 
   // fix width to prevent jumping

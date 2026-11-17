@@ -28,15 +28,13 @@ declare module 'leaflet' {
   // react-leaflet's useMapEvents and eventHandlers props. v2 types event
   // maps per class; merge the ones this app (and react-leaflet) uses.
   export type LeafletEventHandlerFnMap = {
-    [K in
-      | keyof MapEventMap
-      | keyof TileLayerEventMap
-      | keyof InteractiveLayerEventMap]?: (
-      event: (
-        MapEventMap &
-        TileLayerEventMap &
-        InteractiveLayerEventMap
-      )[K],
+    [
+      K in
+        | keyof MapEventMap
+        | keyof TileLayerEventMap
+        | keyof InteractiveLayerEventMap
+    ]?: (
+      event: (MapEventMap & TileLayerEventMap & InteractiveLayerEventMap)[K],
     ) => void
   }
 

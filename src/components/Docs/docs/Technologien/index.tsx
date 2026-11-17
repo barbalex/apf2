@@ -99,8 +99,8 @@ export const Component = () => (
         >
           TanStack Query
         </a>
-        . Komponenten definieren, welche Daten sie brauchen. TanStack Query
-        holt sie von PostgREST und stellt sie bereit
+        . Komponenten definieren, welche Daten sie brauchen. TanStack Query holt
+        sie von PostgREST und stellt sie bereit
       </li>
       <li>
         <a

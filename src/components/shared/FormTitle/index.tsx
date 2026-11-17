@@ -48,7 +48,10 @@ export const FormTitle = ({
   return (
     <div className={styles.container}>
       <div className={styles.titleRow}>
-        <div className={styles.titleClass} data-id="form-title">
+        <div
+          className={styles.titleClass}
+          data-id="form-title"
+        >
           {title}
         </div>
         {!!MenuBarComponent && (

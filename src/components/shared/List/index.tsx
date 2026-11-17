@@ -59,11 +59,16 @@ export const List = ({
       <div className={styles.container}>
         <FormTitle
           title={navData.label}
-          listFilter={navData.listFilter as keyof typeof navListFilterAtoms | undefined}
+          listFilter={
+            navData.listFilter as keyof typeof navListFilterAtoms | undefined
+          }
           MenuBarComponent={MenuBarComponent}
           menuBarProps={menuBarProps}
         />
-        <div className={styles.list} ref={listRef}>
+        <div
+          className={styles.list}
+          ref={listRef}
+        >
           <div
             className={styles.rows}
             style={{ height: virtualizer.getTotalSize() }}
@@ -88,7 +93,9 @@ export const List = ({
                   onMouseEnter={() => onMouseEnterRow(item)}
                 >
                   {!!item.labelLeftElements?.length &&
-                    item.labelLeftElements.map((El, index) => <El key={index} />)}
+                    item.labelLeftElements.map((El, index) => (
+                      <El key={index} />
+                    ))}
                   {highlightSearchString ?
                     <Highlighter
                       searchWords={[highlightSearchString]}

@@ -12,7 +12,9 @@ interface BookmarkHandle extends Record<string, unknown> {
 const matchesFromAllMatches = (allMatches: UIMatch[]) =>
   allMatches
     .filter(
-      (m) => (m.handle as BookmarkHandle | undefined)?.bookmarkFetcher && (m.handle as BookmarkHandle | undefined)?.bookmarkFetcherName,
+      (m) =>
+        (m.handle as BookmarkHandle | undefined)?.bookmarkFetcher &&
+        (m.handle as BookmarkHandle | undefined)?.bookmarkFetcherName,
     )
     .reverse()
 

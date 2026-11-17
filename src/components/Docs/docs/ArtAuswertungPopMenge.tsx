@@ -19,7 +19,7 @@ export const Component = () => (
       <li>Pro Jahr</li>
       <li>
         Gilt gleichermassen für die Auswertung auf Ebene Art (Pop werden
-          summiert) wie auf Ebene Population (TPop werden einzeln dargestellt)
+        summiert) wie auf Ebene Population (TPop werden einzeln dargestellt)
       </li>
       <li>
         Dargestellt wird die ziel-relevante Menge: die jüngste Zählung und die
@@ -30,10 +30,9 @@ export const Component = () => (
     <ul>
       <li>
         <p>
-          TPop aus den jährlich historisierten Daten:{' '}
-          <code>tpop_history</code>. Es gelten nur die Stati und Attribute der
-          TPop - Historien und Stati von Art und Population haben keinen
-          Einfluss auf die Auswertung
+          TPop aus den jährlich historisierten Daten: <code>tpop_history</code>.
+          Es gelten nur die Stati und Attribute der TPop - Historien und Stati
+          von Art und Population haben keinen Einfluss auf die Auswertung
         </p>
         <ul>
           <li>
@@ -45,8 +44,8 @@ export const Component = () => (
         </ul>
       </li>
       Dies führt dazu, dass nur Ergebnisse aus den Jahren angezeigt werden
-      können, für die Historisierungen der TPop vorliegen. Daten aus Jahren
-      ohne Historie werden nie berücksichtigt – auch nicht als übernommene
+      können, für die Historisierungen der TPop vorliegen. Daten aus Jahren ohne
+      Historie werden nie berücksichtigt – auch nicht als übernommene
       Vorjahreswerte.
       <br />
       Mehr zu der Historisierung von Art, Pop und TPop{' '}
@@ -82,12 +81,15 @@ export const Component = () => (
         </ul>
       </li>
       <li>
-        <p>Anpflanzungen (Massnahmen der Typen &quot;Anpflanzung&quot; und &quot;Ansaat und Auspflanzung&quot;)</p>
+        <p>
+          Anpflanzungen (Massnahmen der Typen &quot;Anpflanzung&quot; und
+          &quot;Ansaat und Auspflanzung&quot;)
+        </p>
         <ul>
           <li>nur mit der ziel-relevanten Einheit und einer Anzahl</li>
           <li>
-            additiv zur jüngsten Zählung werden alle Anpflanzungen zwischen
-            der jüngsten Zählung und dem Ende des auszuwertenden Jahrs addiert
+            additiv zur jüngsten Zählung werden alle Anpflanzungen zwischen der
+            jüngsten Zählung und dem Ende des auszuwertenden Jahrs addiert
           </li>
           <li>
             existiert (noch) keine Zählung, werden alle zuvor erfolgten
@@ -95,34 +97,34 @@ export const Component = () => (
           </li>
           <li>
             ist das Jahr entscheidend: Anpflanzungen aus Jahren vor der Zählung
-            werden nie addiert, aus Jahren danach immer. Nur bei Anpflanzung
-            und Zählung im selben Jahr entscheidet das Datum. Fehlt dabei ein
-            Datum, wird die Anpflanzung nicht addiert
+            werden nie addiert, aus Jahren danach immer. Nur bei Anpflanzung und
+            Zählung im selben Jahr entscheidet das Datum. Fehlt dabei ein Datum,
+            wird die Anpflanzung nicht addiert
           </li>
         </ul>
       </li>
     </ul>
     <h3>Darstellung erloschener Teil-Populationen</h3>
     <p>
-      Erloschene TPop werden weiterhin berechnet (mit der Anzahl 0, siehe
-      oben). In der Darstellung interessieren sie aber nur im Jahr des
-      Erlöschens und in Jahren, bevor allenfalls wieder angesiedelt wurde (um
-      Löcher in den Grafiken zu verhindern). In allen anderen Jahren werden
-      sie nicht dargestellt: Sie lenken nur von den interessanten Daten ab.
+      Erloschene TPop werden weiterhin berechnet (mit der Anzahl 0, siehe oben).
+      In der Darstellung interessieren sie aber nur im Jahr des Erlöschens und
+      in Jahren, bevor allenfalls wieder angesiedelt wurde (um Löcher in den
+      Grafiken zu verhindern). In allen anderen Jahren werden sie nicht
+      dargestellt: Sie lenken nur von den interessanten Daten ab.
     </p>
     <p>
-      Das gilt auch für die Populations-Ebene: Eine Population, deren TPop
-      alle erloschen und nicht mehr dargestellt sind, verschwindet aus der
-      Grafik. Populationen mit aktiven TPop bleiben unverändert dargestellt.
-      Das betrifft die Grafik, die Popups und die aus ihnen exportierten
+      Das gilt auch für die Populations-Ebene: Eine Population, deren TPop alle
+      erloschen und nicht mehr dargestellt sind, verschwindet aus der Grafik.
+      Populationen mit aktiven TPop bleiben unverändert dargestellt. Das
+      betrifft die Grafik, die Popups und die aus ihnen exportierten
       Excel-Listen gleichermassen.
     </p>
     <h3>Population: Auswertung Teil-Population Mengen</h3>
     <p>
       In Populationen gibt es eine analoge Auswertung wie auf Ebene Art. Es
       gelten dieselben Rechen-Regeln, dargestellt wird auf Ebene der
-      Teil-Populationen - einschliesslich der Regel zur Darstellung
-      erloschener TPop (siehe oben).
+      Teil-Populationen - einschliesslich der Regel zur Darstellung erloschener
+      TPop (siehe oben).
     </p>
   </>
 )

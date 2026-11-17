@@ -56,17 +56,20 @@ export const Component = () => {
             bearbeiter: adresseId,
             typ: { equalTo: 'Freiwilligen-Kontrolle' },
             ...(acceptNullJahr ?
-                {
-                  or: [{ jahr: { equalTo: jahr } }, { jahr: { isNull: true } }],
-                }
-              : { jahr: { equalTo: jahr } }),
+              {
+                or: [{ jahr: { equalTo: jahr } }, { jahr: { isNull: true } }],
+              }
+            : { jahr: { equalTo: jahr } }),
           },
         }),
       })
       const tpopIds = [
-        ...new Set((kontrs ?? []).map((k) => k.tpop_id).filter((t): t is string => !!t)),
+        ...new Set(
+          (kontrs ?? []).map((k) => k.tpop_id).filter((t): t is string => !!t),
+        ),
       ]
-      const tpops = tpopIds.length ?
+      const tpops =
+        tpopIds.length ?
           await apiFetch<
             {
               id: string
@@ -83,9 +86,12 @@ export const Component = () => {
           })
         : []
       const popIds = [
-        ...new Set((tpops ?? []).map((t) => t.pop_id).filter((p): p is string => !!p)),
+        ...new Set(
+          (tpops ?? []).map((t) => t.pop_id).filter((p): p is string => !!p),
+        ),
       ]
-      const pops = popIds.length ?
+      const pops =
+        popIds.length ?
           await apiFetch<
             {
               id: string
@@ -101,9 +107,12 @@ export const Component = () => {
           })
         : []
       const apIds = [
-        ...new Set((pops ?? []).map((p) => p.ap_id).filter((a): a is string => !!a)),
+        ...new Set(
+          (pops ?? []).map((p) => p.ap_id).filter((a): a is string => !!a),
+        ),
       ]
-      const aps = apIds.length ?
+      const aps =
+        apIds.length ?
           await apiFetch<
             {
               id: string

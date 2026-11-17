@@ -94,7 +94,11 @@ const folderDefs: Record<string, FolderDef> = {
     variants: [
       {
         folders: ['Arten'],
-        def: { view: 'q_apber', parentColumn: 'ap_id', parentFolders: ['Arten'] },
+        def: {
+          view: 'q_apber',
+          parentColumn: 'ap_id',
+          parentFolders: ['Arten'],
+        },
       },
       {
         folders: [],
@@ -176,7 +180,8 @@ export const buildUrlIdChecks = (
     const def = folderDefs[segment]
     if (!def) return
 
-    const effectiveDef: VariantDef | undefined = def.variants ?
+    const effectiveDef: VariantDef | undefined =
+      def.variants ?
         (def.variants.find((variant) =>
           variant.folders.some((folder) => idByFolder.has(folder)),
         )?.def ?? def.variants.at(-1)?.def)
@@ -203,7 +208,9 @@ export const buildUrlIdChecks = (
       id,
       view: effectiveDef.view,
       parent:
-        parentId && parentColumn ? { column: parentColumn, id: parentId } : undefined,
+        parentId && parentColumn ?
+          { column: parentColumn, id: parentId }
+        : undefined,
     })
     idByFolder.set(segment, id)
   })

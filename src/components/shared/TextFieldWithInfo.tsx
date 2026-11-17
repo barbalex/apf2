@@ -42,9 +42,9 @@ export const TextFieldWithInfo = ({
   const [stateValue, setStateValue] = useState<string | number>(
     propsValue || propsValue === 0 ? propsValue : '',
   )
-  const [prevValue, setPrevValue] = useState<string | number | null | undefined>(
-    propsValue,
-  )
+  const [prevValue, setPrevValue] = useState<
+    string | number | null | undefined
+  >(propsValue)
   // adjust state when the value changes from outside
   if (prevValue !== propsValue) {
     setPrevValue(propsValue)
@@ -52,7 +52,6 @@ export const TextFieldWithInfo = ({
   }
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setStateValue(event.target.value)
-
 
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {

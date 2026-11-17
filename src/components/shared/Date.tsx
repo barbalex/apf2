@@ -195,9 +195,15 @@ export const DateField = ({
     stateValueIsValid && parsedStateValue ? parsedStateValue : null
 
   return (
-    <FormControl variant="standard" className={styles.formControl}>
+    <FormControl
+      variant="standard"
+      className={styles.formControl}
+    >
       {!!label && (
-        <InputLabel htmlFor={name} className={styles.labelClass}>
+        <InputLabel
+          htmlFor={name}
+          className={styles.labelClass}
+        >
           {label}
         </InputLabel>
       )}

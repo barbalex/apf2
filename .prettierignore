@@ -3,3 +3,6 @@ src/models/
 
 # build output
 dist/
+
+# minified data file — prettier would expand it to 180k+ lines
+src/etc/chKantone.json

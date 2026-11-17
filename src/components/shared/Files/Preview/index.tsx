@@ -8,7 +8,9 @@ import type { FileNode, FilesOutletContext } from '../types.ts'
 import './style.css'
 
 const DocViewerWrapper = lazy(() =>
-  import('./DocViewerWrapper.tsx').then((m) => ({ default: m.DocViewerWrapper })),
+  import('./DocViewerWrapper.tsx').then((m) => ({
+    default: m.DocViewerWrapper,
+  })),
 )
 import styles from './index.module.css'
 

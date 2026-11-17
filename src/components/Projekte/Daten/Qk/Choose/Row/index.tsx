@@ -40,11 +40,10 @@ export const Row = ({ apId, qk }: RowProps) => {
   const { data, error } = useQuery({
     queryKey: ['apqkQueryForRow', apId, qk.name],
     queryFn: async () => {
-      const rows = (await apiFetch<
-        { ap_id: string; qk_name: string }[]
-      >(
-        `/apqk?ap_id=eq.${apId}&qk_name=eq.${encodeURIComponent(qk.name)}&select=ap_id,qk_name`,
-      )) ?? []
+      const rows =
+        (await apiFetch<{ ap_id: string; qk_name: string }[]>(
+          `/apqk?ap_id=eq.${apId}&qk_name=eq.${encodeURIComponent(qk.name)}&select=ap_id,qk_name`,
+        )) ?? []
       return {
         apqkByApIdAndQkName: rows[0] ?? null,
       } as unknown as ApqkQueryResult

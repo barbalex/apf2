@@ -20,7 +20,10 @@ export const MobileHeader = () => {
       >
         <FaChevronLeft />
       </IconButton>
-      <Link to={`/Dokumentation/${search}`} className={styles.title}>
+      <Link
+        to={`/Dokumentation/${search}`}
+        className={styles.title}
+      >
         Dokumentation
       </Link>
     </div>

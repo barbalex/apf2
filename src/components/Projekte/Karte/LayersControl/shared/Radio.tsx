@@ -10,7 +10,13 @@ interface RadioProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const Radio = ({ name, value, label, checked, onChange }: RadioProps) => (
+export const Radio = ({
+  name,
+  value,
+  label,
+  checked,
+  onChange,
+}: RadioProps) => (
   <label className={styles.label}>
     <input
       type="radio"

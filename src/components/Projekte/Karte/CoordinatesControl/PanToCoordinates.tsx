@@ -15,17 +15,18 @@ import panCentreIcon from '../../../../etc/panTo.png'
 
 import styles from './PanToCoordinates.module.css'
 
-const xIsValid = (x: string | number) =>
-  !x || (+x >= 2485071 && +x < 2828516)
-const yIsValid = (y: string | number) =>
-  !y || (+y >= 1075346 && +y < 1299942)
+const xIsValid = (x: string | number) => !x || (+x >= 2485071 && +x < 2828516)
+const yIsValid = (y: string | number) => !y || (+y >= 1075346 && +y < 1299942)
 
 interface PanToCoordinatesProps {
   setControlType: (value: string) => void
   map: LeafletMap
 }
 
-export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps) => {
+export const PanToCoordinates = ({
+  setControlType,
+  map,
+}: PanToCoordinatesProps) => {
   const xkoordField = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -39,9 +40,9 @@ export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps)
   const [yError, changeYError] = useState('')
   // on dealing with focus of div with children, see:
   // https://medium.com/@jessebeach/dealing-with-focus-and-blur-in-a-composite-widget-in-react-90d3c3b49a9b
-  const [timeoutId, changeTimeoutId] = useState<ReturnType<
-    typeof setTimeout
-  > | ''>('')
+  const [timeoutId, changeTimeoutId] = useState<
+    ReturnType<typeof setTimeout> | ''
+  >('')
   const [gotoFocused, changeGotoFocused] = useState(false)
 
   const onFocusGotoContainer = () => {
@@ -94,7 +95,9 @@ export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps)
     }
   }
 
-  const onChangeX = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChangeX = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     let { value }: { value: string | number } = event.target
     // convert string to number
     value = value ? +value : value
@@ -103,7 +106,9 @@ export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps)
     if (xIsValid(value)) changeXError('')
   }
 
-  const onChangeY = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChangeY = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     let { value }: { value: string | number } = event.target
     // convert string to number
     value = value ? +value : value
@@ -112,14 +117,18 @@ export const PanToCoordinates = ({ setControlType, map }: PanToCoordinatesProps)
     if (yIsValid(value)) changeYError('')
   }
 
-  const onBlurX = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onBlurX = (
+    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     // prevent onBlurGotoContainer
     event.stopPropagation()
     if (xIsValid(x)) return changeXError('')
     changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
   }
 
-  const onBlurY = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onBlurY = (
+    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     // prevent onBlurGotoContainer
     event.stopPropagation()
     if (yIsValid(y)) return changeYError('')

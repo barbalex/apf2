@@ -75,7 +75,13 @@ const getIconHtml = ({ isHighlighted, pop, popIconName }: GetIconHtmlProps) => {
   return iconHtml
 }
 
-export const Marker = ({ pop, labeled = true }: { pop: PopNode; labeled?: boolean }) => {
+export const Marker = ({
+  pop,
+  labeled = true,
+}: {
+  pop: PopNode
+  labeled?: boolean
+}) => {
   const { apId, projId, popId } = useParams()
   const { search } = useLocation()
 

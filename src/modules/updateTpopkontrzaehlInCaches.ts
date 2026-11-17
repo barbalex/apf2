@@ -97,7 +97,9 @@ export const updateTpopkontrzaehlInCaches = ({
         tpopkontrById: {
           ...old.tpopkontrById,
           tpopkontrzaehlsByTpopkontrId: {
-            nodes: nodes.map((n) => (n.id === row.id ? { ...n, ...overrides } : n)),
+            nodes: nodes.map((n) =>
+              n.id === row.id ? { ...n, ...overrides } : n,
+            ),
           },
         },
       }

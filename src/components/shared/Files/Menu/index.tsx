@@ -28,9 +28,11 @@ export const Menu = ({
   const { fileId } = useParams()
   const { pathname } = useLocation()
   // also show preview if Vorschau is omitted (until that rout is used for something else)
-  const isPreview = embedded ?
-    false
-  : pathname.endsWith('Vorschau') || (fileId ? pathname.includes(fileId) : false)
+  const isPreview =
+    embedded ? false : (
+      pathname.endsWith('Vorschau') ||
+      (fileId ? pathname.includes(fileId) : false)
+    )
 
   const file = files.find((f) => f.fileId === fileId)
   const fileIndex = files.findIndex((f) => f.fileId === fileId)
@@ -63,7 +65,8 @@ export const Menu = ({
         : <ListMenus
             files={files}
             embedded={embedded}
-          />}
+          />
+        }
       </MenuBar>
     </ErrorBoundary>
   )

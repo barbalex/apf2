@@ -9,7 +9,7 @@ interface FilesProps {
 }
 
 export const Files = ({ row }: FilesProps) =>
-  row.id ? (
+  row.id ?
     <div className={styles.container}>
       <div className={styles.label}>Dateien</div>
       <div className={styles.val}>
@@ -20,4 +20,4 @@ export const Files = ({ row }: FilesProps) =>
         />
       </div>
     </div>
-  ) : null
+  : null

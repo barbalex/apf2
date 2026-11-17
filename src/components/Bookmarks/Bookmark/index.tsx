@@ -11,7 +11,10 @@ import { showBookmarksMenuAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const transitionStyles: Record<Exclude<TransitionStatus, 'unmounted'>, CSSProperties> = {
+const transitionStyles: Record<
+  Exclude<TransitionStatus, 'unmounted'>,
+  CSSProperties
+> = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
@@ -52,7 +55,9 @@ export const Bookmark = ({
               navData={navData}
               outerContainerRef={outerContainerRef}
               ref={labelRef}
-              labelStyle={state === 'unmounted' ? undefined : transitionStyles[state]}
+              labelStyle={
+                state === 'unmounted' ? undefined : transitionStyles[state]
+              }
             />
             {!!navData.menus && showBookmarksMenu && <Menu navData={navData} />}
           </div>

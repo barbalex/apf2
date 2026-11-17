@@ -160,7 +160,8 @@ export const FilesRouter = ({
                 context={{ files, parent, refetch: () => void refetch() }}
               />
             </Suspense>
-          </div>}
+          </div>
+        }
       </div>
     </ErrorBoundary>
   )
