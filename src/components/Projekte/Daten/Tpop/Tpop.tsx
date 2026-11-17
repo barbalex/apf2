@@ -22,6 +22,7 @@ import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantI
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 import { addNotificationAtom, userNameAtom } from '../../../../store/index.ts'
@@ -203,8 +204,12 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // invalidate tpop queries
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpop', tpopId] })
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['tpop'],
+      row: variables,
+    })
     // update tpop on map
     if (
       (value &&

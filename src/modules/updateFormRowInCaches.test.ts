@@ -67,6 +67,27 @@ describe('updateFormRowInCaches', () => {
     })
   })
 
+  it('patches queries that cache the row directly (no rowKey)', () => {
+    const tsQueryClient = new QueryClient()
+    tsQueryClient.setQueryData(['tpop', 'tpop-1'], {
+      id: 'tpop-1',
+      nr: 4,
+      flurname: 'Alter Flurname',
+    })
+
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['tpop'],
+      row: { id: 'tpop-1', flurname: 'Neuer Flurname' },
+    })
+
+    expect(tsQueryClient.getQueryData(['tpop', 'tpop-1'])).toEqual({
+      id: 'tpop-1',
+      nr: 4,
+      flurname: 'Neuer Flurname',
+    })
+  })
+
   it('does nothing without a string id', () => {
     const tsQueryClient = new QueryClient()
     tsQueryClient.setQueryData(key, {

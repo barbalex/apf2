@@ -23,6 +23,7 @@ import type {
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface PopmassnberQueryResult {
   popmassnberById?: {
@@ -102,9 +103,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate queries to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['popmassnber', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['popmassnber'],
+      rowKey: 'popmassnberById',
+      row: variables,
     })
     if (['jahr', 'beurteilung'].includes(field)) {
       void tsQueryClient.invalidateQueries({
