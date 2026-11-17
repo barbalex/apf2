@@ -695,6 +695,200 @@ LANGUAGE sql
 STABLE
 SECURITY DEFINER;
 
+-- Constant-time grant probes for the write policies (migration 0066).
+-- The write policies used to check ap_writer grants with
+--   <key> IN (SELECT ... FROM tpop/pop JOIN ap_user WHERE user_name = current_user_name())
+-- which made Postgres build the grant SET for every single-row write
+-- (seq-scan over tpop nested-looped against the user's granted pops -
+-- seconds for users with many grants, growing with table size). These
+-- helpers instead walk OUTWARD from the written row via primary keys:
+-- constant cost, independent of grant count and table size.
+-- SECURITY DEFINER (owned by a superuser) so the reader policies of
+-- tpop/pop/ap_user do not nest into every check.
+-- EXECUTE is granted to the five app roles only so PostgREST does not
+-- expose them to anon.
+--
+-- Deliberately ONLY the write expressions use them. The USING clauses of
+-- the reader policies keep the IN-subqueries above: for bulk SELECTs the
+-- planner hashes the grant set once per statement and probes in O(1), while
+-- these per-row probes measured 8x slower on apflora_ap_reader exports
+-- (v_export_tpopkontr: 42 ms -> 360 ms for ~1200 rows). If an
+-- ap_reader-specific read path ever needs optimizing, use a set-returning
+-- grant function instead - not these probes.
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_ap(p_ap_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.ap_user au
+    WHERE au.ap_id = p_ap_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_for_art(p_art_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.apart apa
+    JOIN apflora.ap_user au ON au.ap_id = apa.ap_id
+    WHERE apa.art_id = p_art_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_pop(p_pop_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.pop p
+    JOIN apflora.ap_user au ON au.ap_id = p.ap_id
+    WHERE p.id = p_pop_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_tpop(p_tpop_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.tpop t
+    JOIN apflora.pop p ON p.id = t.pop_id
+    JOIN apflora.ap_user au ON au.ap_id = p.ap_id
+    WHERE t.id = p_tpop_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_tpopkontr(p_tpopkontr_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.tpopkontr k
+    JOIN apflora.tpop t ON t.id = k.tpop_id
+    JOIN apflora.pop p ON p.id = t.pop_id
+    JOIN apflora.ap_user au ON au.ap_id = p.ap_id
+    WHERE k.id = p_tpopkontr_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_tpopmassn(p_tpopmassn_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.tpopmassn m
+    JOIN apflora.tpop t ON t.id = m.tpop_id
+    JOIN apflora.pop p ON p.id = t.pop_id
+    JOIN apflora.ap_user au ON au.ap_id = p.ap_id
+    WHERE m.id = p_tpopmassn_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_idealbiotop(p_idealbiotop_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.idealbiotop i
+    JOIN apflora.ap_user au ON au.ap_id = i.ap_id
+    WHERE i.id = p_idealbiotop_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_granted_in_pop_history(p_pop_history_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.pop_history ph
+    JOIN apflora.ap_user au ON au.ap_id = ph.ap_id
+    WHERE ph.id = p_pop_history_id
+      AND au.user_name = public.current_user_name()
+  )
+$$;
+
+CREATE OR REPLACE FUNCTION apflora.current_user_owns_freiwkontr(p_tpopkontr_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path TO pg_catalog, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM apflora.tpopkontr k
+    WHERE k.id = p_tpopkontr_id
+      AND k.typ = 'Freiwilligen-Kontrolle'
+      AND k.bearbeiter = (
+        SELECT u.adresse_id FROM apflora."user" u
+        WHERE u.name = public.current_user_name()
+      )
+  )
+$$;
+
+REVOKE EXECUTE ON FUNCTION
+  apflora.current_user_granted_in_ap(uuid),
+  apflora.current_user_granted_for_art(uuid),
+  apflora.current_user_granted_in_pop(uuid),
+  apflora.current_user_granted_in_tpop(uuid),
+  apflora.current_user_granted_in_tpopkontr(uuid),
+  apflora.current_user_granted_in_tpopmassn(uuid),
+  apflora.current_user_granted_in_idealbiotop(uuid),
+  apflora.current_user_granted_in_pop_history(uuid),
+  apflora.current_user_owns_freiwkontr(uuid)
+FROM PUBLIC, anon, authenticator;
+GRANT EXECUTE ON FUNCTION
+  apflora.current_user_granted_in_ap(uuid),
+  apflora.current_user_granted_for_art(uuid),
+  apflora.current_user_granted_in_pop(uuid),
+  apflora.current_user_granted_in_tpop(uuid),
+  apflora.current_user_granted_in_tpopkontr(uuid),
+  apflora.current_user_granted_in_tpopmassn(uuid),
+  apflora.current_user_granted_in_idealbiotop(uuid),
+  apflora.current_user_granted_in_pop_history(uuid),
+  apflora.current_user_owns_freiwkontr(uuid)
+TO apflora_manager, apflora_ap_writer, apflora_ap_reader, apflora_reader, apflora_freiwillig;
+
 ALTER TABLE apflora.user ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS reader_writer ON apflora.user;
@@ -821,11 +1015,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(id)
   )
 );
 
@@ -902,11 +1092,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -997,11 +1183,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(id)
   )
 );
 
@@ -1388,11 +1570,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -1494,11 +1672,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -1551,11 +1725,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -1655,11 +1825,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -1739,12 +1905,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND idealbiotop_id IN (
-      SELECT idealbiotop.id
-      FROM apflora.idealbiotop
-       join apflora.ap_user on ap_user.ap_id = idealbiotop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_idealbiotop(idealbiotop_id)
   )
 );
 
@@ -1818,11 +1979,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -1868,12 +2025,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND pop_id IN (
-      SELECT pop.id
-      FROM apflora.pop
-        inner join apflora.ap_user on apflora.ap_user.ap_id = apflora.pop.ap_id
-      WHERE apflora.ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_pop(pop_id)
   )
 );
 
@@ -2063,12 +2215,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND pop_id IN (
-      SELECT pop.id
-      FROM apflora.pop
-        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_pop(pop_id)
   )
 );
 
@@ -2127,12 +2274,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND pop_id IN (
-      SELECT pop.id
-      FROM apflora.pop
-        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_pop(pop_id)
   )
 );
 
@@ -2294,12 +2436,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND pop_id IN (
-      SELECT pop.id
-      FROM apflora.pop
-        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_pop(pop_id)
   )
 );
 
@@ -2346,13 +2483,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      SELECT tpop.id
-      FROM apflora.tpop
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -2460,12 +2591,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND pop_id IN (
-      SELECT pop_history.id
-      FROM apflora.pop_history
-        inner join apflora.ap_user on ap_user.ap_id = pop_history.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_pop_history(pop_id)
   )
 );
 
@@ -2524,13 +2650,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      SELECT tpop.id
-      FROM apflora.tpop
-        inner join apflora.pop on pop.id = tpop.pop_id
-        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -2722,13 +2842,7 @@ WITH CHECK (
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      select tpop.id 
-      from apflora.tpop 
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      where ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -2741,13 +2855,7 @@ USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_ap_reader', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_reader') 
-    AND tpop_id IN (
-      SELECT tpop.id 
-      FROM apflora.tpop
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 )
 WITH CHECK (
@@ -2761,13 +2869,7 @@ WITH CHECK (
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      select tpop.id 
-      from apflora.tpop 
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      where ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -2784,13 +2886,7 @@ USING (
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      select tpop.id 
-      from apflora.tpop 
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      where ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -2850,24 +2946,11 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 
@@ -2877,38 +2960,18 @@ USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_reader') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 )
 WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 
@@ -2918,24 +2981,11 @@ USING (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 -- tpopkontrzaehl
@@ -3007,24 +3057,11 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 
@@ -3034,38 +3071,18 @@ USING (
   CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_reader') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 )
 WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 
@@ -3075,24 +3092,11 @@ USING (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_freiwillig')
-    AND tpopkontr_id IN (
-      SELECT k.id FROM apflora.tpopkontr k
-      WHERE k.typ = 'Freiwilligen-Kontrolle'
-        AND k.bearbeiter = (
-          SELECT u.adresse_id FROM apflora."user" u WHERE u.name = current_user_name()
-        )
-    )
+    AND apflora.current_user_owns_freiwkontr(tpopkontr_id)
   )
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopkontr_id IN (
-      SELECT tpopkontr.id
-      FROM apflora.tpopkontr
-        inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopkontr(tpopkontr_id)
   )
 );
 -- tpopmassn
@@ -3209,13 +3213,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      SELECT tpop.id
-      FROM apflora.tpop
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -3263,14 +3261,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpopmassn_id IN (
-      SELECT tpopmassn.id
-      FROM apflora.tpopmassn
-        inner join apflora.tpop on tpopmassn.tpop_id = tpop.id
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpopmassn(tpopmassn_id)
   )
 );
 
@@ -3330,13 +3321,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      SELECT tpop.id
-      FROM apflora.tpop
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -3480,11 +3465,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -3581,12 +3562,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND art_id IN (
-      SELECT apart.art_id
-      FROM apflora.apart
-        inner join apflora.ap_user on ap_user.ap_id = apart.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_for_art(art_id)
   )
 );
 
@@ -3650,11 +3626,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 
@@ -3770,13 +3742,7 @@ WITH CHECK (
   CURRENT_USER = 'apflora_manager'
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND tpop_id IN (
-      SELECT tpop.id
-      FROM apflora.tpop
-        inner join apflora.pop on tpop.pop_id = pop.id
-        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
-      WHERE ap_user.user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_tpop(tpop_id)
   )
 );
 
@@ -3831,11 +3797,7 @@ WITH CHECK (
   CURRENT_USER IN ('apflora_manager')
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
-    AND ap_id IN (
-      SELECT ap_id
-      FROM apflora.ap_user
-      WHERE user_name = current_user_name()
-    )
+    AND apflora.current_user_granted_in_ap(ap_id)
   )
 );
 

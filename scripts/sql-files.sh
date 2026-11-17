@@ -10,6 +10,7 @@ FILES=(
   sql/apflora/migrations/2026-11-09_set-password-no-passless-claiming/00_close_passless_claiming.sql
   sql/apflora/migrations/2026-11-13_freiwillig-tpopkontr-rls/00_tighten.sql
   sql/apflora/migrations/2026-11-13_error-telemetry/00_error_report.sql
+  sql/migration/0066-rls-write-policy-performance.sql
   sql/postgrest/createComputedViews.sql
   sql/postgrest/compileFilter.sql
   sql/postgrest/createQueryRpcs.sql
