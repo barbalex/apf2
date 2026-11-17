@@ -40,7 +40,11 @@
 
 .layer {
   display: grid;
-  grid-template-columns: 360px 20px;
+  /*
+   * minmax(0, 1fr) lets the label column shrink with narrow map panes
+   * (labels wrap) instead of clipping at the map edge
+   */
+  grid-template-columns: minmax(0, 1fr) 20px;
   padding-top: 4px;
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;

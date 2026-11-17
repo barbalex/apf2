@@ -1,0 +1,1 @@
+In der Karte passt sich die Layer-Auswahlliste ("überlagernd") nun der Kartenbreite an: Bei schmaler Karte werden lange Layer-Bezeichnungen umbrochen statt abgeschnitten.
