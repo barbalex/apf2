@@ -1,4 +1,3 @@
-import { lazy } from 'react'
 import {
   Route,
   createBrowserRouter,
@@ -7,6 +6,30 @@ import {
 import { RouterProvider } from 'react-router/dom'
 
 import { Spinner } from '../shared/Spinner.tsx'
+import { RouterErrorBoundary } from '../shared/RouterErrorBoundary.tsx'
+
+/**
+ * Wraps a route lazy import. When the chunk cannot be loaded — a stale
+ * client (open tab across a deploy) requesting a hashed asset that no
+ * longer exists — the promise resolves to a Component that rethrows the
+ * import error on render, so react-router routes it to the route's
+ * errorElement. Rejections of the function-form lazy() are otherwise
+ * swallowed by react-router 8.5.1 (blank screen, no errorElement; the
+ * fix for react-router #15657 only covers the object form).
+ */
+const lazyRoute =
+  (load: () => Promise<unknown>): (() => Promise<{ Component: () => never }>) =>
+  async () => {
+    try {
+      return (await load()) as { Component: () => never }
+    } catch (error) {
+      return {
+        Component: function FailedImport() {
+          throw error
+        },
+      }
+    }
+  }
 
 const datenHandle = {
   bookmarkFetcher: true,
@@ -176,50 +199,48 @@ const idealbiotopHandle = {
   bookmarkFetcher: true,
   bookmarkFetcherName: 'useIdealbiotopNavData',
 }
-const RouterErrorBoundary = lazy(async () => ({
-  default: (await import('../shared/RouterErrorBoundary.tsx'))
-    .RouterErrorBoundary,
-}))
-
-// WARNING: errorElement did not work
-// import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
+// RouterErrorBoundary is statically imported on purpose: the error
+// boundary must not live in a lazy chunk. Stale clients (open tab across
+// a deploy) get 404s on every hashed lazy chunk — including this one —
+// and would otherwise end up with a blank screen instead of the error UI
+// with its reload buttons
 
 export const datenRoutes = (
   <Route
     path="/Daten"
-    lazy={() => import('./ProtectedRoute.tsx')}
+    lazy={lazyRoute(() => import('./ProtectedRoute.tsx'))}
     handle={datenHandle}
     errorElement={<RouterErrorBoundary />}
   >
     <Route
       path="Projekte/:projId/EK-Planung"
-      lazy={() => import('../EkPlan/index.tsx')}
+      lazy={lazyRoute(() => import('../EkPlan/index.tsx'))}
       errorElement={<RouterErrorBoundary />}
     />
     <Route
       path="Benutzer/:userId/EKF/:ekfYear"
-      lazy={() => import('../Ekf/index.tsx')}
+      lazy={lazyRoute(() => import('../Ekf/index.tsx'))}
       errorElement={<RouterErrorBoundary />}
     >
       <Route
         path="*"
-        lazy={() => import('../Ekf/index.tsx')}
+        lazy={lazyRoute(() => import('../Ekf/index.tsx'))}
         errorElement={<RouterErrorBoundary />}
       />
       <Route
         path=":ekfId"
-        lazy={() => import('../Ekf/index.tsx')}
+        lazy={lazyRoute(() => import('../Ekf/index.tsx'))}
         errorElement={<RouterErrorBoundary />}
       />
     </Route>
     <Route
       path="*"
-      lazy={() => import('../Projekte/index.tsx')}
+      lazy={lazyRoute(() => import('../Projekte/index.tsx'))}
       errorElement={<RouterErrorBoundary />}
     >
       <Route
         index
-        lazy={() => import('../Projekte/Daten/Root/index.tsx')}
+        lazy={lazyRoute(() => import('../Projekte/Daten/Root/index.tsx'))}
         errorElement={<RouterErrorBoundary />}
       />
       <Route
@@ -229,7 +250,7 @@ export const datenRoutes = (
       >
         <Route
           path="*"
-          lazy={() => import('../Projekte/Daten/Wertes/index.tsx')}
+          lazy={lazyRoute(() => import('../Projekte/Daten/Wertes/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
         <Route
@@ -239,12 +260,12 @@ export const datenRoutes = (
         >
           <Route
             path="*"
-            lazy={() => import('../Projekte/Daten/Adresses/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Adresses/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path=":adrId"
-            lazy={() => import('../Projekte/Daten/Adresse/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Adresse/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
         </Route>
@@ -255,14 +276,12 @@ export const datenRoutes = (
         >
           <Route
             path="*"
-            lazy={() =>
-              import('../Projekte/Daten/TpopApberrelevantGrundWertes/index.tsx')
-            }
+            lazy={lazyRoute(() => import('../Projekte/Daten/TpopApberrelevantGrundWertes/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path=":wertId"
-            lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Werte/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
         </Route>
@@ -273,14 +292,12 @@ export const datenRoutes = (
         >
           <Route
             path="*"
-            lazy={() =>
-              import('../Projekte/Daten/EkAbrechnungstypWertes/index.tsx')
-            }
+            lazy={lazyRoute(() => import('../Projekte/Daten/EkAbrechnungstypWertes/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path=":wertId"
-            lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Werte/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
         </Route>
@@ -291,21 +308,19 @@ export const datenRoutes = (
         >
           <Route
             path="*"
-            lazy={() =>
-              import('../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.tsx')
-            }
+            lazy={lazyRoute(() => import('../Projekte/Daten/TpopkontrzaehlEinheitWertes/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path=":wertId"
-            lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Werte/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
         </Route>
       </Route>
       <Route
         path="Mitteilungen"
-        lazy={() => import('../Projekte/Daten/Messages/index.tsx')}
+        lazy={lazyRoute(() => import('../Projekte/Daten/Messages/index.tsx'))}
         handle={messagesHandle}
         errorElement={<RouterErrorBoundary />}
       />
@@ -316,12 +331,12 @@ export const datenRoutes = (
       >
         <Route
           path="*"
-          lazy={() => import('../Projekte/Daten/CurrentIssues/index.tsx')}
+          lazy={lazyRoute(() => import('../Projekte/Daten/CurrentIssues/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
         <Route
           path=":issueId"
-          lazy={() => import('../Projekte/Daten/CurrentIssue/index.tsx')}
+          lazy={lazyRoute(() => import('../Projekte/Daten/CurrentIssue/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
       </Route>
@@ -332,7 +347,7 @@ export const datenRoutes = (
       >
         <Route
           path="*"
-          lazy={() => import('../Projekte/Daten/Projects/index.tsx')}
+          lazy={lazyRoute(() => import('../Projekte/Daten/Projects/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
         <Route
@@ -342,12 +357,12 @@ export const datenRoutes = (
         >
           <Route
             path="*"
-            lazy={() => import('../Projekte/Daten/Projekt/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Projekt/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="Projekt"
-            lazy={() => import('../Projekte/Daten/Projekt/Projekt.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/Projekt/Projekt.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
@@ -357,22 +372,18 @@ export const datenRoutes = (
           >
             <Route
               path="*"
-              lazy={() =>
-                import('../Projekte/Daten/Apberuebersichts/index.tsx')
-              }
+              lazy={lazyRoute(() => import('../Projekte/Daten/Apberuebersichts/index.tsx'))}
               errorElement={<RouterErrorBoundary />}
             />
             <Route path=":apberuebersichtId">
               <Route
                 path="*"
-                lazy={() =>
-                  import('../Projekte/Daten/Apberuebersicht/index.tsx')
-                }
+                lazy={lazyRoute(() => import('../Projekte/Daten/Apberuebersicht/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
                 path="print"
-                lazy={() => import('../Print/ApberForYear/index.tsx')}
+                lazy={lazyRoute(() => import('../Print/ApberForYear/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
             </Route>
@@ -384,7 +395,7 @@ export const datenRoutes = (
           >
             <Route
               path="*"
-              lazy={() => import('../Projekte/Daten/Aps/index.tsx')}
+              lazy={lazyRoute(() => import('../Projekte/Daten/Aps/index.tsx'))}
               errorElement={<RouterErrorBoundary />}
             />
             <Route
@@ -394,45 +405,45 @@ export const datenRoutes = (
             >
               <Route
                 index={true}
-                lazy={() => import('../Projekte/Daten/Ap/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Ap/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
                 path="Art"
-                lazy={() => import('../Projekte/Daten/Ap/Ap/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Ap/Ap/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
                 path="Auswertung"
-                lazy={() => import('../Projekte/Daten/ApAuswertung/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/ApAuswertung/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
                 path="Dateien"
-                lazy={() => import('../Projekte/Daten/Ap/Dateien.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Ap/Dateien.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               >
                 <Route
                   index={true}
-                  lazy={() => import('../shared/Files/Files/index.tsx')}
+                  lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route path=":fileId">
                   <Route
                     path="*"
-                    lazy={() => import('../shared/Files/Preview/index.tsx')}
+                    lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="Vorschau"
-                    lazy={() => import('../shared/Files/Preview/index.tsx')}
+                    lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                 </Route>
               </Route>
               <Route
                 path="Historien"
-                lazy={() => import('../Projekte/Daten/Ap/Historien/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Ap/Historien/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
@@ -442,7 +453,7 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Zieljahrs/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Zieljahrs/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
@@ -452,7 +463,7 @@ export const datenRoutes = (
                 >
                   <Route
                     path="*"
-                    lazy={() => import('../Projekte/Daten/Ziels/index.tsx')}
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Ziels/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
@@ -462,12 +473,12 @@ export const datenRoutes = (
                   >
                     <Route
                       path="*"
-                      lazy={() => import('../Projekte/Daten/Ziel/index.tsx')}
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Ziel/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path="Ziel"
-                      lazy={() => import('../Projekte/Daten/Ziel/Ziel.tsx')}
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Ziel/Ziel.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                   </Route>
@@ -480,12 +491,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Erfkrits/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Erfkrits/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":erfkritId"
-                  lazy={() => import('../Projekte/Daten/Erfkrit/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Erfkrit/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -496,18 +507,18 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Apbers/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Apbers/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route path=":apberId">
                   <Route
                     path="*"
-                    lazy={() => import('../Projekte/Daten/Apber/index.tsx')}
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Apber/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="print"
-                    lazy={() => import('../Print/ApberForApFromAp/index.tsx')}
+                    lazy={lazyRoute(() => import('../Print/ApberForApFromAp/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                 </Route>
@@ -519,37 +530,33 @@ export const datenRoutes = (
               >
                 <Route
                   index={true}
-                  lazy={() => import('../Projekte/Daten/Idealbiotop/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Idealbiotop/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path="Idealbiotop"
-                  lazy={() =>
-                    import('../Projekte/Daten/Idealbiotop/Idealbiotop.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Idealbiotop/Idealbiotop.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path="Dateien"
-                  lazy={() =>
-                    import('../Projekte/Daten/Idealbiotop/Dateien.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Idealbiotop/Dateien.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 >
                   <Route
                     index={true}
-                    lazy={() => import('../shared/Files/Files/index.tsx')}
+                    lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route path=":fileId">
                     <Route
                       path="*"
-                      lazy={() => import('../shared/Files/Preview/index.tsx')}
+                      lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path="Vorschau"
-                      lazy={() => import('../shared/Files/Preview/index.tsx')}
+                      lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                   </Route>
@@ -562,12 +569,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Aparts/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Aparts/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":taxonId"
-                  lazy={() => import('../Projekte/Daten/Apart/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Apart/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -578,12 +585,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Assozarts/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Assozarts/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":assozartId"
-                  lazy={() => import('../Projekte/Daten/Assozart/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Assozart/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -594,12 +601,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Ekfrequenzs/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Ekfrequenzs/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":ekfrequenzId"
-                  lazy={() => import('../Projekte/Daten/Ekfrequenz/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Ekfrequenz/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -610,16 +617,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/Ekzaehleinheits/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Ekzaehleinheits/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":zaehleinheitId"
-                  lazy={() =>
-                    import('../Projekte/Daten/Ekzaehleinheit/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Ekzaehleinheit/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -630,16 +633,12 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/BeobNichtBeurteilts/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/BeobNichtBeurteilts/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":beobId"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnung/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Beobzuordnung/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -650,27 +649,23 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() =>
-                    import('../Projekte/Daten/BeobNichtZuzuordnens/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/BeobNichtZuzuordnens/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
                   path=":beobId"
-                  lazy={() =>
-                    import('../Projekte/Daten/Beobzuordnung/index.tsx')
-                  }
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Beobzuordnung/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
               <Route
                 path="Qualitätskontrollen"
-                lazy={() => import('../Projekte/Daten/Qk/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Qk/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
                 path="Qualitätskontrollen-wählen"
-                lazy={() => import('../Projekte/Daten/Qk/Choose/index.tsx')}
+                lazy={lazyRoute(() => import('../Projekte/Daten/Qk/Choose/index.tsx'))}
                 errorElement={<RouterErrorBoundary />}
               />
               <Route
@@ -680,7 +675,7 @@ export const datenRoutes = (
               >
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/Pops/index.tsx')}
+                  lazy={lazyRoute(() => import('../Projekte/Daten/Pops/index.tsx'))}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route
@@ -690,49 +685,45 @@ export const datenRoutes = (
                 >
                   <Route
                     index={true}
-                    lazy={() => import('../Projekte/Daten/Pop/index.tsx')}
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Pop/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="Population"
-                    lazy={() => import('../Projekte/Daten/Pop/Pop.tsx')}
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Pop/Pop.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="Auswertung"
-                    lazy={() =>
-                      import('../Projekte/Daten/PopAuswertung/index.tsx')
-                    }
+                    lazy={lazyRoute(() => import('../Projekte/Daten/PopAuswertung/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
                     path="Dateien"
-                    lazy={() => import('../Projekte/Daten/Pop/Dateien.tsx')}
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Pop/Dateien.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   >
                     <Route
                       index={true}
-                      lazy={() => import('../shared/Files/Files/index.tsx')}
+                      lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route path=":fileId">
                       <Route
                         index={true}
-                        lazy={() => import('../shared/Files/Preview/index.tsx')}
+                        lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route
                         path="Vorschau"
-                        lazy={() => import('../shared/Files/Preview/index.tsx')}
+                        lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                     </Route>
                   </Route>
                   <Route
                     path="Historien"
-                    lazy={() =>
-                      import('../Projekte/Daten/Pop/Historien/index.tsx')
-                    }
+                    lazy={lazyRoute(() => import('../Projekte/Daten/Pop/Historien/index.tsx'))}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
@@ -742,7 +733,7 @@ export const datenRoutes = (
                   >
                     <Route
                       path="*"
-                      lazy={() => import('../Projekte/Daten/Tpops/index.tsx')}
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Tpops/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
@@ -752,55 +743,45 @@ export const datenRoutes = (
                     >
                       <Route
                         index={true}
-                        lazy={() => import('../Projekte/Daten/Tpop/index.tsx')}
+                        lazy={lazyRoute(() => import('../Projekte/Daten/Tpop/index.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route
                         path="Teil-Population"
-                        lazy={() => import('../Projekte/Daten/Tpop/Tpop.tsx')}
+                        lazy={lazyRoute(() => import('../Projekte/Daten/Tpop/Tpop.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route
                         path="EK"
-                        lazy={() =>
-                          import('../Projekte/Daten/TpopEk/index.tsx')
-                        }
+                        lazy={lazyRoute(() => import('../Projekte/Daten/TpopEk/index.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route
                         path="Dateien"
-                        lazy={() =>
-                          import('../Projekte/Daten/Tpop/Dateien.tsx')
-                        }
+                        lazy={lazyRoute(() => import('../Projekte/Daten/Tpop/Dateien.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       >
                         <Route
                           index={true}
-                          lazy={() => import('../shared/Files/Files/index.tsx')}
+                          lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route path=":fileId">
                           <Route
                             path="*"
-                            lazy={() =>
-                              import('../shared/Files/Preview/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Vorschau"
-                            lazy={() =>
-                              import('../shared/Files/Preview/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                         </Route>
                       </Route>
                       <Route
                         path="Historien"
-                        lazy={() =>
-                          import('../Projekte/Daten/Tpop/Historien/index.tsx')
-                        }
+                        lazy={lazyRoute(() => import('../Projekte/Daten/Tpop/Historien/index.tsx'))}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route
@@ -810,9 +791,7 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopmassns/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassns/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
@@ -822,45 +801,33 @@ export const datenRoutes = (
                         >
                           <Route
                             path="*"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopmassn/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassn/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Massnahme"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopmassn/Tpopmassn.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassn/Tpopmassn.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Dateien"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopmassn/Dateien.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassn/Dateien.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           >
                             <Route
                               index={true}
-                              lazy={() =>
-                                import('../shared/Files/Files/index.tsx')
-                              }
+                              lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                               errorElement={<RouterErrorBoundary />}
                             />
                             <Route path=":fileId">
                               <Route
                                 path="*"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                               <Route
                                 path="Vorschau"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                             </Route>
@@ -874,16 +841,12 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopmassnbers/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassnbers/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
                           path=":tpopmassnberId"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopmassnber/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopmassnber/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                       </Route>
@@ -894,9 +857,7 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopfeldkontrs/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontrs/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
@@ -906,59 +867,43 @@ export const datenRoutes = (
                         >
                           <Route
                             index={true}
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Feld-Kontrolle"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/Tpopfeldkontr.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/Tpopfeldkontr.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Teil-Population"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Biotop"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/Biotop.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/Biotop.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Dateien"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/Dateien.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/Dateien.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           >
                             <Route
                               index={true}
-                              lazy={() =>
-                                import('../shared/Files/Files/index.tsx')
-                              }
+                              lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                               errorElement={<RouterErrorBoundary />}
                             />
                             <Route path=":fileId">
                               <Route
                                 path="*"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                               <Route
                                 path="Vorschau"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                             </Route>
@@ -970,16 +915,12 @@ export const datenRoutes = (
                           >
                             <Route
                               path="*"
-                              lazy={() =>
-                                import('../Projekte/Daten/Tpopkontrzaehls/index.tsx')
-                              }
+                              lazy={lazyRoute(() => import('../Projekte/Daten/Tpopkontrzaehls/index.tsx'))}
                               errorElement={<RouterErrorBoundary />}
                             />
                             <Route
                               path=":tpopkontrzaehlId"
-                              lazy={() =>
-                                import('../Projekte/Daten/Tpopkontrzaehl/index.tsx')
-                              }
+                              lazy={lazyRoute(() => import('../Projekte/Daten/Tpopkontrzaehl/index.tsx'))}
                               errorElement={<RouterErrorBoundary />}
                             />
                           </Route>
@@ -992,9 +933,7 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopfreiwkontrs/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfreiwkontrs/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
@@ -1004,45 +943,33 @@ export const datenRoutes = (
                         >
                           <Route
                             path="*"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfreiwkontr/index.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfreiwkontr/index.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Freiwilligen-Kontrolle"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfreiwkontr/Tpopfreiwkontr.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfreiwkontr/Tpopfreiwkontr.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Dateien"
-                            lazy={() =>
-                              import('../Projekte/Daten/Tpopfeldkontr/Dateien.tsx')
-                            }
+                            lazy={lazyRoute(() => import('../Projekte/Daten/Tpopfeldkontr/Dateien.tsx'))}
                             errorElement={<RouterErrorBoundary />}
                           >
                             <Route
                               index={true}
-                              lazy={() =>
-                                import('../shared/Files/Files/index.tsx')
-                              }
+                              lazy={lazyRoute(() => import('../shared/Files/Files/index.tsx'))}
                               errorElement={<RouterErrorBoundary />}
                             />
                             <Route path=":fileId">
                               <Route
                                 path="*"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                               <Route
                                 path="Vorschau"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.tsx')
-                                }
+                                lazy={lazyRoute(() => import('../shared/Files/Preview/index.tsx'))}
                                 errorElement={<RouterErrorBoundary />}
                               />
                             </Route>
@@ -1056,16 +983,12 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopbers/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopbers/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
                           path=":tpopberId"
-                          lazy={() =>
-                            import('../Projekte/Daten/Tpopber/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Tpopber/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                       </Route>
@@ -1076,16 +999,12 @@ export const datenRoutes = (
                       >
                         <Route
                           path="*"
-                          lazy={() =>
-                            import('../Projekte/Daten/BeobZugeordnets/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/BeobZugeordnets/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
                           path=":beobId"
-                          lazy={() =>
-                            import('../Projekte/Daten/Beobzuordnung/index.tsx')
-                          }
+                          lazy={lazyRoute(() => import('../Projekte/Daten/Beobzuordnung/index.tsx'))}
                           errorElement={<RouterErrorBoundary />}
                         />
                       </Route>
@@ -1098,12 +1017,12 @@ export const datenRoutes = (
                   >
                     <Route
                       path="*"
-                      lazy={() => import('../Projekte/Daten/Popbers/index.tsx')}
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Popbers/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path=":popberId"
-                      lazy={() => import('../Projekte/Daten/Popber/index.tsx')}
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Popber/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                   </Route>
@@ -1114,16 +1033,12 @@ export const datenRoutes = (
                   >
                     <Route
                       path="*"
-                      lazy={() =>
-                        import('../Projekte/Daten/Popmassnbers/index.tsx')
-                      }
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Popmassnbers/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path=":popmassnberId"
-                      lazy={() =>
-                        import('../Projekte/Daten/Popmassnber/index.tsx')
-                      }
+                      lazy={lazyRoute(() => import('../Projekte/Daten/Popmassnber/index.tsx'))}
                       errorElement={<RouterErrorBoundary />}
                     />
                   </Route>
@@ -1140,19 +1055,19 @@ export const datenRoutes = (
       >
         <Route
           path="*"
-          lazy={() => import('../Projekte/Daten/Users/index.tsx')}
+          lazy={lazyRoute(() => import('../Projekte/Daten/Users/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
         <Route path=":userId">
           <Route
             path="*"
-            lazy={() => import('../Projekte/Daten/User/index.tsx')}
+            lazy={lazyRoute(() => import('../Projekte/Daten/User/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route path="EKF">
             <Route
               path="*"
-              lazy={() => import('./EkfYearNavigator.tsx')}
+              lazy={lazyRoute(() => import('./EkfYearNavigator.tsx'))}
               errorElement={<RouterErrorBoundary />}
             />
           </Route>
@@ -1170,13 +1085,13 @@ export const datenRoutes = (
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
-      lazy={() => import('../AppBar/index.tsx')}
+      lazy={lazyRoute(() => import('../AppBar/index.tsx'))}
       hydrateFallbackElement={<Spinner />}
       errorElement={<RouterErrorBoundary />}
     >
       <Route
         index
-        lazy={() => import('../Home/index.tsx')}
+        lazy={lazyRoute(() => import('../Home/index.tsx'))}
         errorElement={<RouterErrorBoundary />}
       />
       {datenRoutes}
@@ -1187,206 +1102,204 @@ const router = createBrowserRouter(
       >
         <Route
           index={true}
-          lazy={() => import('../Docs/index.tsx')}
+          lazy={lazyRoute(() => import('../Docs/index.tsx'))}
           errorElement={<RouterErrorBoundary />}
         />
         <Route
           path="*"
-          lazy={() => import('../Docs/Doc.tsx')}
+          lazy={lazyRoute(() => import('../Docs/Doc.tsx'))}
           errorElement={<RouterErrorBoundary />}
         >
           <Route
             path="was-kann-man-mit-apflora-machen"
-            lazy={() => import('../Docs/docs/WasKannApflora.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/WasKannApflora.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="technische-voraussetzungen"
-            lazy={() => import('../Docs/docs/TechnischeVoraussetzungen.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/TechnischeVoraussetzungen.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="tipps-fuer-den-einstieg"
-            lazy={() => import('../Docs/docs/TippsFuerDenEinstieg.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/TippsFuerDenEinstieg.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="videos-fuer-den-einstieg"
-            lazy={() => import('../Docs/docs/VideosFuerDenEinstieg.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/VideosFuerDenEinstieg.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="anleitung-eingabe"
-            lazy={() => import('../Docs/docs/AnleitungZurEingabe.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/AnleitungZurEingabe.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="navigation"
-            lazy={() => import('../Docs/docs/Navigation/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Navigation/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="ist-apflora-langsam"
-            lazy={() => import('../Docs/docs/IstApfloraLangsam.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/IstApfloraLangsam.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="art-auswertung-pop-menge"
-            lazy={() => import('../Docs/docs/ArtAuswertungPopMenge.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/ArtAuswertungPopMenge.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="beobachtungen-einer-teil-population-zuordnen"
-            lazy={() => import('../Docs/docs/BeobZuordnen/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/BeobZuordnen/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="falsch-bestimmte-beobachtungen"
-            lazy={() => import('../Docs/docs/FalschBestimmteBeob.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/FalschBestimmteBeob.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="erfolgs-kontrollen-planen"
-            lazy={() => import('../Docs/docs/EkPlanen/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/EkPlanen/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="benutzer-konti"
-            lazy={() => import('../Docs/docs/BenutzerKonti.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/BenutzerKonti.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="erfolgs-kontrollen-freiwillige"
-            lazy={() => import('../Docs/docs/Ekf.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Ekf.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="filter"
-            lazy={() => import('../Docs/docs/Filter/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Filter/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="markdown"
-            lazy={() => import('../Docs/docs/Markdown/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Markdown/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="historisierung"
-            lazy={() => import('../Docs/docs/Historisierung.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Historisierung.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="karte-teil-populationen-aller-arten-anzeigen"
-            lazy={() => import('../Docs/docs/KarteTpopAllerArten.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/KarteTpopAllerArten.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="karte-filter"
-            lazy={() => import('../Docs/docs/KarteFilter.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/KarteFilter.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen"
-            lazy={() =>
-              import('../Docs/docs/KartePopTpopIconsLabelWaehlen/index.tsx')
-            }
+            lazy={lazyRoute(() => import('../Docs/docs/KartePopTpopIconsLabelWaehlen/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="karte-massstab"
-            lazy={() => import('../Docs/docs/KarteMassstab/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/KarteMassstab/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="karte-drucken"
-            lazy={() => import('../Docs/docs/KarteDrucken.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/KarteDrucken.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="gedaechtnis"
-            lazy={() => import('../Docs/docs/Gedaechtnis.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Gedaechtnis.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="dateien"
-            lazy={() => import('../Docs/docs/Dateien/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Dateien/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="koordinaten"
-            lazy={() => import('../Docs/docs/Koordinaten/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Koordinaten/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="melden"
-            lazy={() => import('../Docs/docs/Melden.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Melden.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="pwa"
-            lazy={() => import('../Docs/docs/Pwa/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Pwa/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="technologien"
-            lazy={() => import('../Docs/docs/Technologien/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Technologien/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="beobachtungen-verwalten"
-            lazy={() => import('../Docs/docs/BeobVerwalten/index.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/BeobVerwalten/index.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="produkte-fuer-die-fns"
-            lazy={() => import('../Docs/docs/ProdukteFuerFNS.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/ProdukteFuerFNS.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="daten-sichern"
-            lazy={() => import('../Docs/docs/DatenSichern.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/DatenSichern.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="daten-wiederherstellen"
-            lazy={() => import('../Docs/docs/DatenWiederherstellen.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/DatenWiederherstellen.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="testen"
-            lazy={() => import('../Docs/docs/Testen.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Testen.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="geschichte"
-            lazy={() => import('../Docs/docs/Geschichte.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/Geschichte.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="open-source"
-            lazy={() => import('../Docs/docs/OpenSource.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/OpenSource.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="art-taxonomien-ergaenzen"
-            lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/ArtTaxonomieErgaenzen.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="info-flora-export"
-            lazy={() => import('../Docs/docs/InfofloraExport.tsx')}
+            lazy={lazyRoute(() => import('../Docs/docs/InfofloraExport.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
           <Route
             path="*"
-            lazy={() => import('../404.tsx')}
+            lazy={lazyRoute(() => import('../404.tsx'))}
             errorElement={<RouterErrorBoundary />}
           />
         </Route>
       </Route>
       <Route
         path="*"
-        lazy={() => import('../404.tsx')}
+        lazy={lazyRoute(() => import('../404.tsx'))}
       />
     </Route>,
   ),
