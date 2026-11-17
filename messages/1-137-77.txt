@@ -1,0 +1,1 @@
+Die Vorschau von Text-, Office- und Videodateien ist neu ohne eine zusätzliche Fremdbibliothek aufgebaut (Sicherheits-Bereinigung). CSV-Dateien erscheinen dabei neu als Text statt als Tabelle, HTML-Dateien als Quelltext statt gerendert.
