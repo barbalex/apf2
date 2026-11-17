@@ -1,17 +1,11 @@
-import { lazy, Suspense } from 'react'
 import type { CSSProperties } from 'react'
 import { useOutletContext, useParams } from 'react-router'
 import { useElementSize } from '../../../../modules/useElementSize.ts'
 
 import { SuspenseImage } from '../../SuspenseImage.tsx'
 import type { FileNode, FilesOutletContext } from '../types.ts'
+import { FileViewer } from './FileViewer.tsx'
 import './style.css'
-
-const DocViewerWrapper = lazy(() =>
-  import('./DocViewerWrapper.tsx').then((m) => ({
-    default: m.DocViewerWrapper,
-  })),
-)
 import styles from './index.module.css'
 
 const imageStyle = {
@@ -36,7 +30,7 @@ export const Component = () => {
 
   const isImage = row.fileMimeType?.includes?.('image')
   const isPdf = row.fileMimeType?.includes?.('pdf')
-  const isReactDocViewable =
+  const isFileViewable =
     !isImage &&
     !isPdf &&
     row.fileMimeType &&
@@ -54,7 +48,7 @@ export const Component = () => {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'video/mp4',
     ].includes(row.fileMimeType)
-  const isNotViewable = !isImage && !isPdf && !isReactDocViewable
+  const isNotViewable = !isImage && !isPdf && !isFileViewable
 
   return (
     <div
@@ -96,16 +90,13 @@ export const Component = () => {
           }}
         />
       )}
-      {isReactDocViewable && (
+      {isFileViewable && (
         <div style={{ height: '100%' }}>
-          <Suspense fallback={null}>
-            <DocViewerWrapper
-              fileId={row.fileId ?? ''}
-              name={row.name ?? ''}
-              fileMimeType={row.fileMimeType ?? ''}
-              width={width ?? 0}
-            />
-          </Suspense>
+          <FileViewer
+            fileId={row.fileId ?? ''}
+            name={row.name ?? ''}
+            fileMimeType={row.fileMimeType ?? ''}
+          />
         </div>
       )}
       {isNotViewable && (
