@@ -1,0 +1,1 @@
+Alle Formulare zeigen gespeicherte Werte neu ohne verzögertes Nachladen an. Ausgenommen sind Passwort- und BeobachterInnen-Felder, bei denen die Datenbank zusätzlich Werte errechnet.

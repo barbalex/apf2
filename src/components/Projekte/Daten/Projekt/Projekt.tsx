@@ -14,6 +14,7 @@ import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
 import { apiFetch, apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface ProjektQueryResult {
   projektById?: {
@@ -69,9 +70,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate queries to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['projekt', projId],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['projekt'],
+      rowKey: 'projektById',
+      row: variables,
     })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],

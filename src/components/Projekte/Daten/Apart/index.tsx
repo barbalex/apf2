@@ -23,6 +23,7 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface ApartNode {
   id: ApartId
@@ -124,9 +125,12 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // Invalidate queries to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['apart', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['apart'],
+      rowKey: 'apartById',
+      row: variables,
     })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev

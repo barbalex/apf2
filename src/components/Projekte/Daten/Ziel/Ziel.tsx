@@ -62,6 +62,7 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 
 import styles from './Ziel.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 const erreichungOptions = [
   { value: 'erreicht', label: 'erreicht' },
@@ -125,9 +126,12 @@ export const Component = () => {
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['ziel', id],
+    })// the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['ziel'],
+      rowKey: 'zielById',
+      row: variables,
     })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],

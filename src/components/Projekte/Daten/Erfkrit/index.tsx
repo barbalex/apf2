@@ -20,6 +20,7 @@ import type { Erfkrit } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface ErfkritQueryResult {
   erfkritById?: Erfkrit
@@ -97,9 +98,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate queries to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['erfkrit', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['erfkrit'],
+      rowKey: 'erfkritById',
+      row: variables,
     })
     void tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
