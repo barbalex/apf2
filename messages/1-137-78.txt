@@ -1,0 +1,2 @@
+Benutzer-Rollen (damit werden in der Datenbank Benutzerrechte durchgesetzt) wurden überarbeitet. Das beschleunigt Speicheroperationen. Bei Kontrollen und Zählungen kann das in Arten mit sehr vielen Daten eine Beschleunigung bis zum Faktor 100 bewirken. In Einzelfällen wurde uns gemeldet, dass Speichern 3 Sekunden dauern konnte. Das sollte nicht mehr vorkommen.
+Formulare von Feld-Kontrollen und Kontroll-Berichten zeigen gespeicherte Werte neu ohne verzögertes Nachladen an.
