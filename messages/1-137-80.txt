@@ -1,1 +1,1 @@
-Alle Formulare zeigen gespeicherte Werte neu ohne verzögertes Nachladen an. Ausgenommen sind Passwort- und BeobachterInnen-Felder, bei denen die Datenbank zusätzlich Werte errechnet.
+Ab Version 1.137.80: Das Speichern in Formularen wurde nochmals beschleunigt. Die meisten Formulare zeigen geänderte Werte neu ohne zusätzliches Nachladen an (sogenanntes "optimistisches" Speichern).
