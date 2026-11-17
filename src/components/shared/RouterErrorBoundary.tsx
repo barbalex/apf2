@@ -13,7 +13,8 @@ import styles from './RouterErrorBoundary.module.css'
 const moduleLoadFailed = (message: string | undefined) =>
   !!message &&
   (message.includes('dynamically imported module') ||
-    message.includes('Importing a module script failed'))
+    message.includes('Importing a module script failed') ||
+    message.includes('Unable to preload CSS'))
 
 export const RouterErrorBoundary = () => {
   const error = useRouteError()
