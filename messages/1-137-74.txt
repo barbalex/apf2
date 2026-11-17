@@ -1,0 +1,1 @@
+In der Karte wurden die Auswahllisten der Layer ("apflora" und "überlagernd") falsch angezeigt: Die Layer-Bezeichnungen liefen übereinander und waren unlesbar. Das ist behoben.
