@@ -23,6 +23,7 @@ import type {
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface EkzaehleinheitNode {
   id: EkzaehleinheitId
@@ -142,9 +143,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate query to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['ekzaehleinheit', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['ekzaehleinheit'],
+      rowKey: 'ekzaehleinheitById',
+      row: variables,
     })
     if (['zaehleinheitId', 'sort'].includes(field)) {
       void tsQueryClient.invalidateQueries({

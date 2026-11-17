@@ -91,10 +91,23 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate query to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['idealbiotop', apId],
-    })
+    // the patch is the row's new state — update the cache, no refetch (#837).
+    // this form caches the ap's idealbiotops as a node list
+    if (row.id) {
+      const { id: _ignored, ...overrides } = variables
+      tsQueryClient.setQueriesData<
+        { allIdealbiotops?: { nodes: IdealbiotopNode[] } }
+      >({ queryKey: ['idealbiotop'] }, (old) => {
+        const nodes = old?.allIdealbiotops?.nodes
+        if (!old || !nodes?.some((n) => n.id === row.id)) return old
+        return {
+          ...old,
+          allIdealbiotops: {
+            nodes: nodes.map((n) => (n.id === row.id ? { ...n, ...overrides } : n)),
+          },
+        }
+      })
+    }
   }
 
   return (

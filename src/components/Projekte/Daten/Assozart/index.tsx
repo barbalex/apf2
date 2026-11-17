@@ -24,6 +24,7 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface AssozartNode {
   id: AssozartId
@@ -126,9 +127,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate query to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['assozart', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['assozart'],
+      rowKey: 'assozartById',
+      row: variables,
     })
     if (field === 'aeId') {
       void tsQueryClient.invalidateQueries({

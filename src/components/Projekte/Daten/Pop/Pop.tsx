@@ -19,6 +19,7 @@ import { Menu } from './Menu.tsx'
 
 import styles from './Pop.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 // field list of the former PopFields graphql fragment; v_pop serves
 // these columns (selects.ts builds the keys)
@@ -114,9 +115,11 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate queries to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['pop', popId],
+// the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['pop'],
+      row: variables,
     })
     if (['name', 'nr'].includes(field)) {
       void tsQueryClient.invalidateQueries({

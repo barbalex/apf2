@@ -27,6 +27,7 @@ import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface ApberuebersichtNode {
   id: ApberuebersichtId
@@ -103,8 +104,12 @@ export const Component = () => {
         queryKey: [`treeApberuebersicht`],
       })
     }
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`Apberuebersicht`],
+// the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['Apberuebersicht'],
+      rowKey: 'apberuebersichtById',
+      row: variables,
     })
   }
 

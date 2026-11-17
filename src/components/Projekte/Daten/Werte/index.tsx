@@ -1,4 +1,5 @@
 import { apiFetch, apiUpdate } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 import { camelToSnake } from '../../../../modules/camelToSnake.ts'
 import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
@@ -76,8 +77,12 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['werte', table, id],
+// the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['werte'],
+      rowKey: `${table}ById`,
+      row: { id: row.id, [field]: value },
     })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev

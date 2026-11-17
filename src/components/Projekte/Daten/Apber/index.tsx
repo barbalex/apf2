@@ -27,6 +27,7 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface ApberQueryResult {
   apberById: {
@@ -126,7 +127,7 @@ export const Component = () => {
     suspense: true,
   }
 
-  const { data, refetch } = useQuery(queryOptions)
+  const { data } = useQuery(queryOptions)
 
   const row = data?.apberById
 
@@ -167,7 +168,13 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    void refetch()
+// the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['apber'],
+      rowKey: 'apberById',
+      row: variables,
+    })
     if (field === 'jahr') {
       void tsQueryClient.invalidateQueries({ queryKey: [`treeApber`] })
     }

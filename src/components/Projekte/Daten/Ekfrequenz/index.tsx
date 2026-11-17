@@ -21,6 +21,7 @@ import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 interface EkfrequenzNode {
   id: EkfrequenzId
@@ -128,9 +129,12 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate query to refetch data
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['ekfrequenz', id],
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['ekfrequenz'],
+      rowKey: 'ekfrequenzById',
+      row: variables,
     })
     if (field === 'code') {
       void tsQueryClient.invalidateQueries({
