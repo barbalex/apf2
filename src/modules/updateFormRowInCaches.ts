@@ -7,8 +7,10 @@ import type { QueryClient } from '@tanstack/react-query'
  */
 type FormQueryData = Record<
   string,
-  ({ id: string } & Record<string, unknown>) | null | undefined
+  CachedRow | null | undefined
 >
+
+type CachedRow = { id: string } & Record<string, unknown>
 
 /**
  * A successful PATCH already knows the row's new state — write it into the
@@ -17,6 +19,10 @@ type FormQueryData = Record<
  * The controlled fields render from that cache, so they update with zero
  * round trips instead of waiting for the form query's parallel requests.
  * The nav-tree queries still get their background refetch for labels.
+ *
+ * rowKey: which property of the cached query result holds the row
+ * (e.g. 'tpopmassnById'); omit it for queries that cache the row directly
+ * (e.g. ['tpop', id] returns the row itself).
  */
 export const updateFormRowInCaches = ({
   tsQueryClient,
@@ -33,14 +39,19 @@ export const updateFormRowInCaches = ({
    * keeps other rows' caches untouched.
    */
   queryKey: readonly unknown[]
-  /** which property of the cached query result holds the row */
-  rowKey: string
+  rowKey?: string
   /** the saved fields in camelCase, exactly as the PATCH sent them */
   row: Record<string, unknown>
 }) => {
   const id = row.id
   if (typeof id !== 'string') return
   const { id: _ignored, ...overrides } = row
+  if (rowKey === undefined) {
+    tsQueryClient.setQueriesData<CachedRow>({ queryKey }, (old) =>
+      old?.id === id ? { ...old, ...overrides } : old,
+    )
+    return
+  }
   tsQueryClient.setQueriesData<FormQueryData>({ queryKey }, (old) => {
     const cachedRow = old?.[rowKey]
     if (!old || !cachedRow || cachedRow.id !== id) return old

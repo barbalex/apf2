@@ -64,6 +64,7 @@ const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
 
 import styles from './index.module.css'
 import { apiUpdateByVariables } from '../../../../modules/api.ts'
+import { updateFormRowInCaches } from '../../../../modules/updateFormRowInCaches.ts'
 
 export const tpopmassnberQueryOptions = (id: string | undefined) => ({
   queryKey: ['tpopmassnber', id],
@@ -123,8 +124,13 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    // invalidate tpopmassnber query
-    void tsQueryClient.invalidateQueries({ queryKey: ['tpopmassnber', id] })
+    // the patch is the row's new state — update the cache, no refetch (#837)
+    updateFormRowInCaches({
+      tsQueryClient,
+      queryKey: ['tpopmassnber'],
+      rowKey: 'tpopmassnberById',
+      row: variables,
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
