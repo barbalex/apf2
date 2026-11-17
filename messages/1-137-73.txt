@@ -1,0 +1,1 @@
+Der verständliche Hinweis für veraltete App-Sitzungen (offener Tab über ein Update hinweg) erscheint nun auch bei einer weiteren Fehlerursache ("Unable to preload CSS") statt einer kryptischen Fehlermeldung.
