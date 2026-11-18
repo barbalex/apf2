@@ -18,6 +18,16 @@
   }
 }
 
+/* phones: the nowrap buttons squeeze the text into a narrow column,
+   so stack the text above the buttons */
+@media (max-width: 640px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
+
 .text {
   flex: 1;
   font-size: 0.9rem;
