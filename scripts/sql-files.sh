@@ -11,6 +11,10 @@ FILES=(
   sql/apflora/migrations/2026-11-13_freiwillig-tpopkontr-rls/00_tighten.sql
   sql/apflora/migrations/2026-11-13_error-telemetry/00_error_report.sql
   sql/migration/0066-rls-write-policy-performance.sql
+  sql/apflora/migrations/2026-11-19_issue-847-tpopmassn-zieleinheit/00_trigger.sql
+  sql/apflora/migrations/2026-11-19_issue-847-tpopmassn-zieleinheit/01_qk_views.sql
+  sql/apflora/migrations/2026-11-19_issue-847-tpopmassn-zieleinheit/02_backfill.sql
+  sql/apflora/migrations/2026-11-19_issue-847-tpopmassn-zieleinheit/03_einheit_ergaenzen.sql
   sql/postgrest/createComputedViews.sql
   sql/postgrest/compileFilter.sql
   sql/postgrest/createQueryRpcs.sql

@@ -4303,7 +4303,7 @@ FROM
   INNER JOIN apflora.ap ap
   INNER JOIN apflora.ae_taxonomies tax ON tax.id = ap.art_id ON ap.id = pop.ap_id ON pop.id = tpop.pop_id ON massn.tpop_id = tpop.id
 WHERE
-  massn.typ = 2
+  massn_typ.anpflanzung = TRUE
   AND massn.zieleinheit_einheit IS NULL
 ORDER BY
   pop.nr,
@@ -4337,7 +4337,7 @@ FROM
   INNER JOIN apflora.tpopkontrzaehl_einheit_werte AS zaehl_einheit_werte ON zaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id ON ekzaehleinheit.ap_id = ap.id
     AND ekzaehleinheit.zielrelevant = TRUE ON ap.id = pop.ap_id ON pop.id = tpop.pop_id ON massn.tpop_id = tpop.id
 WHERE
-  massn.typ = 2
+  massn_typ.anpflanzung = TRUE
   AND massn.zieleinheit_einheit <> zaehl_einheit_werte.code
   AND ekzaehleinheit.not_massn_count_unit IS FALSE
 ORDER BY
@@ -4379,7 +4379,7 @@ with data AS (
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte AS zaehl_einheit_werte ON zaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id ON ekzaehleinheit.ap_id = ap.id
       AND ekzaehleinheit.zielrelevant = TRUE ON ap.id = pop.ap_id ON pop.id = tpop.pop_id ON massn.tpop_id = tpop.id
   WHERE
-    massn.typ = 2
+    massn_typ.anpflanzung = TRUE
     AND massn.zieleinheit_einheit IS NOT NULL
     AND ekzaehleinheit.not_massn_count_unit IS FALSE
     AND zaehl_einheit_werte.text = massn_einheit_werte.text

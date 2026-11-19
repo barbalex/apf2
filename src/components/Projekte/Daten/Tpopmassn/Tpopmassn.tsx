@@ -20,7 +20,6 @@ import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { userNameAtom } from '../../../../store/index.ts'
-import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -107,32 +106,6 @@ interface TpopmassnQueryResult {
   }
 }
 
-interface ZieleinheitWerte {
-  id: string
-  code: number | null
-  correspondsToMassnAnzTriebe: boolean | null
-  correspondsToMassnAnzPflanzen: boolean | null
-}
-
-/**
- * anpflanzung flag of the massn type + the ap's zielrelevant
- * zaehleinheit werte (former tpopmassnZieleinheitQuery)
- */
-const fetchZieleinheit = async (apId: string | undefined, typ: number) => {
-  const [typWertes, ekzaehleinheits] = await Promise.all([
-    apiFetch<{ anpflanzung: boolean | null }[]>(
-      `/tpopmassn_typ_werte?code=eq.${typ}&select=anpflanzung`,
-    ),
-    apiFetch<{ werte: ZieleinheitWerte | null }[]>(
-      `/v_ekzaehleinheit?ap_id=eq.${apId ?? ''}&zielrelevant=eq.true&select=werte:tpopkontrzaehl_einheit_werte_by_zaehleinheit_id&order=id.asc&limit=1`,
-    ),
-  ])
-  return {
-    isAnpflanzung: typWertes?.[0]?.anpflanzung,
-    zieleinheit: ekzaehleinheits?.[0]?.werte ?? null,
-  }
-}
-
 interface ComponentProps {
   showFilter?: boolean
 }
@@ -183,7 +156,7 @@ export const tpopmassnQueryOptions = (id: string | undefined) => ({
 })
 
 export const Component = ({ showFilter = false }: ComponentProps) => {
-  const { tpopmassnId, apId } = useParams()
+  const { tpopmassnId } = useParams()
 
   const tsQueryClient = useQueryClient()
 
@@ -223,74 +196,6 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       variables.jahr =
         value && typeof value === 'string' ? +value.substring(0, 4) : value
     }
-    if (field === 'typ') {
-      // IF typ is anpflanzung
-      // have to set zieleinheit_einheit to
-      // ekzaehleinheit with zielrelevant = true
-      let isAnpflanzung: boolean | null | undefined
-      let zieleinheit: ZieleinheitWerte | null
-      try {
-        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
-          apId,
-          (value ?? 1) as number,
-        ))
-      } catch (error) {
-        return setFieldErrors((prev) => ({
-          ...prev,
-          [field]: (error as Error).message,
-        }))
-      }
-      const zieleinheitCode = zieleinheit?.code
-      if (isAnpflanzung && zieleinheitCode) {
-        variables.zieleinheitEinheit = zieleinheitCode
-        if (!notMassnCountUnit && zieleinheit?.correspondsToMassnAnzTriebe) {
-          variables.zieleinheitAnzahl = row.anzTriebe
-        }
-        if (!notMassnCountUnit && zieleinheit?.correspondsToMassnAnzPflanzen) {
-          variables.zieleinheitAnzahl = row.anzPflanzen
-        }
-      }
-    }
-    if (!notMassnCountUnit && field === 'anzTriebe') {
-      // IF zieleinheit corresponds to Anzahl Triebe
-      // have to set zieleinheitAnzahl to anzTriebe
-      let isAnpflanzung: boolean | null | undefined
-      let zieleinheit: ZieleinheitWerte | null
-      try {
-        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
-          apId,
-          row.typ ?? 1,
-        ))
-      } catch (error) {
-        return setFieldErrors((prev) => ({
-          ...prev,
-          [field]: (error as Error).message,
-        }))
-      }
-      if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzTriebe) {
-        variables.zieleinheitAnzahl = exists(value) ? value : null
-      }
-    }
-    if (!notMassnCountUnit && field === 'anzPflanzen') {
-      // IF zieleinheit corresponds to Anzahl Triebe
-      // have to set zieleinheitAnzahl to anzPflanzen
-      let isAnpflanzung: boolean | null | undefined
-      let zieleinheit: ZieleinheitWerte | null
-      try {
-        ;({ isAnpflanzung, zieleinheit } = await fetchZieleinheit(
-          apId,
-          row.typ ?? 1,
-        ))
-      } catch (error) {
-        return setFieldErrors((prev) => ({
-          ...prev,
-          [field]: (error as Error).message,
-        }))
-      }
-      if (isAnpflanzung && zieleinheit?.correspondsToMassnAnzPflanzen) {
-        variables.zieleinheitAnzahl = exists(value) ? value : null
-      }
-    }
     try {
       await apiUpdateByVariables('tpopmassn', variables)
     } catch (error) {
@@ -322,6 +227,13 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     ) {
       void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassn`],
+      })
+    }
+    if (['typ', 'anzTriebe', 'anzPflanzen', 'zieleinheitEinheit'].includes(field)) {
+      // the db trigger (tpopmassn_set_zieleinheit, #847) derives
+      // zieleinheitEinheit/zieleinheitAnzahl — fetch its result
+      void tsQueryClient.invalidateQueries({
+        queryKey: ['tpopmassn', row.id],
       })
     }
   }
