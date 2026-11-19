@@ -69,7 +69,7 @@
     "html-to-image": "1.11.13",
     "jotai": "3.0.2",
     "jwt-decode": "4.0.0",
-    "leaflet": "2.0.0-beta.4",
+    "leaflet": "2.0.0-beta.5",
     "leaflet.markercluster": "2.0.0-beta.1",
     "linkify-react": "4.4.0",
     "linkifyjs": "4.4.0",
@@ -128,7 +128,7 @@
     "@emotion/react": "unfortunately needed by @mui/material",
     "@emotion/styled": "unfortunately needed by @mui/material",
     "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies",
-    "leaflet": "2.0.0-beta.2: react-leaflet 5.0.0 still pins peer leaflet ^1.9.0, hence the override forcing our leaflet everywhere plus scripts/patch-leaflet2.mjs (DomUtil.addClass/removeClass and TileLayer.WMS were removed in Leaflet 2; markercluster's MarkerPatches.d.ts breaks other leaflet type augmentations under TS 6) and src/types/leaflet-v1-type-compat.d.ts for react-leaflet's @types/leaflet-based d.ts. Drop all three once react-leaflet ships Leaflet 2 support",
+    "leaflet": "2.0.0-beta.5: react-leaflet 5.0.0 still pins peer leaflet ^1.9.0, hence the override forcing our leaflet everywhere plus scripts/patch-leaflet2.mjs (DomUtil.addClass/removeClass and TileLayer.WMS were removed in Leaflet 2; markercluster's MarkerPatches.d.ts breaks other leaflet type augmentations under TS 6) and src/types/leaflet2-compat.d.ts for react-leaflet's @types/leaflet-based d.ts. Drop all three once react-leaflet ships Leaflet 2 support",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup"
   }
 }
