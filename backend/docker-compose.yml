@@ -35,12 +35,12 @@ services:
       retries: 5
   # PostgREST — same db, same JWT secret as the former PostGraphile
   # stack (the graphql → postgrest migration is complete).
-  # Version and settings match ae3 (v12.2.12; see its
-  # backend/db/migrations/2026-10-27-postgrest-auth.sql diary).
+  # 2026-11-19: v12.2.12 → v16.5, now ahead of ae3 (still v12.2.12).
+  # v13+ refuses to start when the JWT secret is shorter than 32 chars.
   postgrest:
     container_name: apf_postgrest
     restart: always
-    image: postgrest/postgrest:v12.2.12
+    image: postgrest/postgrest:v16.5
     networks:
       - network
     expose:

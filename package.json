@@ -2,7 +2,7 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.137.82",
+  "version": "1.137.83",
   "versionDate": "19.11.2026",
   "type": "module",
   "repository": {
@@ -13,10 +13,10 @@
   "license": "ISC",
   "overrides": {
     "leaflet": "$leaflet",
-    "lodash": "^4.18.1",
+    "lodash": "4.18.1",
     "next": "16.4.5",
     "react-markdown-editor-lite": {
-      "nanoid": "^5.1.16"
+      "nanoid": "5.1.16"
     }
   },
   "scripts": {
