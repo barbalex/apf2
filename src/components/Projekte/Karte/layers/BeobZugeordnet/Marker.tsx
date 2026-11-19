@@ -139,11 +139,13 @@ export const Marker = ({ beob }: MarkerProps) => {
         'Beobachtungen',
         beob.id,
       ]
-      void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+      // update before navigating: a failed write must not leave the url
+      // pointing into a tpop the beob was never assigned to
       await apiUpdateByVariables('beob', {
         id: beob.id,
         tpopId: nearestTpop.id,
       })
+      void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
       void tsQueryClient.invalidateQueries({
         queryKey: [`BeobZugeordnetForMapQuery`],
       })
