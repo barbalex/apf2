@@ -47,12 +47,14 @@ describe('jwt handling', () => {
     expect(res.status).toBe(200)
   })
 
-  it('an expired token is rejected as PGRST301', async () => {
+  it('an expired token is rejected as PGRST303', async () => {
     const res = await pgrst('/ap?select=id&limit=1', {
       token: sign({ role: 'apflora_manager' }, -60),
     })
     expect(res.status).toBe(401)
-    expect(res.data.code).toBe('PGRST301')
+    // v13+: PGRST303 (JWT claim decoding failed) for expired tokens,
+    // PGRST301 only for undecodable tokens (see the garbage-token test)
+    expect(res.data.code).toBe('PGRST303')
     expect(res.data.message).toContain('JWT expired')
   })
 
