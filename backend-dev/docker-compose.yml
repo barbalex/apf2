@@ -35,12 +35,12 @@ services:
       retries: 5
   # PostgREST — same db, same JWT secret as the former PostGraphile
   # stack (the graphql → postgrest migration is complete).
-  # Version and settings match ae3's migration (v12.2.3, see its
+  # Version and settings match ae3's migration (v12.2.12, see its
   # backend/db/migrations/2026-10-27-postgrest-auth.sql diary).
   postgrest:
     container_name: apf_postgrest
     restart: always
-    image: postgrest/postgrest:v12.2.3
+    image: postgrest/postgrest:v12.2.12
     networks:
       - network
     expose:
