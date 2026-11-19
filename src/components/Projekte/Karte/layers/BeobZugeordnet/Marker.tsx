@@ -1,4 +1,5 @@
 import { apiUpdateByVariables } from '../../../../../modules/api.ts'
+import { reportError } from '../../../../../modules/errorTelemetry.ts'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
@@ -104,17 +105,74 @@ export const Marker = ({ beob }: MarkerProps) => {
      * assign to nearest tpop
      * point url to moved beob
      */
-    const nearestTpop = await getNearestTpop({
-      ...(apId ? { apId } : {}),
-      latLng: (event.target as LeafletMarkerType).getLatLng(),
-      ...(beob.aeTaxonomyByArtId?.id ?
-        { artId: beob.aeTaxonomyByArtId.id }
-      : {}),
-    })
-    if (!nearestTpop?.id) {
+    try {
+      const nearestTpop = await getNearestTpop({
+        ...(apId ? { apId } : {}),
+        latLng: (event.target as LeafletMarkerType).getLatLng(),
+        ...(beob.aeTaxonomyByArtId?.id ?
+          { artId: beob.aeTaxonomyByArtId.id }
+        : {}),
+      })
+      if (!nearestTpop?.id) {
+        addNotification({
+          message:
+            'Die Beobachtung wurde nicht zugeordnet: Das Taxon der Beobachtung gehört nicht zu den Taxa dieser Art oder die Art hat keine Teil-Population mit Koordinaten',
+          options: {
+            variant: 'error',
+          },
+        })
+        // move the marker back to the beob's coordinates
+        void tsQueryClient.invalidateQueries({
+          queryKey: [`BeobZugeordnetForMapQuery`],
+        })
+        return
+      }
+      const newActiveNodeArray = [
+        'Projekte',
+        projId ?? '',
+        'Arten',
+        apId ?? '',
+        'Populationen',
+        nearestTpop.popId ?? '',
+        'Teil-Populationen',
+        nearestTpop.id,
+        'Beobachtungen',
+        beob.id,
+      ]
+      // update before navigating: a failed write must not leave the url
+      // pointing into a tpop the beob was never assigned to
+      await apiUpdateByVariables('beob', {
+        id: beob.id,
+        tpopId: nearestTpop.id,
+      })
+      void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`BeobZugeordnetForMapQuery`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`BeobNichtBeurteiltForMapQuery`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`BeobAssignLinesQuery`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeBeobZugeordnet`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeBeobNichtZuzuordnen`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeBeobNichtBeurteilt`],
+      })
+      void tsQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
+      setTreeLastTouchedNode(newActiveNodeArray)
+      //map.redraw()
+    } catch (error) {
       addNotification({
         message:
-          'Die Beobachtung wurde nicht zugeordnet: Das Taxon der Beobachtung gehört nicht zu den Taxa dieser Art oder die Art hat keine Teil-Population mit Koordinaten',
+          'Die Beobachtung wurde nicht zugeordnet: Netzwerk- oder Serverfehler',
         options: {
           variant: 'error',
         },
@@ -123,48 +181,9 @@ export const Marker = ({ beob }: MarkerProps) => {
       void tsQueryClient.invalidateQueries({
         queryKey: [`BeobZugeordnetForMapQuery`],
       })
-      return
+      // handled errors no longer reach the global handlers: report manually
+      void reportError('manual', error)
     }
-    const newActiveNodeArray = [
-      'Projekte',
-      projId ?? '',
-      'Arten',
-      apId ?? '',
-      'Populationen',
-      nearestTpop.popId ?? '',
-      'Teil-Populationen',
-      nearestTpop.id,
-      'Beobachtungen',
-      beob.id,
-    ]
-    void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-    await apiUpdateByVariables('beob', {
-      id: beob.id,
-      tpopId: nearestTpop.id,
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`BeobZugeordnetForMapQuery`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`BeobNichtBeurteiltForMapQuery`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`BeobAssignLinesQuery`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeBeobZugeordnet`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeBeobNichtZuzuordnen`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeBeobNichtBeurteilt`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeAp`],
-    })
-    setTreeLastTouchedNode(newActiveNodeArray)
-    //map.redraw()
   }
 
   const popId = beob?.tpopByTpopId?.popId ?? ''
