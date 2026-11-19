@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.65.0",
+    "@playwright/test": "1.65.1",
     "@rolldown/plugin-babel": "0.3.1",
     "@types/file-saver": "2.0.7",
     "@types/node": "26.6.6",
@@ -116,7 +116,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.7",
     "globals": "17.14.0",
-    "kanel": "4.0.4",
+    "kanel": "4.0.6",
     "prettier": "3.10.1",
     "typescript": "6.0.3",
     "vite": "8.3.8",
