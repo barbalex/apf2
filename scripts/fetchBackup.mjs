@@ -28,7 +28,9 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const target = path.join(root, 'backend-dev', 'db', 'apflora.backup')
 const identity = path.join(homedir(), '.config', 'age', 'keys.txt')
 const encrypted = path.join(tmpdir(), 'apflora-fetch.backup.age')
-const decrypted = path.join(tmpdir(), 'apflora-fetch.backup')
+// decrypt into the target directory, not /tmp: rename(2) is atomic only
+// within one filesystem (a /tmp → repo rename dies with EXDEV on tmpfs)
+const decrypted = `${target}.fetch-tmp`
 
 console.log('creating a backup on the server (skips if data unchanged)...')
 run('ssh', ['-o', 'BatchMode=yes', SERVER, 'docker exec apf_db bash ./backup.sh'])
@@ -70,15 +72,17 @@ try {
     console.error('ERROR: age not found - install it (apt install age, or the static binary into ~/.local/bin)')
   }
   rmSync(encrypted, { force: true })
+  rmSync(decrypted, { force: true })
   throw error
 }
 rmSync(encrypted, { force: true })
 
 if (!existsSync(decrypted) || statSync(decrypted).size < 10_000_000) {
   console.error('ERROR: the decrypted backup looks wrong (missing or < 10MB)')
+  rmSync(decrypted, { force: true })
   process.exit(1)
 }
-// rename so backend-dev/db/apflora.backup is never a half-written file
+// same-directory rename: backend-dev/db/apflora.backup is never a half-written file
 renameSync(decrypted, target)
 const mb = Math.round(statSync(target).size / 100_000) / 10
 console.log(`backend-dev/db/apflora.backup updated (${mb} MB, decrypted + verified non-trivial size)`)
