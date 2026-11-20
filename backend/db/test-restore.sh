@@ -8,6 +8,12 @@
 # (mounted from the host, see docker-compose.yml)
 # no extensions need pre-creating: the dump carries its own
 # CREATE EXTENSION statements (postgis included)
+# 2026-11-20: backups are age-encrypted since that date. This container
+# deliberately holds NO private key (a compromised VM must not decrypt
+# the offsite copies), so encrypted backups cannot be tested here —
+# the ongoing drill is notebook-side: npm run fetchBackup + dev rebuild.
+# This script still works for plaintext dumps: the old pre-encryption
+# backups, or a dump decrypted on the notebook and passed explicitly.
 
 set -e
 
@@ -22,8 +28,18 @@ if [ -z "$NEWEST" ]; then
     echo "ERROR: no backup found in $REMOTE_DIR"
     exit 1
   fi
-  echo "newest backup: $NEWEST"
-  echo "downloading..."
+fi
+case "$NEWEST" in
+  *.age)
+    echo "ERROR: $NEWEST is age-encrypted and this container deliberately holds no"
+    echo "private key (ransomware model: the VM must not decrypt offsite backups)."
+    echo "test notebook-side instead: npm run fetchBackup, then rebuild the dev stack."
+    echo "or decrypt on the notebook and pass the plaintext dump explicitly."
+    exit 1
+    ;;
+esac
+if [ ! -f "$NEWEST" ]; then
+  echo "downloading $NEWEST..."
   rclone copyto "$REMOTE_DIR/$NEWEST" "/tmp/$NEWEST" --retries 3
   NEWEST="/tmp/$NEWEST"
 fi

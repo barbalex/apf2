@@ -23,6 +23,9 @@ RUN apt-get install -y -qq curl
 RUN apt-get install -y -qq bash
 RUN apt-get install -y -qq nano
 RUN apt-get install -y -qq rclone
+# age: encrypt backups before they leave the container (public key only —
+# see backup.sh; the private key lives offline on the notebook)
+RUN apt-get install -y -qq age
 RUN apt-get install -y -qq dos2unix
 
 # add the backup + restore-test scripts

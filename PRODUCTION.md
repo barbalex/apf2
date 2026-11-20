@@ -29,16 +29,39 @@ Nightly db backup via cron on the VM (23:00, root): `/root/backup/backup.sh`
    tables are covered automatically; `error_report` is excluded (client
    telemetry changes almost daily without real data changing — it stays
    in the dump itself). Unchanged fingerprint → no dump at all.
-2. `pg_dump -Fc -Z9 apflora` → `/sik_data/<datetime>_apflora.backup`
-3. uploads it to nextcloud via rclone (config at `/root/backup/rclone.conf`,
+2. `pg_dump -Fc -Z9 apflora` → `/sik_data/dump.tmp` (transient
+   plaintext — deleted immediately after encryption)
+3. age-encrypts it with the committed public key →
+   `/sik_data/<datetime>_apflora.backup.age`. A failed dump or
+   encryption aborts the run — plaintext is never uploaded.
+4. uploads it to nextcloud via rclone (config at `/root/backup/rclone.conf`,
    mounted into the container read-only)
-4. only after a successful upload moves it to `/sik_data/last.backup`
+5. only after a successful upload moves it to `/sik_data/last.backup.age`
    and writes `/sik_data/last.fingerprint` — a failed upload is
    retried by the next run
 
 The fingerprint replaces the old size-equality check, which silently
 skipped backups when the size happened to match despite changed
 content (and always built a full 145MB dump first).
+
+Encryption (2026-11-20): backups are age-encrypted inside the
+container, before they touch nextcloud — every hop after the VM
+(nextcloud instance, NAS, backblaze account) only ever sees
+ciphertext. Key model:
+
+- only the PUBLIC key lives on the VM (committed in
+  [backend/db/backup.sh](backend/db/backup.sh) — creating backups is
+  all it can do)
+- the private key lives on the notebook at `~/.config/age/keys.txt`
+  (mode 600) — plus a printout as the offline copy. If it is lost, the
+  encrypted backups are cryptographically garbage; the printout is
+  part of the system, not optional.
+- ransomware model: a compromised or wiped VM cannot decrypt the
+  offsite copies.
+- the same keypair is intended to be reused for ps
+  (arten-fördern.app) backups — one key to print, one to keep.
+- manual decrypt: `age -d -i ~/.config/age/keys.txt -o out.backup
+  file.backup.age`
 
 Dead-man's switch (2026-11-20): the host wrapper pings healthchecks.io
 after every run — the plain URL on success (a fingerprint skip counts as
@@ -58,20 +81,22 @@ chmod 600 /root/backup/healthcheck.env
 The uuid is the secret — anyone knowing it can send false "all fine"
 pings — which is why it lives in the env file, not in this repo.
 
-Restore test (verify the backups actually restore):
+Restore test (verify the backups actually restore): since encryption
+the VM holds no private key, so the ongoing drill runs notebook-side —
+`npm run fetchBackup` + dev-stack rebuild exercises download → decrypt
+→ init-from-dump, and every fetch re-proves the notebook key still
+decrypts current backups. The in-container test
+([backend/db/test-restore.sh](backend/db/test-restore.sh)) still works
+for plaintext dumps (the pre-2026-11-20 backups, or a locally decrypted
+dump passed explicitly) and refuses `.age` files by design:
 
 ```bash
 ssh root@api.apflora.ch 'docker exec -it apf_db bash ./test-restore.sh'
-# or against a local dump file, skipping the download:
-ssh root@api.apflora.ch 'docker exec -it apf_db bash ./test-restore.sh /sik_data/last.backup'
 ```
 
-downloads the newest nextcloud backup, restores it into a scratch
-database inside the running postgres, runs sanity counts, and drops
-the scratch database. No extensions need pre-creating — the dump
-carries its own `CREATE EXTENSION` statements. Passed 14.11.2026
-against the 02.11. dump (0 errors; 600 ap / 21'457 tpop / 28'360
-tpopkontr / 500'775 beob).
+Last VM-side pass 14.11.2026 against the 02.11. dump (0 errors; 600 ap /
+21'457 tpop / 28'360 tpopkontr / 500'775 beob) — port these sanity
+counts into the notebook drill eventually.
 
 Deploying changes to these scripts: `/root/apf` on the VM is a plain
 copy of this repo's `backend/` (not a git checkout). `scp` the changed
@@ -80,12 +105,19 @@ files (e.g. `backend/db/backup.sh`, `backend/db/test-restore.sh`,
 `cd /root/apf && docker compose build db && docker compose up -d db`
 (volumes survive the container recreation). The host wrapper at
 `/root/backup/backup.sh` is copied manually — keep it in sync with
-`backend/db/host-backup.sh`.
+`backend/db/host-backup.sh`. The encryption switch (2026-11-20) changed
+`Dockerfile` + `backup.sh` + `test-restore.sh`, so it follows this path;
+order: rebuild → trigger one backup manually (`/root/backup/backup.sh`)
+→ confirm a `.backup.age` file appears in nextcloud → `npm run
+fetchBackup` on the notebook to prove the decrypt path. Pre-encryption
+plaintext dumps stay in the nextcloud folder until a retention step
+prunes them.
 
 Seeding the dev stack from production: `npm run fetchBackup`
 ([scripts/fetchBackup.mjs](scripts/fetchBackup.mjs)) runs the
 production backup (fingerprint-skips when unchanged), copies
-`/sik_data/last.backup` out of the container and downloads it into
+`/sik_data/last.backup.age` out of the container, downloads it and
+decrypts it with the local age key into
 `backend-dev/db/apflora.backup` (gitignored) — the file a fresh dev db
 volume initializes from. Then
 `docker compose -f backend-dev/docker-compose.yml down -v && up -d --build`
