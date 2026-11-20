@@ -25,8 +25,6 @@ Tree keyboard navigation as in ae3
 
 ---
 
-are there any other imperative handlers whose errors are not caught?
-
 ---
 
 ---
