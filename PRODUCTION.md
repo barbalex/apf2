@@ -40,6 +40,24 @@ The fingerprint replaces the old size-equality check, which silently
 skipped backups when the size happened to match despite changed
 content (and always built a full 145MB dump first).
 
+Dead-man's switch (2026-11-20): the host wrapper pings healthchecks.io
+after every run — the plain URL on success (a fingerprint skip counts as
+success: nothing to back up is healthy), `/fail` on a non-zero exit
+(alerts immediately), and no ping within the check's period alerts too.
+That last case is the point: a cron that silently dies (expired
+nextcloud password, full disk, broken rclone) gets noticed instead of
+writing to `backup.log` for weeks. One-time setup: create a check at
+healthchecks.io (schedule "period 24h, grace 1h" — cron runs 23:00
+nightly), then on the VM:
+
+```bash
+printf "HEALTHCHECK_URL='https://hc-ping.com/<uuid>'\n" > /root/backup/healthcheck.env
+chmod 600 /root/backup/healthcheck.env
+```
+
+The uuid is the secret — anyone knowing it can send false "all fine"
+pings — which is why it lives in the env file, not in this repo.
+
 Restore test (verify the backups actually restore):
 
 ```bash
