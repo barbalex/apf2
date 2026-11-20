@@ -96,6 +96,21 @@ chmod 600 /root/backup/healthcheck.env
 The uuid is the secret — anyone knowing it can send false "all fine"
 pings — which is why it lives in the env file, not in this repo.
 
+Retention (2026-11-20): after every successful upload, backup.sh runs
+[backend/db/prune-backups.sh](backend/db/prune-backups.sh) — keep 7
+daily + 4 weekly (newest per ISO week) + 12 monthly (newest per
+month) + the OLDEST backup of each calendar year forever (the
+year-start snapshot contains the complete passed year; reports
+evaluate the passed year). Everything timestamped beyond that is
+deleted from the nextcloud folder, purely server-side — deleted files
+land in the nextcloud trashbin. `.meta.age` files follow their pair;
+nextcloud conflict copies ("… (1)", "… (copy)") count as duplicates
+of their base name; non-dump artifacts (the access-era archive, beob
+dumps, ArtenDb zips, the 2012 v0) are never touched. Run it manually
+with `--dry-run` to preview. Initial application on 2026-11-20
+reduced the folder from 2087 files / 257 GB to 57 files / 5 GB
+(37 scheme keeps + the unique artifacts).
+
 Restore test (verify the backups actually restore): since encryption
 the VM holds no private key, so the ongoing drill runs notebook-side —
 `npm run fetchBackup` + dev-stack rebuild exercises download → decrypt
@@ -120,9 +135,9 @@ files (e.g. `backend/db/backup.sh`, `backend/db/test-restore.sh`,
 `cd /root/apf && docker compose build db && docker compose up -d db`
 (volumes survive the container recreation). The host wrapper at
 `/root/backup/backup.sh` is copied manually — keep it in sync with
-`backend/db/host-backup.sh`. The 2026-11-20 changes (encryption,
-meta bundle) touched `Dockerfile` + `backup.sh` + `test-restore.sh`
-(image rebuild path) and `docker-compose.yml` (the `.env` mount —
+`backend/db/host-backup.sh`. The 2026-11-20 changes (encryption, meta
+bundle, retention) touched `Dockerfile` + `backup.sh` +
+`test-restore.sh` + `prune-backups.sh` (image rebuild path) and `docker-compose.yml` (the `.env` mount —
 scp to `root@api.apflora.ch:/root/apf/`, a plain `up -d db` applies
 it). Order: rebuild + recreate → trigger one backup manually
 (`/root/backup/backup.sh`) → confirm `.backup.age` + `.meta.age`

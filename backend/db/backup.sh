@@ -132,3 +132,12 @@ mv -f "/sik_data/$FILENAME" /sik_data/last.backup.age
 mv -f "/sik_data/$META_FILENAME" /sik_data/last.meta.age
 echo "$FINGERPRINT" > /sik_data/last.fingerprint
 echo "backed up $FILENAME (+ $META_FILENAME)"
+
+# prune the nextcloud folder to the retention scheme (7/4/12/yearly).
+# best-effort: the dumps are already safe at this point, so a prune
+# failure warns but does not fail the backup (the dead-man's switch
+# stays green — check the log for the warning line)
+echo "pruning nextcloud folder to retention scheme..."
+if ! ./prune-backups.sh; then
+  echo "WARNING: retention pruning failed - run ./prune-backups.sh manually"
+fi

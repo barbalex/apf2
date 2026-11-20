@@ -28,10 +28,11 @@ RUN apt-get install -y -qq rclone
 RUN apt-get install -y -qq age
 RUN apt-get install -y -qq dos2unix
 
-# add the backup + restore-test scripts
+# add the backup + restore-test + retention-prune scripts
 ADD backup.sh /backup.sh
 ADD test-restore.sh /test-restore.sh
+ADD prune-backups.sh /prune-backups.sh
 # Change line ending format to LF
-RUN dos2unix /backup.sh /test-restore.sh
-RUN chmod +x /backup.sh /test-restore.sh
-RUN chmod 0744 /backup.sh /test-restore.sh
+RUN dos2unix /backup.sh /test-restore.sh /prune-backups.sh
+RUN chmod +x /backup.sh /test-restore.sh /prune-backups.sh
+RUN chmod 0744 /backup.sh /test-restore.sh /prune-backups.sh
