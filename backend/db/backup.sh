@@ -1,5 +1,6 @@
 # dumps apflora db
 # encrypts the dump with age BEFORE it leaves this container
+# bundles globals + .env as a second encrypted file next to the dump
 # prepends the datetime to filename
 # uploads the backup to nextcloud
 # but only if the data fingerprint changed
@@ -46,25 +47,71 @@ if [ -f /sik_data/last.fingerprint ] && [ "$FINGERPRINT" = "$(cat /sik_data/last
   exit 0
 fi
 
+TS=$(date +"%Y-%m-%d_%H-%M-%S")
+FILENAME="${TS}_apflora.backup.age"
+META_FILENAME="${TS}_apflora.meta.age"
+REMOTE_DIR="nextcloud:Gabriel Software/projekte/apflora/sik"
+
+# --- meta bundle: globals + .env, encrypted alongside every dump -------
+# roles/tablespaces (with their passwords) plus the VM's compose .env —
+# everything a lost-VM restore needs besides the dump itself. Same
+# timestamp prefix as the dump, so retention pruning treats them as a
+# pair. Built and uploaded FIRST: it is small, so a dead nextcloud
+# fails the run before the expensive dump is built.
+# BEWARE: /backup-env/.env is mounted by docker-compose.yml
+# (/root/apf/.env:/backup-env/.env:ro)
+echo "bundling globals + env..."
+STAGE=/sik_data/meta-stage
+rm -rf "$STAGE" && mkdir -p "$STAGE"
+if ! PGPASSWORD=$POSTGRES_PASSWORD pg_dumpall -U postgres -h localhost --globals-only > "$STAGE/globals.sql"; then
+  echo "ERROR: pg_dumpall failed"
+  rm -rf "$STAGE"
+  exit 1
+fi
+if [ -f /backup-env/.env ]; then
+  cp /backup-env/.env "$STAGE/env"
+else
+  # degraded, not fatal: the dump is the critical artifact and the env
+  # exists elsewhere too (vault, notes). but this should not happen —
+  # the compose mount is part of this change.
+  echo "WARNING: /backup-env/.env not mounted - env not bundled (see docker-compose.yml)"
+fi
+if ! tar -C "$STAGE" -cf /sik_data/meta.tmp .; then
+  echo "ERROR: tar of meta bundle failed"
+  rm -rf "$STAGE" /sik_data/meta.tmp
+  exit 1
+fi
+rm -rf "$STAGE"
+if ! age -r "$AGE_RECIPIENT" -o "/sik_data/$META_FILENAME" /sik_data/meta.tmp; then
+  echo "ERROR: age encryption of meta bundle failed"
+  rm -f /sik_data/meta.tmp "/sik_data/$META_FILENAME"
+  exit 1
+fi
+rm -f /sik_data/meta.tmp
+echo "uploading meta bundle..."
+if ! rclone copyto "/sik_data/$META_FILENAME" "$REMOTE_DIR/$META_FILENAME" --retries 3; then
+  echo "ERROR: meta bundle upload to nextcloud failed"
+  rm -f "/sik_data/$META_FILENAME"
+  exit 1
+fi
+
+# --- the dump itself -----------------------------------------------------
 echo "creating dump file..."
-FILENAME=$(date +"%Y-%m-%d_%H-%M-%S_apflora.backup.age")
 PGPASSWORD=$POSTGRES_PASSWORD pg_dump -U postgres -h localhost --file=/sik_data/dump.tmp -Fc -Z9 apflora || {
   echo "ERROR: pg_dump failed"
-  rm -f /sik_data/dump.tmp
+  rm -f /sik_data/dump.tmp "/sik_data/$META_FILENAME"
   exit 1
 }
 
 echo "encrypting dump file..."
 if ! age -r "$AGE_RECIPIENT" -o "/sik_data/$FILENAME" /sik_data/dump.tmp; then
   echo "ERROR: age encryption failed"
-  rm -f /sik_data/dump.tmp
+  rm -f /sik_data/dump.tmp "/sik_data/$META_FILENAME"
   exit 1
 fi
 rm -f /sik_data/dump.tmp
 # plaintext-era leftovers — the encrypted pipeline replaced them
 rm -f /sik_data/last.backup
-
-REMOTE_DIR="nextcloud:Gabriel Software/projekte/apflora/sik"
 
 upload() {
   echo "uploading backup file..."
@@ -72,15 +119,16 @@ upload() {
   if ! rclone copyto "/sik_data/$FILENAME" "$REMOTE_DIR/$FILENAME" --retries 3; then
     # on failure: keep last.backup.age so the next run retries the upload
     echo "ERROR: upload to nextcloud failed"
-    rm -f "/sik_data/$FILENAME"
+    rm -f "/sik_data/$FILENAME" "/sik_data/$META_FILENAME"
     exit 1
   fi
 }
 
 upload
 
-# only replace last.backup.age and the fingerprint after a successful upload
-rm -f /sik_data/last.backup.age
+# only replace the lasts and the fingerprint after a successful upload
+rm -f /sik_data/last.backup.age /sik_data/last.meta.age
 mv -f "/sik_data/$FILENAME" /sik_data/last.backup.age
+mv -f "/sik_data/$META_FILENAME" /sik_data/last.meta.age
 echo "$FINGERPRINT" > /sik_data/last.fingerprint
-echo "backed up $FILENAME"
+echo "backed up $FILENAME (+ $META_FILENAME)"

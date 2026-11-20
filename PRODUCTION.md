@@ -29,16 +29,27 @@ Nightly db backup via cron on the VM (23:00, root): `/root/backup/backup.sh`
    tables are covered automatically; `error_report` is excluded (client
    telemetry changes almost daily without real data changing — it stays
    in the dump itself). Unchanged fingerprint → no dump at all.
-2. `pg_dump -Fc -Z9 apflora` → `/sik_data/dump.tmp` (transient
+2. bundles globals + env into a second, small encrypted file
+   `<datetime>_apflora.meta.age` — a tar of `pg_dumpall
+   --globals-only` (roles with their passwords) and the VM's compose
+   `.env` (mounted read-only at `/backup-env/.env`, see
+   [backend/docker-compose.yml](backend/docker-compose.yml)):
+   everything a lost-VM restore needs besides the dump itself. Same
+   timestamp prefix as the dump, so retention pruning can treat them
+   as a pair; uploaded first so a dead nextcloud fails the run before
+   the expensive dump is built. Refreshes only when the fingerprint
+   changed — roles/env rarely change, and the repo SQL recreates the
+   roles anyway.
+3. `pg_dump -Fc -Z9 apflora` → `/sik_data/dump.tmp` (transient
    plaintext — deleted immediately after encryption)
-3. age-encrypts it with the committed public key →
+4. age-encrypts it with the committed public key →
    `/sik_data/<datetime>_apflora.backup.age`. A failed dump or
    encryption aborts the run — plaintext is never uploaded.
-4. uploads it to nextcloud via rclone (config at `/root/backup/rclone.conf`,
+5. uploads both to nextcloud via rclone (config at `/root/backup/rclone.conf`,
    mounted into the container read-only)
-5. only after a successful upload moves it to `/sik_data/last.backup.age`
-   and writes `/sik_data/last.fingerprint` — a failed upload is
-   retried by the next run
+6. only after a successful upload moves them to `/sik_data/last.backup.age`
+   and `/sik_data/last.meta.age`, and writes `/sik_data/last.fingerprint`
+   — a failed upload is retried by the next run
 
 The fingerprint replaces the old size-equality check, which silently
 skipped backups when the size happened to match despite changed
@@ -62,6 +73,10 @@ ciphertext. Key model:
   (arten-fördern.app) backups — one key to print, one to keep.
 - manual decrypt: `age -d -i ~/.config/age/keys.txt -o out.backup
   file.backup.age`
+- the meta bundle restores a lost VM self-contained: decrypt it the
+  same way, `tar -xf` → `env` goes to `/root/apf/.env`, `globals.sql`
+  only if roles drifted from the repo SQL (the init path recreates
+  them anyway).
 
 Dead-man's switch (2026-11-20): the host wrapper pings healthchecks.io
 after every run — the plain URL on success (a fingerprint skip counts as
@@ -105,13 +120,15 @@ files (e.g. `backend/db/backup.sh`, `backend/db/test-restore.sh`,
 `cd /root/apf && docker compose build db && docker compose up -d db`
 (volumes survive the container recreation). The host wrapper at
 `/root/backup/backup.sh` is copied manually — keep it in sync with
-`backend/db/host-backup.sh`. The encryption switch (2026-11-20) changed
-`Dockerfile` + `backup.sh` + `test-restore.sh`, so it follows this path;
-order: rebuild → trigger one backup manually (`/root/backup/backup.sh`)
-→ confirm a `.backup.age` file appears in nextcloud → `npm run
-fetchBackup` on the notebook to prove the decrypt path. Pre-encryption
-plaintext dumps stay in the nextcloud folder until a retention step
-prunes them.
+`backend/db/host-backup.sh`. The 2026-11-20 changes (encryption,
+meta bundle) touched `Dockerfile` + `backup.sh` + `test-restore.sh`
+(image rebuild path) and `docker-compose.yml` (the `.env` mount —
+scp to `root@api.apflora.ch:/root/apf/`, a plain `up -d db` applies
+it). Order: rebuild + recreate → trigger one backup manually
+(`/root/backup/backup.sh`) → confirm `.backup.age` + `.meta.age`
+appear in nextcloud → `npm run fetchBackup` on the notebook to prove
+the decrypt path. Pre-encryption plaintext dumps stay in the
+nextcloud folder until a retention step prunes them.
 
 Seeding the dev stack from production: `npm run fetchBackup`
 ([scripts/fetchBackup.mjs](scripts/fetchBackup.mjs)) runs the
