@@ -1,6 +1,7 @@
 # beware when upgrading: need to re-create backups!
 # 2026.05.04: upgrade from 17-3.5 to 18-3.6
-FROM postgis/postgis:18-3.6
+# 2026.11.19: upgrade from 18-3.6 to 18-3.7 (PG 18.7 security minor)
+FROM postgis/postgis:18-3.7
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data

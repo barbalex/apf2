@@ -28,6 +28,7 @@ import { hideBookmarksAtom } from '../../store/index.ts'
 import { useIsPrint } from '../../modules/useIsPrint.ts'
 import { DataFilterUrlSync } from './DataFilterUrlSync.tsx'
 import { LabelFilterUrlSync } from './LabelFilterUrlSync.tsx'
+import { NurApUrlSync } from './NurApUrlSync.tsx'
 
 import styles from './ProjektContainer.module.css'
 
@@ -133,6 +134,9 @@ export const ProjektContainer = () => {
           map alike */}
       <DataFilterUrlSync />
       <LabelFilterUrlSync />
+      {/* the tree's "nur AP" filter changes what a filtered link shows
+          (non-AP arts are hidden when on) */}
+      <NurApUrlSync />
       {!hideBookmarks && (
         <Suspense fallback={null}>
           <Bookmarks />
