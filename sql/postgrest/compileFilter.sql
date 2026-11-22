@@ -11,6 +11,9 @@
 --   {"id": {"in": ["uuid", ...]}}
 --   {"apberRelevant": {"isNull": true | false}}
 --   {"geomPoint": {"coveredBy": <GeoJSON>}}                — st_coveredby
+--   {"geomPoint": {"intersects": <GeoJSON>}}               — st_intersects
+--     (the map layers use intersects with the viewport polygon to load
+--     only features near the current view)
 --   {"label": {"includesInsensitive": "x"}}               — apflora.<table>_label(row)
 --   {"popByPopId": {<filter on apflora.pop>}}              — forward relation,
 --     compiles to an exists-subquery and recurses (tpopmassn→tpop→pop→ap …)
@@ -431,9 +434,19 @@ BEGIN
                 'public.st_coveredby(%s, public.st_geomfromgeojson(%L::jsonb))',
                 v_expr, v_op_value::text
               )];
+            WHEN 'intersects' THEN
+              IF NOT v_is_geometry THEN
+                RAISE EXCEPTION
+                  'compile_filter: intersects needs a geometry column, %.% is %',
+                  p_table, v_col, v_col_type;
+              END IF;
+              v_parts := v_parts || ARRAY[format(
+                'public.st_intersects(%s, public.st_geomfromgeojson(%L::jsonb))',
+                v_expr, v_op_value::text
+              )];
             ELSE
               RAISE EXCEPTION
-                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThan, greaterThanOrEqualTo, lessThan, lessThanOrEqualTo, in, notIn, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy)',
+                'compile_filter: unsupported operator "%" on %.% (supported: equalTo, notEqualTo, greaterThan, greaterThanOrEqualTo, lessThan, lessThanOrEqualTo, in, notIn, isNull, distinctFrom, notDistinctFrom, includes, includesInsensitive, coveredBy, intersects)',
                 v_op, p_table, v_col;
           END CASE;
         END LOOP;

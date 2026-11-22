@@ -48,6 +48,17 @@ export const mapViewAtom = atomWithStorage<MapView | undefined>(
   undefined,
   { getOnInit: true },
 )
+// bounds of the current viewport, written by MapPersister on moveend and on
+// map mount — the query envelope for the map layers' viewport filtering
+// (useViewportFilterEnvelope). Not persisted: it must never be restored
+// stale, layers simply don't query until the map reports it.
+export interface MapViewportBounds {
+  swLat: number
+  swLng: number
+  neLat: number
+  neLng: number
+}
+export const mapViewportBoundsAtom = atom<MapViewportBounds | null>(null)
 export const idOfTpopBeingLocalizedAtom = atom<string | null>(null)
 export const setIdOfTpopBeingLocalizedAtom = atom(
   (get) => get(idOfTpopBeingLocalizedAtom),

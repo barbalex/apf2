@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
@@ -9,6 +9,7 @@ import type { Marker as LeafletMarkerType } from 'leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
 import { useDisplayedLabels } from '../../useDisplayedLabels.ts'
+import { useViewportFilterEnvelope } from '../../useViewportEnvelope.ts'
 import {
   LABELS_MAX_MARKERS,
   useProgressiveElements,
@@ -24,6 +25,7 @@ import type {
   ApId,
   AeTaxonomiesId,
 } from '../../../../../models/apflora/index.ts'
+import type { PopFilter } from '../../../../../modules/gqlFilterTypes.ts'
 
 import {
   addNotificationAtom,
@@ -77,12 +79,23 @@ const ObservedPop = () => {
   const map = useMap()
   const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const addNotification = useSetAtom(addNotificationAtom)
+  // viewport filtering: only fetch pops near the current view
+  const envelope = useViewportFilterEnvelope()
 
-  const popFilter = cloneDeep(popGqlFilter.filtered)
-  popFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
+  // PopFilter: compile_filter ANDs top-level keys, so the viewport
+  // predicate narrows the or-branches (full type — the atom's filtered
+  // shape only spells out the or it emits)
+  const popFilter: PopFilter = cloneDeep(popGqlFilter.filtered)
+  popFilter.or!.forEach((f) => (f.wgs84Lat = { isNull: false }))
+  if (envelope) popFilter.geomPoint = { intersects: envelope }
 
   const { data, error } = useQuery({
     queryKey: ['PopForMapQuery', popFilter],
+    // null envelope = the map has not reported bounds yet: better no query
+    // than the unfiltered fetch-all it would replace
+    enabled: envelope !== null,
+    // keep markers mounted while the refetch after a viewport change runs
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       // phase 5: the cascade filter runs through query_pop; status text
       // and artname join client-side
