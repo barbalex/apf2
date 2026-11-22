@@ -51,10 +51,10 @@ export const ApfLayerNotifier = () => {
       mapIsOpen
     ) {
       addNotification({
-        message: `Sie laden in der Karte apflora-Informationen für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen. Empfehlung bei Problemen: minimieren Sie die Anzahl Arten mit einem Filter`,
+        message: `Sie laden in der Karte Daten für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen. Empfehlung bei Problemen: 1. wählen Sie einen kleinen Kartenausschnitt (apflora lädt nur, was sich darin befindet) 2. minimieren Sie die Anzahl Arten mit einem Filter`,
         options: {
           variant: 'info',
-          autoHideDuration: 10000,
+          autoHideDuration: 20000,
         },
       })
     }
