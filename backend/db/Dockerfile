@@ -23,12 +23,16 @@ RUN apt-get install -y -qq curl
 RUN apt-get install -y -qq bash
 RUN apt-get install -y -qq nano
 RUN apt-get install -y -qq rclone
+# age: encrypt backups before they leave the container (public key only —
+# see backup.sh; the private key lives offline on the notebook)
+RUN apt-get install -y -qq age
 RUN apt-get install -y -qq dos2unix
 
-# add the backup + restore-test scripts
+# add the backup + restore-test + retention-prune scripts
 ADD backup.sh /backup.sh
 ADD test-restore.sh /test-restore.sh
+ADD prune-backups.sh /prune-backups.sh
 # Change line ending format to LF
-RUN dos2unix /backup.sh /test-restore.sh
-RUN chmod +x /backup.sh /test-restore.sh
-RUN chmod 0744 /backup.sh /test-restore.sh
+RUN dos2unix /backup.sh /test-restore.sh /prune-backups.sh
+RUN chmod +x /backup.sh /test-restore.sh /prune-backups.sh
+RUN chmod 0744 /backup.sh /test-restore.sh /prune-backups.sh

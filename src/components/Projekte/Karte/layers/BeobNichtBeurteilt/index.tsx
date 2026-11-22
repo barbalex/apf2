@@ -1,11 +1,13 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { cloneDeep } from 'es-toolkit'
 import { DivIcon, Point } from 'leaflet'
 import { apiFetch } from '../../../../../modules/api.ts'
 // import { useMap } from 'react-leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
+import { useViewportFilterEnvelope } from '../../useViewportEnvelope.ts'
 import { useProgressiveElements } from '../../useProgressiveCount.ts'
 import type { MarkerCluster } from 'leaflet.markercluster'
 import { Marker } from './Marker.tsx'
@@ -45,12 +47,18 @@ const BeobNichtBeurteiltMarker = ({ clustered }: { clustered: boolean }) => {
   const beobNichtBeurteiltGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('nichtBeurteilt'),
   )
+  // viewport filtering: only fetch beobs near the current view
+  const envelope = useViewportFilterEnvelope()
+  const beobFilter = cloneDeep(beobNichtBeurteiltGqlFilter.filtered)
+  if (envelope) beobFilter.geomPoint = { intersects: envelope }
 
   const { data, error } = useQuery({
-    queryKey: [
-      'BeobNichtBeurteiltForMapQuery',
-      beobNichtBeurteiltGqlFilter.filtered,
-    ],
+    queryKey: ['BeobNichtBeurteiltForMapQuery', beobFilter],
+    // null envelope = the map has not reported bounds yet: better no query
+    // than the unfiltered fetch-all it would replace
+    enabled: envelope !== null,
+    // keep markers mounted while the refetch after a viewport change runs
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const rows =
         (await apiFetch<
@@ -72,7 +80,7 @@ const BeobNichtBeurteiltMarker = ({ clustered }: { clustered: boolean }) => {
           {
             method: 'POST',
             body: JSON.stringify({
-              p_filter: beobNichtBeurteiltGqlFilter.filtered,
+              p_filter: beobFilter,
             }),
           },
         )) ?? []

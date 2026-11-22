@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router'
 import { useMapEvents } from 'react-leaflet'
 
-import { mapViewAtom, store } from '../../../store/index.ts'
+import { mapViewAtom, mapViewportBoundsAtom, store } from '../../../store/index.ts'
 import type { MapView } from '../../../store/index.ts'
 import {
   formatMapView,
@@ -38,18 +38,35 @@ export const MapPersister = () => {
     )
   }
 
+  // the map layers' viewport filtering reads these bounds (see
+  // useViewportFilterEnvelope) — report them as soon as the map opens, so
+  // layers never start their (potentially huge) unfiltered boot query
+  const writeViewportBounds = () => {
+    const bounds = map.getBounds()
+    const southWest = bounds.getSouthWest()
+    const northEast = bounds.getNorthEast()
+    store.set(mapViewportBoundsAtom, {
+      swLat: southWest.lat,
+      swLng: southWest.lng,
+      neLat: northEast.lat,
+      neLng: northEast.lng,
+    })
+  }
+
   const map = useMapEvents({
     // moveend fires after panning and after zooming ends
     moveend: () => {
       const view = { center: map.getCenter(), zoom: map.getZoom() }
       store.set(mapViewAtom, view)
       writeViewToUrl(view)
+      writeViewportBounds()
     },
   })
 
   // complete the url as soon as the map opens, with the restored view
   useEffect(() => {
     writeViewToUrl({ center: map.getCenter(), zoom: map.getZoom() })
+    writeViewportBounds()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map])
 

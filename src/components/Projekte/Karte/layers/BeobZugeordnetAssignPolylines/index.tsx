@@ -1,8 +1,10 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { cloneDeep } from 'es-toolkit'
 import { apiFetch } from '../../../../../modules/api.ts'
 
+import { useViewportFilterEnvelope } from '../../useViewportEnvelope.ts'
 import { useProgressiveElements } from '../../useProgressiveCount.ts'
 
 import { Polyline } from './Polyline.tsx'
@@ -24,9 +26,20 @@ const Polylines = () => {
   const beobZugeordnetGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('zugeordnet'),
   )
+  // viewport filtering — note this culls on the beob endpoint only: a line
+  // whose beob is off-screen disappears even if its tpop is on-screen
+  // (either-endpoint filtering would need a second spatial query)
+  const envelope = useViewportFilterEnvelope()
+  const beobFilter = cloneDeep(beobZugeordnetGqlFilter.filtered)
+  if (envelope) beobFilter.geomPoint = { intersects: envelope }
 
   const { data, error } = useQuery({
-    queryKey: ['BeobAssignLinesQuery', beobZugeordnetGqlFilter.filtered],
+    queryKey: ['BeobAssignLinesQuery', beobFilter],
+    // null envelope = the map has not reported bounds yet: better no query
+    // than the unfiltered fetch-all it would replace
+    enabled: envelope !== null,
+    // keep lines mounted while the refetch after a viewport change runs
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const rows =
         (await apiFetch<
@@ -48,7 +61,7 @@ const Polylines = () => {
           {
             method: 'POST',
             body: JSON.stringify({
-              p_filter: beobZugeordnetGqlFilter.filtered,
+              p_filter: beobFilter,
             }),
           },
         )) ?? []

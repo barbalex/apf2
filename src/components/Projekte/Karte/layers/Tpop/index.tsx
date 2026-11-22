@@ -1,7 +1,7 @@
 import { apiUpdateByVariables } from '../../../../../modules/api.ts'
 import { useEffect, useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
@@ -10,6 +10,7 @@ import type { LeafletMouseEvent, Marker as LeafletMarkerType } from 'leaflet'
 
 import { ClusterGroup } from '../../ClusterGroup.tsx'
 import { useDisplayedLabels } from '../../useDisplayedLabels.ts'
+import { useViewportFilterEnvelope } from '../../useViewportEnvelope.ts'
 import {
   LABELS_MAX_MARKERS,
   useProgressiveElements,
@@ -86,15 +87,25 @@ const iconCreateFunction = (cluster: MarkerCluster) => {
   })
 }
 
-const getTpopFilter = (tpopGqlFilter: { filtered: { or: TpopFilter[] } }) => {
-  const filter = cloneDeep(tpopGqlFilter.filtered)
-  filter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
+const getTpopFilter = (
+  tpopGqlFilter: { filtered: { or: TpopFilter[] } },
+  envelope: ReturnType<typeof useViewportFilterEnvelope>,
+) => {
+  // TpopFilter: compile_filter ANDs top-level keys, so the viewport
+  // predicate narrows the or-branches (full type — the atom's filtered
+  // shape only spells out the or it emits)
+  const filter: TpopFilter = cloneDeep(tpopGqlFilter.filtered)
+  filter.or!.forEach((f) => (f.wgs84Lat = { isNull: false }))
+  // viewport filtering: only fetch tpops near the current view
+  if (envelope) filter.geomPoint = { intersects: envelope }
 
   return filter
 }
 
 const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
   const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
+  // viewport filtering: only fetch tpops near the current view
+  const envelope = useViewportFilterEnvelope()
 
   const idOfTpopBeingLocalized = useAtomValue(idOfTpopBeingLocalizedAtom)
   const setIdOfTpopBeingLocalized = useSetAtom(setIdOfTpopBeingLocalizedAtom)
@@ -102,10 +113,15 @@ const ObservedTpop = ({ clustered }: { clustered: boolean }) => {
 
   const tsQueryClient = useQueryClient()
 
-  const tpopFilter = getTpopFilter(tpopGqlFilter)
+  const tpopFilter = getTpopFilter(tpopGqlFilter, envelope)
 
   const { data, error } = useQuery({
     queryKey: ['TpopForMapQuery', tpopFilter],
+    // null envelope = the map has not reported bounds yet: better no query
+    // than the unfiltered fetch-all it would replace
+    enabled: envelope !== null,
+    // keep markers mounted while the refetch after a viewport change runs
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       // phase 5: the cascade filter runs through query_tpop; status text
       // and the pop/ap context join client-side

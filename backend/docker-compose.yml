@@ -24,6 +24,9 @@ services:
       - sik_data:/sik_data
       # keep the rclone config (nextcloud backup target) across container recreations
       - /root/backup/rclone.conf:/root/.config/rclone/rclone.conf:ro
+      # the backup bundles the .env (encrypted) so a lost VM restores
+      # self-contained — see backend/db/backup.sh
+      - /root/apf/.env:/backup-env/.env:ro
     platform: linux/amd64
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
