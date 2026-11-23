@@ -103,6 +103,16 @@ describe('errorTelemetry', () => {
     expect(JSON.parse(init?.body as string).message).toBe('string rejection')
   })
 
+  it('names the type of Event rejection reasons', async () => {
+    const { reportError } = await loadModule()
+
+    await reportError('unhandledrejection', new Event('error'))
+
+    const [, init] = fetchMock.mock.calls[0] ?? []
+    // a raw DOM Event would otherwise stringify to '{"isTrusted":true}'
+    expect(JSON.parse(init?.body as string).message).toBe('Event error')
+  })
+
   it('drops benign browser noise', async () => {
     const { reportError } = await loadModule()
 

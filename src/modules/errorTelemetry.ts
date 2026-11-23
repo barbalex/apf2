@@ -55,6 +55,7 @@ const buildEvent = (
   const message =
     error instanceof Error ? error.message
     : typeof error === 'string' ? error
+    : error instanceof Event ? `Event ${error.type}`
     : (JSON.stringify(error) ?? 'unknown error')
   if (!message) return undefined
   if (benignMessages.some((m) => message.startsWith(m))) return undefined

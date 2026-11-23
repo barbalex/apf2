@@ -16,11 +16,15 @@ export const Notifier = () => {
       // Do nothing if snackbar is already displayed
       if (displayed.includes(notification.key)) return
 
-      // Display snackbar using notistack
-      enqueueSnackbar(
-        notification.message,
-        notification.options as OptionsObject | undefined,
-      )
+      // notistack throws on an undefined message — drop undisplayable
+      // notifications instead of letting them wedge the queue
+      if (notification.message) {
+        // Display snackbar using notistack
+        enqueueSnackbar(
+          notification.message,
+          notification.options as OptionsObject | undefined,
+        )
+      }
       // Keep track of snackbars that we've displayed
       setDisplayed([...displayed, notification.key])
       // Dispatch action to remove snackbar from jotai store
