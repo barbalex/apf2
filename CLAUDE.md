@@ -111,7 +111,7 @@ Uploadcare uploads are signed server-side: the `Uploader` component ([src/compon
 
 ## Conventions
 
-- **Always include file extensions in imports** (`.ts`/`.tsx`) — enforced by `eslint-plugin-import` (`import/extensions`) and used everywhere. MUI/Emotion is a dependency only because `@mui/material` needs it.
+- **Always include file extensions in imports** (`.ts`/`.tsx`). The import lint rule is `import-x/extensions` from `eslint-plugin-import-x`. MUI/Emotion is a dependency only because `@mui/material` needs it.
 - **Prettier config lives in the repo** ([.prettierrc.json](.prettierrc.json), previously only in VS Code user settings): single quotes, no semicolons, `experimentalTernaries`, `singleAttributePerLine`. Generated dir `src/models/` is ignored via [.prettierignore](.prettierignore).
 - **React Compiler is on** (`babel-plugin-react-compiler` via `@rolldown/plugin-babel` in [vite.config.ts](vite.config.ts)); write compiler-friendly components (stable refs, no manual memoization hacks).
 - **CSS Modules** use `localsConvention: 'camelCaseOnly'` — import as `styles.someClass`.

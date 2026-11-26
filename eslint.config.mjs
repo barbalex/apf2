@@ -1,6 +1,6 @@
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
-import pluginImport from 'eslint-plugin-import'
+import pluginImportX from 'eslint-plugin-import-x'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
@@ -29,7 +29,7 @@ export default [
   {
     plugins: {
       'react-refresh': pluginReactRefresh,
-      import: pluginImport,
+      'import-x': pluginImportX,
     },
 
     languageOptions: {
@@ -82,7 +82,7 @@ export default [
         },
       ],
 
-      'import/extensions': [
+      'import-x/extensions': [
         'warn',
         'ignorePackages',
         {
