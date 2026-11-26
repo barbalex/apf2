@@ -2,8 +2,8 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.137.88",
-  "versionDate": "23.11.2026",
+  "version": "1.137.89",
+  "versionDate": "26.11.2026",
   "type": "module",
   "repository": {
     "type": "git",
@@ -14,6 +14,9 @@
   "overrides": {
     "leaflet": "$leaflet",
     "lodash": "4.18.1",
+    "workbox-build": {
+      "glob": "^14.0.6"
+    },
     "next": "16.4.5",
     "react-markdown-editor-lite": {
       "nanoid": "5.1.16"
@@ -70,7 +73,7 @@
     "jotai": "3.0.2",
     "jwt-decode": "4.0.0",
     "leaflet": "2.0.0-beta.5",
-    "leaflet.markercluster": "2.0.0-beta.2",
+    "leaflet.markercluster": "2.0.0",
     "linkify-react": "4.4.0",
     "linkifyjs": "4.4.0",
     "localforage": "1.10.0",
@@ -111,8 +114,8 @@
     "babel-plugin-react-compiler": "1.0.0",
     "cross-env": "10.1.0",
     "esbuild": "0.28.2",
-    "eslint": "9.39.5",
-    "eslint-plugin-import": "2.32.0",
+    "eslint": "10.15.0",
+    "eslint-plugin-import-x": "4.18.1",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.8",
     "globals": "17.14.0",
