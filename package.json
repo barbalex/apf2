@@ -73,7 +73,7 @@
     "jotai": "3.0.2",
     "jwt-decode": "4.0.0",
     "leaflet": "2.0.0-beta.5",
-    "leaflet.markercluster": "2.0.0-beta.2",
+    "leaflet.markercluster": "2.0.0",
     "linkify-react": "4.4.0",
     "linkifyjs": "4.4.0",
     "localforage": "1.10.0",
